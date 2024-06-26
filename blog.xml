@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Ritesh Kumar Maurya</title>
+<link>https://riteshrm.github.io/blog.html</link>
+<atom:link href="https://riteshrm.github.io/blog.xml" rel="self" type="application/rss+xml"/>
+<description>Personal site of Ritesh Kumar Maurya.</description>
+<generator>quarto-1.4.553</generator>
+<lastBuildDate>Thu, 23 May 2024 18:30:00 GMT</lastBuildDate>
+<item>
+  <title>Leetcode POTD</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/Leetcode POTD/</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="june-2024" class="level2">
+
+<ul>
+<li><a href="https://leetcode.com/problems/balance-a-binary-search-tree/description/">Balance a Binary Search Tree</a></li>
+<li><strong>Solution</strong>
+<ul>
+<li>The approach is to make an arraylist where all the elements are in ascending order.</li>
+<li>Since it is a BST, then inorder traversal can give that arraylist</li>
+<li>Using that arraylist create another BST.</li>
+</ul></li>
+<li><strong>Code</strong></li>
+</ul>
+<pre class="{java}"><code>/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    ArrayList&lt;Integer&gt; arr;
+    TreeNode fun(int low, int high){
+        if(low&gt;high){
+            return null;
+        }
+        int mid = (low+high)/2;
+        TreeNode root = new TreeNode(arr.get(mid));
+        root.left = fun(low,mid-1);
+        root.right = fun(mid+1,high);
+        return root;
+    }
+    void inorder(TreeNode root){
+        if(root==null){
+            return;
+        }
+        inorder(root.left);
+        arr.add(root.val);
+        inorder(root.right);
+    }
+    public TreeNode balanceBST(TreeNode root) {
+        arr = new ArrayList&lt;&gt;();
+        inorder(root);
+        return fun(0, arr.size()-1);
+    }
+}</code></pre>
+
+
+</section>
+
+ ]]></description>
+  <category>DSA</category>
+  <guid>https://riteshrm.github.io/posts/Leetcode POTD/</guid>
+  <pubDate>Thu, 23 May 2024 18:30:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/Leetcode POTD/leetcode.jpg" medium="image" type="image/jpeg"/>
+</item>
+</channel>
+</rss>

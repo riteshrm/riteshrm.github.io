@@ -1,0 +1,51 @@
+[
+  {
+    "objectID": "pages/resources.html",
+    "href": "pages/resources.html",
+    "title": "Resources",
+    "section": "",
+    "text": "A bit about my formal education"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Ritesh Kumar Maurya",
+    "section": "",
+    "text": "Hi there 👋. I am Ritesh Kumar Maurya. I work on 🧨 diffusion models at Samsung R&D Institute Noida. Know more about me from here.\nThe structure of this website is inspired by Sayak’s site."
+  },
+  {
+    "objectID": "posts/Leetcode POTD/index.html",
+    "href": "posts/Leetcode POTD/index.html",
+    "title": "Leetcode POTD",
+    "section": "",
+    "text": "Balance a Binary Search Tree\nSolution\n\nThe approach is to make an arraylist where all the elements are in ascending order.\nSince it is a BST, then inorder traversal can give that arraylist\nUsing that arraylist create another BST.\n\nCode\n\n/**\n * Definition for a binary tree node.\n * public class TreeNode {\n *     int val;\n *     TreeNode left;\n *     TreeNode right;\n *     TreeNode() {}\n *     TreeNode(int val) { this.val = val; }\n *     TreeNode(int val, TreeNode left, TreeNode right) {\n *         this.val = val;\n *         this.left = left;\n *         this.right = right;\n *     }\n * }\n */\nclass Solution {\n    ArrayList&lt;Integer&gt; arr;\n    TreeNode fun(int low, int high){\n        if(low&gt;high){\n            return null;\n        }\n        int mid = (low+high)/2;\n        TreeNode root = new TreeNode(arr.get(mid));\n        root.left = fun(low,mid-1);\n        root.right = fun(mid+1,high);\n        return root;\n    }\n    void inorder(TreeNode root){\n        if(root==null){\n            return;\n        }\n        inorder(root.left);\n        arr.add(root.val);\n        inorder(root.right);\n    }\n    public TreeNode balanceBST(TreeNode root) {\n        arr = new ArrayList&lt;&gt;();\n        inorder(root);\n        return fun(0, arr.size()-1);\n    }\n}"
+  },
+  {
+    "objectID": "posts/Leetcode POTD/index.html#june-2024",
+    "href": "posts/Leetcode POTD/index.html#june-2024",
+    "title": "Leetcode POTD",
+    "section": "",
+    "text": "Balance a Binary Search Tree\nSolution\n\nThe approach is to make an arraylist where all the elements are in ascending order.\nSince it is a BST, then inorder traversal can give that arraylist\nUsing that arraylist create another BST.\n\nCode\n\n/**\n * Definition for a binary tree node.\n * public class TreeNode {\n *     int val;\n *     TreeNode left;\n *     TreeNode right;\n *     TreeNode() {}\n *     TreeNode(int val) { this.val = val; }\n *     TreeNode(int val, TreeNode left, TreeNode right) {\n *         this.val = val;\n *         this.left = left;\n *         this.right = right;\n *     }\n * }\n */\nclass Solution {\n    ArrayList&lt;Integer&gt; arr;\n    TreeNode fun(int low, int high){\n        if(low&gt;high){\n            return null;\n        }\n        int mid = (low+high)/2;\n        TreeNode root = new TreeNode(arr.get(mid));\n        root.left = fun(low,mid-1);\n        root.right = fun(mid+1,high);\n        return root;\n    }\n    void inorder(TreeNode root){\n        if(root==null){\n            return;\n        }\n        inorder(root.left);\n        arr.add(root.val);\n        inorder(root.right);\n    }\n    public TreeNode balanceBST(TreeNode root) {\n        arr = new ArrayList&lt;&gt;();\n        inorder(root);\n        return fun(0, arr.size()-1);\n    }\n}"
+  },
+  {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "Blog",
+    "section": "",
+    "text": "Leetcode POTD\n\n\n\n\n\n\n\n\n\n\n\nMay 24, 2024\n\n\nRitesh Kumar Maurya\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "pages/about.html",
+    "href": "pages/about.html",
+    "title": "About Me",
+    "section": "",
+    "text": "I work on diffusion models at Samsung R&D Institute Noida. For more details on my work experience, check out my LinkedIn profile.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTimeline\n\n\n\n\n\n\n\n\nPosition\nCompany\nDuration\n\n\n\n\nEngineer\nSamsung R&D Institute Noida\nJan 2024 - Present\n\n\nIntern\nSamsung R&D Institute Noida\nJan 2023 - Dec 2023"
+  },
+  {
+    "objectID": "pages/education.html",
+    "href": "pages/education.html",
+    "title": "Education",
+    "section": "",
+    "text": "(The formal ones may be)\n\nB.Tech in Computer Science and Engineering from Indian Institute of Information Technology Kota (2019 - 23)\nHigh School from Dayawati Modi Academy Varanasi\nCourses/certifications relevant to my subject of interest:\n\nDeep Learning Specialization (Coursera)\nData Analysis with Python (Coursera)\nJava Programming: Solving Problems with Software (Coursera)\nPython for Everybody Specialization (Coursera)\nIntroduction to Data Science in Python (Coursera)\nNatural Language Processing Specialization (Coursera)\nMathematics for Machine Learning and Data Science Specialization (Coursera)\nGenerative AI with Large Language Models (Coursera)\nGenerative Adversarial Networks (GANs) Specialization (Coursera)"
+  }
+]
