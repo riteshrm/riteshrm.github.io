@@ -1,0 +1,50 @@
+project:
+  type: website
+    
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    css: styles.css
+    toc: true
+
+website:
+  title: "Ritesh Kumar Maurya"
+  site-url: "https://riteshrm.github.io/"
+  description: "Personal site of Ritesh Kumar Maurya."
+  favicon: posts/favicon.ico
+  search: false
+  twitter-card:
+    creator: "@_riteshrm_"
+    card-style: summary
+  open-graph: true
+  repo-actions: [edit, issue]
+  repo-branch: "master"
+  repo-url: "https://github.com/riteshrm/riteshrm.github.io"
+  google-analytics: "UA-163448909-1"
+  navbar:
+    background: primary
+    left:
+      - text: "About Me"
+        href: pages/about.qmd
+      #- text: "Authoring"
+        #href: pages/authoring.qmd
+      - text: "Blog"
+        href: blog.qmd
+      #- text: "Research"
+        #href: pages/research.qmd
+      - text: "Resources"
+        href: pages/resources.qmd
+    right:
+      #- icon: twitter
+        #href: https://twitter.com/_riteshrm_/
+      - icon: linkedin
+        href: https://www.linkedin.com/in/riteshrm/
+      - icon: github
+        href: https://github.com/riteshrm
+      - text: "{{< iconify cib leetcode >}}"
+        href: https://leetcode.com/riteshrm
+
+execute:
+  freeze: true

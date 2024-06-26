@@ -1,0 +1,9 @@
+---
+title: "Resources"
+aliases: 
+  - /resources
+toc: false
+---
+
+
+* [A bit about my formal education](education.qmd)

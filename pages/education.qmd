@@ -1,0 +1,30 @@
+---
+title: Education
+aliases: 
+  - /education
+toc: false
+---
+(The formal ones may be)
+
+-   B.Tech in Computer Science and Engineering from [Indian Institute of Information Technology Kota](https://iiitkota.ac.in/) (2019 - 23) 
+-   High School from Dayawati Modi Academy Varanasi
+-   Courses/certifications relevant to my subject of interest:
+
+    -   [Deep Learning Specialization (Coursera)](https://www.coursera.org/account/accomplishments/specialization/certificate/VNYY39R9JNSQ)
+
+    -   [Data Analysis with Python (Coursera)](https://www.coursera.org/account/accomplishments/certificate/LQTW7AK5GKN3)
+
+    -   [Java Programming: Solving Problems with Software (Coursera)](https://www.coursera.org/account/accomplishments/certificate/4Z3F9HJBEGAF)
+
+    -   [ Python for Everybody Specialization (Coursera)](https://www.coursera.org/account/accomplishments/specialization/certificate/JR5AESSZQ2WX)
+
+    -   [Introduction to Data Science in Python (Coursera)](https://www.coursera.org/account/accomplishments/certificate/VBTDYK49TK2N)
+
+    -   [Natural Language Processing Specialization (Coursera)](https://www.coursera.org/account/accomplishments/specialization/certificate/RJGPQQ8BF88B)
+
+    -   [Mathematics for Machine Learning and Data Science Specialization (Coursera)](https://www.coursera.org/account/accomplishments/specialization/certificate/FL9XDG5A2VQE)
+
+    -   [Generative AI with Large Language Models (Coursera)](https://www.coursera.org/account/accomplishments/certificate/2LM4FQT8Y4NN)
+
+    -   [Generative Adversarial Networks (GANs) Specialization (Coursera)](https://www.coursera.org/account/accomplishments/specialization/LN3G2NVPYM82)
+ 
