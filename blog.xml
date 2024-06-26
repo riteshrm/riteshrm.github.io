@@ -10,7 +10,344 @@
 <atom:link href="https://riteshrm.github.io/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Personal site of Ritesh Kumar Maurya.</description>
 <generator>quarto-1.4.553</generator>
-<lastBuildDate>Thu, 23 May 2024 18:30:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 23 Jun 2024 18:30:00 GMT</lastBuildDate>
+<item>
+  <title>Meta Learning Book Chapter Wise Summary Points</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="from-not-being-able-to-program-to-deep-learning-expert" class="level1">
+<h1>From not being able to program to deep learning expert</h1>
+<ul>
+<li>Understand the value of Stack Overflow, documentation and how to reach both.</li>
+<li>Learn to use a code editor really well.</li>
+<li>Learn to use git for version control.</li>
+<li>Learn how to use local or cloud VM.</li>
+<li>How to complete a lecture:-
+<ul>
+<li>Watch the lecture</li>
+<li>Open the notebook and try to find out how all the pieces fit together.</li>
+<li>If you encounter some new functions then it will be good to know about them.</li>
+<li>Tweak the hyperparameters and see how it performs.</li>
+<li>Once you understand, try to create a new notebook recreating the training pipeline that is demonstrated in lecture.</li>
+<li>Now if everything is working well, then you might want to test the same technique on another dataset of similar type.</li>
+</ul></li>
+</ul>
+</section>
+<section id="theory-vs-practice-" class="level1">
+<h1>Theory vs practice:-</h1>
+<ul>
+<li>If you aim to reach the highest echelons of deep learning research, you first and foremost need to be a great practitioner!</li>
+<li>For best effects, use one cup of theory, one cup of practice. Rinse and repeat</li>
+<li>We are reading papers, but without training actual models, without the experience of applying what we are learning to real-life problem, we are missing a very important feedback loop.</li>
+</ul>
+</section>
+<section id="programming-is-about-what-you-have-to-say-" class="level1">
+<h1>Programming is about what you have to say:-</h1>
+<ul>
+<li>Your ability as a developer is measured by the utility of the things you can express in a language.</li>
+<li>Reading and writing a lot of code is the best way to learn a programming language.</li>
+</ul>
+</section>
+<section id="the-secret-of-good-developers-" class="level1">
+<h1>The secret of good developers:-</h1>
+<ul>
+<li>Go for long, uninterrupted sessions to avoid context switching.</li>
+</ul>
+</section>
+<section id="the-best-way-to-improve-as-a-developer-" class="level1">
+<h1>The best way to improve as a developer:-</h1>
+<ul>
+<li>You don’t sharpen your skills with resources, books, or articles. You sharpen your skills with practice. If you want to get better, go do the thing.</li>
+<li>Read and write a lot of code.</li>
+</ul>
+</section>
+<section id="how-to-use-your-tools-to-achieve-a-state-of-flow" class="level1">
+<h1>How to use your tools to achieve a state of flow</h1>
+<ul>
+<li>You are in a state of flow when nothing separates you and your work</li>
+<li>That’s why many programmers spend a lot of time studying their editors</li>
+<li>We are always somewhere between two extremes (state of flow)</li>
+<li>All we can do is take small steps and see if it is taking us towards the ideal.</li>
+<li>This can take our productivity to a whole new level.</li>
+</ul>
+</section>
+<section id="use-reality-as-your-mirror-" class="level1">
+<h1>Use reality as your mirror:-</h1>
+<ul>
+<li>If you want to live a different life tomorrow than you are living today, you have to put your beliefs to the test.</li>
+<li>The stronger the emotions involved in a situation, the higher the chance you are not seeing things clearly.</li>
+<li>Suppose you want to post something and you are afraid that people whom I respect will unfollow me or they will say I am stupid, but that doesn’t matter in the long run.</li>
+<li>Post it and you will learn on the way.</li>
+<li>Thinking about writing something isn’t doing the thing.</li>
+</ul>
+</section>
+<section id="do-genuine-work-it-compounds-" class="level1">
+<h1>Do genuine work (it compounds):-</h1>
+<ul>
+<li>Reading a book without taking notes is like discovering a new territory and forgetting to draw a map.</li>
+<li>Genuine work moves the atoms in the universe.</li>
+<li>Always make notes.</li>
+<li>Share whatever you have made.</li>
+<li>The more atoms you move the better the feedback you receive and the greater the extent to which you can reflect on what you are learning.</li>
+</ul>
+</section>
+<section id="the-hidden-game-of-machine-learning-" class="level1">
+<h1>The hidden game of machine learning:-</h1>
+<ul>
+<li>At the core of machine learning lies the ability to generalize to unseen data.</li>
+<li><a href="https://www.fast.ai/posts/2017-11-13-validation-sets.html">How (and why) to create a good validation set blog post by Rachel Thomas</a></li>
+<li><a href="https://work.caltech.edu/telecourse.html">Learning From Data: A short course by Yaser S. Abu-Mostafa</a></li>
+<li><a href="https://millengustavo.github.io/build-ml-app/">Building Machine Learning Powered Applications: Going from Idea to Product by Emmanuel Ameisen</a></li>
+</ul>
+</section>
+<section id="how-to-structure-a-machine-learning-project-" class="level1">
+<h1>How to structure a machine learning project:-</h1>
+<ul>
+<li><p>The main condition for a healthy machine learning project is a good train-val-test split.</p></li>
+<li><p>Always have a baseline to get to know whether i am going in right direction or not or what can be done next.</p></li>
+<li><p>Don’t run experiments just for the sake of tweaking hyperparameters, instead invest time in exploring other architectures, developing diagnostic code.</p></li>
+<li><p>The idea is to always move in small increments, using simpler models as a stepping stone to more complex ones.</p></li>
+<li><p>Define loss and implement it on simple model consisting of few layers and then check by passing a batch if output is not all zeros and the output shape is required shape.</p></li>
+<li><p>Create a subset of train data(1%) to check whether the modified code is working and the we are going in the right direction.</p></li>
+<li><p>Read as much as possible related to the domain you are working on so that our mind can work on the solution and analyze what to do next.</p></li>
+<li><p>Go slowly and give attention to each component of the pipeline and grow them systematically.</p></li>
+</ul>
+</section>
+<section id="how-to-win-at-kaggle-" class="level1">
+<h1>How to win at Kaggle:-</h1>
+<ul>
+<li><p>Join the competition early.</p></li>
+<li><p>Learn about the problem domain and data</p></li>
+<li><p>Write diagnostic code and identify where model is struggling.</p></li>
+<li><p>Follow Kaggle forums and read daily.</p></li>
+<li><p>Try to find out the relevant research papers and see if it is useful in solving the problem.</p></li>
+<li><p>You can read blogs related to the problem you are solving.</p></li>
+<li><p>While early in the competition, try on different architectures instead of tweaking the hyperparameters.</p></li>
+<li><p>How do we know that we are moving in the right direction? So first of all create a baseline and make a submission. The submission can consist of all zeros.</p></li>
+<li><p>Try to find out a validation split that will track the public leaderboard.</p></li>
+<li><p>A proper validation split lies at the heart of any good Kaggle submission.</p></li>
+<li><p>To know that if we are going in the right direction, see if the local results matches with the leaderboard. If so then you are going in the right direction and if not then try to find out other ways of splitting the data or something else.</p></li>
+<li><p>You can do ensembling also. the idea is to cancel out the errors from individual model in a hope that their errors are not correlated.</p></li>
+<li><p>A related technique is training with cross-validation, where you train multiple models withholding different parts of the data for validation and then combine the results from them.</p></li>
+</ul>
+</section>
+<section id="the-best-hardware-for-deep-learning-" class="level1">
+<h1>The best hardware for deep learning:-</h1>
+<ul>
+<li><a href="https://timdettmers.com/2023/01/30/which-gpu-for-deep-learning/#more-6">Follow this blog to know more about GPUs</a></li>
+</ul>
+</section>
+<section id="debugging-with-ease-is-a-superpower-" class="level1">
+<h1>Debugging with ease is a superpower:-</h1>
+<ul>
+<li><a href="https://x.com/radekosmulski/status/945739571735748609">Radek Osmulski’s Favorite recent jupyter notebook discovery - the %debug magic:</a></li>
+</ul>
+</section>
+<section id="time-yourself-" class="level1">
+<h1>Time yourself:-</h1>
+<ul>
+<li>Always keep track of the time which you devote to various activities.</li>
+<li>%%timeit</li>
+</ul>
+</section>
+<section id="you-cant-learn-a-profession-by-studying-a-textbook-" class="level1">
+<h1>You can’t learn a profession by studying a textbook:-</h1>
+<ul>
+<li>Extensive practice is very important alongside theory.</li>
+</ul>
+</section>
+<section id="on-finding-a-job-" class="level1">
+<h1>On finding a job:-</h1>
+<ul>
+<li>The best approach is to showcase your work, by helping others.</li>
+<li>Reach out to the people who know you and can help you.</li>
+</ul>
+</section>
+<section id="the-deep-learning-party-is-on-twitter-" class="level1">
+<h1>The deep learning party is on Twitter:-</h1>
+<ul>
+<li>you will find all the amazing people there</li>
+</ul>
+</section>
+<section id="share-your-work-" class="level1">
+<h1>Share your work:-</h1>
+<ul>
+<li><a href="https://www.fast.ai/posts/2017-12-18-personal-brand.html">Making Peace with Personal Branding</a></li>
+</ul>
+</section>
+<section id="when-to-start-sharing-your-work-" class="level1">
+<h1>When to start sharing your work:-</h1>
+<ul>
+<li>The sooner, the better!</li>
+<li>With every piece that we produce, we hone our communication skills</li>
+</ul>
+</section>
+<section id="i-am-scared-to-share-my-work-help" class="level1">
+<h1>I am scared to share my work! Help!</h1>
+<ul>
+<li>Where some see failure, others see cheap feedback.</li>
+<li>If you don’t like something then you can always delete it.</li>
+</ul>
+</section>
+<section id="what-to-focus-on-in-sharing-your-work-" class="level1">
+<h1>What to focus on in sharing your work:-</h1>
+<ul>
+<li>Speak to your experience.</li>
+<li>You don’t have to share something outside of your experience.</li>
+</ul>
+</section>
+<section id="dont-lose-sight-of-what-is-important-" class="level1">
+<h1>Don’t lose sight of what is important:-</h1>
+<ul>
+<li>You won a Kaggle competition that’s good but never ever forget why you have started.</li>
+<li>You don’t need followers or likes or even social media to learn.</li>
+<li>Nearly all of the best DL engineers I(Radek Osmulski) know are either very quiet or completely silent on Twitter</li>
+</ul>
+</section>
+<section id="make-mental-space-for-what-matters-" class="level1">
+<h1>Make mental space for what matters:-</h1>
+<ul>
+<li>Peace of mind is the most important prerequisite for creative work.</li>
+<li>Avoid using social media too much!</li>
+</ul>
+</section>
+<section id="to-engage-afterburners-find-a-mentor-" class="level1">
+<h1>To engage afterburners, find a mentor:-</h1>
+<ul>
+<li>Find a mentor, who is good at something you care about.</li>
+<li>The mentor doesn’t need to know you.</li>
+<li>In general, we want to get answers from the people who are like us and have gone through that path and the people who are not like us to get to know about more ideas.</li>
+<li>Always make your message as concise and clear as you can.</li>
+</ul>
+</section>
+<section id="the-biggest-regret-of-fast.ai-students-" class="level1">
+<h1>The biggest regret of fast.ai students:-</h1>
+<ul>
+<li>I wished I spent more time coding and experimenting and less time studying in a more traditional sense.</li>
+<li>100% learning -&gt; x% doing/100-x% real learning.</li>
+<li>Shortest path to understand how something works leads through practice.</li>
+<li>80% doing and 20% reading theory.</li>
+</ul>
+</section>
+<section id="persistence-is-everything-" class="level1">
+<h1>Persistence is everything:-</h1>
+<ul>
+<li>At any given moment, as you put in the work, you can barely notice a difference in your life. But the longer you stay the course the more rewarding the journey becomes.</li>
+<li>Learning compounds and you need to give it time before you start seeing the exponential results.</li>
+<li>Combine persistence with community involvement and you cannot be stopped.</li>
+</ul>
+</section>
+<section id="change-is-about-what-not-to-do-" class="level1">
+<h1>Change is about what not to do:-</h1>
+<ul>
+<li>Ceasing how we have done things up to now is harder than taking on new approach.</li>
+<li>Try to find out the behaviors which are no longer helpful to pursuing your goals and replace them with some meaningful.</li>
+</ul>
+</section>
+<section id="learning-might-just-be-enough" class="level1">
+<h1>Learning might just be enough</h1>
+<ul>
+<li>A good strategy towards learning is to observe whether you are getting the results that you are after and if you are not then change your approach.</li>
+</ul>
+</section>
+<section id="more-perspectives-on-mentoring-" class="level1">
+<h1>More perspectives on mentoring:-</h1>
+<ul>
+<li>If you want to catch the attention of someone you admire give yourself a job working for them.</li>
+<li>Learn in public.
+<ul>
+<li>Write blogs and tutorials and cheatsheets.</li>
+<li>Speak at meetups and conferences.</li>
+<li>Ask and answer things on Stackoverflow or Reddit. Avoid the walled gardens like Slack and Discord, they’re not public.</li>
+<li>Make Youtube videos or Twitch streams.</li>
+<li>Start a newsletter.</li>
+<li>Draw cartoons</li>
+</ul></li>
+<li>Make the thing you wish you had found when you were learning.</li>
+<li>Don’t judge results by claps or tweets or stars or upvotes, just talk to yourself from 3 months ago.</li>
+<li>by far the biggest beneficiary of you trying to help past you is future you. If others benefit, that’s icing.</li>
+<li>Don’t stop there:
+<ul>
+<li>Enjoyed a coding video? Reach out to the speaker/instructor and thank them, and ask questions.</li>
+<li>Make PR’s to libraries you use.</li>
+<li>Make your own libraries no one will ever use.</li>
+<li>Clone stuff you like, from scratch, to see how they work.</li>
+<li>Teach workshops.</li>
+<li>Go to conferences and summarize what you learned.</li>
+</ul></li>
+<li>Try your best to be right, but don’t worry when you’re wrong, and let the internet correct you when you are inevitably wrong.</li>
+<li>Talk while you code.</li>
+<li>Whenever someone wants some help, then you should be always ready to help them because these are some of the most in-demand people in tech.</li>
+</ul>
+</section>
+<section id="tap-into-the-power-of-the-community-to-learn-faster" class="level1">
+<h1>Tap into the power of the community to learn faster</h1>
+<ul>
+<li>Instead of asking questions only try to answer more.</li>
+<li>Joining community will help you in better communication, learn from other’s.</li>
+</ul>
+</section>
+<section id="energize" class="level1">
+<h1>Energize</h1>
+<ul>
+<li>Yoga can help.</li>
+<li>Time-restricted eating and its primary benefit is restore hormonal balance.</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>Deep Learning</category>
+  <guid>https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/</guid>
+  <pubDate>Sun, 23 Jun 2024 18:30:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>Practical Deep Learning for Coders with fast.ai &amp; PyTorch Book Chapter wise Summary Points</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/fast.ai summary points/</link>
+  <description><![CDATA[ 
+
+
+
+
+<ul>
+<li>This is completely based on <a href="https://course.fast.ai/Resources/book.html">Practical Deep Learning Fast.ai course</a></li>
+</ul>
+<section id="chapter-1-your-deep-learning-journey" class="level1">
+<h1>[Chapter 1] Your Deep Learning Journey</h1>
+<ul>
+<li><p>A regression model is one that attempts to predict one or more numeric quantities, such a temperature or a location. Sometimes people use the word regression to refer to a particular kind of model called a linear regression model.</p></li>
+<li><p>The entire purpose of loss is to define a “measure of performance” that the training system can use to update weights automatically.But a metric is defined for human consumption, so a good metric is one that is easy for you to understand.</p></li>
+<li><p>Images from a time series dataset using a technique called Gramian Angular Difference Field.</p></li>
+</ul>
+<section id="why-do-we-need-trainval-and-test" class="level4">
+<h4 class="anchored" data-anchor-id="why-do-we-need-trainval-and-test">why do we need train,val and test</h4>
+<ul>
+<li><p>We use validation loss to kind of of tune the hyper-params. By doing so, we are indirectly using the val data. That’s why we need test data also.</p></li>
+<li><p>Train data is used to train the model. (Training Process)</p></li>
+<li><p>Val data is used to improve the model. (Modeling Process)</p></li>
+<li><p>Test data is used to only evaluate the model. Don’t see it or share, just use it for evaluation.</p></li>
+<li><p>the automatic training process with backpropagation, the more manual process of trying different hyperparameters between training sessions, and the assessment of our final result.</p></li>
+<li><p>If your data includes the date and you are building a model to use in the future, you will want to choose a continuous section with the latest dates as your validation set</p></li>
+</ul>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>Deep Learning</category>
+  <guid>https://riteshrm.github.io/posts/fast.ai summary points/</guid>
+  <pubDate>Sat, 15 Jun 2024 18:30:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/fast.ai summary points/book.jpg" medium="image" type="image/jpeg"/>
+</item>
 <item>
   <title>Leetcode POTD</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
@@ -82,6 +419,3173 @@ class Solution {
   <guid>https://riteshrm.github.io/posts/Leetcode POTD/</guid>
   <pubDate>Thu, 23 May 2024 18:30:00 GMT</pubDate>
   <media:content url="https://riteshrm.github.io/posts/Leetcode POTD/leetcode.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>Quantization in Depth</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/Quantization in Depth/</link>
+  <description><![CDATA[ 
+
+
+
+
+<ul>
+<li><p>This is completely based on <a href="https://learn.deeplearning.ai/courses/quantization-in-depth/lesson/1/introduction">Quantization in Depth</a></p></li>
+<li><p>For the code part, you can checkout this <a href="https://github.com/riteshrm/Quantization-in-Depth-deeplearning.ai-">link</a></p></li>
+</ul>
+<section id="quantize-and-de-quantize-a-tensor" class="level3">
+<h3 class="anchored" data-anchor-id="quantize-and-de-quantize-a-tensor">Quantize and De-quantize a tensor</h3>
+<ul>
+<li>Advantages of Quantization
+<ul>
+<li>Smaller model</li>
+<li>Speed gains
+<ul>
+<li>Memory bandwidth</li>
+<li>Faster operations
+<ul>
+<li>GEMM: General Matrix Multiply(matrix to matrix multiplication)</li>
+<li>GEMV: General Matrix Vector Multiplication (matrix to vector multiplication)</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Challenges of Quantization
+<ul>
+<li>Quantization error</li>
+<li>Retraining (Quantization Aware Training)</li>
+<li>Limited Hardware support</li>
+<li>Calibration dataset needed</li>
+<li>packing/unpacking</li>
+</ul></li>
+<li>getting q:-
+<ul>
+<li>r = s(q-z) q = int(round(r/s+z))</li>
+</ul></li>
+</ul>
+<div id="43c38b6b" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> seaborn <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> sns</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> plt</span>
+<span id="cb1-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> matplotlib.colors <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> ListedColormap</span>
+<span id="cb1-5"></span>
+<span id="cb1-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#Helper functions to visualize</span></span>
+<span id="cb1-7"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> plot_matrix(tensor, ax, title, vmin<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, vmax<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, cmap<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>):</span>
+<span id="cb1-8">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""</span></span>
+<span id="cb1-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    Plot a heatmap of tensors using seaborn</span></span>
+<span id="cb1-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    """</span></span>
+<span id="cb1-11">    sns.heatmap(tensor.cpu().numpy(), ax<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>ax, vmin<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>vmin, vmax<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>vmax, cmap<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>cmap, annot<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>, fmt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".2f"</span>, cbar<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>)</span>
+<span id="cb1-12">    ax.set_title(title)</span>
+<span id="cb1-13">    ax.set_yticklabels([])</span>
+<span id="cb1-14">    ax.set_xticklabels([])</span>
+<span id="cb1-15"></span>
+<span id="cb1-16"></span>
+<span id="cb1-17"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> plot_quantization_errors(original_tensor, quantized_tensor, dequantized_tensor, dtype <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.int8, n_bits <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>):</span>
+<span id="cb1-18">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""</span></span>
+<span id="cb1-19"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    A method that plots 4 matrices, the original tensor, the quantized tensor</span></span>
+<span id="cb1-20"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    the de-quantized tensor and the error tensor.</span></span>
+<span id="cb1-21"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    """</span></span>
+<span id="cb1-22">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Get a figure of 4 plots</span></span>
+<span id="cb1-23">    fig, axes <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> plt.subplots(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, figsize<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">15</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>))</span>
+<span id="cb1-24"></span>
+<span id="cb1-25">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Plot the first matrix</span></span>
+<span id="cb1-26">    plot_matrix(original_tensor, axes[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>], <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Original Tensor'</span>, cmap<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>ListedColormap([<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'white'</span>]))</span>
+<span id="cb1-27"></span>
+<span id="cb1-28">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Get the quantization range and plot the quantized tensor</span></span>
+<span id="cb1-29">    q_min, q_max <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.iinfo(dtype).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">min</span>, torch.iinfo(dtype).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">max</span></span>
+<span id="cb1-30">    plot_matrix(quantized_tensor, axes[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>], <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f'</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>n_bits<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">-bit Linear Quantized Tensor'</span>, vmin<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>q_min, vmax<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>q_max, cmap<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'coolwarm'</span>)</span>
+<span id="cb1-31"></span>
+<span id="cb1-32">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Plot the de-quantized tensors</span></span>
+<span id="cb1-33">    plot_matrix(dequantized_tensor, axes[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>], <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Dequantized Tensor'</span>, cmap<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'coolwarm'</span>)</span>
+<span id="cb1-34"></span>
+<span id="cb1-35">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Get the quantization errors</span></span>
+<span id="cb1-36">    q_error_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">abs</span>(original_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> dequantized_tensor)</span>
+<span id="cb1-37">    plot_matrix(q_error_tensor, axes[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>], <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Quantization Error Tensor'</span>, cmap<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>ListedColormap([<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'white'</span>]))</span>
+<span id="cb1-38"></span>
+<span id="cb1-39">    fig.tight_layout()</span>
+<span id="cb1-40">    plt.show()</span>
+<span id="cb1-41"></span>
+<span id="cb1-42"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> linear_q_with_scale_and_zero_point(</span>
+<span id="cb1-43">    tensor, scale, zero_point, dtype <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.int8):</span>
+<span id="cb1-44"></span>
+<span id="cb1-45">    scaled_and_shifted_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> scale <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> zero_point</span>
+<span id="cb1-46"></span>
+<span id="cb1-47">    rounded_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">round</span>(scaled_and_shifted_tensor)</span>
+<span id="cb1-48"></span>
+<span id="cb1-49">    q_min <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.iinfo(dtype).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">min</span></span>
+<span id="cb1-50">    q_max <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.iinfo(dtype).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">max</span></span>
+<span id="cb1-51"></span>
+<span id="cb1-52">    q_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> rounded_tensor.clamp(q_min,q_max).to(dtype)</span>
+<span id="cb1-53">    </span>
+<span id="cb1-54">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> q_tensor</span>
+<span id="cb1-55"></span>
+<span id="cb1-56">test_tensor<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.tensor(</span>
+<span id="cb1-57">    [[<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">191.6</span>, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">13.5</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">728.6</span>],</span>
+<span id="cb1-58">     [<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">92.14</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">295.5</span>,  <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">184</span>],</span>
+<span id="cb1-59">     [<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,     <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">684.6</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">245.5</span>]])</span>
+<span id="cb1-60"></span>
+<span id="cb1-61">scale <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3.5</span></span>
+<span id="cb1-62">zero_point <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">70</span></span>
+<span id="cb1-63"></span>
+<span id="cb1-64">quantized_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> linear_q_with_scale_and_zero_point(</span>
+<span id="cb1-65">    test_tensor, scale, zero_point)</span>
+<span id="cb1-66"></span>
+<span id="cb1-67"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> linear_dequantization(quantized_tensor, scale, zero_point):</span>
+<span id="cb1-68">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> scale <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> (quantized_tensor.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">float</span>() <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> zero_point)</span>
+<span id="cb1-69"></span>
+<span id="cb1-70">dequantized_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> linear_dequantization(</span>
+<span id="cb1-71">    quantized_tensor, scale, zero_point)</span>
+<span id="cb1-72"></span>
+<span id="cb1-73">plot_quantization_errors(test_tensor, quantized_tensor,</span>
+<span id="cb1-74">                         dequantized_tensor)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://riteshrm.github.io/posts/Quantization in Depth/index_files/figure-html/cell-2-output-1.png" width="1430" height="374" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="get-the-scale-and-zero-point" class="level3">
+<h3 class="anchored" data-anchor-id="get-the-scale-and-zero-point">Get the Scale and Zero-Point</h3>
+<ul>
+<li>s = (r_max-r_min)[current_tensor_range]/(q_max-q_min)[datatype_range]</li>
+<li>z = int(round(q_min - r_min/s))</li>
+<li>z and quantized tensor are of the same type</li>
+<li>z is an integer because it represent zero(in the original ‘r’ range) with an integer in the quantized ‘q’ range</li>
+<li>if z goes out of range:-
+<ul>
+<li>z &lt; q_min:-
+<ul>
+<li>z = q_min</li>
+</ul></li>
+<li>z &gt; q_max:-
+<ul>
+<li>z = q_max</li>
+</ul></li>
+</ul></li>
+</ul>
+<div id="a16c08a4" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb2-2"></span>
+<span id="cb2-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> get_q_scale_and_zero_point(tensor, dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.int8):</span>
+<span id="cb2-4">    </span>
+<span id="cb2-5">    q_min, q_max <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.iinfo(dtype).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">min</span>, torch.iinfo(dtype).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">max</span></span>
+<span id="cb2-6">    r_min, r_max <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tensor.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">min</span>().item(), tensor.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">max</span>().item()</span>
+<span id="cb2-7"></span>
+<span id="cb2-8">    scale <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (r_max <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> r_min) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> (q_max <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> q_min)</span>
+<span id="cb2-9"></span>
+<span id="cb2-10">    zero_point <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> q_min <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> (r_min <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> scale)</span>
+<span id="cb2-11"></span>
+<span id="cb2-12">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># clip the zero_point to fall in [quantized_min, quantized_max]</span></span>
+<span id="cb2-13">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> zero_point <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> q_min:</span>
+<span id="cb2-14">        zero_point <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> q_min</span>
+<span id="cb2-15">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">elif</span> zero_point <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> q_max:</span>
+<span id="cb2-16">        zero_point <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> q_max</span>
+<span id="cb2-17">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">else</span>:</span>
+<span id="cb2-18">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># round and cast to int</span></span>
+<span id="cb2-19">        zero_point <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">round</span>(zero_point))</span>
+<span id="cb2-20">    </span>
+<span id="cb2-21">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> scale, zero_point</span></code></pre></div>
+</div>
+</section>
+<section id="symmetric-vs-asymmetrci-mode" class="level3">
+<h3 class="anchored" data-anchor-id="symmetric-vs-asymmetrci-mode">Symmetric vs Asymmetrci Mode</h3>
+<ul>
+<li>Assymetric Mode:-
+<ul>
+<li>map [r_max, r_min] to [q_max, q_min]</li>
+<li>This is what we have implemnted above</li>
+</ul></li>
+<li>Symmetric Mode:-
+<ul>
+<li>map [-r_max, r_max] to [-q_max, q_max]
+<ul>
+<li>where r_max = max(|tensor|)</li>
+</ul></li>
+</ul></li>
+</ul>
+We don’t need to use zero point(z=0). this happens because the floating point range and the quantized range are symmetric with respect to zero
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Quantization in Depth/im1.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<p>Hence, we can simplify the equation to:-</p>
+<ul>
+<li>q = int(round(r/s))</li>
+<li>s = r_max/q_max</li>
+</ul>
+<div id="d5613f1a" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb3-2"></span>
+<span id="cb3-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> get_q_scale_symmetric(tensor, dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.int8):</span>
+<span id="cb3-4">    r_max <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tensor.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">abs</span>().<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">max</span>().item()</span>
+<span id="cb3-5">    q_max <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.iinfo(dtype).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">max</span></span>
+<span id="cb3-6"></span>
+<span id="cb3-7">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># return the scale</span></span>
+<span id="cb3-8">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> r_max<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>q_max</span>
+<span id="cb3-9"></span>
+<span id="cb3-10"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> linear_q_symmetric(tensor, dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.int8):</span>
+<span id="cb3-11">    scale <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_q_scale_symmetric(tensor)</span>
+<span id="cb3-12">    </span>
+<span id="cb3-13">    quantized_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> linear_q_with_scale_and_zero_point(tensor,</span>
+<span id="cb3-14">                                                     scale<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>scale,</span>
+<span id="cb3-15">                   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># in symmetric quantization zero point is = 0    </span></span>
+<span id="cb3-16">                                                    zero_point<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,</span>
+<span id="cb3-17">                                                      dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>dtype)</span>
+<span id="cb3-18">    </span>
+<span id="cb3-19">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> quantized_tensor, scale</span></code></pre></div>
+</div>
+<p><strong>Trade-off</strong></p>
+<ul>
+<li><p>Utilization of quantized range:</p>
+<ul>
+<li>when using asymmetric quantization, the quantized range is fully utilized</li>
+<li>When symmetric mode, if the float range is biased towards one side, this will result in a quantized range where a part of the range is dedicated to values that we’ll never see.(e.g ReLU where the output is positive)</li>
+</ul></li>
+<li><p>Simplicity:</p>
+<ul>
+<li>Symmetric mode is much simpler compared to asymmetric mode.</li>
+</ul></li>
+<li><p>Memory: We don’t have to store zero-point for symmetric quantization</p></li>
+<li><p><strong>We use symmetric quantization for 8-bit, but as we go for lower bits such as 2 or 4 bits, we use asyyemtric quantization</strong></p></li>
+</ul>
+</section>
+<section id="finer-granularity-for-more-precision" class="level3">
+<h3 class="anchored" data-anchor-id="finer-granularity-for-more-precision">Finer Granularity for more Precision</h3>
+<ul>
+<li>Different granularities
+<ul>
+<li>per tensor</li>
+<li>per channel (along an axis)</li>
+<li>per group (group n elements together)</li>
+</ul></li>
+<li>The more granular quantization is the more precise it will be.</li>
+</ul>
+</section>
+<section id="per-channel-quantization" class="level3">
+<h3 class="anchored" data-anchor-id="per-channel-quantization">Per Channel Quantization</h3>
+<ul>
+<li>we usually use per channel quantization in int8</li>
+</ul>
+<div id="90f8a947" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> linear_q_symmetric_per_channel(r_tensor, dim, dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.int8):</span>
+<span id="cb4-2">    </span>
+<span id="cb4-3">    output_dim <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> r_tensor.shape[dim]</span>
+<span id="cb4-4">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># store the scales</span></span>
+<span id="cb4-5">    scale <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.zeros(output_dim)</span>
+<span id="cb4-6"></span>
+<span id="cb4-7">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> index <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(output_dim):</span>
+<span id="cb4-8">        sub_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> r_tensor.select(dim, index)</span>
+<span id="cb4-9">        scale[index] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_q_scale_symmetric(sub_tensor, dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>dtype)</span>
+<span id="cb4-10"></span>
+<span id="cb4-11">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># reshape the scale</span></span>
+<span id="cb4-12">    scale_shape <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> r_tensor.dim()</span>
+<span id="cb4-13">    scale_shape[dim] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb4-14">    scale <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> scale.view(scale_shape)</span>
+<span id="cb4-15">    quantized_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> linear_q_with_scale_and_zero_point(</span>
+<span id="cb4-16">        r_tensor, scale<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>scale, zero_point<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>dtype)</span>
+<span id="cb4-17">   </span>
+<span id="cb4-18">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> quantized_tensor, scale</span></code></pre></div>
+</div>
+</section>
+<section id="per-group-quantization" class="level3">
+<h3 class="anchored" data-anchor-id="per-group-quantization">Per Group Quantization</h3>
+<ul>
+<li><p>Group n(e.g.&nbsp;32, 64, 128) elements together and quantize</p></li>
+<li><p>Per group quantization can require a lot of memory</p>
+<ul>
+<li>Let’s say we want to quantize a tensor in 4-bit and we choose group_size=32, symmetric mode(z=0), and we store the scales in FP16</li>
+<li>It means that we actually quantizing the tensor in <strong>4.5 bits</strong> since we have:
+<ul>
+<li>4 bit(each element is stored in 4 bit)</li>
+<li>16/32 bit (scale in 16 bits for every 32 elements)</li>
+</ul></li>
+</ul></li>
+</ul>
+<div id="ea9e3a17" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> linear_q_symmetric_per_group(tensor, group_size,</span>
+<span id="cb5-2">                                 dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.int8):</span>
+<span id="cb5-3">    </span>
+<span id="cb5-4">    t_shape <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tensor.shape</span>
+<span id="cb5-5">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">assert</span> t_shape[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%</span> group_size <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span></span>
+<span id="cb5-6">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">assert</span> tensor.dim() <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span>
+<span id="cb5-7">    </span>
+<span id="cb5-8">    tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tensor.view(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, group_size)</span>
+<span id="cb5-9">    </span>
+<span id="cb5-10">    quantized_tensor, scale <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> linear_q_symmetric_per_channel(</span>
+<span id="cb5-11">                                tensor, dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>dtype)</span>
+<span id="cb5-12">    </span>
+<span id="cb5-13">    quantized_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> quantized_tensor.view(t_shape)</span>
+<span id="cb5-14">    </span>
+<span id="cb5-15">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> quantized_tensor, scale</span>
+<span id="cb5-16"></span>
+<span id="cb5-17"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> linear_dequantization_per_group(quantized_tensor, scale, </span>
+<span id="cb5-18">                                    group_size):</span>
+<span id="cb5-19">    </span>
+<span id="cb5-20">    q_shape <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> quantized_tensor.shape</span>
+<span id="cb5-21">    quantized_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> quantized_tensor.view(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, group_size)</span>
+<span id="cb5-22">    </span>
+<span id="cb5-23">    dequantized_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> linear_dequantization(quantized_tensor, </span>
+<span id="cb5-24">                                               scale, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>)</span>
+<span id="cb5-25">    </span>
+<span id="cb5-26">    dequantized_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> dequantized_tensor.view(q_shape)</span>
+<span id="cb5-27">    </span>
+<span id="cb5-28">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> dequantized_tensor</span></code></pre></div>
+</div>
+</section>
+<section id="quantizing-weights-and-activations-for-inference" class="level3">
+<h3 class="anchored" data-anchor-id="quantizing-weights-and-activations-for-inference">Quantizing Weights and Activations for Inference</h3>
+<ul>
+<li>Depending on what we quantize, the storage and the computation are not the same.</li>
+<li>W8A32
+<ul>
+<li>If weights are quantized but not the activations, then computation is done floating point (FP16,FP32, BF16)</li>
+<li>We need to dequantize the weights to perform the floating point computation (cast to float32)</li>
+</ul></li>
+<li>W8A8
+<ul>
+<li>Both are quantized</li>
+<li>Computation is integer based but not <strong>supported by all hardware</strong></li>
+</ul></li>
+</ul>
+</section>
+<section id="custom-build-an-8-bit-quantizer" class="level3">
+<h3 class="anchored" data-anchor-id="custom-build-an-8-bit-quantizer">Custom Build an 8-Bit Quantizer</h3>
+<div id="7b86ac82" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#W8A16LinearLayer</span></span>
+<span id="cb6-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> w8_a16_forward(weight, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>, scales, bias<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>):</span>
+<span id="cb6-3">    </span>
+<span id="cb6-4">    casted_weights <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> weight.to(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>.dtype)</span>
+<span id="cb6-5">    output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> F.linear(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>, casted_weights) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> scales</span>
+<span id="cb6-6">    </span>
+<span id="cb6-7">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> bias <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">is</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">not</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>:</span>
+<span id="cb6-8">        output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> bias</span>
+<span id="cb6-9">      </span>
+<span id="cb6-10">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> output</span></code></pre></div>
+</div>
+<div id="7a1e397b" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb7-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> nn</span>
+<span id="cb7-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn.functional <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> F</span>
+<span id="cb7-4"></span>
+<span id="cb7-5"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">class</span> W8A16LinearLayer(nn.Module):</span>
+<span id="cb7-6">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, in_features, out_features, </span>
+<span id="cb7-7">                 bias<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>, dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.float32):</span>
+<span id="cb7-8">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">super</span>().<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>()</span>
+<span id="cb7-9">        </span>
+<span id="cb7-10">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.int8_weights <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Parameter(torch.Tensor([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span>
+<span id="cb7-11">                                     ).to(dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.int8))</span>
+<span id="cb7-12"></span>
+<span id="cb7-13"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">try</span>:</span>
+<span id="cb7-14">    </span>
+<span id="cb7-15">    W8A16LinearLayer(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb7-16">    </span>
+<span id="cb7-17"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">except</span> <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">Exception</span> <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> error:</span>
+<span id="cb7-18">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\033</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">[91m"</span>, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">type</span>(error).<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">__name__</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">": "</span>, error, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\033</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">[0m"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> RuntimeError :  Only Tensors of floating point and complex dtype can require gradients </code></pre>
+</div>
+</div>
+<ul>
+<li><p>When we create nn.Parameters, pytorch expects that parameter where it’s able to compute gradients on it.</p></li>
+<li><p>The issue is that with PyTorch, you can’t explicitly compute gradients on INT8 tensors.</p></li>
+<li><p>So above code snippet will give an error saying that only tensors of floating point and complex dtype can require gradients.</p></li>
+<li><p>So the right approach to save INT8 weights is instead of saving attributes as being an endless parameter, is to call the method called register buffer.</p></li>
+<li><p>This way instead of storing a parameter, we just store a buffer, meaning we don’t need to compute gradients on the tensor.</p></li>
+<li><p>You can initialize it with whatever dtype you want.</p></li>
+</ul>
+<div id="ab90bdd5" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb9-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> nn</span>
+<span id="cb9-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn.functional <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> F</span>
+<span id="cb9-4"></span>
+<span id="cb9-5"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">class</span> W8A16LinearLayer(nn.Module):</span>
+<span id="cb9-6">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, in_features, out_features, </span>
+<span id="cb9-7">                 bias<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>, dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.float32):</span>
+<span id="cb9-8">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">super</span>().<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>()</span>
+<span id="cb9-9">        </span>
+<span id="cb9-10">        </span>
+<span id="cb9-11">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.register_buffer(</span>
+<span id="cb9-12">            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"int8_weights"</span>,</span>
+<span id="cb9-13">            torch.randint(</span>
+<span id="cb9-14">                <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">128</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">127</span>, (out_features, in_features), dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.int8</span>
+<span id="cb9-15">            )</span>
+<span id="cb9-16">        )</span>
+<span id="cb9-17">        </span>
+<span id="cb9-18">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.register_buffer(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"scales"</span>, </span>
+<span id="cb9-19">                             torch.randn((out_features), dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>dtype)) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># We are intereseted in inference only</span></span>
+<span id="cb9-20">        </span>
+<span id="cb9-21">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> bias:</span>
+<span id="cb9-22">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.register_buffer(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"bias"</span>, </span>
+<span id="cb9-23">                                 torch.randn((<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, out_features), </span>
+<span id="cb9-24">                                             dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>dtype))</span>
+<span id="cb9-25">        </span>
+<span id="cb9-26">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">else</span>:</span>
+<span id="cb9-27">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.bias <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span></span>
+<span id="cb9-28">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> forward(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>):</span>
+<span id="cb9-29">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> w8_a16_forward(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.int8_weights, </span>
+<span id="cb9-30">                              <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.scales, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.bias)</span></code></pre></div>
+</div>
+<p><strong>Quantize a Base Model</strong></p>
+<div id="3d004a78" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb10-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> nn</span>
+<span id="cb10-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn.functional <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> F</span>
+<span id="cb10-4"></span>
+<span id="cb10-5"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">class</span> W8A16LinearLayer(nn.Module):</span>
+<span id="cb10-6">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, in_features, out_features, </span>
+<span id="cb10-7">                 bias<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>, dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.float32):</span>
+<span id="cb10-8">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">super</span>().<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>()</span>
+<span id="cb10-9">        </span>
+<span id="cb10-10">        </span>
+<span id="cb10-11">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.register_buffer(</span>
+<span id="cb10-12">            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"int8_weights"</span>,</span>
+<span id="cb10-13">            torch.randint(</span>
+<span id="cb10-14">                <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">128</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">127</span>, (out_features, in_features), dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.int8</span>
+<span id="cb10-15">            )</span>
+<span id="cb10-16">        )</span>
+<span id="cb10-17">        </span>
+<span id="cb10-18">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.register_buffer(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"scales"</span>, </span>
+<span id="cb10-19">                             torch.randn((out_features), dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>dtype))</span>
+<span id="cb10-20">        </span>
+<span id="cb10-21">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> bias:</span>
+<span id="cb10-22">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.register_buffer(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"bias"</span>, </span>
+<span id="cb10-23">                                 torch.randn((<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, out_features), </span>
+<span id="cb10-24">                                             dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>dtype))</span>
+<span id="cb10-25">        </span>
+<span id="cb10-26">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">else</span>:</span>
+<span id="cb10-27">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.bias <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span></span>
+<span id="cb10-28"></span>
+<span id="cb10-29">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> quantize(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, weights):</span>
+<span id="cb10-30">        w_fp32 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> weights.clone().to(torch.float32)</span>
+<span id="cb10-31"></span>
+<span id="cb10-32">        scales <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> w_fp32.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">abs</span>().<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">max</span>(dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>).values <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">127</span></span>
+<span id="cb10-33">        scales <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> scales.to(weights.dtype)</span>
+<span id="cb10-34"></span>
+<span id="cb10-35">        int8_weights <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">round</span>(weights</span>
+<span id="cb10-36">                        <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>scales.unsqueeze(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)).to(torch.int8)</span>
+<span id="cb10-37"></span>
+<span id="cb10-38">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.int8_weights <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> int8_weights</span>
+<span id="cb10-39">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.scales <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> scales</span>
+<span id="cb10-40">    </span>
+<span id="cb10-41">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> forward(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>):</span>
+<span id="cb10-42">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> w8_a16_forward(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.int8_weights, </span>
+<span id="cb10-43">                              <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.scales, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.bias)</span>
+<span id="cb10-44"></span>
+<span id="cb10-45">module <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> W8A16LinearLayer(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>)</span>
+<span id="cb10-46"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Weights before:</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span> , module.int8_weights)</span>
+<span id="cb10-47">random_matrix <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.randn((<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>), dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.bfloat16)</span>
+<span id="cb10-48">module.quantize(random_matrix)</span>
+<span id="cb10-49"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Weights After:</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span> , module.int8_weights)</span>
+<span id="cb10-50"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Average quantiation error:-"</span>,(random_matrix <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> module.int8_weights </span>
+<span id="cb10-51"> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> module.scales.unsqueeze(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">abs</span>().mean())</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Weights before:
+ tensor([[-42, -86,  75,  40],
+        [ 89,  35,  17, -93],
+        [ 84, -42,  -6,  23],
+        [ 10,  88,  30, -78],
+        [ 89, 116,  23,   1],
+        [ -9, -80,  74,  33],
+        [112,  90, 121, -87],
+        [-74, 125, -73,   1]], dtype=torch.int8)
+Weights After:
+ tensor([[ -16,  -49,   19,  -56,  -26,   19, -128,   -5],
+        [  26,   46,  -38,   53,  -99,   98,  -14, -127],
+        [ -83,   57,   49,   54,  -13,  -11,   24, -127],
+        [ 127,  -47,  -18,    9,  -24,   86,  126,    0]], dtype=torch.int8)
+Average quantiation error:- tensor(0.0034, dtype=torch.bfloat16)</code></pre>
+</div>
+</div>
+</section>
+<section id="replace-pytorch-layers-with-quantized-layers" class="level3">
+<h3 class="anchored" data-anchor-id="replace-pytorch-layers-with-quantized-layers">Replace PyTorch layers with Quantized Layers</h3>
+<ul>
+<li>For language models, it better to not quantize the last layer.</li>
+</ul>
+<div id="1f0b9d84" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb12-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> nn</span>
+<span id="cb12-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn.functional <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> F</span>
+<span id="cb12-4"></span>
+<span id="cb12-5"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> replace_linear_with_target(module, </span>
+<span id="cb12-6">                               target_class, module_name_to_exclude):</span>
+<span id="cb12-7">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> name, child <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> module.named_children():</span>
+<span id="cb12-8">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">isinstance</span>(child, nn.Linear) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">and</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">not</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb12-9">          <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">any</span>([x <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> name <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> x <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> module_name_to_exclude]):</span>
+<span id="cb12-10">            old_bias <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> child.bias</span>
+<span id="cb12-11"></span>
+<span id="cb12-12">            new_module <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> target_class(child.in_features, </span>
+<span id="cb12-13">                                      child.out_features, </span>
+<span id="cb12-14">                                      old_bias <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">is</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">not</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, </span>
+<span id="cb12-15">                                      child.weight.dtype)</span>
+<span id="cb12-16">            <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">setattr</span>(module, name, new_module)</span>
+<span id="cb12-17">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> old_bias <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">is</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">not</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>:</span>
+<span id="cb12-18">              <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">getattr</span>(module, name).bias <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> old_bias</span>
+<span id="cb12-19">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">else</span>:</span>
+<span id="cb12-20">            <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Recursively call the function for nested modules</span></span>
+<span id="cb12-21">            replace_linear_with_target(</span>
+<span id="cb12-22">                child, target_class, module_name_to_exclude)</span>
+<span id="cb12-23"></span>
+<span id="cb12-24"></span>
+<span id="cb12-25"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> replace_linear_with_target_and_quantize(module, </span>
+<span id="cb12-26">                               target_class, module_name_to_exclude):</span>
+<span id="cb12-27">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> name, child <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> module.named_children():</span>
+<span id="cb12-28">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">isinstance</span>(child, nn.Linear) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">and</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">not</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb12-29">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">any</span>([x <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> name <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> x <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> module_name_to_exclude]):</span>
+<span id="cb12-30">            old_bias <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> child.bias</span>
+<span id="cb12-31">            old_weight <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> child.weight</span>
+<span id="cb12-32"></span>
+<span id="cb12-33">            new_module <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> target_class(child.in_features, </span>
+<span id="cb12-34">                                      child.out_features, </span>
+<span id="cb12-35">                                      old_bias <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">is</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">not</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, </span>
+<span id="cb12-36">                                      child.weight.dtype)</span>
+<span id="cb12-37">            <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">setattr</span>(module, name, new_module) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># current module is replaced by new_module</span></span>
+<span id="cb12-38"></span>
+<span id="cb12-39">            <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">getattr</span>(module, name).quantize(old_weight)</span>
+<span id="cb12-40">            </span>
+<span id="cb12-41">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> old_bias <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">is</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">not</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>:</span>
+<span id="cb12-42">              <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">getattr</span>(module, name).bias <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> old_bias</span>
+<span id="cb12-43">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">else</span>:</span>
+<span id="cb12-44">            <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Recursively call the function for nested modules</span></span>
+<span id="cb12-45">            replace_linear_with_target_and_quantize(child, </span>
+<span id="cb12-46">                     target_class, module_name_to_exclude)</span>
+<span id="cb12-47"></span>
+<span id="cb12-48"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">class</span> DummyModel(torch.nn.Module):</span>
+<span id="cb12-49">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>):</span>
+<span id="cb12-50">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">super</span>().<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>()</span>
+<span id="cb12-51">    <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.emb <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.nn.Embedding(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb12-52">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Try with bias</span></span>
+<span id="cb12-53">    <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.linear_1 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Linear(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb12-54">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Try without bias</span></span>
+<span id="cb12-55">    <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.linear_2 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Linear(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, bias<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>)</span>
+<span id="cb12-56">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Lm prediction head</span></span>
+<span id="cb12-57">    <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.lm_head <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Linear(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, bias<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>)</span>
+<span id="cb12-58"></span>
+<span id="cb12-59">model_1 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> DummyModel()</span>
+<span id="cb12-60">model_2 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> DummyModel()</span>
+<span id="cb12-61">replace_linear_with_target_and_quantize(model_1, W8A16LinearLayer, [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"lm_head"</span>])</span>
+<span id="cb12-62"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"model_1"</span>,model_1)</span>
+<span id="cb12-63"></span>
+<span id="cb12-64">replace_linear_with_target_and_quantize(model_2, W8A16LinearLayer, [])</span>
+<span id="cb12-65"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"model_2"</span>,model_2)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>model_1 DummyModel(
+  (emb): Embedding(1, 1)
+  (linear_1): W8A16LinearLayer()
+  (linear_2): W8A16LinearLayer()
+  (lm_head): Linear(in_features=1, out_features=1, bias=False)
+)
+model_2 DummyModel(
+  (emb): Embedding(1, 1)
+  (linear_1): W8A16LinearLayer()
+  (linear_2): W8A16LinearLayer()
+  (lm_head): W8A16LinearLayer()
+)</code></pre>
+</div>
+</div>
+</section>
+<section id="quantize-any-open-source-pytorch-model" class="level3">
+<h3 class="anchored" data-anchor-id="quantize-any-open-source-pytorch-model">Quantize any Open Source PyTorch Model</h3>
+<div id="b3de09bc" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> transformers <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> AutoModelForCausalLM, AutoTokenizer, pipeline</span>
+<span id="cb14-2"></span>
+<span id="cb14-3">model_id <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Salesforce/codegen-350M-mono"</span></span>
+<span id="cb14-4"></span>
+<span id="cb14-5">model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> AutoModelForCausalLM.from_pretrained(model_id, </span>
+<span id="cb14-6">                                    torch_dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.bfloat16, </span>
+<span id="cb14-7">                                             low_cpu_mem_usage<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span>
+<span id="cb14-8">tokenizer <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> AutoTokenizer.from_pretrained(model_id)</span>
+<span id="cb14-9"></span>
+<span id="cb14-10">pipe <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pipeline(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"text-generation"</span>, model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>model, tokenizer<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>tokenizer)</span>
+<span id="cb14-11"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(pipe(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"def hello_world():"</span>, max_new_tokens<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">20</span>, do_sample<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>)[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"generated_text"</span>])</span>
+<span id="cb14-12"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Model before:</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>, model)</span>
+<span id="cb14-13">replace_linear_with_target_and_quantize(model, </span>
+<span id="cb14-14">                                        W8A16LinearLayer, [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"lm_head"</span>])</span>
+<span id="cb14-15"></span>
+<span id="cb14-16"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Model after:</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>, model)</span>
+<span id="cb14-17"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(pipe(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"def hello_world():"</span>, max_new_tokens<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">20</span>, </span>
+<span id="cb14-18">           do_sample<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>)[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"generated_text"</span>])</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Setting `pad_token_id` to `eos_token_id`:50256 for open-end generation.
+Setting `pad_token_id` to `eos_token_id`:50256 for open-end generation.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>def hello_world():
+    print("Hello World")
+
+hello_world()
+
+# 파
+Model before:
+
+ CodeGenForCausalLM(
+  (transformer): CodeGenModel(
+    (wte): Embedding(51200, 1024)
+    (drop): Dropout(p=0.0, inplace=False)
+    (h): ModuleList(
+      (0-19): 20 x CodeGenBlock(
+        (ln_1): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (attn): CodeGenAttention(
+          (attn_dropout): Dropout(p=0.0, inplace=False)
+          (resid_dropout): Dropout(p=0.0, inplace=False)
+          (qkv_proj): Linear(in_features=1024, out_features=3072, bias=False)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=False)
+        )
+        (mlp): CodeGenMLP(
+          (fc_in): Linear(in_features=1024, out_features=4096, bias=True)
+          (fc_out): Linear(in_features=4096, out_features=1024, bias=True)
+          (act): NewGELUActivation()
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+      )
+    )
+    (ln_f): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+  )
+  (lm_head): Linear(in_features=1024, out_features=51200, bias=True)
+)
+Model after:
+
+ CodeGenForCausalLM(
+  (transformer): CodeGenModel(
+    (wte): Embedding(51200, 1024)
+    (drop): Dropout(p=0.0, inplace=False)
+    (h): ModuleList(
+      (0-19): 20 x CodeGenBlock(
+        (ln_1): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (attn): CodeGenAttention(
+          (attn_dropout): Dropout(p=0.0, inplace=False)
+          (resid_dropout): Dropout(p=0.0, inplace=False)
+          (qkv_proj): W8A16LinearLayer()
+          (out_proj): W8A16LinearLayer()
+        )
+        (mlp): CodeGenMLP(
+          (fc_in): W8A16LinearLayer()
+          (fc_out): W8A16LinearLayer()
+          (act): NewGELUActivation()
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+      )
+    )
+    (ln_f): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+  )
+  (lm_head): Linear(in_features=1024, out_features=51200, bias=True)
+)
+def hello_world():
+    print("Hello World")
+
+# hello_world()
+
+# def hello_</code></pre>
+</div>
+</div>
+<ul>
+<li>Above code snippet modifies the model inplace</li>
+<li>Also don’t try to change the lm_head otherwise it will not give the desired results</li>
+<li>All the rounding errors can sum up once you start generating a lot of tokens, until may be all of these errors get super large so that it affects the model’s performance</li>
+</ul>
+</section>
+<section id="load-your-quantized-weights-from-huggingface-hub" class="level3">
+<h3 class="anchored" data-anchor-id="load-your-quantized-weights-from-huggingface-hub">Load your Quantized Weights from HuggingFace Hub</h3>
+<ul>
+<li>The idea is to quantize weights on bigger instance and then push it back to huggingface. So that we don’t have to load and quantize again and again.</li>
+<li>Then use meta device from pytorch to load the skeleton of the model instead of loading the whole model itself.</li>
+<li>Replace the original layers with the quantized layers</li>
+<li>Load the quantized weights from huggingfacehub</li>
+</ul>
+<div id="4f4e5b6a" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb17-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> transformers <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> AutoModelForCausalLM, AutoTokenizer</span>
+<span id="cb17-3"></span>
+<span id="cb17-4">model_id <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"facebook/opt-125m"</span></span>
+<span id="cb17-5"></span>
+<span id="cb17-6">model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> AutoModelForCausalLM.from_pretrained(</span>
+<span id="cb17-7">    model_id, torch_dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.bfloat16, low_cpu_mem_usage<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span>
+<span id="cb17-8">tokenizer <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> AutoTokenizer.from_pretrained(model_id)</span>
+<span id="cb17-9"></span>
+<span id="cb17-10">replace_linear_with_target_and_quantize(model, </span>
+<span id="cb17-11">                             W8A16LinearLayer, </span>
+<span id="cb17-12">                                   [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"lm_head"</span>])</span>
+<span id="cb17-13"></span>
+<span id="cb17-14">model</span>
+<span id="cb17-15"></span>
+<span id="cb17-16">quantized_state_dict <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model.state_dict()</span>
+<span id="cb17-17">torch.save(quantized_state_dict, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/home/inspiron/random/models/quantized_state_dict.pth"</span>)</span></code></pre></div>
+</div>
+<p><strong>How to upload on HF</strong></p>
+<p>from huggingface_hub import HfApi, create_repo</p>
+<p>YOUR_HF_USERNAME = “” your_repo_id = f”{YOUR_HF_USERNAME}/opt-125m-quantized-dlai”</p>
+<p>api = HfApi()</p>
+<p>create_repo(your_repo_id)</p>
+<p>api.upload_file( path_or_fileobj=“quantized_state_dict.pth”, path_in_repo=“quantized_state_dict.pth”, repo_id=your_repo_id )</p>
+<div id="ac078a79" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb18-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> transformers <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> OPTForCausalLM, AutoTokenizer, AutoConfig</span>
+<span id="cb18-3"></span>
+<span id="cb18-4">model_id <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"facebook/opt-125m"</span></span>
+<span id="cb18-5">config <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> AutoConfig.from_pretrained(model_id)</span>
+<span id="cb18-6"></span>
+<span id="cb18-7"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">with</span> torch.device(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"meta"</span>):</span>
+<span id="cb18-8">  model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> OPTForCausalLM(config)</span>
+<span id="cb18-9"></span>
+<span id="cb18-10">tokenizer <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> AutoTokenizer.from_pretrained(model_id)</span>
+<span id="cb18-11"></span>
+<span id="cb18-12"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> param <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> model.parameters():</span>
+<span id="cb18-13">  <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(param)</span>
+<span id="cb18-14">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">break</span></span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/home/inspiron/anaconda3/envs/pixart/lib/python3.10/site-packages/huggingface_hub/file_download.py:1132: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Parameter containing:
+tensor(..., device='meta', size=(50272, 768), requires_grad=True)</code></pre>
+</div>
+</div>
+<div id="a5400fe7" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1">model</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>OPTForCausalLM(
+  (model): OPTModel(
+    (decoder): OPTDecoder(
+      (embed_tokens): Embedding(50272, 768, padding_idx=1)
+      (embed_positions): OPTLearnedPositionalEmbedding(2050, 768)
+      (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+      (layers): ModuleList(
+        (0-11): 12 x OPTDecoderLayer(
+          (self_attn): OPTAttention(
+            (k_proj): Linear(in_features=768, out_features=768, bias=True)
+            (v_proj): Linear(in_features=768, out_features=768, bias=True)
+            (q_proj): Linear(in_features=768, out_features=768, bias=True)
+            (out_proj): Linear(in_features=768, out_features=768, bias=True)
+          )
+          (activation_fn): ReLU()
+          (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (fc1): Linear(in_features=768, out_features=3072, bias=True)
+          (fc2): Linear(in_features=3072, out_features=768, bias=True)
+          (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        )
+      )
+    )
+  )
+  (lm_head): Linear(in_features=768, out_features=50272, bias=False)
+)</code></pre>
+</div>
+</div>
+<div id="899f1a2d" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1">replace_linear_with_target(model, W8A16LinearLayer, [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"lm_head"</span>])</span>
+<span id="cb23-2">model</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>OPTForCausalLM(
+  (model): OPTModel(
+    (decoder): OPTDecoder(
+      (embed_tokens): Embedding(50272, 768, padding_idx=1)
+      (embed_positions): OPTLearnedPositionalEmbedding(2050, 768)
+      (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+      (layers): ModuleList(
+        (0-11): 12 x OPTDecoderLayer(
+          (self_attn): OPTAttention(
+            (k_proj): W8A16LinearLayer()
+            (v_proj): W8A16LinearLayer()
+            (q_proj): W8A16LinearLayer()
+            (out_proj): W8A16LinearLayer()
+          )
+          (activation_fn): ReLU()
+          (self_attn_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (fc1): W8A16LinearLayer()
+          (fc2): W8A16LinearLayer()
+          (final_layer_norm): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        )
+      )
+    )
+  )
+  (lm_head): Linear(in_features=768, out_features=50272, bias=False)
+)</code></pre>
+</div>
+</div>
+<p><strong>If loading from HF</strong></p>
+<p>from huggingface_hub import hf_hub_download</p>
+<p>state_dict_cache_path = hf_hub_download( “ybelkada/opt-125m-quantized-dlai”, “quantized_state_dict.pth” )</p>
+<div id="62307eec" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1">state_dict <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.load(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/home/inspiron/random/models/quantized_state_dict.pth"</span>)</span>
+<span id="cb25-2">model.load_state_dict(state_dict, strict<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>, assign<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>&lt;All keys matched successfully&gt;</code></pre>
+</div>
+</div>
+<div id="0f634d34" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> transformers <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> pipeline</span>
+<span id="cb27-2"></span>
+<span id="cb27-3">pipe <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pipeline(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"text-generation"</span>, model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>model, tokenizer<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>tokenizer)</span>
+<span id="cb27-4">pipe(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Hello today I am"</span>, max_new_tokens<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">40</span>)</span>
+<span id="cb27-5"></span>
+<span id="cb27-6">pipe <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pipeline(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"text-generation"</span>, model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>model, tokenizer<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>tokenizer)</span>
+<span id="cb27-7">pipe(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Hello today I am giving a course about"</span>, max_new_tokens<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>[{'generated_text': 'Hello today I am giving a course about the history of the world and the history of the'}]</code></pre>
+</div>
+</div>
+</section>
+<section id="weights-packing" class="level3">
+<h3 class="anchored" data-anchor-id="weights-packing">Weights Packing</h3>
+<ul>
+<li>Weights packing is important for storing quantized weights, because torch.int4 is not available as of today, so we need to store and load the weights in int8</li>
+<li>This is not ideal because:
+<ul>
+<li>tensor will occupy 8-bit per datapoint and might add a considerable overhead for large models</li>
+<li>There would be no point of quantizing to 2/4 bits becuase we are still using 8-bit</li>
+</ul></li>
+<li>So, we need to pack values</li>
+<li>Consider a tensor with 4 values each with 2-bit(0,1,2,3) precision but stored in 8-bit
+<ul>
+<li>tensor = torch.tensor([1,0,3,2], dtype=torch.uint8)</li>
+<li>1:- 00000001</li>
+<li>0:- 00000000</li>
+<li>3:- 00000011</li>
+<li>2:- 00000010</li>
+</ul></li>
+<li>We can pack all these values into a single 8-bit value as 177
+<ul>
+<li>177:- 10110001</li>
+</ul></li>
+<li>Adavantages:-
+<ul>
+<li>It reflects the true memory footprint of the quantized weights Disadvantages:-</li>
+<li>The unpacked tensors need to be a shape with a multiple of 8//nbits</li>
+<li>It needs to unpack before performing an operation</li>
+</ul></li>
+</ul>
+</section>
+<section id="packing-2-bit-weights" class="level3">
+<h3 class="anchored" data-anchor-id="packing-2-bit-weights">Packing 2-bit Weights</h3>
+<div id="54b902a7" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb29-2"></span>
+<span id="cb29-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Example Tensor: [1, 0, 3, 2]</span></span>
+<span id="cb29-4">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 1 0 3 2 - 01 00 11 10</span></span>
+<span id="cb29-5"></span>
+<span id="cb29-6">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Starting point of packed int8 Tensor</span></span>
+<span id="cb29-7">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [0000 0000]</span></span>
+<span id="cb29-8"></span>
+<span id="cb29-9">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##### First Iteration Start:</span></span>
+<span id="cb29-10">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># packed int8 Tensor State: [0000 0000]</span></span>
+<span id="cb29-11">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 1 = 0000 0001</span></span>
+<span id="cb29-12">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 0000 0001</span></span>
+<span id="cb29-13">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># No left shifts in the First Iteration</span></span>
+<span id="cb29-14">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># After bit-wise OR operation between 0000 0000 and 0000 0001:</span></span>
+<span id="cb29-15">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># packed int8 Tensor State: 0000 0001</span></span>
+<span id="cb29-16">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##### First Iteration End</span></span>
+<span id="cb29-17"></span>
+<span id="cb29-18">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##### Second Iteration Start:</span></span>
+<span id="cb29-19">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># packed int8 Tensor State: [0000 0001]</span></span>
+<span id="cb29-20">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 0 = 0000 0000</span></span>
+<span id="cb29-21">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 0000 0000</span></span>
+<span id="cb29-22">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 2 left shifts:</span></span>
+<span id="cb29-23">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [0000 0000] (1 shift)-&gt; 0000 0000 (2 shift)-&gt; 0000 0000</span></span>
+<span id="cb29-24">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># After bit-wise OR operation between 0000 0001 and 0000 0000:</span></span>
+<span id="cb29-25">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># packed int8 Tensor State: 0000 0001</span></span>
+<span id="cb29-26">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##### Second Iteration End</span></span>
+<span id="cb29-27"></span>
+<span id="cb29-28">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##### Third Iteration Start:</span></span>
+<span id="cb29-29">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># packed int8 Tensor State: [0000 0001]</span></span>
+<span id="cb29-30">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 3 = 0000 0011</span></span>
+<span id="cb29-31">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 0000 0011</span></span>
+<span id="cb29-32">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 4 left shifts:</span></span>
+<span id="cb29-33">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [0000 0011] (1 shift)-&gt; 0000 0110 (2 shift)-&gt; 0000 1100</span></span>
+<span id="cb29-34">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 0000 1100 (3 shift)-&gt; 0001 1000 (4 shift)-&gt; 0011 0000</span></span>
+<span id="cb29-35">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># After bit-wise OR operation between 0000 0001 and 0011 0000:</span></span>
+<span id="cb29-36">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># packed int8 Tensor State: 0011 0001</span></span>
+<span id="cb29-37">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##### Third Iteration End</span></span>
+<span id="cb29-38"></span>
+<span id="cb29-39">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##### Fourth Iteration Start:</span></span>
+<span id="cb29-40">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># packed int8 Tensor State: [0011 0001]</span></span>
+<span id="cb29-41">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 2 = 0000 0010</span></span>
+<span id="cb29-42">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 0000 0010</span></span>
+<span id="cb29-43">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 6 left shifts:</span></span>
+<span id="cb29-44">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [0000 0010] (1 shift)-&gt; 0000 0100 (2 shift)-&gt; 0000 1000</span></span>
+<span id="cb29-45">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 0000 1000 (3 shift)-&gt; 0001 0000 (4 shift)-&gt; 0010 0000</span></span>
+<span id="cb29-46">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 0010 0000 (5 shift)-&gt; 0100 0000 (6 shift)-&gt; 1000 0000</span></span>
+<span id="cb29-47">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># After bit-wise OR operation between 0011 0001 and 1000 0000:</span></span>
+<span id="cb29-48">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># packed int8 Tensor State: 1011 0001</span></span>
+<span id="cb29-49">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##### Fourth Iteration End</span></span>
+<span id="cb29-50"></span>
+<span id="cb29-51">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Final packed int8 Tensor State: [1011 0001]</span></span>
+<span id="cb29-52"></span>
+<span id="cb29-53"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> pack_weights(uint8tensor, bits):</span>
+<span id="cb29-54">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> uint8tensor.shape[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> bits <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>:</span>
+<span id="cb29-55">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">raise</span> <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">ValueError</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"The input shape needs to be a mutiple </span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb29-56"><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">        of </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> bits<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> - got </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>uint8tensor<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>shape[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb29-57"></span>
+<span id="cb29-58">    num_values <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> uint8tensor.shape[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> bits <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span></span>
+<span id="cb29-59"></span>
+<span id="cb29-60">    num_steps <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span> bits</span>
+<span id="cb29-61"></span>
+<span id="cb29-62">    unpacked_idx <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span></span>
+<span id="cb29-63"></span>
+<span id="cb29-64">    packed_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.zeros((num_values), dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.uint8)</span>
+<span id="cb29-65"></span>
+<span id="cb29-66">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 1 0 3 2 - 01 00 11 10</span></span>
+<span id="cb29-67"></span>
+<span id="cb29-68">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [0000 0000] -&gt; 0000 0001</span></span>
+<span id="cb29-69"></span>
+<span id="cb29-70">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 0000 0001</span></span>
+<span id="cb29-71"></span>
+<span id="cb29-72">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 0000 0000 - 0000 0000</span></span>
+<span id="cb29-73"></span>
+<span id="cb29-74">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 0000 0011 - 0011 0000 - 0011 0001</span></span>
+<span id="cb29-75"></span>
+<span id="cb29-76">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 1011 0001</span></span>
+<span id="cb29-77">    </span>
+<span id="cb29-78">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(num_values):</span>
+<span id="cb29-79">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> j <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(num_steps):</span>
+<span id="cb29-80">            packed_tensor[i] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|=</span> uint8tensor[unpacked_idx] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;&lt;</span> (bits <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> j)</span>
+<span id="cb29-81">            unpacked_idx <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb29-82">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> packed_tensor</span>
+<span id="cb29-83">unpacked_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>], </span>
+<span id="cb29-84">                               dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.uint8)</span>
+<span id="cb29-85">pack_weights(unpacked_tensor, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb29-86">unpacked_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>], </span>
+<span id="cb29-87">                               dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.uint8)</span>
+<span id="cb29-88">pack_weights(unpacked_tensor, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>tensor([177, 255], dtype=torch.uint8)</code></pre>
+</div>
+</div>
+</section>
+<section id="unpacking-2-bit-weights" class="level3">
+<h3 class="anchored" data-anchor-id="unpacking-2-bit-weights">Unpacking 2-Bit Weights</h3>
+<div id="80ee4486" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb31-2"></span>
+<span id="cb31-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Example Tensor: [10110001]</span></span>
+<span id="cb31-4">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Which was Originally: 1 0 3 2 - 01 00 11 10</span></span>
+<span id="cb31-5"></span>
+<span id="cb31-6">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Starting point of unpacked Tensor</span></span>
+<span id="cb31-7">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [00000000 00000000 00000000 00000000]</span></span>
+<span id="cb31-8"></span>
+<span id="cb31-9">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##### First Iteration Start:</span></span>
+<span id="cb31-10">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># packed int8 Tensor: [10110001]</span></span>
+<span id="cb31-11">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># You want to extract 01 from [101100 01]</span></span>
+<span id="cb31-12">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># No right shifts in the First Iteration</span></span>
+<span id="cb31-13">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># After bit-wise OR operation between 00000000 and 10110001:</span></span>
+<span id="cb31-14">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [10110001 00000000 00000000 00000000]</span></span>
+<span id="cb31-15">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># unpacked Tensor state: [10110001 00000000 00000000 00000000]</span></span>
+<span id="cb31-16">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##### First Iteration End</span></span>
+<span id="cb31-17"></span>
+<span id="cb31-18">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##### Second Iteration Start:</span></span>
+<span id="cb31-19">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># packed int8 Tensor: [10110001]</span></span>
+<span id="cb31-20">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># You want to extract 00 from [1011 00 01]</span></span>
+<span id="cb31-21">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 2 right shifts:</span></span>
+<span id="cb31-22">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [10110001] (1 shift)-&gt; 01011000 (2 shift)-&gt; 00101100</span></span>
+<span id="cb31-23">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># After bit-wise OR operation between 00000000 and 00101100:</span></span>
+<span id="cb31-24">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [10110001 00101100 00000000 00000000]</span></span>
+<span id="cb31-25">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># unpacked Tensor state: [10110001 00101100 00000000 00000000]</span></span>
+<span id="cb31-26">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##### Second Iteration End</span></span>
+<span id="cb31-27"></span>
+<span id="cb31-28">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##### Third Iteration Start:</span></span>
+<span id="cb31-29">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># packed int8 Tensor: [10110001]</span></span>
+<span id="cb31-30">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># You want to extract 11 from [10 11 0001]</span></span>
+<span id="cb31-31">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 4 right shifts:</span></span>
+<span id="cb31-32">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [10110001] (1 shift)-&gt; 01011000 (2 shift)-&gt; 00101100</span></span>
+<span id="cb31-33">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 00101100 (3 shift)-&gt; 00010110 (4 shift)-&gt; 00001011</span></span>
+<span id="cb31-34">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># After bit-wise OR operation between 00000000 and 00001011:</span></span>
+<span id="cb31-35">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [10110001 00101100 00001011 00000000]</span></span>
+<span id="cb31-36">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># unpacked Tensor state: [10110001 00101100 00001011 00000000]</span></span>
+<span id="cb31-37">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##### Third Iteration End</span></span>
+<span id="cb31-38"></span>
+<span id="cb31-39">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##### Fourth Iteration Start:</span></span>
+<span id="cb31-40">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># packed int8 Tensor: [10110001]</span></span>
+<span id="cb31-41">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># You want to extract 10 from [10 110001]</span></span>
+<span id="cb31-42">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 6 right shifts:</span></span>
+<span id="cb31-43">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [10110001] (1 shift)-&gt; 01011000 (2 shift)-&gt; 00101100</span></span>
+<span id="cb31-44">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 00101100 (3 shift)-&gt; 00010110 (4 shift)-&gt; 00001011</span></span>
+<span id="cb31-45">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 00001011 (5 shift)-&gt; 00000101 (6 shift)-&gt; 00000010</span></span>
+<span id="cb31-46">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># After bit-wise OR operation between 00000000 and 00000010:</span></span>
+<span id="cb31-47">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [10110001 00101100 00001011 00000010]</span></span>
+<span id="cb31-48">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># unpacked Tensor state: [10110001 00101100 00001011 00000010]</span></span>
+<span id="cb31-49">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##### Fourth Iteration End</span></span>
+<span id="cb31-50"></span>
+<span id="cb31-51">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Last step: Perform masking (bit-wise AND operation)</span></span>
+<span id="cb31-52">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Mask: 00000011</span></span>
+<span id="cb31-53">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Bit-wise AND operation between </span></span>
+<span id="cb31-54">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># unpacked Tensor and 00000011</span></span>
+<span id="cb31-55">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [10110001 00101100 00001011 00000010] &lt;- unpacked tensor</span></span>
+<span id="cb31-56">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [00000011 00000011 00000011 00000011] &lt;- Mask</span></span>
+<span id="cb31-57">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [00000001 00000000 00000011 00000010] &lt;- Result</span></span>
+<span id="cb31-58"></span>
+<span id="cb31-59">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Final</span></span>
+<span id="cb31-60">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># unpacked Tensor state: [00000001 00000000 00000011 00000010]</span></span>
+<span id="cb31-61"></span>
+<span id="cb31-62"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> unpack_weights(uint8tensor, bits):</span>
+<span id="cb31-63">    num_values <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> uint8tensor.shape[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span> bits</span>
+<span id="cb31-64"></span>
+<span id="cb31-65">    num_steps <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span> bits</span>
+<span id="cb31-66"></span>
+<span id="cb31-67">    unpacked_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.zeros((num_values), dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.uint8)</span>
+<span id="cb31-68"></span>
+<span id="cb31-69">    unpacked_idx <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span></span>
+<span id="cb31-70"></span>
+<span id="cb31-71">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 1 0 3 2 - 01 00 11 10</span></span>
+<span id="cb31-72"></span>
+<span id="cb31-73">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [00000000 00000000 00000000 00000000]</span></span>
+<span id="cb31-74">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [10110001 00101100 00001011 00000010]</span></span>
+<span id="cb31-75">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [00000001 00000000 00000011 00000010]</span></span>
+<span id="cb31-76"></span>
+<span id="cb31-77">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 10110001</span></span>
+<span id="cb31-78">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 00000011</span></span>
+<span id="cb31-79">    </span>
+<span id="cb31-80">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 00000001</span></span>
+<span id="cb31-81"></span>
+<span id="cb31-82">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 1: [10110001]</span></span>
+<span id="cb31-83">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 2: [00101100]</span></span>
+<span id="cb31-84">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 3: [00001011]</span></span>
+<span id="cb31-85"></span>
+<span id="cb31-86">    mask <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span> bits <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb31-87"></span>
+<span id="cb31-88">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(uint8tensor.shape[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]):</span>
+<span id="cb31-89">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> j <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(num_steps):</span>
+<span id="cb31-90">            unpacked_tensor[unpacked_idx] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|=</span> uint8tensor[i] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;&gt;</span> (bits <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> j)</span>
+<span id="cb31-91">            unpacked_idx <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb31-92"></span>
+<span id="cb31-93">    unpacked_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;=</span> mask</span>
+<span id="cb31-94">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> unpacked_tensor</span>
+<span id="cb31-95"></span>
+<span id="cb31-96">unpacked_tensor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">177</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">255</span>], </span>
+<span id="cb31-97">                               dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.uint8)</span>
+<span id="cb31-98"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Answer should be: torch.tensor([1, 0, 3, 2, 3, 3, 3, 3]</span></span>
+<span id="cb31-99">unpack_weights(unpacked_tensor, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>tensor([1, 0, 3, 2, 3, 3, 3, 3], dtype=torch.uint8)</code></pre>
+</div>
+</div>
+</section>
+<section id="beyond-linear-qauntization" class="level3">
+<h3 class="anchored" data-anchor-id="beyond-linear-qauntization">Beyond Linear Qauntization</h3>
+<ul>
+<li><p>Emergent features at scale:- Simply some characteristics or features which appear at scale, when model is large.</p></li>
+<li><p>Features predicted by the model meaning the magnitude of the hidden states started to get large thus making the classic quantization schemes quite obsolete, which led to classic linear quantization algorithms just failing on these models.</p></li>
+<li><p>Now how to deal with outlier features for LLMs</p></li>
+<li><p>Outlier features simply means hidden states with large magnitude.</p></li>
+<li><p>So there are some interesting papers such as LLM.int8, SmoothQuant, AWQ.</p>
+<ul>
+<li>LLM.int8 separates the matmul in two steps:-
+<ul>
+<li>For non-outliers (smaller values)
+<ul>
+<li>Perform matmul in int8, then dequantize it.</li>
+</ul></li>
+<li>For outliers (larger values)
+<ul>
+<li>Perform matmul in classical way(basically in the dtype of hidden states usually half precision and then you combine these results)</li>
+</ul></li>
+</ul></li>
+<li>SmoothQuant
+<ul>
+<li>Applies A8W8 scheme(quantize weights and activations)</li>
+<li>Given an input it determines some factor and use it to quantize.</li>
+<li>migrates the scale variance from activations to weights to reduce the quantization difficulty of activations.</li>
+<li>the smoothed activation and the adjusted weight are both easy to quantize.</li>
+</ul></li>
+<li>AWQ
+<ul>
+<li>Used a calibration dataset to find out which weights could be responsible of generating outlier features called salient weights.</li>
+<li>and then use that information to scale the weights before quantization and also use that scale during inference to rescale the input as well.</li>
+</ul></li>
+</ul></li>
+<li><p>Recent SOTA quantization methods:</p>
+<ul>
+<li>LL.INT8</li>
+<li>GPTQ</li>
+<li>SmoothQuant</li>
+<li>QLoRA</li>
+<li>AWQ</li>
+<li>QuIP#</li>
+<li>HQQ</li>
+<li>AQLM</li>
+<li>………..</li>
+</ul></li>
+<li><p>Challenges of Quantization</p>
+<ul>
+<li>Retraining (Quantization Aware Training) [less explored]</li>
+<li>Limited Hardware support</li>
+<li>Calibration dataset needed</li>
+<li>packing/unpacking</li>
+</ul></li>
+<li><p>Some Other resources</p>
+<ul>
+<li>MIT Han Lab</li>
+<li>Huggingface transformers quantization docs/blogposts</li>
+<li>llama.cpp discussions</li>
+<li>Reddit LocalLlama</li>
+</ul></li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>Optimization</category>
+  <guid>https://riteshrm.github.io/posts/Quantization in Depth/</guid>
+  <pubDate>Thu, 23 May 2024 18:30:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/Quantization in Depth/qat-training-precision.png" medium="image" type="image/png" height="81" width="144"/>
+</item>
+<item>
+  <title>Quantization Fundamentals</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/Quantization Fundamentals/</link>
+  <description><![CDATA[ 
+
+
+
+
+<ul>
+<li><p>This is completely based on <a href="https://learn.deeplearning.ai/courses/quantization-fundamentals/lesson/1/introduction">Quantization Fundamentals</a></p></li>
+<li><p>For the code part, you can checkout this <a href="https://github.com/riteshrm/Quantization-Fundamentals-deeplearning.ai-">link</a></p></li>
+<li><p><strong>Quantizatio</strong> helps to reduce the size of the model with little or no degradation.</p></li>
+</ul>
+<section id="handling-big-models" class="level3">
+<h3 class="anchored" data-anchor-id="handling-big-models">Handling Big Models</h3>
+<p>Current model compression technique:-</p>
+<ol type="1">
+<li><p>Pruning:-remove connections that do not improve the model.</p></li>
+<li><p>Knowledge Distillation:- Train a smaller model(Student) using the original model(Teacher). Cons:-You need to have enough hardware to fit both teacher as weel student both.</p></li>
+</ol>
+</section>
+<section id="options-to-quantize-" class="level3">
+<h3 class="anchored" data-anchor-id="options-to-quantize-">Options to quantize:-</h3>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Quantization Fundamentals/S1.png" style="width:80%" class="figure-img">
+<figcaption>
+Fig.1 - A layer of Neural Network.
+</figcaption>
+</figure>
+<ol type="1">
+<li><p>You can quantize weights.</p></li>
+<li><p>You can quantize activations that propagate through the layers of neural network</p></li>
+</ol>
+<p>Idea:Store the parameters of the model in ower precision</p>
+</section>
+<section id="data-types-and-sizes" class="level3">
+<h3 class="anchored" data-anchor-id="data-types-and-sizes">Data Types and Sizes</h3>
+<p><strong>Integer</strong></p>
+<ol type="1">
+<li><p>Unsigned Integer (8-bit):- Range is [0, 255] [0, 2<sup>n</sup>-1] (All 8 bits are used to represent the number)</p></li>
+<li><p>Signed Integer (8-bit):- Range is [-128, 127] [-2<sup>n-1</sup>, 2<sup>n-1</sup>-1] (7 bits are used to represent the number and the 8th bit represent the sign 0:Positive 1:Negative)</p></li>
+</ol>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Data Type</th>
+<th>torch.dtype</th>
+<th>torch.dtype alias</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>8-bit signed integer</td>
+<td>torch.int8</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>8-bit unsigned integer</td>
+<td>torch.uint8</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>16-bit signed integer</td>
+<td>torch.int16</td>
+<td>torch.short</td>
+</tr>
+<tr class="even">
+<td>32-bit signed integer</td>
+<td>torch.int32</td>
+<td>torch.int</td>
+</tr>
+<tr class="odd">
+<td>64-bit signed integer</td>
+<td>torch.int64</td>
+<td>torch.long</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>You can use below mentioned code to find out the more info</li>
+</ul>
+<div id="e9c84fc4" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb1-2"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(torch.iinfo(torch.int8))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iinfo(min=-128, max=127, dtype=int8)</code></pre>
+</div>
+</div>
+<p><strong>Floating Point</strong></p>
+<p>3 components in floating point: Sign:- positive/negative (always 1 bit) Exponent(range): impact the representable range of the number Fraction(precision): impact on the precision of the number</p>
+<ul>
+<li>FP32, BF16, FP16, FP8 are floating point format with a specific number of bits for exponent and the fraction.</li>
+</ul>
+<ol type="1">
+<li>FP32</li>
+</ol>
+<ul>
+<li>Sign: 1 bit</li>
+<li>Exponent(range): 8 bit</li>
+<li>Fraction(precision): 23 bit</li>
+<li>Total: 32 bit</li>
+</ul>
+<ol start="2" type="1">
+<li>BF16</li>
+</ol>
+<ul>
+<li>Sign: 1 bit</li>
+<li>Exponent(range): 8 bit</li>
+<li>Fraction(precision): 7 bit</li>
+<li>Total: 16 bit</li>
+</ul>
+<ol start="3" type="1">
+<li>FP16</li>
+</ol>
+<ul>
+<li>Sign: 1 bit</li>
+<li>Exponent(range): 5 bit</li>
+<li>Fraction(precision): 10 bit</li>
+<li>Total: 16 bit</li>
+</ul>
+<p><strong>Comparison Of Data Types</strong></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Data Type</th>
+<th>Precision</th>
+<th>Maximum</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FP32</td>
+<td>Best</td>
+<td>~10<sup>+38</sup></td>
+</tr>
+<tr class="even">
+<td>FP16</td>
+<td>Better</td>
+<td>~10<sup>04</sup></td>
+</tr>
+<tr class="odd">
+<td>BF16</td>
+<td>Good</td>
+<td>~10<sup>38</sup></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Data Type</th>
+<th>torch.dtype</th>
+<th>torch.dtype alias</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>16-bit floating point</td>
+<td>torch.float16</td>
+<td>torch.half</td>
+</tr>
+<tr class="even">
+<td>16-bit brain floating point</td>
+<td>torch.bfloat16</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>32-bit floating point</td>
+<td>torch.float32</td>
+<td>torch.float</td>
+</tr>
+<tr class="even">
+<td>64-bit floating point</td>
+<td>torch.float64</td>
+<td>torch.double</td>
+</tr>
+</tbody>
+</table>
+<div id="21917492" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb3-2"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"By default, python stores float data in fp64"</span>)</span>
+<span id="cb3-3">value <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span></span>
+<span id="cb3-4">tensor_fp64 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor(value, dtype <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.float64)</span>
+<span id="cb3-5">tensor_fp32 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor(value, dtype <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.float32)</span>
+<span id="cb3-6">tensor_fp16 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor(value, dtype <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.float16)</span>
+<span id="cb3-7">tensor_bf16 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor(value, dtype <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.bfloat16)</span>
+<span id="cb3-8"></span>
+<span id="cb3-9"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"fp64 tensor: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">format</span>(tensor_fp64.item(), <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'.60f'</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb3-10"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"fp32 tensor: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">format</span>(tensor_fp32.item(), <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'.60f'</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb3-11"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"fp16 tensor: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">format</span>(tensor_fp16.item(), <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'.60f'</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb3-12"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"bf16 tensor: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">format</span>(tensor_bf16.item(), <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'.60f'</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb3-13"></span>
+<span id="cb3-14"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(torch.finfo(torch.bfloat16))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>By default, python stores float data in fp64
+fp64 tensor: 0.333333333333333314829616256247390992939472198486328125000000
+fp32 tensor: 0.333333343267440795898437500000000000000000000000000000000000
+fp16 tensor: 0.333251953125000000000000000000000000000000000000000000000000
+bf16 tensor: 0.333984375000000000000000000000000000000000000000000000000000
+finfo(resolution=0.01, min=-3.38953e+38, max=3.38953e+38, eps=0.0078125, smallest_normal=1.17549e-38, tiny=1.17549e-38, dtype=bfloat16)</code></pre>
+</div>
+</div>
+<p><strong>PyTorch Downcasting</strong></p>
+<ul>
+<li><p>when a higher data type converted to a lower data type, it results in loss of data</p></li>
+<li><p>Adavantages:</p>
+<ul>
+<li>Reduced memory footprint</li>
+<li>Increased compute and speed (Depends on the hardware)</li>
+</ul></li>
+<li><p>Disadvantages:</p>
+<ul>
+<li>Less precise</li>
+</ul></li>
+<li><p>Use case:</p>
+<ul>
+<li>Mixed precision training
+<ul>
+<li>Do computation in smaller precision (FP16/BF16/FP8)</li>
+<li>Store and update the wights in higher precision (FP32)</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="loading-models-by-data-type" class="level3">
+<h3 class="anchored" data-anchor-id="loading-models-by-data-type">Loading Models by data type</h3>
+<ul>
+<li><p>target_dtype = torch.float16 or torch.bfloat16</p></li>
+<li><p>model = model.to(target_dtype)</p></li>
+<li><p>model = model.half() for fp16</p></li>
+<li><p>model = model.bfloat16() for bfloat16</p></li>
+<li><p>Always use bfloat16 instead of float16 while using pytorch-cpu</p></li>
+<li><p>FP32 is default in pytorch</p></li>
+<li><p>model.get_memory_footprint()/1e+6</p></li>
+<li><p>torch.set_default_dtype(desired_dtype) # By doing so we can directly load the model in desired dtype without loading in full precision and then quantizing it</p></li>
+<li><p>set it back to float32 to avoid unnecesary behaviors</p></li>
+</ul>
+</section>
+<section id="quantization-theory" class="level3">
+<h3 class="anchored" data-anchor-id="quantization-theory">Quantization Theory</h3>
+<ul>
+<li><p>Quantization refers to the process of mapping a large set to a smaller set of values.</p></li>
+<li><p>How do we convert the FP32 weights to INT8 without losing too much information??</p>
+<ul>
+<li>It is done using a linear mapping using linear mapping parameters.</li>
+<li>s = scale</li>
+<li>z = zero point</li>
+</ul></li>
+<li><p>How do we get back our original tensor from the quantized tensor?</p>
+<ul>
+<li>We can’t get exactly the original tensor but using dequantization following linear relationship that used to quantize the original tensor.</li>
+</ul></li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Quantization Fundamentals/Q1.png" style="width:50%" class="figure-img">
+<figcaption>
+Fig.2 - Comparison of tensors.
+</figcaption>
+</figure>
+<p><strong>Quantize Using Quanto Library</strong></p>
+<ul>
+<li>from quanto import quantize, freeze</li>
+<li>quantize(model, weights = desired_dtype, activations = desired_dtype)</li>
+<li>freeze(model)</li>
+<li>quantize create an intermediate state of the model</li>
+<li>after calling freeze, we get the quantized weights</li>
+</ul>
+<p><strong>Uses of the Intermediate State</strong></p>
+<ul>
+<li>Calibration
+<ul>
+<li>Calibrate model when quantizing the activations of the model.
+<ul>
+<li>Range of activation values depends on what input was given. (e.g.&nbsp;different input text will generate different activations)</li>
+<li>Min/Max of activation ranges are used to perform linear quantization.</li>
+<li>How to get min and max range of activations?
+<ul>
+<li>Gather sample input data.</li>
+<li>Run inference.</li>
+<li>Calculate min/mac of activations</li>
+</ul></li>
+</ul></li>
+<li>Result: better quantized activations</li>
+</ul></li>
+<li>Quantization Aware Training
+<ul>
+<li>Training in a way that controls how the model performs once it is quantized.</li>
+<li>Intermediate state holds both(quantized as well as unquantized weights).</li>
+<li>Use quantized version of model in forward pass (e.g.&nbsp;BF16)</li>
+<li>Update original, unquantized version of model weights during back propogation (e.g.&nbsp;FP32)</li>
+</ul></li>
+<li>In L4 there is a function in helper.py to calculate the model size</li>
+</ul>
+<p><strong>Linear Quantization</strong></p>
+<p>Even if it looks very simple, it is used in many SOTA quantization methods:</p>
+<ul>
+<li>AWQ: Activation-aware Weight Quantization</li>
+<li>GPTQ: GPT Quantized</li>
+<li>BNB: BitsandBytes Quantization</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Quantization Fundamentals/Q2.png" style="width:50%" class="figure-img">
+<figcaption>
+Fig.3 - Range
+</figcaption>
+</figure>
+<ul>
+<li>Simple idea: linear mapping</li>
+<li>r = s(q-z)
+<ul>
+<li>where</li>
+<li>r:- original value(e.g.&nbsp;in FP32)</li>
+<li>s:- scale(e.g.&nbsp;in FP32)</li>
+<li>q:- quantized value(e.g.&nbsp;in INT8)</li>
+<li>z:- zero point(e.g.&nbsp;INT8)</li>
+</ul></li>
+<li>How do we get scale and zero pint??
+<ul>
+<li>s = (r_max-r_min)/(q_max-q_min)</li>
+<li>z = int(round(q_min-r_min/s))</li>
+</ul></li>
+</ul>
+</section>
+<section id="quantization-of-llms" class="level3">
+<h3 class="anchored" data-anchor-id="quantization-of-llms">Quantization of LLMs</h3>
+<p>Recent SOTA quantization methods:-</p>
+<ul>
+<li>LLM.INT8 (only 8-bit)
+<ul>
+<li>Decomposes the mat-mul in two stages (outlier part in float16 and non-outlier part in int8).</li>
+</ul></li>
+<li>QLoRA (only 4-bit)
+<ul>
+<li>Quantize as well as fine-tune the adapters</li>
+</ul></li>
+<li>AWQ</li>
+<li>GPTQ</li>
+<li>SmoothQuant</li>
+</ul>
+<p>More recent SOTA quantization methods for 2-bit quantization</p>
+<ul>
+<li>QuIP#</li>
+<li>HQQ</li>
+<li>AQLM</li>
+</ul>
+<p>All are <strong>open-source</strong></p>
+<p>Some Quantization Methods require calibration (from above)</p>
+<p>Some Quantization Methods require Adjustments</p>
+<p>Many of these methods were applied to LLMs, but if we want then we can apply to other type of models by making few adjustments to the quantization methods</p>
+<ul>
+<li><p>Some methods can be applied without making adjustments</p>
+<ul>
+<li>Linear quantization</li>
+<li>LL.INT8</li>
+<li>QLoRA</li>
+<li>HQQ</li>
+</ul></li>
+<li><p>Other approaches are data-dependent</p></li>
+<li><p>There are distributors on HuggingFacewhich gives a quantized version of popular models (TheBloke)</p></li>
+<li><p>Checkout HuggingFace Open <strong>LLM leaderboard</strong> to see how these quantized models are performing</p></li>
+<li><p>Benefits of fine-tuning a quantized model:</p>
+<ul>
+<li>Recover the accuracy from quantization</li>
+<li>Tailor your model for specific use-cases and applications</li>
+</ul></li>
+<li><p>Fine tune with Quantization Aware Training (QAT)</p>
+<ul>
+<li>Not compatible with Post Training Quantization (PTQ) techniques.</li>
+<li>The linear quantization method is an example of PTQ.</li>
+<li><a href="https://pytorch.org/blog/finetune-llms/">PEFT + QLoRA</a>
+<ul>
+<li>QLoRa quantizes the pre-trained base weights in 4-bit precision.</li>
+<li>This matches the precision of the LoRA weights.</li>
+<li>This allows the model to add the activations of the pre-trained and adapter weights.</li>
+<li>This sum of the two activations can be fed as the input to the next layer of the network.</li>
+</ul></li>
+</ul></li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>Optimization</category>
+  <guid>https://riteshrm.github.io/posts/Quantization Fundamentals/</guid>
+  <pubDate>Sun, 12 May 2024 18:30:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/Quantization Fundamentals/qat-training-precision.png" medium="image" type="image/png" height="81" width="144"/>
 </item>
 </channel>
 </rss>

@@ -2,7 +2,11 @@
   {
     "listing": "/blog.html",
     "items": [
-      "/posts/Leetcode POTD/index.html"
+      "/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html",
+      "/posts/fast.ai summary points/index.html",
+      "/posts/Leetcode POTD/index.html",
+      "/posts/Quantization in Depth/index.html",
+      "/posts/Quantization Fundamentals/index.html"
     ]
   }
 ]
