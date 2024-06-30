@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Ritesh Kumar Maurya">
+<meta name="dcterms.date" content="2024-05-24">
 
-<title>Ritesh Kumar Maurya - Blog</title>
+<title>Ritesh Kumar Maurya - Leetcode POTD June 2024</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +25,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<link href="./posts/favicon.ico" rel="icon">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<script src="site_libs/quarto-contrib/iconify-2.0.0/iconify-icon.min.js"></script>
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<link href="../../posts/favicon.ico" rel="icon">
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-contrib/iconify-2.0.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -56,35 +56,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
 <script type="text/javascript">
 
@@ -100,40 +71,13 @@ ga('send', {
 });
 </script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
-<link rel="alternate" type="application/rss+xml" title="Ritesh Kumar Maurya" href="blog.xml" data-external="1"><meta property="og:title" content="Ritesh Kumar Maurya - Blog">
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Ritesh Kumar Maurya - Leetcode POTD June 2024">
+<meta property="og:image" content="https://riteshrm.github.io/posts/Leetcode POTD June 2024/leetcode.jpg">
 <meta property="og:site_name" content="Ritesh Kumar Maurya">
-<meta name="twitter:title" content="Ritesh Kumar Maurya - Blog">
+<meta name="twitter:title" content="Ritesh Kumar Maurya - Leetcode POTD June 2024">
+<meta name="twitter:image" content="https://riteshrm.github.io/posts/Leetcode POTD June 2024/leetcode.jpg">
 <meta name="twitter:creator" content="@_riteshrm_">
 <meta name="twitter:card" content="summary">
 </head>
@@ -145,7 +89,7 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Ritesh Kumar Maurya</span>
     </a>
   </div>
@@ -155,15 +99,15 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./pages/about.html"> 
+    <a class="nav-link" href="../../pages/about.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./blog.html" aria-current="page"> 
+    <a class="nav-link" href="../../blog.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./pages/resources.html"> 
+    <a class="nav-link" href="../../pages/resources.html"> 
 <span class="menu-text">Resources</span></a>
   </li>  
 </ul>
@@ -195,21 +139,46 @@ window.Quarto = {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#june" id="toc-june" class="nav-link active" data-scroll-target="#june">30 June</a></li>
+  <li><a href="#june-1" id="toc-june-1" class="nav-link" data-scroll-target="#june-1">29 June</a></li>
+  <li><a href="#june-2" id="toc-june-2" class="nav-link" data-scroll-target="#june-2">28 June</a></li>
+  <li><a href="#june-3" id="toc-june-3" class="nav-link" data-scroll-target="#june-3">27 June</a></li>
+  <li><a href="#june-4" id="toc-june-4" class="nav-link" data-scroll-target="#june-4">26 June</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Leetcode POTD June 2024/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Blog</h1>
-</div>
+<h1 class="title">Leetcode POTD June 2024</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">DSA</div>
+  </div>
+  </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ritesh Kumar Maurya </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 24, 2024</p>
+    </div>
+  </div>
   
     
   </div>
@@ -219,157 +188,262 @@ window.Quarto = {
 </header>
 
 
+<section id="june" class="level2">
+<h2 class="anchored" data-anchor-id="june">30 June</h2>
+<ul>
+<li><p><a href="https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/description/">Remove Max Number of Edges to Keep Graph Fully Traversable</a></p></li>
+<li><p><strong>Solution</strong></p>
+<ul>
+<li><a href="https://leetcode.com/problems/redundant-connection/description/">Redundant Connection</a></li>
+<li>The idea is to consider all the nodes as disjoint set and find the union of them</li>
+<li>If two have same parents then we don’t need to merge those two nodes.</li>
+<li>Perform the union using the common edge first and then for Alice and Bob.</li>
+<li>In the end if number of connected components is not 1 for both then it is not possible.</li>
+</ul></li>
+<li><p><strong>Code</strong></p></li>
+</ul>
+<pre class="{java}"><code>class UF{
+    int[] par;
+    int[] rank;
+    int n;
+    UF(int size){
+        n=size;
+        par = new int[size+1];
+        rank = new int[size+1];
+        Arrays.fill(rank,1);
+        for(int i=1;i&lt;=size;i++){
+            par[i] = i;
+        }
+    }
+    int find(int c){
+        if(c==par[c]){
+            return c;
+        }
+        int x = find(par[c]);
+        par[c] = x;
+        return x;
+    }
+    boolean union(int a,int b){
+        int parA = find(a);
+        int parB = find(b);
+        if(parA==parB){
+            return false;
+        }
+        if(rank[parA]&gt;rank[parB]){
+            par[parB] = parA;
+            rank[parA]+=rank[parB];
+        }
+        else{
+            par[parA] = parB;
+            rank[parB]+=rank[parA];            
+        }
+        n--;
+        return true;
+    }
+}
 
 
+class Solution {
+
+    public int maxNumEdgesToRemove(int n, int[][] edges) {
+        UF ufA = new UF(n);
+        UF ufB = new UF(n);
+        int cnt = 0;
+        for(int i=0;i&lt;edges.length;i++){
+            int type = edges[i][0];
+            int a = edges[i][1];
+            int b = edges[i][2];
+            if(type==3){
+                boolean f1 = ufA.union(a,b);
+                boolean f2 = ufB.union(a,b);
+                if(f1||f2){
+                    cnt++;
+                }
+            }
+        }
+
+        for(int i=0;i&lt;edges.length;i++){
+            int type = edges[i][0];
+            int a = edges[i][1];
+            int b = edges[i][2];
+            if(type==1){
+                if(ufA.union(a,b)){
+                    cnt++;
+                }
+            }
+            else if(type==2){
+                if(ufB.union(a,b)){
+                    cnt++;
+                }
+            }
+        }
+        if(ufA.n==1 &amp; ufB.n==1){
+            return edges.length-cnt;
+        }
+        return -1;
+    }
+}</code></pre>
+</section>
+<section id="june-1" class="level2">
+<h2 class="anchored" data-anchor-id="june-1">29 June</h2>
+<ul>
+<li><p><a href="https://leetcode.com/problems/all-ancestors-of-a-node-in-a-directed-acyclic-graph/description/">All Ancestors of a Node in a Directed Acyclic Graph</a></p></li>
+<li><p><strong>Solution</strong></p>
+<ul>
+<li>Take a node and find out all the nodes which can be reached.</li>
+<li>Append the node to the ancestors list of all the other nodes where you can reach.</li>
+</ul></li>
+<li><p><strong>Code</strong></p></li>
+</ul>
+<pre class="{java}"><code>class Solution {
+    HashMap&lt;Integer,List&lt;Integer&gt;&gt; map;
+    List&lt;List&lt;Integer&gt;&gt; ans;
+    int[] vis;
+    void fun(int i){
+        vis[i] = 1;
+        List&lt;Integer&gt; tr = map.getOrDefault(i, new ArrayList&lt;&gt;());
+        for(int j=0;j&lt;tr.size();j++){
+            if(vis[tr.get(j)]==0){fun(tr.get(j));}
+        }
+        
+    }
+    public List&lt;List&lt;Integer&gt;&gt; getAncestors(int n, int[][] edges) {
+        map = new HashMap&lt;&gt;();
+        for(int i=0;i&lt;edges.length;i++){
+            int a = edges[i][0];
+            int b = edges[i][1];
+            List&lt;Integer&gt; arr = map.getOrDefault(a, new ArrayList&lt;&gt;());
+            arr.add(b);
+            map.put(a,arr);
+        }
+        ans = new ArrayList&lt;&gt;();
+        for(int i=0;i&lt;n;i++){
+            ans.add(new ArrayList&lt;&gt;());
+        }
+
+        for(int i=0;i&lt;n;i++){
+            vis = new int[n];
+            fun(i);
+            for(int j=0;j&lt;n;j++){
+                if(i==j){
+                    continue;
+                }
+                if(vis[j]==1){
+                    ans.get(j).add(i);
+                }
+            }
+        }
+        return ans;
+       
+    }
+}</code></pre>
+</section>
+<section id="june-2" class="level2">
+<h2 class="anchored" data-anchor-id="june-2">28 June</h2>
+<ul>
+<li><p><a href="https://leetcode.com/problems/maximum-total-importance-of-roads/description/">Maximum Total Importance of Roads</a></p></li>
+<li><p><strong>Solution</strong></p>
+<ul>
+<li>Count the degree of all the nodes and then run a while loop in descending order of number of degrees.</li>
+</ul></li>
+<li><p><strong>Code</strong></p></li>
+</ul>
+<pre class="{java}"><code>class Solution {
+    public long maximumImportance(int n, int[][] roads) {
+        long[] arr = new long[n];
+        for(int i=0;i&lt;roads.length;i++){
+            int a = roads[i][0];
+            int b = roads[i][1];
+            arr[a]++;
+            arr[b]++;
+        }
+        Arrays.sort(arr);
+        long ans = 0;
+        for(int i=arr.length-1;i&gt;=0;i--){
+            if(arr[i]!=0){
+                ans+=(n*arr[i]);
+            }
+            n--;
+        }
+        return ans;
+    }
+}</code></pre>
+</section>
+<section id="june-3" class="level2">
+<h2 class="anchored" data-anchor-id="june-3">27 June</h2>
+<ul>
+<li><p><a href="https://leetcode.com/problems/find-center-of-star-graph/description/">Find Center of Star Graph</a></p></li>
+<li><p><strong>Solution</strong></p>
+<ul>
+<li>My first approach was to count the number of edges for all the nodes and at the same time check if one of the current nodes have n-1 edges.</li>
+<li>Other approach is based on some logical thinking like if there is only one node which connects to n-1 nodes and there are only n-1 edges then in the edges array either 1st or 2nd is that node.</li>
+</ul></li>
+<li><p><strong>Code</strong></p></li>
+</ul>
+<pre class="{java}"><code>class Solution {
+    public int findCenter(int[][] edges) {
+        return edges[0][0]==edges[1][0] || edges[0][0]==edges[1][1]?edges[0][0]:edges[0][1];
+    }
+}</code></pre>
+</section>
+<section id="june-4" class="level2">
+<h2 class="anchored" data-anchor-id="june-4">26 June</h2>
+<ul>
+<li><a href="https://leetcode.com/problems/balance-a-binary-search-tree/description/">Balance a Binary Search Tree</a></li>
+<li><strong>Solution</strong>
+<ul>
+<li>The approach is to make an arraylist where all the elements are in ascending order.</li>
+<li>Since it is a BST, then inorder traversal can give that arraylist</li>
+<li>Using that arraylist create another BST.</li>
+</ul></li>
+<li><strong>Code</strong></li>
+</ul>
+<pre class="{java}"><code>/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    ArrayList&lt;Integer&gt; arr;
+    TreeNode fun(int low, int high){
+        if(low&gt;high){
+            return null;
+        }
+        int mid = (low+high)/2;
+        TreeNode root = new TreeNode(arr.get(mid));
+        root.left = fun(low,mid-1);
+        root.right = fun(mid+1,high);
+        return root;
+    }
+    void inorder(TreeNode root){
+        if(root==null){
+            return;
+        }
+        inorder(root.left);
+        arr.add(root.val);
+        inorder(root.right);
+    }
+    public TreeNode balanceBST(TreeNode root) {
+        arr = new ArrayList&lt;&gt;();
+        inorder(root);
+        return fun(0, arr.size()-1);
+    }
+}</code></pre>
 
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="Deep Learning" data-listing-date-sort="1719167400000" data-listing-file-modified-sort="1719369159405" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1774">
-<div class="thumbnail">
-<p><a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external"></a></p><a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">
-<p><img src="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">Meta Learning Book Chapter Wise Summary Points</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">The main condition for a healthy machine learning project is a good train-val-test split.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">
-<div class="listing-date">
-Jun 24, 2024
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="Deep Learning" data-listing-date-sort="1718476200000" data-listing-file-modified-sort="1719369159374" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="238">
-<div class="thumbnail">
-<p><a href="./posts/fast.ai summary points/index.html" class="no-external"></a></p><a href="./posts/fast.ai summary points/index.html" class="no-external">
-<p><img src="./posts/fast.ai summary points/book.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/fast.ai summary points/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/fast.ai summary points/index.html" class="no-external">Practical Deep Learning for Coders with fast.ai &amp; PyTorch Book Chapter wise Summary Points</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/fast.ai summary points/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/fast.ai summary points/index.html" class="no-external">A regression model is one that attempts to predict one or more numeric quantities, such a temperature or a location. Sometimes people use the word regression to refer to a…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/fast.ai summary points/index.html" class="no-external">
-<div class="listing-date">
-Jun 16, 2024
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="Optimization" data-listing-date-sort="1716489000000" data-listing-file-modified-sort="1719369281376" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="30" data-listing-word-count-sort="5990">
-<div class="thumbnail">
-<p><a href="./posts/Quantization in Depth/index.html" class="no-external"></a></p><a href="./posts/Quantization in Depth/index.html" class="no-external">
-<p><img src="./posts/Quantization in Depth/qat-training-precision.png" class="thumbnail-image"></p>
-</a><p><a href="./posts/Quantization in Depth/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Quantization in Depth/index.html" class="no-external">Quantization in Depth</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Quantization in Depth/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Quantization in Depth/index.html" class="no-external">This is completely based on Quantization in Depth</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Quantization in Depth/index.html" class="no-external">
-<div class="listing-date">
-May 24, 2024
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="DSA" data-listing-date-sort="1716489000000" data-listing-file-modified-sort="1719753984506" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2099">
-<div class="thumbnail">
-<p><a href="./posts/Leetcode POTD June 2024/index.html" class="no-external"></a></p><a href="./posts/Leetcode POTD June 2024/index.html" class="no-external">
-<p><img src="./posts/Leetcode POTD June 2024/leetcode.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/Leetcode POTD June 2024/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Leetcode POTD June 2024/index.html" class="no-external">Leetcode POTD June 2024</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Leetcode POTD June 2024/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Leetcode POTD June 2024/index.html" class="no-external">Remove Max Number of Edges to Keep Graph Fully Traversable</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Leetcode POTD June 2024/index.html" class="no-external">
-<div class="listing-date">
-May 24, 2024
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="Optimization" data-listing-date-sort="1715538600000" data-listing-file-modified-sort="1719369281376" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1234">
-<div class="thumbnail">
-<p><a href="./posts/Quantization Fundamentals/index.html" class="no-external"></a></p><a href="./posts/Quantization Fundamentals/index.html" class="no-external">
-<p><img src="./posts/Quantization Fundamentals/qat-training-precision.png" class="thumbnail-image"></p>
-</a><p><a href="./posts/Quantization Fundamentals/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Quantization Fundamentals/index.html" class="no-external">Quantization Fundamentals</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Quantization Fundamentals/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Quantization Fundamentals/index.html" class="no-external">This is completely based on Quantization Fundamentals</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Quantization Fundamentals/index.html" class="no-external">
-<div class="listing-date">
-May 13, 2024
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -928,4 +1002,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/blog.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Leetcode POTD June 2024/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
