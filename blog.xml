@@ -10,277 +10,7 @@
 <atom:link href="https://riteshrm.github.io/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Personal site of Ritesh Kumar Maurya.</description>
 <generator>quarto-1.4.553</generator>
-<lastBuildDate>Tue, 25 Jun 2024 18:30:00 GMT</lastBuildDate>
-<item>
-  <title>Leetcode POTD June 2024</title>
-  <dc:creator>Ritesh Kumar Maurya</dc:creator>
-  <link>https://riteshrm.github.io/posts/Leetcode POTD June 2024/</link>
-  <description><![CDATA[ 
-
-
-
-
-<section id="june" class="level2">
-<h2 class="anchored" data-anchor-id="june">30 June</h2>
-<ul>
-<li><p><a href="https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/description/">Remove Max Number of Edges to Keep Graph Fully Traversable</a></p></li>
-<li><p><strong>Solution</strong></p>
-<ul>
-<li><a href="https://leetcode.com/problems/redundant-connection/description/">Redundant Connection</a></li>
-<li>The idea is to consider all the nodes as disjoint set and find the union of them</li>
-<li>If two have same parents then we don’t need to merge those two nodes.</li>
-<li>Perform the union using the common edge first and then for Alice and Bob.</li>
-<li>In the end if number of connected components is not 1 for both then it is not possible.</li>
-</ul></li>
-<li><p><strong>Code</strong></p></li>
-</ul>
-<pre class="{java}"><code>class UF{
-    int[] par;
-    int[] rank;
-    int n;
-    UF(int size){
-        n=size;
-        par = new int[size+1];
-        rank = new int[size+1];
-        Arrays.fill(rank,1);
-        for(int i=1;i&lt;=size;i++){
-            par[i] = i;
-        }
-    }
-    int find(int c){
-        if(c==par[c]){
-            return c;
-        }
-        int x = find(par[c]);
-        par[c] = x;
-        return x;
-    }
-    boolean union(int a,int b){
-        int parA = find(a);
-        int parB = find(b);
-        if(parA==parB){
-            return false;
-        }
-        if(rank[parA]&gt;rank[parB]){
-            par[parB] = parA;
-            rank[parA]+=rank[parB];
-        }
-        else{
-            par[parA] = parB;
-            rank[parB]+=rank[parA];            
-        }
-        n--;
-        return true;
-    }
-}
-
-
-class Solution {
-
-    public int maxNumEdgesToRemove(int n, int[][] edges) {
-        UF ufA = new UF(n);
-        UF ufB = new UF(n);
-        int cnt = 0;
-        for(int i=0;i&lt;edges.length;i++){
-            int type = edges[i][0];
-            int a = edges[i][1];
-            int b = edges[i][2];
-            if(type==3){
-                boolean f1 = ufA.union(a,b);
-                boolean f2 = ufB.union(a,b);
-                if(f1||f2){
-                    cnt++;
-                }
-            }
-        }
-
-        for(int i=0;i&lt;edges.length;i++){
-            int type = edges[i][0];
-            int a = edges[i][1];
-            int b = edges[i][2];
-            if(type==1){
-                if(ufA.union(a,b)){
-                    cnt++;
-                }
-            }
-            else if(type==2){
-                if(ufB.union(a,b)){
-                    cnt++;
-                }
-            }
-        }
-        if(ufA.n==1 &amp; ufB.n==1){
-            return edges.length-cnt;
-        }
-        return -1;
-    }
-}</code></pre>
-</section>
-<section id="june-1" class="level2">
-<h2 class="anchored" data-anchor-id="june-1">29 June</h2>
-<ul>
-<li><p><a href="https://leetcode.com/problems/all-ancestors-of-a-node-in-a-directed-acyclic-graph/description/">All Ancestors of a Node in a Directed Acyclic Graph</a></p></li>
-<li><p><strong>Solution</strong></p>
-<ul>
-<li>Take a node and find out all the nodes which can be reached.</li>
-<li>Append the node to the ancestors list of all the other nodes where you can reach.</li>
-</ul></li>
-<li><p><strong>Code</strong></p></li>
-</ul>
-<pre class="{java}"><code>class Solution {
-    HashMap&lt;Integer,List&lt;Integer&gt;&gt; map;
-    List&lt;List&lt;Integer&gt;&gt; ans;
-    int[] vis;
-    void fun(int i){
-        vis[i] = 1;
-        List&lt;Integer&gt; tr = map.getOrDefault(i, new ArrayList&lt;&gt;());
-        for(int j=0;j&lt;tr.size();j++){
-            if(vis[tr.get(j)]==0){fun(tr.get(j));}
-        }
-        
-    }
-    public List&lt;List&lt;Integer&gt;&gt; getAncestors(int n, int[][] edges) {
-        map = new HashMap&lt;&gt;();
-        for(int i=0;i&lt;edges.length;i++){
-            int a = edges[i][0];
-            int b = edges[i][1];
-            List&lt;Integer&gt; arr = map.getOrDefault(a, new ArrayList&lt;&gt;());
-            arr.add(b);
-            map.put(a,arr);
-        }
-        ans = new ArrayList&lt;&gt;();
-        for(int i=0;i&lt;n;i++){
-            ans.add(new ArrayList&lt;&gt;());
-        }
-
-        for(int i=0;i&lt;n;i++){
-            vis = new int[n];
-            fun(i);
-            for(int j=0;j&lt;n;j++){
-                if(i==j){
-                    continue;
-                }
-                if(vis[j]==1){
-                    ans.get(j).add(i);
-                }
-            }
-        }
-        return ans;
-       
-    }
-}</code></pre>
-</section>
-<section id="june-2" class="level2">
-<h2 class="anchored" data-anchor-id="june-2">28 June</h2>
-<ul>
-<li><p><a href="https://leetcode.com/problems/maximum-total-importance-of-roads/description/">Maximum Total Importance of Roads</a></p></li>
-<li><p><strong>Solution</strong></p>
-<ul>
-<li>Count the degree of all the nodes and then run a while loop in descending order of number of degrees.</li>
-</ul></li>
-<li><p><strong>Code</strong></p></li>
-</ul>
-<pre class="{java}"><code>class Solution {
-    public long maximumImportance(int n, int[][] roads) {
-        long[] arr = new long[n];
-        for(int i=0;i&lt;roads.length;i++){
-            int a = roads[i][0];
-            int b = roads[i][1];
-            arr[a]++;
-            arr[b]++;
-        }
-        Arrays.sort(arr);
-        long ans = 0;
-        for(int i=arr.length-1;i&gt;=0;i--){
-            if(arr[i]!=0){
-                ans+=(n*arr[i]);
-            }
-            n--;
-        }
-        return ans;
-    }
-}</code></pre>
-</section>
-<section id="june-3" class="level2">
-<h2 class="anchored" data-anchor-id="june-3">27 June</h2>
-<ul>
-<li><p><a href="https://leetcode.com/problems/find-center-of-star-graph/description/">Find Center of Star Graph</a></p></li>
-<li><p><strong>Solution</strong></p>
-<ul>
-<li>My first approach was to count the number of edges for all the nodes and at the same time check if one of the current nodes have n-1 edges.</li>
-<li>Other approach is based on some logical thinking like if there is only one node which connects to n-1 nodes and there are only n-1 edges then in the edges array either 1st or 2nd is that node.</li>
-</ul></li>
-<li><p><strong>Code</strong></p></li>
-</ul>
-<pre class="{java}"><code>class Solution {
-    public int findCenter(int[][] edges) {
-        return edges[0][0]==edges[1][0] || edges[0][0]==edges[1][1]?edges[0][0]:edges[0][1];
-    }
-}</code></pre>
-</section>
-<section id="june-4" class="level2">
-<h2 class="anchored" data-anchor-id="june-4">26 June</h2>
-<ul>
-<li><a href="https://leetcode.com/problems/balance-a-binary-search-tree/description/">Balance a Binary Search Tree</a></li>
-<li><strong>Solution</strong>
-<ul>
-<li>The approach is to make an arraylist where all the elements are in ascending order.</li>
-<li>Since it is a BST, then inorder traversal can give that arraylist</li>
-<li>Using that arraylist create another BST.</li>
-</ul></li>
-<li><strong>Code</strong></li>
-</ul>
-<pre class="{java}"><code>/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
-class Solution {
-    ArrayList&lt;Integer&gt; arr;
-    TreeNode fun(int low, int high){
-        if(low&gt;high){
-            return null;
-        }
-        int mid = (low+high)/2;
-        TreeNode root = new TreeNode(arr.get(mid));
-        root.left = fun(low,mid-1);
-        root.right = fun(mid+1,high);
-        return root;
-    }
-    void inorder(TreeNode root){
-        if(root==null){
-            return;
-        }
-        inorder(root.left);
-        arr.add(root.val);
-        inorder(root.right);
-    }
-    public TreeNode balanceBST(TreeNode root) {
-        arr = new ArrayList&lt;&gt;();
-        inorder(root);
-        return fun(0, arr.size()-1);
-    }
-}</code></pre>
-
-
-</section>
-
- ]]></description>
-  <category>DSA</category>
-  <guid>https://riteshrm.github.io/posts/Leetcode POTD June 2024/</guid>
-  <pubDate>Tue, 25 Jun 2024 18:30:00 GMT</pubDate>
-  <media:content url="https://riteshrm.github.io/posts/Leetcode POTD June 2024/leetcode.jpg" medium="image" type="image/jpeg"/>
-</item>
+<lastBuildDate>Fri, 05 Jul 2024 18:30:00 GMT</lastBuildDate>
 <item>
   <title>Meta Learning Book Chapter Wise Summary Points</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
@@ -575,8 +305,488 @@ class Solution {
  ]]></description>
   <category>Deep Learning</category>
   <guid>https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/</guid>
-  <pubDate>Sun, 23 Jun 2024 18:30:00 GMT</pubDate>
+  <pubDate>Fri, 05 Jul 2024 18:30:00 GMT</pubDate>
   <media:content url="https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>Leetcode POTD July 2024</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/Leetcode POTD July 2024/</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="july" class="level2">
+<h2 class="anchored" data-anchor-id="july">5 July</h2>
+<ul>
+<li><p><a href="https://leetcode.com/problems/find-the-minimum-and-maximum-number-of-nodes-between-critical-points/description/">Find the Minimum and Maximum Number of Nodes Between Critical Points</a></p></li>
+<li><p><strong>Solution</strong></p>
+<ul>
+<li>Traverse the list and keep track of min and max distance using prev_ind, first_ind and curr_ind</li>
+</ul></li>
+<li><p><strong>Code</strong></p></li>
+</ul>
+<pre class="{java}"><code>/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public int[] nodesBetweenCriticalPoints(ListNode head) {
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        int prev = head.val;
+        int prev_ind=-1;
+        int first_ind = -1;
+        int curr_ind = 1;
+        head = head.next;
+        int cnt = 0;
+        while(head.next!=null){
+            if((head.val&gt;prev &amp;&amp; head.val&gt;head.next.val) |(head.val&lt;prev &amp;&amp; head.val&lt;head.next.val)){
+                cnt++;
+                if(prev_ind==-1){
+                    prev_ind = curr_ind;
+                    first_ind = curr_ind;
+                }
+                else{
+                    min = Math.min(min, curr_ind-prev_ind);
+                    max = Math.max(max, curr_ind-first_ind);
+                    prev_ind = curr_ind;
+                }
+            }
+            prev = head.val;
+            head = head.next;
+            curr_ind++;
+        }
+        if(cnt&lt;2){
+            return new int[]{-1,-1};
+        }
+        return new int[]{min,max};
+    }
+}</code></pre>
+</section>
+<section id="july-1" class="level2">
+<h2 class="anchored" data-anchor-id="july-1">4 July</h2>
+<ul>
+<li><p><a href="https://leetcode.com/problems/merge-nodes-in-between-zeros/description/">Merge Nodes in Between Zeros</a></p></li>
+<li><p><strong>Solution</strong></p>
+<ul>
+<li>Keep a variable sum</li>
+<li>Add the elements until you find 0</li>
+<li>Add new node with value as sum and set sum to 0</li>
+</ul></li>
+<li><p><strong>Code</strong></p></li>
+</ul>
+<pre class="{java}"><code>/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode mergeNodes(ListNode head) {
+        ListNode new_head = new ListNode();
+        ListNode tmp = new_head;
+        int sum = 0;
+        head = head.next;
+        while(head!=null){
+            sum+=head.val;
+            if(head.val==0){
+                tmp.next = new ListNode(sum);
+                tmp = tmp.next;
+                sum=0;
+            }
+            head = head.next;
+        }
+        return new_head.next;
+    }
+}</code></pre>
+</section>
+<section id="july-2" class="level2">
+<h2 class="anchored" data-anchor-id="july-2">3 July</h2>
+<ul>
+<li><p><a href="https://leetcode.com/problems/minimum-difference-between-largest-and-smallest-value-in-three-moves/description/">Minimum Difference Between Largest and Smallest Value in Three Moves</a></p></li>
+<li><p><strong>Solution</strong></p>
+<ul>
+<li>There are 4 cases:-
+<ul>
+<li>Change the value of 3 minimum values</li>
+<li>2 min and 1 max</li>
+<li>1 min and 2 max</li>
+<li>3 max</li>
+</ul></li>
+<li>The result will be min difference of all the cases.</li>
+</ul></li>
+<li><p><strong>Code</strong></p></li>
+</ul>
+<pre class="{java}"><code>class Solution {
+    public int minDifference(int[] nums) {
+        if(nums.length&lt;=4){
+            return 0;
+        }
+        Arrays.sort(nums);
+        int ans = nums[nums.length-4]-nums[0];
+        for(int i=1;i&lt;=4;i++){
+            ans = Math.min(ans, nums[nums.length-i]-nums[4-i]);
+        }
+        return ans;
+    }
+}</code></pre>
+</section>
+<section id="july-3" class="level2">
+<h2 class="anchored" data-anchor-id="july-3">2 July</h2>
+<ul>
+<li><p><a href="https://leetcode.com/problems/intersection-of-two-arrays-ii/description/">Intersection of Two Arrays II</a></p></li>
+<li><p><strong>Solution</strong></p>
+<ul>
+<li>1st approach is to use two hashamps for each array</li>
+<li>Find intersection of those two using keys(map.keySet()) and intersection of those two sets(set = set.retainAll(s2));</li>
+<li>2nd approch is to make an array of length 1001(max num can be 1000)</li>
+<li>While traversing nums1 increment the counter in cnt array</li>
+<li>While traversing nums2 if cnt of num is 0 then continue else add num to ans and decrease the cnt by 1</li>
+</ul></li>
+<li><p><strong>Code</strong></p></li>
+</ul>
+<pre class="{java}"><code>class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+        int[] cnt = new int[1001];
+        
+        for(int i=0;i&lt;nums1.length;i++){
+            cnt[nums1[i]]++;
+        }
+        ArrayList&lt;Integer&gt; arr = new ArrayList&lt;&gt;();
+        for(int i=0;i&lt;nums2.length;i++){
+            if(cnt[nums2[i]]!=0){
+                arr.add(nums2[i]);
+                cnt[nums2[i]]--;
+            }
+        }
+        int[] ans = new int[arr.size()];
+        for(int i=0;i&lt;ans.length;i++){
+            ans[i] = arr.get(i);
+        }
+        return ans;
+
+    }
+}</code></pre>
+</section>
+<section id="july-4" class="level2">
+<h2 class="anchored" data-anchor-id="july-4">1 July</h2>
+<ul>
+<li><p><a href="https://leetcode.com/problems/three-consecutive-odds/description/">Three Consecutive Odds</a></p></li>
+<li><p><strong>Solution</strong></p>
+<ul>
+<li>Keep a count if the currrent num is odd increase it and check if it is equal to 3 then return true</li>
+<li>Otherwise set it back to 0</li>
+</ul></li>
+<li><p><strong>Code</strong></p></li>
+</ul>
+<pre class="{java}"><code>class Solution {
+    public boolean threeConsecutiveOdds(int[] arr) {
+        int cnt = 0;
+        for(int i=0;i&lt;arr.length;i++){
+            if(arr[i]%2==1){
+                cnt++;
+            }
+            else{
+                cnt=0;
+            }
+            if(cnt==3){
+                return true;
+            }
+        }
+        return false;
+    }
+}</code></pre>
+
+
+</section>
+
+ ]]></description>
+  <category>DSA</category>
+  <guid>https://riteshrm.github.io/posts/Leetcode POTD July 2024/</guid>
+  <pubDate>Sun, 30 Jun 2024 18:30:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/Leetcode POTD July 2024/leetcode.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>Leetcode POTD June 2024</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/Leetcode POTD June 2024/</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="june" class="level2">
+<h2 class="anchored" data-anchor-id="june">30 June</h2>
+<ul>
+<li><p><a href="https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/description/">Remove Max Number of Edges to Keep Graph Fully Traversable</a></p></li>
+<li><p><strong>Solution</strong></p>
+<ul>
+<li><a href="https://leetcode.com/problems/redundant-connection/description/">Redundant Connection</a></li>
+<li>The idea is to consider all the nodes as disjoint set and find the union of them</li>
+<li>If two have same parents then we don’t need to merge those two nodes.</li>
+<li>Perform the union using the common edge first and then for Alice and Bob.</li>
+<li>In the end if number of connected components is not 1 for both then it is not possible.</li>
+</ul></li>
+<li><p><strong>Code</strong></p></li>
+</ul>
+<pre class="{java}"><code>class UF{
+    int[] par;
+    int[] rank;
+    int n;
+    UF(int size){
+        n=size;
+        par = new int[size+1];
+        rank = new int[size+1];
+        Arrays.fill(rank,1);
+        for(int i=1;i&lt;=size;i++){
+            par[i] = i;
+        }
+    }
+    int find(int c){
+        if(c==par[c]){
+            return c;
+        }
+        int x = find(par[c]);
+        par[c] = x;
+        return x;
+    }
+    boolean union(int a,int b){
+        int parA = find(a);
+        int parB = find(b);
+        if(parA==parB){
+            return false;
+        }
+        if(rank[parA]&gt;rank[parB]){
+            par[parB] = parA;
+            rank[parA]+=rank[parB];
+        }
+        else{
+            par[parA] = parB;
+            rank[parB]+=rank[parA];            
+        }
+        n--;
+        return true;
+    }
+}
+
+
+class Solution {
+
+    public int maxNumEdgesToRemove(int n, int[][] edges) {
+        UF ufA = new UF(n);
+        UF ufB = new UF(n);
+        int cnt = 0;
+        for(int i=0;i&lt;edges.length;i++){
+            int type = edges[i][0];
+            int a = edges[i][1];
+            int b = edges[i][2];
+            if(type==3){
+                boolean f1 = ufA.union(a,b);
+                boolean f2 = ufB.union(a,b);
+                if(f1||f2){
+                    cnt++;
+                }
+            }
+        }
+
+        for(int i=0;i&lt;edges.length;i++){
+            int type = edges[i][0];
+            int a = edges[i][1];
+            int b = edges[i][2];
+            if(type==1){
+                if(ufA.union(a,b)){
+                    cnt++;
+                }
+            }
+            else if(type==2){
+                if(ufB.union(a,b)){
+                    cnt++;
+                }
+            }
+        }
+        if(ufA.n==1 &amp; ufB.n==1){
+            return edges.length-cnt;
+        }
+        return -1;
+    }
+}</code></pre>
+</section>
+<section id="june-1" class="level2">
+<h2 class="anchored" data-anchor-id="june-1">29 June</h2>
+<ul>
+<li><p><a href="https://leetcode.com/problems/all-ancestors-of-a-node-in-a-directed-acyclic-graph/description/">All Ancestors of a Node in a Directed Acyclic Graph</a></p></li>
+<li><p><strong>Solution</strong></p>
+<ul>
+<li>Take a node and find out all the nodes which can be reached.</li>
+<li>Append the node to the ancestors list of all the other nodes where you can reach.</li>
+</ul></li>
+<li><p><strong>Code</strong></p></li>
+</ul>
+<pre class="{java}"><code>class Solution {
+    HashMap&lt;Integer,List&lt;Integer&gt;&gt; map;
+    List&lt;List&lt;Integer&gt;&gt; ans;
+    int[] vis;
+    void fun(int i){
+        vis[i] = 1;
+        List&lt;Integer&gt; tr = map.getOrDefault(i, new ArrayList&lt;&gt;());
+        for(int j=0;j&lt;tr.size();j++){
+            if(vis[tr.get(j)]==0){fun(tr.get(j));}
+        }
+        
+    }
+    public List&lt;List&lt;Integer&gt;&gt; getAncestors(int n, int[][] edges) {
+        map = new HashMap&lt;&gt;();
+        for(int i=0;i&lt;edges.length;i++){
+            int a = edges[i][0];
+            int b = edges[i][1];
+            List&lt;Integer&gt; arr = map.getOrDefault(a, new ArrayList&lt;&gt;());
+            arr.add(b);
+            map.put(a,arr);
+        }
+        ans = new ArrayList&lt;&gt;();
+        for(int i=0;i&lt;n;i++){
+            ans.add(new ArrayList&lt;&gt;());
+        }
+
+        for(int i=0;i&lt;n;i++){
+            vis = new int[n];
+            fun(i);
+            for(int j=0;j&lt;n;j++){
+                if(i==j){
+                    continue;
+                }
+                if(vis[j]==1){
+                    ans.get(j).add(i);
+                }
+            }
+        }
+        return ans;
+       
+    }
+}</code></pre>
+</section>
+<section id="june-2" class="level2">
+<h2 class="anchored" data-anchor-id="june-2">28 June</h2>
+<ul>
+<li><p><a href="https://leetcode.com/problems/maximum-total-importance-of-roads/description/">Maximum Total Importance of Roads</a></p></li>
+<li><p><strong>Solution</strong></p>
+<ul>
+<li>Count the degree of all the nodes and then run a while loop in descending order of number of degrees.</li>
+</ul></li>
+<li><p><strong>Code</strong></p></li>
+</ul>
+<pre class="{java}"><code>class Solution {
+    public long maximumImportance(int n, int[][] roads) {
+        long[] arr = new long[n];
+        for(int i=0;i&lt;roads.length;i++){
+            int a = roads[i][0];
+            int b = roads[i][1];
+            arr[a]++;
+            arr[b]++;
+        }
+        Arrays.sort(arr);
+        long ans = 0;
+        for(int i=arr.length-1;i&gt;=0;i--){
+            if(arr[i]!=0){
+                ans+=(n*arr[i]);
+            }
+            n--;
+        }
+        return ans;
+    }
+}</code></pre>
+</section>
+<section id="june-3" class="level2">
+<h2 class="anchored" data-anchor-id="june-3">27 June</h2>
+<ul>
+<li><p><a href="https://leetcode.com/problems/find-center-of-star-graph/description/">Find Center of Star Graph</a></p></li>
+<li><p><strong>Solution</strong></p>
+<ul>
+<li>My first approach was to count the number of edges for all the nodes and at the same time check if one of the current nodes have n-1 edges.</li>
+<li>Other approach is based on some logical thinking like if there is only one node which connects to n-1 nodes and there are only n-1 edges then in the edges array either 1st or 2nd is that node.</li>
+</ul></li>
+<li><p><strong>Code</strong></p></li>
+</ul>
+<pre class="{java}"><code>class Solution {
+    public int findCenter(int[][] edges) {
+        return edges[0][0]==edges[1][0] || edges[0][0]==edges[1][1]?edges[0][0]:edges[0][1];
+    }
+}</code></pre>
+</section>
+<section id="june-4" class="level2">
+<h2 class="anchored" data-anchor-id="june-4">26 June</h2>
+<ul>
+<li><a href="https://leetcode.com/problems/balance-a-binary-search-tree/description/">Balance a Binary Search Tree</a></li>
+<li><strong>Solution</strong>
+<ul>
+<li>The approach is to make an arraylist where all the elements are in ascending order.</li>
+<li>Since it is a BST, then inorder traversal can give that arraylist</li>
+<li>Using that arraylist create another BST.</li>
+</ul></li>
+<li><strong>Code</strong></li>
+</ul>
+<pre class="{java}"><code>/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    ArrayList&lt;Integer&gt; arr;
+    TreeNode fun(int low, int high){
+        if(low&gt;high){
+            return null;
+        }
+        int mid = (low+high)/2;
+        TreeNode root = new TreeNode(arr.get(mid));
+        root.left = fun(low,mid-1);
+        root.right = fun(mid+1,high);
+        return root;
+    }
+    void inorder(TreeNode root){
+        if(root==null){
+            return;
+        }
+        inorder(root.left);
+        arr.add(root.val);
+        inorder(root.right);
+    }
+    public TreeNode balanceBST(TreeNode root) {
+        arr = new ArrayList&lt;&gt;();
+        inorder(root);
+        return fun(0, arr.size()-1);
+    }
+}</code></pre>
+
+
+</section>
+
+ ]]></description>
+  <category>DSA</category>
+  <guid>https://riteshrm.github.io/posts/Leetcode POTD June 2024/</guid>
+  <pubDate>Tue, 25 Jun 2024 18:30:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/Leetcode POTD June 2024/leetcode.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>Practical Deep Learning for Coders with fast.ai &amp; PyTorch Book Chapter wise Summary Points</title>

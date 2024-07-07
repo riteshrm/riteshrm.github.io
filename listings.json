@@ -2,8 +2,9 @@
   {
     "listing": "/blog.html",
     "items": [
-      "/posts/Leetcode POTD June 2024/index.html",
       "/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html",
+      "/posts/Leetcode POTD July 2024/index.html",
+      "/posts/Leetcode POTD June 2024/index.html",
       "/posts/fast.ai summary points/index.html",
       "/posts/Quantization in Depth/index.html",
       "/posts/Quantization Fundamentals/index.html"
