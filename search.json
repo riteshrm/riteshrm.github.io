@@ -137,7 +137,7 @@
     "href": "pages/about.html",
     "title": "About Me",
     "section": "",
-    "text": "I work on diffusion models at Samsung R&D Institute Noida. For more details on my work experience, check out my LinkedIn profile.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTimeline\n\n\n\n\n\n\n\n\nPosition\nCompany\nDuration\n\n\n\n\nEngineer\nSamsung R&D Institute Noida\nJan 2024 - Present\n\n\nIntern\nSamsung R&D Institute Noida\nJan 2023 - Dec 2023"
+    "text": "As an engineer at Samsung R&D Institute Noida, I work on diffusion models, where i have implemented optimized architectures inspired by SnapFusion and MobileDiffusion. I have experience converting models from PyTorch to TFLite or ONNX for on-device deployment, and performing quantization using Quanto(HuggingFace) and AIMET(Qualcomm).\nDuring my internship, I contributed to a machine learning project centered on multiclass time series classification. I worked on advanced architectures such as Inception, SqueezeNet, and Transformers, and explored practical applications of Angular Loss and Focal Loss, gaining foundational skills that have been invaluable in my subsequent roles.\nFor more details on my work experience, check out my LinkedIn profile.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTimeline\n\n\n\n\n\n\n\n\nPosition\nCompany\nDuration\n\n\n\n\nEngineer\nSamsung R&D Institute Noida\nJan 2024 - Present\n\n\nIntern\nSamsung R&D Institute Noida\nJan 2023 - Dec 2023"
   },
   {
     "objectID": "pages/education.html",
