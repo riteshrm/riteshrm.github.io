@@ -144,6 +144,7 @@ ga('send', {
    
   <ul>
   <li><a href="#chapter-1-your-deep-learning-journey" id="toc-chapter-1-your-deep-learning-journey" class="nav-link active" data-scroll-target="#chapter-1-your-deep-learning-journey">[Chapter 1] Your Deep Learning Journey</a></li>
+  <li><a href="#chapter-2-from-model-to-production" id="toc-chapter-2-from-model-to-production" class="nav-link" data-scroll-target="#chapter-2-from-model-to-production">[Chapter 2] From Model to Production</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/fast.ai summary points/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -202,11 +203,25 @@ ga('send', {
 <li><p>Val data is used to improve the model. (Modeling Process)</p></li>
 <li><p>Test data is used to only evaluate the model. Don’t see it or share, just use it for evaluation.</p></li>
 <li><p>the automatic training process with backpropagation, the more manual process of trying different hyperparameters between training sessions, and the assessment of our final result.</p></li>
-<li><p>If your data includes the date and you are building a model to use in the future, you will want to choose a continuous section with the latest dates as your validation set</p></li>
+<li><p>If your data includes the date and you are building a model to use in the future, you will want to choose a continuous section with the latest dates as your validation set.</p></li>
+</ul>
+</section>
+</section>
+<section id="chapter-2-from-model-to-production" class="level1">
+<h1>[Chapter 2] From Model to Production</h1>
+<ul>
+<li>First try to Make and end to end pipeline for the project you want to work.</li>
+<li>Then iteratively modify the parts, like data is not enough or need to use another architecture etc.</li>
+<li><strong>The Drivetrain Approach</strong>
+<ul>
+<li>Define your objective like what outcome do you want.</li>
+<li>Define the actions which you can do to get there like what inputs you can control.</li>
+<li>What type of data can help or you can collect.</li>
+<li>Then build a model that you can use to determine the best actions to take to get the best results in terms of your objective.</li>
+</ul></li>
 </ul>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
