@@ -309,60 +309,6 @@
   <media:content url="https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
-  <title>Practical Deep Learning for Coders with fast.ai &amp; PyTorch Book Chapter wise Summary Points</title>
-  <dc:creator>Ritesh Kumar Maurya</dc:creator>
-  <link>https://riteshrm.github.io/posts/fast.ai summary points/</link>
-  <description><![CDATA[ 
-
-
-
-
-<ul>
-<li>This is completely based on <a href="https://course.fast.ai/Resources/book.html">Practical Deep Learning Fast.ai course</a></li>
-</ul>
-<section id="chapter-1-your-deep-learning-journey" class="level1">
-<h1>[Chapter 1] Your Deep Learning Journey</h1>
-<ul>
-<li><p>A regression model is one that attempts to predict one or more numeric quantities, such a temperature or a location. Sometimes people use the word regression to refer to a particular kind of model called a linear regression model.</p></li>
-<li><p>The entire purpose of loss is to define a “measure of performance” that the training system can use to update weights automatically.But a metric is defined for human consumption, so a good metric is one that is easy for you to understand.</p></li>
-<li><p>Images from a time series dataset using a technique called Gramian Angular Difference Field.</p></li>
-</ul>
-<section id="why-do-we-need-trainval-and-test" class="level4">
-<h4 class="anchored" data-anchor-id="why-do-we-need-trainval-and-test">why do we need train,val and test</h4>
-<ul>
-<li><p>We use validation loss to kind of of tune the hyper-params. By doing so, we are indirectly using the val data. That’s why we need test data also.</p></li>
-<li><p>Train data is used to train the model. (Training Process)</p></li>
-<li><p>Val data is used to improve the model. (Modeling Process)</p></li>
-<li><p>Test data is used to only evaluate the model. Don’t see it or share, just use it for evaluation.</p></li>
-<li><p>the automatic training process with backpropagation, the more manual process of trying different hyperparameters between training sessions, and the assessment of our final result.</p></li>
-<li><p>If your data includes the date and you are building a model to use in the future, you will want to choose a continuous section with the latest dates as your validation set.</p></li>
-</ul>
-</section>
-</section>
-<section id="chapter-2-from-model-to-production" class="level1">
-<h1>[Chapter 2] From Model to Production</h1>
-<ul>
-<li>First try to Make and end to end pipeline for the project you want to work.</li>
-<li>Then iteratively modify the parts, like data is not enough or need to use another architecture etc.</li>
-<li><strong>The Drivetrain Approach</strong>
-<ul>
-<li>Define your objective like what outcome do you want.</li>
-<li>Define the actions which you can do to get there like what inputs you can control.</li>
-<li>What type of data can help or you can collect.</li>
-<li>Then build a model that you can use to determine the best actions to take to get the best results in terms of your objective.</li>
-</ul></li>
-</ul>
-
-
-</section>
-
- ]]></description>
-  <category>Deep Learning</category>
-  <guid>https://riteshrm.github.io/posts/fast.ai summary points/</guid>
-  <pubDate>Sat, 15 Jun 2024 18:30:00 GMT</pubDate>
-  <media:content url="https://riteshrm.github.io/posts/fast.ai summary points/book.jpg" medium="image" type="image/jpeg"/>
-</item>
-<item>
   <title>Quantization in Depth</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
   <link>https://riteshrm.github.io/posts/Quantization in Depth/</link>

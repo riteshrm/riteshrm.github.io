@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Ritesh Kumar Maurya">
+<meta name="dcterms.date" content="2024-07-21">
 
-<title>Ritesh Kumar Maurya - Blog</title>
+<title>Ritesh Kumar Maurya - Diffusion Models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +25,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<link href="./posts/favicon.ico" rel="icon">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<script src="site_libs/quarto-contrib/iconify-2.0.0/iconify-icon.min.js"></script>
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<link href="../../posts/favicon.ico" rel="icon">
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-contrib/iconify-2.0.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -56,35 +56,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
 <script type="text/javascript">
 
@@ -130,12 +101,18 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="styles.css">
-<link rel="alternate" type="application/rss+xml" title="Ritesh Kumar Maurya" href="blog.xml" data-external="1"><meta property="og:title" content="Ritesh Kumar Maurya - Blog">
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Ritesh Kumar Maurya - Diffusion Models">
+<meta property="og:image" content="https://riteshrm.github.io/posts/Diffusion Models/qat-training-precision.png">
 <meta property="og:site_name" content="Ritesh Kumar Maurya">
-<meta name="twitter:title" content="Ritesh Kumar Maurya - Blog">
+<meta property="og:image:height" content="290">
+<meta property="og:image:width" content="516">
+<meta name="twitter:title" content="Ritesh Kumar Maurya - Diffusion Models">
+<meta name="twitter:image" content="https://riteshrm.github.io/posts/Diffusion Models/qat-training-precision.png">
 <meta name="twitter:creator" content="@_riteshrm_">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image-height" content="290">
+<meta name="twitter:image-width" content="516">
 </head>
 
 <body class="nav-fixed">
@@ -145,7 +122,7 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Ritesh Kumar Maurya</span>
     </a>
   </div>
@@ -155,15 +132,15 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./pages/about.html"> 
+    <a class="nav-link" href="../../pages/about.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./blog.html" aria-current="page"> 
+    <a class="nav-link" href="../../blog.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./pages/resources.html"> 
+    <a class="nav-link" href="../../pages/resources.html"> 
 <span class="menu-text">Resources</span></a>
   </li>  
 </ul>
@@ -195,21 +172,46 @@ window.Quarto = {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-are-diffusion-models" id="toc-what-are-diffusion-models" class="nav-link active" data-scroll-target="#what-are-diffusion-models">What are Diffusion Models?</a>
+  <ul class="collapse">
+  <li><a href="#forward-process" id="toc-forward-process" class="nav-link" data-scroll-target="#forward-process">Forward Process</a></li>
+  <li><a href="#reverse-process" id="toc-reverse-process" class="nav-link" data-scroll-target="#reverse-process">Reverse Process</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Diffusion Models/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Blog</h1>
-</div>
+<h1 class="title">Diffusion Models</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Diffusion Models</div>
+  </div>
+  </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ritesh Kumar Maurya </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 21, 2024</p>
+    </div>
+  </div>
   
     
   </div>
@@ -219,101 +221,53 @@ window.Quarto = {
 </header>
 
 
+<section id="what-are-diffusion-models" class="level1">
+<h1>What are Diffusion Models?</h1>
+<ul>
+<li>The essential idea, inspired by non-equilibrium statistical physics, is to systematically and slowly destroy structure in a data distribution through an iterative forward diffusion process. We then learn a reverse diffusion process that restores structure in data, yielding a highly flexible and tractable generative model of the data. Diffusion Process consists of forward and reverse process.</li>
+</ul>
+<section id="forward-process" class="level2">
+<h2 class="anchored" data-anchor-id="forward-process">Forward Process</h2>
+<ul>
+<li>The equation:-
+<ul>
+<li><p><span class="math inline">\(q(x_t|x_{t-1}) = N(x_t,\sqrt{1-\beta_t}x_{t-1},\beta_t\mathit{I})\)</span></p></li>
+<li><p>Why sqrt of alpha_t <span class="math inline">\(N(0,\sigma^2)\)</span></p></li>
+<li><p>where q is forward process</p></li>
+<li><p><span class="math inline">\(\sqrt{1-\beta_t}x_{t-1}\)</span> is the mean</p></li>
+<li><p><span class="math inline">\(\beta_t\mathit{I}\)</span> is the variance</p></li>
+<li><p><span class="math inline">\(\beta_t\)</span> is the scheduler which ranges from 0 to 1. The values are kept low to prevent it from exploding.</p></li>
+<li><p><span class="math inline">\(\alpha_t = 1-\beta_t\)</span></p></li>
+<li><p><span class="math inline">\(x_t = \sqrt{\alpha_t}x_{t-1} + \sqrt{1-\alpha_t}\epsilon_{t-1}\)</span></p></li>
+<li><p>After performing some reparameterization trick</p></li>
+<li><p><span class="math inline">\(\bar{\alpha}_t = \prod_{s=1}^{t} \alpha_s\)</span></p></li>
+<li><p><span class="math inline">\(x_t = \sqrt{\bar{\alpha}_t}x_{0} + \sqrt{1-\bar{\alpha}_t}\epsilon\)</span></p></li>
+</ul></li>
+</ul>
+</section>
+<section id="reverse-process" class="level2">
+<h2 class="anchored" data-anchor-id="reverse-process">Reverse Process</h2>
+<ul>
+<li>The equation:
+<ul>
+<li><span class="math inline">\(p_{\theta}(x_{t-1}|x_t) = N(x_{t-1}, \mu_\theta(x_t,t), \sum_{\theta}(x_t,t))\)</span></li>
+<li><span class="math inline">\(\mu_\theta(x_t,t)\)</span> is the mean</li>
+<li><span class="math inline">\(\sum_{\theta}(x_t,t)\)</span> is equals to variance (<span class="math inline">\(\sigma_{t}^2\mathit{I}\)</span>)</li>
+<li><span class="math inline">\(\mu_\theta(x_t,t) = \frac{1}{\sqrt{\alpha_t}}(x_t-\frac{1-\alpha_t}{\sqrt{1-\bar{\alpha}_t}}\epsilon_{\theta}(x_t,t))\)</span></li>
+<li>This gives us:-</li>
+<li><span class="math inline">\(x_{t-1} = N(x_{t-1}, \frac{1}{\sqrt{\alpha_t}}(x_t-\frac{1-\alpha_t}{\sqrt{1-\bar{\alpha}_t}}\epsilon_{\theta}(x_t,t)), \sqrt{\beta_t}\epsilon)\)</span></li>
+<li>which we can use to calculate output for a given timestep</li>
+<li><span class="math inline">\(x_{t-1} =  \frac{1}{\sqrt{\alpha_t}}(x_t-\frac{1-\alpha_t}{\sqrt{1-\bar{\alpha}_t}}\epsilon_{\theta}(x_t,t)) +  \sqrt{\beta_t}\epsilon\)</span></li>
+<li>where <span class="math inline">\(\epsilon_{\theta}(x_t,t)\)</span> is model’s ouput</li>
+<li>The last iteration of reverse process does not add <span class="math inline">\(\sqrt{\beta_t}\epsilon\)</span> because we wouldn’t be able to remove it.</li>
+</ul></li>
+</ul>
 
 
+</section>
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="Deep Learning" data-listing-date-sort="1720204200000" data-listing-file-modified-sort="1720328810372" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1774">
-<div class="thumbnail">
-<p><a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external"></a></p><a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">
-<p><img src="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">Meta Learning Book Chapter Wise Summary Points</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">The main condition for a healthy machine learning project is a good train-val-test split.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">
-<div class="listing-date">
-Jul 6, 2024
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="Optimization" data-listing-date-sort="1716489000000" data-listing-file-modified-sort="1719369281376" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="30" data-listing-word-count-sort="5990">
-<div class="thumbnail">
-<p><a href="./posts/Quantization in Depth/index.html" class="no-external"></a></p><a href="./posts/Quantization in Depth/index.html" class="no-external">
-<p><img src="./posts/Quantization in Depth/qat-training-precision.png" class="thumbnail-image"></p>
-</a><p><a href="./posts/Quantization in Depth/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Quantization in Depth/index.html" class="no-external">Quantization in Depth</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Quantization in Depth/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Quantization in Depth/index.html" class="no-external">This is completely based on Quantization in Depth</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Quantization in Depth/index.html" class="no-external">
-<div class="listing-date">
-May 24, 2024
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="Optimization" data-listing-date-sort="1715538600000" data-listing-file-modified-sort="1719369281376" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1234">
-<div class="thumbnail">
-<p><a href="./posts/Quantization Fundamentals/index.html" class="no-external"></a></p><a href="./posts/Quantization Fundamentals/index.html" class="no-external">
-<p><img src="./posts/Quantization Fundamentals/qat-training-precision.png" class="thumbnail-image"></p>
-</a><p><a href="./posts/Quantization Fundamentals/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Quantization Fundamentals/index.html" class="no-external">Quantization Fundamentals</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Quantization Fundamentals/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Quantization Fundamentals/index.html" class="no-external">This is completely based on Quantization Fundamentals</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Quantization Fundamentals/index.html" class="no-external">
-<div class="listing-date">
-May 13, 2024
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -872,4 +826,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/blog.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Diffusion Models/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
