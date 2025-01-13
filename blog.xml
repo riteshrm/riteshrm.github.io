@@ -113,7 +113,7 @@
 </section>
 <section id="importing-the-required-packages" class="level1">
 <h1>Importing the required packages</h1>
-<div id="6e5d156d" class="cell" data-execution_count="1">
+<div id="c4b483a0" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
@@ -154,7 +154,7 @@ font-style: inherit;">'cuda'</span></span></code></pre></div>
 </section>
 <section id="function-to-sample-data-of-size-batch_size" class="level1">
 <h1>Function to sample data of size batch_size</h1>
-<div id="ff3e26d4" class="cell" data-execution_count="2">
+<div id="56a75bf2" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -196,7 +196,7 @@ font-style: inherit;">=</span>device)</span></code></pre></div>
 </section>
 <section id="mlp-model-designing-for-reverse-process" class="level1">
 <h1>MLP model designing for reverse process</h1>
-<div id="f930735b" class="cell" data-execution_count="3">
+<div id="93cce5fd" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -293,7 +293,7 @@ font-style: inherit;">return</span> mu, std</span></code></pre></div>
 </section>
 <section id="diffusion-model-designing-for-forward-reverse-and-sampling-process" class="level1">
 <h1>Diffusion Model designing for forward, reverse and sampling process</h1>
-<div id="8f026a1c" class="cell" data-execution_count="4">
+<div id="542f9493" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -647,7 +647,7 @@ font-style: inherit;">return</span> loss</span></code></pre></div>
 </section>
 <section id="function-to-plot-the-forward-and-reverse-process" class="level1">
 <h1>Function to plot the forward and reverse process</h1>
-<div id="aa176443" class="cell" data-execution_count="5">
+<div id="e7af6a5d" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -881,7 +881,7 @@ font-style: inherit;">#plt.savefig(file_name, bbox_inches='tight')</span></span>
 </section>
 <section id="inference-of-pretrained-model" class="level1">
 <h1>Inference of pretrained model</h1>
-<div id="5aeb6529" class="cell" data-execution_count="6">
+<div id="b07fa273" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">mlp_model <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> torch.load(<span class="st" style="color: #20794D;
@@ -898,7 +898,7 @@ font-style: inherit;">f'inference.png'</span>, <span class="dv" style="color: #A
 background-color: null;
 font-style: inherit;">5_000</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\rites\AppData\Local\Temp\ipykernel_14860\2907671096.py:1: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+<pre><code>C:\Users\rites\AppData\Local\Temp\ipykernel_44504\2907671096.py:1: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   mlp_model = torch.load('mlp_model_299000.pt').to(device)</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -912,7 +912,7 @@ font-style: inherit;">5_000</span>)</span></code></pre></div>
 </section>
 <section id="training-loop" class="level1">
 <h1>Training loop</h1>
-<div id="7972f78c" class="cell" data-execution_count="7">
+<div id="72f46188" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -1361,7 +1361,7 @@ font-style: inherit;"># plt.close()</span></span></code></pre></div>
 <li>r = s(q-z) q = int(round(r/s+z))</li>
 </ul></li>
 </ul>
-<div id="a9bcbb0c" class="cell" data-execution_count="1">
+<div id="ba5e0332" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -1692,7 +1692,7 @@ font-style: inherit;">=</span> linear_dequantization(</span>
 </ul></li>
 </ul></li>
 </ul>
-<div id="35bfecf3" class="cell" data-execution_count="2">
+<div id="66f09fb8" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -1806,7 +1806,7 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 <li>q = int(round(r/s))</li>
 <li>s = r_max/q_max</li>
 </ul>
-<div id="67de63ff" class="cell" data-execution_count="3">
+<div id="8a4be441" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -1905,7 +1905,7 @@ font-style: inherit;">return</span> quantized_tensor, scale</span></code></pre><
 <ul>
 <li>we usually use per channel quantization in int8</li>
 </ul>
-<div id="96b0b10f" class="cell" data-execution_count="4">
+<div id="c4e7564c" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -1994,7 +1994,7 @@ font-style: inherit;">return</span> quantized_tensor, scale</span></code></pre><
 </ul></li>
 </ul></li>
 </ul>
-<div id="8be5ea29" class="cell" data-execution_count="5">
+<div id="5508af2a" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -2107,7 +2107,7 @@ font-style: inherit;">return</span> dequantized_tensor</span></code></pre></div>
 </section>
 <section id="custom-build-an-8-bit-quantizer" class="level3">
 <h3 class="anchored" data-anchor-id="custom-build-an-8-bit-quantizer">Custom Build an 8-Bit Quantizer</h3>
-<div id="788c5efc" class="cell" data-execution_count="6">
+<div id="0979f2f6" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#W8A16LinearLayer</span></span>
@@ -2158,7 +2158,7 @@ background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> output</span></code></pre></div>
 </div>
-<div id="c8f8aa52" class="cell" data-execution_count="7">
+<div id="4ae14183" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -2263,7 +2263,7 @@ font-style: inherit;">[0m"</span>)</span></code></pre></div>
 <li><p>This way instead of storing a parameter, we just store a buffer, meaning we don’t need to compute gradients on the tensor.</p></li>
 <li><p>You can initialize it with whatever dtype you want.</p></li>
 </ul>
-<div id="5a31fba3" class="cell" data-execution_count="8">
+<div id="3e01af3c" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -2384,7 +2384,7 @@ background-color: null;
 font-style: inherit;">self</span>.bias)</span></code></pre></div>
 </div>
 <p><strong>Quantize a Base Model</strong></p>
-<div id="068d0d73" class="cell" data-execution_count="9">
+<div id="1bab23b3" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -2605,20 +2605,20 @@ background-color: null;
 font-style: inherit;">abs</span>().mean())</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Weights before:
- tensor([[ -23,    7,  107,  -22],
-        [  64,  -19,  -26,   -1],
-        [ 101,  -11,  111,   77],
-        [  19,   67,   10,    8],
-        [ 116,   80,   51,   37],
-        [ -96,   33,   61,   79],
-        [-100,  -31,  104,  -30],
-        [  44,  -75,   45,  104]], dtype=torch.int8)
+ tensor([[ -55,   55,   41,   27],
+        [   1,  -81,   34,  126],
+        [ -12,   35, -104,  100],
+        [  63,  -58, -109,   10],
+        [ 116,  -24,   -1, -124],
+        [ -48,    4,   -9,   23],
+        [ -63,  -48,  -18,  -26],
+        [   9,  -82,   90,    9]], dtype=torch.int8)
 Weights After:
- tensor([[  11,  -87,  -47,   28,   20, -127,  -84, -109],
-        [ -77,  127,  -54,    3,    2,  -87,  -47,   19],
-        [  47,   88,  -56,   45, -126,  -14,    6,   36],
-        [  61, -128,   36,   62, -108,   44,  -79,    7]], dtype=torch.int8)
-Average quantiation error:- tensor(0.0023, dtype=torch.bfloat16)</code></pre>
+ tensor([[-126,  -68,   46,  -70,  126,    9,   22,  -75],
+        [ -10,  100,   96,   48,  -68,  126,  -20,   15],
+        [  47,  102,  -14,   27, -127,   76,  -31,   25],
+        [  40,  -55,   62,  127,  -10,    6,  -34,  -66]], dtype=torch.int8)
+Average quantiation error:- tensor(0.0039, dtype=torch.bfloat16)</code></pre>
 </div>
 </div>
 </section>
@@ -2627,7 +2627,7 @@ Average quantiation error:- tensor(0.0023, dtype=torch.bfloat16)</code></pre>
 <ul>
 <li>For language models, it better to not quantize the last layer.</li>
 </ul>
-<div id="b9fe9311" class="cell" data-execution_count="10">
+<div id="e621c992" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -2933,7 +2933,7 @@ model_2 DummyModel(
 </section>
 <section id="quantize-any-open-source-pytorch-model" class="level3">
 <h3 class="anchored" data-anchor-id="quantize-any-open-source-pytorch-model">Quantize any Open Source PyTorch Model</h3>
-<div id="3a4d8e07" class="cell" data-execution_count="11">
+<div id="be893e0b" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> transformers <span class="im" style="color: #00769E;
@@ -3123,7 +3123,7 @@ def hello_world():
 <li>Replace the original layers with the quantized layers</li>
 <li>Load the quantized weights from huggingfacehub</li>
 </ul>
-<div id="1ac10055" class="cell" data-execution_count="12">
+<div id="2609e9f0" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -3174,7 +3174,7 @@ font-style: inherit;">r"C:\wsl\random\models\quantized_state_dict.pth"</span>)</
 <p>api = HfApi()</p>
 <p>create_repo(your_repo_id)</p>
 <p>api.upload_file( path_or_fileobj=“quantized_state_dict.pth”, path_in_repo=“quantized_state_dict.pth”, repo_id=your_repo_id )</p>
-<div id="c86fb64c" class="cell" data-execution_count="13">
+<div id="2d86df55" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -3226,7 +3226,7 @@ font-style: inherit;">break</span></span></code></pre></div>
 tensor(..., device='meta', size=(50272, 768), requires_grad=True)</code></pre>
 </div>
 </div>
-<div id="228b2216" class="cell" data-execution_count="14">
+<div id="7cf871bd" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1">model</span></code></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>OPTForCausalLM(
@@ -3256,7 +3256,7 @@ tensor(..., device='meta', size=(50272, 768), requires_grad=True)</code></pre>
 )</code></pre>
 </div>
 </div>
-<div id="8550abf1" class="cell" data-execution_count="15">
+<div id="b9c15a86" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1">replace_linear_with_target(model, W8A16LinearLayer, [<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"lm_head"</span>])</span>
@@ -3292,7 +3292,7 @@ font-style: inherit;">"lm_head"</span>])</span>
 <p><strong>If loading from HF</strong></p>
 <p>from huggingface_hub import hf_hub_download</p>
 <p>state_dict_cache_path = hf_hub_download( “ybelkada/opt-125m-quantized-dlai”, “quantized_state_dict.pth” )</p>
-<div id="c668285f" class="cell" data-execution_count="16">
+<div id="65743597" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1">state_dict <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> torch.load(<span class="vs" style="color: #20794D;
@@ -3308,14 +3308,14 @@ font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">True</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\rites\AppData\Local\Temp\ipykernel_17956\1779271493.py:1: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+<pre><code>C:\Users\rites\AppData\Local\Temp\ipykernel_32032\1779271493.py:1: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   state_dict = torch.load(r"C:\wsl\random\models\quantized_state_dict.pth")</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>&lt;All keys matched successfully&gt;</code></pre>
 </div>
 </div>
-<div id="b0aa9779" class="cell" data-execution_count="17">
+<div id="27a3b963" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> transformers <span class="im" style="color: #00769E;
@@ -3360,7 +3360,7 @@ font-style: inherit;">10</span>)</span></code></pre></div>
 Device set to use cuda:0</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="17">
-<pre><code>[{'generated_text': 'Hello today I am giving a course about the art of the world and I am going to'}]</code></pre>
+<pre><code>[{'generated_text': 'Hello today I am giving a course about the history of the world and the history of the'}]</code></pre>
 </div>
 </div>
 </section>
@@ -3396,7 +3396,7 @@ Device set to use cuda:0</code></pre>
 </section>
 <section id="packing-2-bit-weights" class="level3">
 <h3 class="anchored" data-anchor-id="packing-2-bit-weights">Packing 2-bit Weights</h3>
-<div id="7e2647eb" class="cell" data-execution_count="18">
+<div id="44eeb807" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -3730,7 +3730,7 @@ font-style: inherit;">2</span>)</span></code></pre></div>
 </section>
 <section id="unpacking-2-bit-weights" class="level3">
 <h3 class="anchored" data-anchor-id="unpacking-2-bit-weights">Unpacking 2-Bit Weights</h3>
-<div id="c49271f3" class="cell" data-execution_count="19">
+<div id="8f3ae343" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -4193,7 +4193,7 @@ Fig.1 - A layer of Neural Network.
 <ul>
 <li>You can use below mentioned code to find out the more info</li>
 </ul>
-<div id="95df653d" class="cell" data-execution_count="1">
+<div id="642a48eb" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -4295,7 +4295,7 @@ font-style: inherit;">print</span>(torch.iinfo(torch.int8))</span></code></pre><
 </tr>
 </tbody>
 </table>
-<div id="5b371940" class="cell" data-execution_count="2">
+<div id="85f4e793" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
