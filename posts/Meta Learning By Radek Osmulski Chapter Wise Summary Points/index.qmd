@@ -1,0 +1,212 @@
+---
+title: "Meta Learning Book Chapter Wise Summary Points"
+author: "Ritesh Kumar Maurya"
+date: "2024-07-06"
+categories: [Deep Learning]
+image: "metalearning.jpg"
+---
+
+# From not being able to program to deep learning expert
++ Understand the value of Stack Overflow, documentation and how to reach both.
++ Learn to use a code editor really well.
++ Learn to use git for version control.
++ Learn how to use local or cloud VM.
++ How to complete a lecture:-
+	- Watch the lecture
+	- Open the notebook and try to find out how all the pieces fit together.
+	- If you encounter some new functions then it will be good to know about them.
+	- Tweak the hyperparameters and see how it performs.
+	- Once you understand, try to create a new notebook recreating the training pipeline that is demonstrated in lecture.
+	- Now if everything is working well, then you might want to test the same technique on another dataset of similar type.
+
+# Theory vs practice:-
++ If you aim to reach the highest echelons of deep learning research, you first and foremost need to be a great practitioner!
++ For best effects, use one cup of theory, one cup of practice. Rinse and repeat
++ We are reading papers, but without training actual models, without the experience of applying what we are learning to real-life problem, we are missing a very important feedback loop.
+
+# Programming is about what you have to say:-
++ Your ability as a developer is measured by the utility of the things you can express in a language.
++ Reading and writing a lot of code is the best way to learn a programming language.
+
+# The secret of good developers:-
++ Go for long, uninterrupted sessions to avoid context switching.
+
+# The best way to improve as a developer:-
++ You don’t sharpen your skills with resources, books, or articles. You sharpen your skills with practice. If you want to get better, go do the thing.
++ Read and write a lot of code.
+
+# How to use your tools to achieve a state of flow
++ You are in a state of flow when nothing separates you and your work
++ That's why many programmers spend a lot of time studying their editors
++ We are always somewhere between two extremes (state of flow)
++ All we can do is take small steps and see if it is taking us towards the ideal.
++ This can take our productivity to  a whole new level.
+
+# Use reality as your mirror:-
++ If you want to live a different life tomorrow than you are living today, you have to put your beliefs to the test.
++ The stronger the emotions involved in a situation, the higher the chance you are not seeing things clearly.
++ Suppose you want to post something and you are afraid that people whom I respect will unfollow me or they will say I am stupid, but that doesn't matter in the long run.
++ Post it and you will learn on the way.
++ Thinking about writing something isn't doing the thing.
+
+# Do genuine work (it compounds):-
++ Reading a book without taking notes is like discovering a new territory and forgetting to draw a map.
++ Genuine work moves the atoms in the universe.
++ Always make notes.
++ Share whatever you have made.
++ The more atoms you move the better the feedback you receive and the greater the extent to which you can reflect on what you are learning.
+
+# The hidden game of machine learning:-
++ At the core of machine learning lies the ability to generalize to unseen data.
++ [How (and why) to create a good validation set blog post by Rachel Thomas](https://www.fast.ai/posts/2017-11-13-validation-sets.html)
++ [Learning From Data: A short course by Yaser S. Abu-Mostafa](https://work.caltech.edu/telecourse.html)
++ [Building Machine Learning Powered Applications: Going from Idea to Product by Emmanuel Ameisen](https://millengustavo.github.io/build-ml-app/)
+	
+
+
+# How to structure a machine learning project:-
+
++ The main condition for a healthy machine learning project is a good train-val-test split.
+
++ Always have a baseline to get to know whether i am going in right direction or not or what can be done next.
+
++ Don't run experiments just for the sake of tweaking hyperparameters, instead invest time in exploring other architectures, developing diagnostic code.
+
++ The idea is to always move in small increments, using simpler models as a stepping stone to more complex ones.
+
++ Define loss and implement it on simple model consisting of few layers and then check by passing a batch if output is not all zeros and the output shape is required shape.
+
++ Create a subset of train data(1%) to check whether the 	modified code is working and the we are going in the right direction.
+
++ Read as much as possible related to the domain you are working on so that our mind can work on the solution and analyze what to do next.
+
++ Go slowly and give attention to each component of the pipeline and grow them systematically.
+
+# How to win at Kaggle:-
++ Join the competition early.
+
++ Learn about the problem domain and data
+
++ Write diagnostic code and identify where model is struggling.
+
++ Follow Kaggle forums and read daily.
+
++ Try to find out the relevant research papers and see if it is useful in solving the problem.
+
++ You can read blogs related to the problem you are solving.
+
++ While early in the competition, try on different architectures instead of tweaking the hyperparameters.
+
++ How do we know that we are moving in the right direction? So first of all create a baseline and make a submission. The submission can consist of all zeros.
+
++ Try to find out a validation split that will track the public leaderboard.
+
++ A proper validation split lies at the heart of any good Kaggle submission.
+
++ To know that if we are going in the right direction, see if the local results matches with the leaderboard. If so then you are going in the right direction and if not then try to find out other ways of splitting the data or something else.
+
++ You can do ensembling also. the idea is to cancel out the errors from individual model in a hope that their errors are not correlated.
+
++ A related technique is training with cross-validation, where you train multiple models withholding different parts of the data for validation and then combine the results from them.
+
+# The best hardware for deep learning:-
++ [Follow this blog to know more about GPUs](https://timdettmers.com/2023/01/30/which-gpu-for-deep-learning/#more-6)
+
+# Debugging with ease is a superpower:-
++ [Radek Osmulski's Favorite recent jupyter notebook discovery - the %debug magic:](https://x.com/radekosmulski/status/945739571735748609)
+
+# Time yourself:-
++ Always keep track of the time which you devote to various activities.
++ %%timeit
+
+# You can't learn a profession by studying a textbook:-
++ Extensive practice is very important alongside theory.
+
+# On finding a job:-
++ The best approach is to showcase your work, by helping others.
++ Reach out to the people who know you and can help you.
+
+# The deep learning party is on Twitter:-
++ you will find all the amazing people there
+
+# Share your work:-
++ [Making Peace with Personal Branding](https://www.fast.ai/posts/2017-12-18-personal-brand.html)
+
+# When to start sharing your work:-
++ The sooner, the better!
++ With every piece that we produce, we hone our communication skills
+
+# I am scared to share my work! Help!
++ Where some see failure, others see cheap feedback.
++ If you don't like something then you can always delete it.
+
+
+# What to focus on in sharing your work:-
++ Speak to your experience.
++ You don't have to share something outside of your experience.
+
+# Don't lose sight of what is important:-
++ You won a Kaggle competition that's good but never ever forget why you have started.
++ You don't need followers or likes or even social media to learn.
++ Nearly all of the best DL engineers I(Radek Osmulski) know are either very quiet or completely silent on Twitter
+
+# Make mental space for what matters:-
++ Peace of mind is the most important prerequisite for creative work.
++ Avoid using social media too much!
+
+# To engage afterburners, find a mentor:-
++ Find a mentor, who is good at something you care about.
++ The mentor doesn't need to know you.
++ In general, we want to get answers from the people who are like us and have gone through that path and the people who are not like us to get to know about more ideas.
++ Always make your message as concise and clear as you can.
+
+# The biggest regret of fast.ai students:-
++ I wished I spent more time coding and experimenting and less time studying in a more traditional sense.
++ 100% learning -> x% doing/100-x% real learning.
++ Shortest path to understand how something works leads through practice.
++ 80% doing and 20% reading theory.
+
+# Persistence is everything:-
++ At any given moment, as you put in the work, you can barely notice a difference in your life. But the longer you stay the course the more rewarding the journey becomes.
++ Learning compounds and you need to give it time before you start seeing the exponential results.
++ Combine persistence with community involvement and you cannot be stopped.
+
+# Change is about what not to do:-
++ Ceasing how we have done things up to now is harder than taking on new approach.
++ Try to find out the behaviors which are no longer helpful to pursuing your goals and replace them with some meaningful.
+
+# Learning might just be enough
++ A good strategy towards learning is to observe whether you are getting the results that you are after and if you are not then change your approach.
+
+# More perspectives on mentoring:-
++ If you want to catch the attention of someone you admire give yourself a job working for them.
++ Learn in public.
+	- Write blogs and tutorials and cheatsheets.
+	- Speak at meetups and conferences.
+	- Ask and answer things on Stackoverflow or Reddit. Avoid the walled gardens like Slack and Discord, they’re not public.
+	- Make Youtube videos or Twitch streams.
+	- Start a newsletter.
+	- Draw cartoons
++ Make the thing you wish you had found when you were learning.
++ Don't judge results by claps or tweets or stars or upvotes, just talk to yourself from 3 months ago.
++ by far the biggest beneficiary of you trying to help past you is future you. If others benefit, that’s icing.
++ Don’t stop there:
+	- Enjoyed a coding video? Reach out to the speaker/instructor and thank them, and ask questions.
+	- Make PR’s to libraries you use.
+	- Make your own libraries no one will ever use.
+	- Clone stuff you like, from scratch, to see how they work.
+	- Teach workshops.
+	- Go to conferences and summarize what you learned.
++ Try your best to be right, but don’t worry when you’re wrong, and let the internet correct you when you are inevitably wrong.
++ Talk while you code.
++ Whenever someone wants some help, then you should be always ready to help them because these are some of the most in-demand people in tech. 
+
+# Tap into the power of the community to learn faster
++ Instead of asking questions only try to answer more.
++ Joining community will help you in better communication, learn from other's.
+
+# Energize
++ Yoga can help.
++ Time-restricted eating and its primary benefit is  restore hormonal balance. 
+	
+
