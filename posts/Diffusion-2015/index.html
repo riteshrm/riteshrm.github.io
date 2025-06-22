@@ -357,7 +357,7 @@ window.Quarto = {
 </section>
 <section id="importing-the-required-packages" class="level1">
 <h1>Importing the required packages</h1>
-<div id="c4b483a0" class="cell" data-execution_count="1">
+<div id="ba2b7b3a" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
@@ -370,7 +370,7 @@ window.Quarto = {
 </section>
 <section id="function-to-sample-data-of-size-batch_size" class="level1">
 <h1>Function to sample data of size batch_size</h1>
-<div id="56a75bf2" class="cell" data-execution_count="2">
+<div id="9d8300e2" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample_batch(batch_size):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    data, _ <span class="op">=</span> make_swiss_roll(batch_size)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> data[:,[<span class="dv">2</span>, <span class="dv">0</span>]]<span class="op">/</span><span class="dv">10</span></span>
@@ -380,7 +380,7 @@ window.Quarto = {
 </section>
 <section id="mlp-model-designing-for-reverse-process" class="level1">
 <h1>MLP model designing for reverse process</h1>
-<div id="93cce5fd" class="cell" data-execution_count="3">
+<div id="20a6d295" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MLP(nn.Module):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, T, data_dim<span class="op">=</span><span class="dv">2</span>, hidden_dim<span class="op">=</span><span class="dv">64</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>(MLP, <span class="va">self</span>).<span class="fu">__init__</span>()</span>
@@ -403,7 +403,7 @@ window.Quarto = {
 </section>
 <section id="diffusion-model-designing-for-forward-reverse-and-sampling-process" class="level1">
 <h1>Diffusion Model designing for forward, reverse and sampling process</h1>
-<div id="542f9493" class="cell" data-execution_count="4">
+<div id="dca2030d" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DiffusionModel():</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, T, model):</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.betas  <span class="op">=</span> (torch.sigmoid(torch.linspace(<span class="op">-</span><span class="dv">18</span>, <span class="dv">10</span>, T))<span class="op">*</span>(<span class="fl">3e-1</span> <span class="op">-</span> <span class="fl">1e-5</span>) <span class="op">+</span> <span class="fl">1e-5</span>).to(device)</span>
@@ -450,7 +450,7 @@ window.Quarto = {
 </section>
 <section id="function-to-plot-the-forward-and-reverse-process" class="level1">
 <h1>Function to plot the forward and reverse process</h1>
-<div id="e7af6a5d" class="cell" data-execution_count="5">
+<div id="c2a8e95a" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot(model, file_name, N):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    x0 <span class="op">=</span> sample_batch(N)</span>
@@ -484,12 +484,12 @@ window.Quarto = {
 </section>
 <section id="inference-of-pretrained-model" class="level1">
 <h1>Inference of pretrained model</h1>
-<div id="b07fa273" class="cell" data-execution_count="6">
+<div id="821a897f" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mlp_model <span class="op">=</span> torch.load(<span class="st">'mlp_model_299000.pt'</span>).to(device)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> DiffusionModel(<span class="dv">40</span>, mlp_model)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>plot(model,<span class="ss">f'inference.png'</span>, <span class="dv">5_000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\rites\AppData\Local\Temp\ipykernel_44504\2907671096.py:1: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+<pre><code>C:\Users\rites\AppData\Local\Temp\ipykernel_11176\2907671096.py:1: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   mlp_model = torch.load('mlp_model_299000.pt').to(device)</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -503,7 +503,7 @@ window.Quarto = {
 </section>
 <section id="training-loop" class="level1">
 <h1>Training loop</h1>
-<div id="72f46188" class="cell" data-execution_count="7">
+<div id="74642120" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train(model, optimizer,batch_size, epochs):</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    training_loss <span class="op">=</span> []</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ep <span class="kw">in</span> tqdm(<span class="bu">range</span>(<span class="dv">1</span>,epochs)):</span>
