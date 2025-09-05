@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ritesh Kumar Maurya">
+<meta name="dcterms.date" content="2024-07-06">
+
+<title>Meta Learning Book Chapter Wise Summary Points – Ritesh Kumar Maurya</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<link href="../../posts/favicon.ico" rel="icon">
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ea72dc5fed832574809a9c94082fbbb.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-d19aaff0441ffe538fac26ca03b5f350.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-e89341beafc15df96e2eb459d0c9c10f.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+<script type="text/javascript">
+
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-163448909-1', 'auto');
+
+ga('send', {
+  hitType: 'pageview',
+  'anonymizeIp': true,
+});
+</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Meta Learning Book Chapter Wise Summary Points – Ritesh Kumar Maurya">
+<meta property="og:image" content="https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning.jpg">
+<meta property="og:site_name" content="Ritesh Kumar Maurya">
+<meta name="twitter:title" content="Meta Learning Book Chapter Wise Summary Points – Ritesh Kumar Maurya">
+<meta name="twitter:image" content="https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning.jpg">
+<meta name="twitter:creator" content="@_riteshrm_">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Ritesh Kumar Maurya</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../pages/about.html"> 
+<span class="menu-text">About Me</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../pages/resources.html"> 
+<span class="menu-text">Resources</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/riteshrm/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/riteshrm"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://leetcode.com/riteshrm"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="cib:leetcode" aria-label="Icon leetcode from cib Iconify.design set." title="Icon leetcode from cib Iconify.design set."></iconify-icon></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#from-not-being-able-to-program-to-deep-learning-expert" id="toc-from-not-being-able-to-program-to-deep-learning-expert" class="nav-link active" data-scroll-target="#from-not-being-able-to-program-to-deep-learning-expert">From not being able to program to deep learning expert</a></li>
+  <li><a href="#theory-vs-practice-" id="toc-theory-vs-practice-" class="nav-link" data-scroll-target="#theory-vs-practice-">Theory vs practice:-</a></li>
+  <li><a href="#programming-is-about-what-you-have-to-say-" id="toc-programming-is-about-what-you-have-to-say-" class="nav-link" data-scroll-target="#programming-is-about-what-you-have-to-say-">Programming is about what you have to say:-</a></li>
+  <li><a href="#the-secret-of-good-developers-" id="toc-the-secret-of-good-developers-" class="nav-link" data-scroll-target="#the-secret-of-good-developers-">The secret of good developers:-</a></li>
+  <li><a href="#the-best-way-to-improve-as-a-developer-" id="toc-the-best-way-to-improve-as-a-developer-" class="nav-link" data-scroll-target="#the-best-way-to-improve-as-a-developer-">The best way to improve as a developer:-</a></li>
+  <li><a href="#how-to-use-your-tools-to-achieve-a-state-of-flow" id="toc-how-to-use-your-tools-to-achieve-a-state-of-flow" class="nav-link" data-scroll-target="#how-to-use-your-tools-to-achieve-a-state-of-flow">How to use your tools to achieve a state of flow</a></li>
+  <li><a href="#use-reality-as-your-mirror-" id="toc-use-reality-as-your-mirror-" class="nav-link" data-scroll-target="#use-reality-as-your-mirror-">Use reality as your mirror:-</a></li>
+  <li><a href="#do-genuine-work-it-compounds-" id="toc-do-genuine-work-it-compounds-" class="nav-link" data-scroll-target="#do-genuine-work-it-compounds-">Do genuine work (it compounds):-</a></li>
+  <li><a href="#the-hidden-game-of-machine-learning-" id="toc-the-hidden-game-of-machine-learning-" class="nav-link" data-scroll-target="#the-hidden-game-of-machine-learning-">The hidden game of machine learning:-</a></li>
+  <li><a href="#how-to-structure-a-machine-learning-project-" id="toc-how-to-structure-a-machine-learning-project-" class="nav-link" data-scroll-target="#how-to-structure-a-machine-learning-project-">How to structure a machine learning project:-</a></li>
+  <li><a href="#how-to-win-at-kaggle-" id="toc-how-to-win-at-kaggle-" class="nav-link" data-scroll-target="#how-to-win-at-kaggle-">How to win at Kaggle:-</a></li>
+  <li><a href="#the-best-hardware-for-deep-learning-" id="toc-the-best-hardware-for-deep-learning-" class="nav-link" data-scroll-target="#the-best-hardware-for-deep-learning-">The best hardware for deep learning:-</a></li>
+  <li><a href="#debugging-with-ease-is-a-superpower-" id="toc-debugging-with-ease-is-a-superpower-" class="nav-link" data-scroll-target="#debugging-with-ease-is-a-superpower-">Debugging with ease is a superpower:-</a></li>
+  <li><a href="#time-yourself-" id="toc-time-yourself-" class="nav-link" data-scroll-target="#time-yourself-">Time yourself:-</a></li>
+  <li><a href="#you-cant-learn-a-profession-by-studying-a-textbook-" id="toc-you-cant-learn-a-profession-by-studying-a-textbook-" class="nav-link" data-scroll-target="#you-cant-learn-a-profession-by-studying-a-textbook-">You can’t learn a profession by studying a textbook:-</a></li>
+  <li><a href="#on-finding-a-job-" id="toc-on-finding-a-job-" class="nav-link" data-scroll-target="#on-finding-a-job-">On finding a job:-</a></li>
+  <li><a href="#the-deep-learning-party-is-on-twitter-" id="toc-the-deep-learning-party-is-on-twitter-" class="nav-link" data-scroll-target="#the-deep-learning-party-is-on-twitter-">The deep learning party is on Twitter:-</a></li>
+  <li><a href="#share-your-work-" id="toc-share-your-work-" class="nav-link" data-scroll-target="#share-your-work-">Share your work:-</a></li>
+  <li><a href="#when-to-start-sharing-your-work-" id="toc-when-to-start-sharing-your-work-" class="nav-link" data-scroll-target="#when-to-start-sharing-your-work-">When to start sharing your work:-</a></li>
+  <li><a href="#i-am-scared-to-share-my-work-help" id="toc-i-am-scared-to-share-my-work-help" class="nav-link" data-scroll-target="#i-am-scared-to-share-my-work-help">I am scared to share my work! Help!</a></li>
+  <li><a href="#what-to-focus-on-in-sharing-your-work-" id="toc-what-to-focus-on-in-sharing-your-work-" class="nav-link" data-scroll-target="#what-to-focus-on-in-sharing-your-work-">What to focus on in sharing your work:-</a></li>
+  <li><a href="#dont-lose-sight-of-what-is-important-" id="toc-dont-lose-sight-of-what-is-important-" class="nav-link" data-scroll-target="#dont-lose-sight-of-what-is-important-">Don’t lose sight of what is important:-</a></li>
+  <li><a href="#make-mental-space-for-what-matters-" id="toc-make-mental-space-for-what-matters-" class="nav-link" data-scroll-target="#make-mental-space-for-what-matters-">Make mental space for what matters:-</a></li>
+  <li><a href="#to-engage-afterburners-find-a-mentor-" id="toc-to-engage-afterburners-find-a-mentor-" class="nav-link" data-scroll-target="#to-engage-afterburners-find-a-mentor-">To engage afterburners, find a mentor:-</a></li>
+  <li><a href="#the-biggest-regret-of-fast.ai-students-" id="toc-the-biggest-regret-of-fast.ai-students-" class="nav-link" data-scroll-target="#the-biggest-regret-of-fast.ai-students-">The biggest regret of fast.ai students:-</a></li>
+  <li><a href="#persistence-is-everything-" id="toc-persistence-is-everything-" class="nav-link" data-scroll-target="#persistence-is-everything-">Persistence is everything:-</a></li>
+  <li><a href="#change-is-about-what-not-to-do-" id="toc-change-is-about-what-not-to-do-" class="nav-link" data-scroll-target="#change-is-about-what-not-to-do-">Change is about what not to do:-</a></li>
+  <li><a href="#learning-might-just-be-enough" id="toc-learning-might-just-be-enough" class="nav-link" data-scroll-target="#learning-might-just-be-enough">Learning might just be enough</a></li>
+  <li><a href="#more-perspectives-on-mentoring-" id="toc-more-perspectives-on-mentoring-" class="nav-link" data-scroll-target="#more-perspectives-on-mentoring-">More perspectives on mentoring:-</a></li>
+  <li><a href="#tap-into-the-power-of-the-community-to-learn-faster" id="toc-tap-into-the-power-of-the-community-to-learn-faster" class="nav-link" data-scroll-target="#tap-into-the-power-of-the-community-to-learn-faster">Tap into the power of the community to learn faster</a></li>
+  <li><a href="#energize" id="toc-energize" class="nav-link" data-scroll-target="#energize">Energize</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Meta Learning Book Chapter Wise Summary Points</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Deep Learning</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ritesh Kumar Maurya </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 6, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="from-not-being-able-to-program-to-deep-learning-expert" class="level1">
+<h1>From not being able to program to deep learning expert</h1>
+<ul>
+<li>Understand the value of Stack Overflow, documentation and how to reach both.</li>
+<li>Learn to use a code editor really well.</li>
+<li>Learn to use git for version control.</li>
+<li>Learn how to use local or cloud VM.</li>
+<li>How to complete a lecture:-
+<ul>
+<li>Watch the lecture</li>
+<li>Open the notebook and try to find out how all the pieces fit together.</li>
+<li>If you encounter some new functions then it will be good to know about them.</li>
+<li>Tweak the hyperparameters and see how it performs.</li>
+<li>Once you understand, try to create a new notebook recreating the training pipeline that is demonstrated in lecture.</li>
+<li>Now if everything is working well, then you might want to test the same technique on another dataset of similar type.</li>
+</ul></li>
+</ul>
+</section>
+<section id="theory-vs-practice-" class="level1">
+<h1>Theory vs practice:-</h1>
+<ul>
+<li>If you aim to reach the highest echelons of deep learning research, you first and foremost need to be a great practitioner!</li>
+<li>For best effects, use one cup of theory, one cup of practice. Rinse and repeat</li>
+<li>We are reading papers, but without training actual models, without the experience of applying what we are learning to real-life problem, we are missing a very important feedback loop.</li>
+</ul>
+</section>
+<section id="programming-is-about-what-you-have-to-say-" class="level1">
+<h1>Programming is about what you have to say:-</h1>
+<ul>
+<li>Your ability as a developer is measured by the utility of the things you can express in a language.</li>
+<li>Reading and writing a lot of code is the best way to learn a programming language.</li>
+</ul>
+</section>
+<section id="the-secret-of-good-developers-" class="level1">
+<h1>The secret of good developers:-</h1>
+<ul>
+<li>Go for long, uninterrupted sessions to avoid context switching.</li>
+</ul>
+</section>
+<section id="the-best-way-to-improve-as-a-developer-" class="level1">
+<h1>The best way to improve as a developer:-</h1>
+<ul>
+<li>You don’t sharpen your skills with resources, books, or articles. You sharpen your skills with practice. If you want to get better, go do the thing.</li>
+<li>Read and write a lot of code.</li>
+</ul>
+</section>
+<section id="how-to-use-your-tools-to-achieve-a-state-of-flow" class="level1">
+<h1>How to use your tools to achieve a state of flow</h1>
+<ul>
+<li>You are in a state of flow when nothing separates you and your work</li>
+<li>That’s why many programmers spend a lot of time studying their editors</li>
+<li>We are always somewhere between two extremes (state of flow)</li>
+<li>All we can do is take small steps and see if it is taking us towards the ideal.</li>
+<li>This can take our productivity to a whole new level.</li>
+</ul>
+</section>
+<section id="use-reality-as-your-mirror-" class="level1">
+<h1>Use reality as your mirror:-</h1>
+<ul>
+<li>If you want to live a different life tomorrow than you are living today, you have to put your beliefs to the test.</li>
+<li>The stronger the emotions involved in a situation, the higher the chance you are not seeing things clearly.</li>
+<li>Suppose you want to post something and you are afraid that people whom I respect will unfollow me or they will say I am stupid, but that doesn’t matter in the long run.</li>
+<li>Post it and you will learn on the way.</li>
+<li>Thinking about writing something isn’t doing the thing.</li>
+</ul>
+</section>
+<section id="do-genuine-work-it-compounds-" class="level1">
+<h1>Do genuine work (it compounds):-</h1>
+<ul>
+<li>Reading a book without taking notes is like discovering a new territory and forgetting to draw a map.</li>
+<li>Genuine work moves the atoms in the universe.</li>
+<li>Always make notes.</li>
+<li>Share whatever you have made.</li>
+<li>The more atoms you move the better the feedback you receive and the greater the extent to which you can reflect on what you are learning.</li>
+</ul>
+</section>
+<section id="the-hidden-game-of-machine-learning-" class="level1">
+<h1>The hidden game of machine learning:-</h1>
+<ul>
+<li>At the core of machine learning lies the ability to generalize to unseen data.</li>
+<li><a href="https://www.fast.ai/posts/2017-11-13-validation-sets.html">How (and why) to create a good validation set blog post by Rachel Thomas</a></li>
+<li><a href="https://work.caltech.edu/telecourse.html">Learning From Data: A short course by Yaser S. Abu-Mostafa</a></li>
+<li><a href="https://millengustavo.github.io/build-ml-app/">Building Machine Learning Powered Applications: Going from Idea to Product by Emmanuel Ameisen</a></li>
+</ul>
+</section>
+<section id="how-to-structure-a-machine-learning-project-" class="level1">
+<h1>How to structure a machine learning project:-</h1>
+<ul>
+<li><p>The main condition for a healthy machine learning project is a good train-val-test split.</p></li>
+<li><p>Always have a baseline to get to know whether i am going in right direction or not or what can be done next.</p></li>
+<li><p>Don’t run experiments just for the sake of tweaking hyperparameters, instead invest time in exploring other architectures, developing diagnostic code.</p></li>
+<li><p>The idea is to always move in small increments, using simpler models as a stepping stone to more complex ones.</p></li>
+<li><p>Define loss and implement it on simple model consisting of few layers and then check by passing a batch if output is not all zeros and the output shape is required shape.</p></li>
+<li><p>Create a subset of train data(1%) to check whether the modified code is working and the we are going in the right direction.</p></li>
+<li><p>Read as much as possible related to the domain you are working on so that our mind can work on the solution and analyze what to do next.</p></li>
+<li><p>Go slowly and give attention to each component of the pipeline and grow them systematically.</p></li>
+</ul>
+</section>
+<section id="how-to-win-at-kaggle-" class="level1">
+<h1>How to win at Kaggle:-</h1>
+<ul>
+<li><p>Join the competition early.</p></li>
+<li><p>Learn about the problem domain and data</p></li>
+<li><p>Write diagnostic code and identify where model is struggling.</p></li>
+<li><p>Follow Kaggle forums and read daily.</p></li>
+<li><p>Try to find out the relevant research papers and see if it is useful in solving the problem.</p></li>
+<li><p>You can read blogs related to the problem you are solving.</p></li>
+<li><p>While early in the competition, try on different architectures instead of tweaking the hyperparameters.</p></li>
+<li><p>How do we know that we are moving in the right direction? So first of all create a baseline and make a submission. The submission can consist of all zeros.</p></li>
+<li><p>Try to find out a validation split that will track the public leaderboard.</p></li>
+<li><p>A proper validation split lies at the heart of any good Kaggle submission.</p></li>
+<li><p>To know that if we are going in the right direction, see if the local results matches with the leaderboard. If so then you are going in the right direction and if not then try to find out other ways of splitting the data or something else.</p></li>
+<li><p>You can do ensembling also. the idea is to cancel out the errors from individual model in a hope that their errors are not correlated.</p></li>
+<li><p>A related technique is training with cross-validation, where you train multiple models withholding different parts of the data for validation and then combine the results from them.</p></li>
+</ul>
+</section>
+<section id="the-best-hardware-for-deep-learning-" class="level1">
+<h1>The best hardware for deep learning:-</h1>
+<ul>
+<li><a href="https://timdettmers.com/2023/01/30/which-gpu-for-deep-learning/#more-6">Follow this blog to know more about GPUs</a></li>
+</ul>
+</section>
+<section id="debugging-with-ease-is-a-superpower-" class="level1">
+<h1>Debugging with ease is a superpower:-</h1>
+<ul>
+<li><a href="https://x.com/radekosmulski/status/945739571735748609">Radek Osmulski’s Favorite recent jupyter notebook discovery - the %debug magic:</a></li>
+</ul>
+</section>
+<section id="time-yourself-" class="level1">
+<h1>Time yourself:-</h1>
+<ul>
+<li>Always keep track of the time which you devote to various activities.</li>
+<li>%%timeit</li>
+</ul>
+</section>
+<section id="you-cant-learn-a-profession-by-studying-a-textbook-" class="level1">
+<h1>You can’t learn a profession by studying a textbook:-</h1>
+<ul>
+<li>Extensive practice is very important alongside theory.</li>
+</ul>
+</section>
+<section id="on-finding-a-job-" class="level1">
+<h1>On finding a job:-</h1>
+<ul>
+<li>The best approach is to showcase your work, by helping others.</li>
+<li>Reach out to the people who know you and can help you.</li>
+</ul>
+</section>
+<section id="the-deep-learning-party-is-on-twitter-" class="level1">
+<h1>The deep learning party is on Twitter:-</h1>
+<ul>
+<li>you will find all the amazing people there</li>
+</ul>
+</section>
+<section id="share-your-work-" class="level1">
+<h1>Share your work:-</h1>
+<ul>
+<li><a href="https://www.fast.ai/posts/2017-12-18-personal-brand.html">Making Peace with Personal Branding</a></li>
+</ul>
+</section>
+<section id="when-to-start-sharing-your-work-" class="level1">
+<h1>When to start sharing your work:-</h1>
+<ul>
+<li>The sooner, the better!</li>
+<li>With every piece that we produce, we hone our communication skills</li>
+</ul>
+</section>
+<section id="i-am-scared-to-share-my-work-help" class="level1">
+<h1>I am scared to share my work! Help!</h1>
+<ul>
+<li>Where some see failure, others see cheap feedback.</li>
+<li>If you don’t like something then you can always delete it.</li>
+</ul>
+</section>
+<section id="what-to-focus-on-in-sharing-your-work-" class="level1">
+<h1>What to focus on in sharing your work:-</h1>
+<ul>
+<li>Speak to your experience.</li>
+<li>You don’t have to share something outside of your experience.</li>
+</ul>
+</section>
+<section id="dont-lose-sight-of-what-is-important-" class="level1">
+<h1>Don’t lose sight of what is important:-</h1>
+<ul>
+<li>You won a Kaggle competition that’s good but never ever forget why you have started.</li>
+<li>You don’t need followers or likes or even social media to learn.</li>
+<li>Nearly all of the best DL engineers I(Radek Osmulski) know are either very quiet or completely silent on Twitter</li>
+</ul>
+</section>
+<section id="make-mental-space-for-what-matters-" class="level1">
+<h1>Make mental space for what matters:-</h1>
+<ul>
+<li>Peace of mind is the most important prerequisite for creative work.</li>
+<li>Avoid using social media too much!</li>
+</ul>
+</section>
+<section id="to-engage-afterburners-find-a-mentor-" class="level1">
+<h1>To engage afterburners, find a mentor:-</h1>
+<ul>
+<li>Find a mentor, who is good at something you care about.</li>
+<li>The mentor doesn’t need to know you.</li>
+<li>In general, we want to get answers from the people who are like us and have gone through that path and the people who are not like us to get to know about more ideas.</li>
+<li>Always make your message as concise and clear as you can.</li>
+</ul>
+</section>
+<section id="the-biggest-regret-of-fast.ai-students-" class="level1">
+<h1>The biggest regret of fast.ai students:-</h1>
+<ul>
+<li>I wished I spent more time coding and experimenting and less time studying in a more traditional sense.</li>
+<li>100% learning -&gt; x% doing/100-x% real learning.</li>
+<li>Shortest path to understand how something works leads through practice.</li>
+<li>80% doing and 20% reading theory.</li>
+</ul>
+</section>
+<section id="persistence-is-everything-" class="level1">
+<h1>Persistence is everything:-</h1>
+<ul>
+<li>At any given moment, as you put in the work, you can barely notice a difference in your life. But the longer you stay the course the more rewarding the journey becomes.</li>
+<li>Learning compounds and you need to give it time before you start seeing the exponential results.</li>
+<li>Combine persistence with community involvement and you cannot be stopped.</li>
+</ul>
+</section>
+<section id="change-is-about-what-not-to-do-" class="level1">
+<h1>Change is about what not to do:-</h1>
+<ul>
+<li>Ceasing how we have done things up to now is harder than taking on new approach.</li>
+<li>Try to find out the behaviors which are no longer helpful to pursuing your goals and replace them with some meaningful.</li>
+</ul>
+</section>
+<section id="learning-might-just-be-enough" class="level1">
+<h1>Learning might just be enough</h1>
+<ul>
+<li>A good strategy towards learning is to observe whether you are getting the results that you are after and if you are not then change your approach.</li>
+</ul>
+</section>
+<section id="more-perspectives-on-mentoring-" class="level1">
+<h1>More perspectives on mentoring:-</h1>
+<ul>
+<li>If you want to catch the attention of someone you admire give yourself a job working for them.</li>
+<li>Learn in public.
+<ul>
+<li>Write blogs and tutorials and cheatsheets.</li>
+<li>Speak at meetups and conferences.</li>
+<li>Ask and answer things on Stackoverflow or Reddit. Avoid the walled gardens like Slack and Discord, they’re not public.</li>
+<li>Make Youtube videos or Twitch streams.</li>
+<li>Start a newsletter.</li>
+<li>Draw cartoons</li>
+</ul></li>
+<li>Make the thing you wish you had found when you were learning.</li>
+<li>Don’t judge results by claps or tweets or stars or upvotes, just talk to yourself from 3 months ago.</li>
+<li>by far the biggest beneficiary of you trying to help past you is future you. If others benefit, that’s icing.</li>
+<li>Don’t stop there:
+<ul>
+<li>Enjoyed a coding video? Reach out to the speaker/instructor and thank them, and ask questions.</li>
+<li>Make PR’s to libraries you use.</li>
+<li>Make your own libraries no one will ever use.</li>
+<li>Clone stuff you like, from scratch, to see how they work.</li>
+<li>Teach workshops.</li>
+<li>Go to conferences and summarize what you learned.</li>
+</ul></li>
+<li>Try your best to be right, but don’t worry when you’re wrong, and let the internet correct you when you are inevitably wrong.</li>
+<li>Talk while you code.</li>
+<li>Whenever someone wants some help, then you should be always ready to help them because these are some of the most in-demand people in tech.</li>
+</ul>
+</section>
+<section id="tap-into-the-power-of-the-community-to-learn-faster" class="level1">
+<h1>Tap into the power of the community to learn faster</h1>
+<ul>
+<li>Instead of asking questions only try to answer more.</li>
+<li>Joining community will help you in better communication, learn from other’s.</li>
+</ul>
+</section>
+<section id="energize" class="level1">
+<h1>Energize</h1>
+<ul>
+<li>Yoga can help.</li>
+<li>Time-restricted eating and its primary benefit is restore hormonal balance.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/riteshrm\.github\.io\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
