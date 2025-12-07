@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Ritesh">
+<meta name="dcterms.date" content="2024-03-21">
+<meta name="description" content="Key concepts and insights from the foundational machine learning textbook by Tom Mitchell">
 
-<title>Blog – Ritesh Kumar Maurya</title>
+<title>Machine Learning by Tom Mitchell – Ritesh Kumar Maurya</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +26,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<link href="./posts/favicon.ico" rel="icon">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-8ea72dc5fed832574809a9c94082fbbb.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-d19aaff0441ffe538fac26ca03b5f350.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-e89341beafc15df96e2eb459d0c9c10f.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<script src="site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<link href="../../posts/favicon.ico" rel="icon">
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ea72dc5fed832574809a9c94082fbbb.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-d19aaff0441ffe538fac26ca03b5f350.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-e89341beafc15df96e2eb459d0c9c10f.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -56,35 +57,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
 <script type="text/javascript">
 
@@ -100,42 +72,15 @@ ga('send', {
 });
 </script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
-<link rel="alternate" type="application/rss+xml" title="Ritesh Kumar Maurya" href="blog.xml" data-external="1"><meta property="og:title" content="Blog – Ritesh Kumar Maurya">
-<meta property="og:image" content="https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning.jpg">
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Machine Learning by Tom Mitchell – Ritesh Kumar Maurya">
+<meta property="og:description" content="Key concepts and insights from the foundational machine learning textbook by Tom Mitchell">
+<meta property="og:image" content="https://riteshrm.github.io/posts/Machine Learning Tom Mitchell/ml_mitchell.jpg">
 <meta property="og:site_name" content="Ritesh Kumar Maurya">
-<meta name="twitter:title" content="Blog – Ritesh Kumar Maurya">
-<meta name="twitter:image" content="https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning.jpg">
+<meta name="twitter:title" content="Machine Learning by Tom Mitchell – Ritesh Kumar Maurya">
+<meta name="twitter:description" content="Key concepts and insights from the foundational machine learning textbook by Tom Mitchell">
+<meta name="twitter:image" content="https://riteshrm.github.io/posts/Machine Learning Tom Mitchell/ml_mitchell.jpg">
 <meta name="twitter:creator" content="@_riteshrm_">
 <meta name="twitter:card" content="summary">
 </head>
@@ -147,7 +92,7 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Ritesh Kumar Maurya</span>
     </a>
   </div>
@@ -157,15 +102,15 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./pages/about.html"> 
+    <a class="nav-link" href="../../pages/about.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./blog.html" aria-current="page"> 
+    <a class="nav-link" href="../../blog.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./pages/resources.html"> 
+    <a class="nav-link" href="../../pages/resources.html"> 
 <span class="menu-text">Resources</span></a>
   </li>  
 </ul>
@@ -196,22 +141,55 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#well-known-definition-of-machine-learning" id="toc-well-known-definition-of-machine-learning" class="nav-link" data-scroll-target="#well-known-definition-of-machine-learning">Well-Known Definition of Machine Learning</a></li>
+  <li><a href="#key-concepts-covered" id="toc-key-concepts-covered" class="nav-link" data-scroll-target="#key-concepts-covered">Key Concepts Covered</a></li>
+  <li><a href="#relevance-to-modern-machine-learning" id="toc-relevance-to-modern-machine-learning" class="nav-link" data-scroll-target="#relevance-to-modern-machine-learning">Relevance to Modern Machine Learning</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Machine Learning Tom Mitchell/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Blog</h1>
-</div>
+<h1 class="title">Machine Learning by Tom Mitchell</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Machine Learning</div>
+    <div class="quarto-category">Books</div>
+    <div class="quarto-category">Education</div>
+  </div>
+  </div>
 
+<div>
+  <div class="description">
+    Key concepts and insights from the foundational machine learning textbook by Tom Mitchell
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ritesh </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 21, 2024</p>
+    </div>
+  </div>
   
     
   </div>
@@ -221,101 +199,76 @@ window.Quarto = {
 </header>
 
 
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>Tom Mitchell’s “Machine Learning” is one of the most influential textbooks in the field of machine learning. Published in 1997, it provides a comprehensive introduction to the fundamental concepts of machine learning. In this post, we’ll explore key concepts from the book and their relevance to modern machine learning.</p>
+</section>
+<section id="well-known-definition-of-machine-learning" class="level2">
+<h2 class="anchored" data-anchor-id="well-known-definition-of-machine-learning">Well-Known Definition of Machine Learning</h2>
+<p>One of the most cited definitions of machine learning comes from this book:</p>
+<blockquote class="blockquote">
+<p>A computer program is said to learn from experience E with respect to some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E.</p>
+</blockquote>
+<p>This definition elegantly captures the three essential components of any machine learning system: - Task (T): What the system is trying to accomplish - Performance (P): How we measure success - Experience (E): The data from which the system learns</p>
+</section>
+<section id="key-concepts-covered" class="level2">
+<h2 class="anchored" data-anchor-id="key-concepts-covered">Key Concepts Covered</h2>
+<ol type="1">
+<li><strong>Concept Learning</strong>
+<ul>
+<li>Version Space Learning</li>
+<li>Inductive Bias</li>
+<li>The Role of Prior Knowledge</li>
+</ul></li>
+<li><strong>Decision Tree Learning</strong>
+<ul>
+<li>ID3 Algorithm</li>
+<li>Information Gain</li>
+<li>Handling Continuous Values</li>
+</ul></li>
+<li><strong>Artificial Neural Networks</strong>
+<ul>
+<li>Perceptrons</li>
+<li>Backpropagation</li>
+<li>Network Architectures</li>
+</ul></li>
+<li><strong>Bayesian Learning</strong>
+<ul>
+<li>Bayes Theorem</li>
+<li>Naive Bayes Classifiers</li>
+<li>Bayesian Belief Networks</li>
+</ul></li>
+<li><strong>Computational Learning Theory</strong>
+<ul>
+<li>PAC Learning</li>
+<li>Sample Complexity</li>
+<li>VC Dimension</li>
+</ul></li>
+</ol>
+</section>
+<section id="relevance-to-modern-machine-learning" class="level2">
+<h2 class="anchored" data-anchor-id="relevance-to-modern-machine-learning">Relevance to Modern Machine Learning</h2>
+<p>Despite being published in 1997, many of the fundamental concepts covered in Mitchell’s book remain highly relevant to modern machine learning:</p>
+<ol type="1">
+<li><p>The theoretical frameworks introduced in the book still form the foundation of many modern algorithms</p></li>
+<li><p>The discussion of bias-variance tradeoff remains crucial in understanding model performance</p></li>
+<li><p>The principles of evaluation and validation continue to guide how we assess machine learning systems</p></li>
+</ol>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>Tom Mitchell’s “Machine Learning” provides a solid theoretical foundation that helps practitioners understand not just how machine learning algorithms work, but why they work. This understanding is invaluable even in today’s rapidly evolving landscape of deep learning and artificial intelligence.</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ol type="1">
+<li>Mitchell, T. M. (1997). Machine Learning. McGraw-Hill Science/Engineering/Math.</li>
+</ol>
 
 
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1720204200000" data-listing-file-modified-sort="1735612717466" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1774">
-<div class="thumbnail">
-<p><a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external"></a></p><a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">
-<p><img loading="lazy" src="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">Meta Learning Book Chapter Wise Summary Points</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">The main condition for a healthy machine learning project is a good train-val-test split.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">
-<div class="listing-date">
-Jul 6, 2024
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="T3B0aW1pemF0aW9u" data-listing-date-sort="1716489000000" data-listing-file-modified-sort="1736772288195" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="30" data-listing-word-count-sort="5990">
-<div class="thumbnail">
-<p><a href="./posts/Quantization in Depth/index.html" class="no-external"></a></p><a href="./posts/Quantization in Depth/index.html" class="no-external">
-<p><img loading="lazy" src="./posts/Quantization in Depth/qat-training-precision.png" class="thumbnail-image"></p>
-</a><p><a href="./posts/Quantization in Depth/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Quantization in Depth/index.html" class="no-external">Quantization in Depth</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Quantization in Depth/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Quantization in Depth/index.html" class="no-external">This is completely based on Quantization in Depth</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Quantization in Depth/index.html" class="no-external">
-<div class="listing-date">
-May 24, 2024
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="T3B0aW1pemF0aW9u" data-listing-date-sort="1715538600000" data-listing-file-modified-sort="1735612717416" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1234">
-<div class="thumbnail">
-<p><a href="./posts/Quantization Fundamentals/index.html" class="no-external"></a></p><a href="./posts/Quantization Fundamentals/index.html" class="no-external">
-<p><img loading="lazy" src="./posts/Quantization Fundamentals/qat-training-precision.png" class="thumbnail-image"></p>
-</a><p><a href="./posts/Quantization Fundamentals/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Quantization Fundamentals/index.html" class="no-external">Quantization Fundamentals</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Quantization Fundamentals/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Quantization Fundamentals/index.html" class="no-external">This is completely based on Quantization Fundamentals</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Quantization Fundamentals/index.html" class="no-external">
-<div class="listing-date">
-May 13, 2024
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -882,4 +835,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/blog.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Machine Learning Tom Mitchell/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

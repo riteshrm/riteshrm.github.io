@@ -2,11 +2,9 @@
   {
     "listing": "/blog.html",
     "items": [
-      "/posts/Diffusion-2015/index.html",
       "/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html",
       "/posts/Quantization in Depth/index.html",
-      "/posts/Quantization Fundamentals/index.html",
-      "/posts/Flow Matching/index.html"
+      "/posts/Quantization Fundamentals/index.html"
     ]
   }
 ]
