@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ritesh Kumar Maurya">
-<meta name="dcterms.date" content="2024-07-06">
+<meta name="dcterms.date" content="2024-05-24">
 
-<title>Meta Learning Book Chapter Wise Summary Points – Ritesh Kumar Maurya</title>
+<title>Different Attention Mechanisms – Ritesh Kumar Maurya</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -75,15 +110,48 @@ ga('send', {
 });
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="Meta Learning Book Chapter Wise Summary Points – Ritesh Kumar Maurya">
-<meta property="og:image" content="https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning.jpg">
+<meta property="og:title" content="Different Attention Mechanisms – Ritesh Kumar Maurya">
+<meta property="og:image" content="https://riteshrm.github.io/posts/Attention Mechanism/attn.png">
 <meta property="og:site_name" content="Ritesh Kumar Maurya">
-<meta name="twitter:title" content="Meta Learning Book Chapter Wise Summary Points – Ritesh Kumar Maurya">
-<meta name="twitter:image" content="https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning.jpg">
+<meta property="og:image:height" content="837">
+<meta property="og:image:width" content="740">
+<meta name="twitter:title" content="Different Attention Mechanisms – Ritesh Kumar Maurya">
+<meta name="twitter:image" content="https://riteshrm.github.io/posts/Attention Mechanism/attn.png">
 <meta name="twitter:creator" content="@_riteshrm_">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image-height" content="837">
+<meta name="twitter:image-width" content="740">
 </head>
 
 <body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -314,39 +382,14 @@ ga('send', {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#from-not-being-able-to-program-to-deep-learning-expert" id="toc-from-not-being-able-to-program-to-deep-learning-expert" class="nav-link active" data-scroll-target="#from-not-being-able-to-program-to-deep-learning-expert">From not being able to program to deep learning expert</a></li>
-  <li><a href="#theory-vs-practice-" id="toc-theory-vs-practice-" class="nav-link" data-scroll-target="#theory-vs-practice-">Theory vs practice:-</a></li>
-  <li><a href="#programming-is-about-what-you-have-to-say-" id="toc-programming-is-about-what-you-have-to-say-" class="nav-link" data-scroll-target="#programming-is-about-what-you-have-to-say-">Programming is about what you have to say:-</a></li>
-  <li><a href="#the-secret-of-good-developers-" id="toc-the-secret-of-good-developers-" class="nav-link" data-scroll-target="#the-secret-of-good-developers-">The secret of good developers:-</a></li>
-  <li><a href="#the-best-way-to-improve-as-a-developer-" id="toc-the-best-way-to-improve-as-a-developer-" class="nav-link" data-scroll-target="#the-best-way-to-improve-as-a-developer-">The best way to improve as a developer:-</a></li>
-  <li><a href="#how-to-use-your-tools-to-achieve-a-state-of-flow" id="toc-how-to-use-your-tools-to-achieve-a-state-of-flow" class="nav-link" data-scroll-target="#how-to-use-your-tools-to-achieve-a-state-of-flow">How to use your tools to achieve a state of flow</a></li>
-  <li><a href="#use-reality-as-your-mirror-" id="toc-use-reality-as-your-mirror-" class="nav-link" data-scroll-target="#use-reality-as-your-mirror-">Use reality as your mirror:-</a></li>
-  <li><a href="#do-genuine-work-it-compounds-" id="toc-do-genuine-work-it-compounds-" class="nav-link" data-scroll-target="#do-genuine-work-it-compounds-">Do genuine work (it compounds):-</a></li>
-  <li><a href="#the-hidden-game-of-machine-learning-" id="toc-the-hidden-game-of-machine-learning-" class="nav-link" data-scroll-target="#the-hidden-game-of-machine-learning-">The hidden game of machine learning:-</a></li>
-  <li><a href="#how-to-structure-a-machine-learning-project-" id="toc-how-to-structure-a-machine-learning-project-" class="nav-link" data-scroll-target="#how-to-structure-a-machine-learning-project-">How to structure a machine learning project:-</a></li>
-  <li><a href="#how-to-win-at-kaggle-" id="toc-how-to-win-at-kaggle-" class="nav-link" data-scroll-target="#how-to-win-at-kaggle-">How to win at Kaggle:-</a></li>
-  <li><a href="#the-best-hardware-for-deep-learning-" id="toc-the-best-hardware-for-deep-learning-" class="nav-link" data-scroll-target="#the-best-hardware-for-deep-learning-">The best hardware for deep learning:-</a></li>
-  <li><a href="#debugging-with-ease-is-a-superpower-" id="toc-debugging-with-ease-is-a-superpower-" class="nav-link" data-scroll-target="#debugging-with-ease-is-a-superpower-">Debugging with ease is a superpower:-</a></li>
-  <li><a href="#time-yourself-" id="toc-time-yourself-" class="nav-link" data-scroll-target="#time-yourself-">Time yourself:-</a></li>
-  <li><a href="#you-cant-learn-a-profession-by-studying-a-textbook-" id="toc-you-cant-learn-a-profession-by-studying-a-textbook-" class="nav-link" data-scroll-target="#you-cant-learn-a-profession-by-studying-a-textbook-">You can’t learn a profession by studying a textbook:-</a></li>
-  <li><a href="#on-finding-a-job-" id="toc-on-finding-a-job-" class="nav-link" data-scroll-target="#on-finding-a-job-">On finding a job:-</a></li>
-  <li><a href="#the-deep-learning-party-is-on-twitter-" id="toc-the-deep-learning-party-is-on-twitter-" class="nav-link" data-scroll-target="#the-deep-learning-party-is-on-twitter-">The deep learning party is on Twitter:-</a></li>
-  <li><a href="#share-your-work-" id="toc-share-your-work-" class="nav-link" data-scroll-target="#share-your-work-">Share your work:-</a></li>
-  <li><a href="#when-to-start-sharing-your-work-" id="toc-when-to-start-sharing-your-work-" class="nav-link" data-scroll-target="#when-to-start-sharing-your-work-">When to start sharing your work:-</a></li>
-  <li><a href="#i-am-scared-to-share-my-work-help" id="toc-i-am-scared-to-share-my-work-help" class="nav-link" data-scroll-target="#i-am-scared-to-share-my-work-help">I am scared to share my work! Help!</a></li>
-  <li><a href="#what-to-focus-on-in-sharing-your-work-" id="toc-what-to-focus-on-in-sharing-your-work-" class="nav-link" data-scroll-target="#what-to-focus-on-in-sharing-your-work-">What to focus on in sharing your work:-</a></li>
-  <li><a href="#dont-lose-sight-of-what-is-important-" id="toc-dont-lose-sight-of-what-is-important-" class="nav-link" data-scroll-target="#dont-lose-sight-of-what-is-important-">Don’t lose sight of what is important:-</a></li>
-  <li><a href="#make-mental-space-for-what-matters-" id="toc-make-mental-space-for-what-matters-" class="nav-link" data-scroll-target="#make-mental-space-for-what-matters-">Make mental space for what matters:-</a></li>
-  <li><a href="#to-engage-afterburners-find-a-mentor-" id="toc-to-engage-afterburners-find-a-mentor-" class="nav-link" data-scroll-target="#to-engage-afterburners-find-a-mentor-">To engage afterburners, find a mentor:-</a></li>
-  <li><a href="#the-biggest-regret-of-fast.ai-students-" id="toc-the-biggest-regret-of-fast.ai-students-" class="nav-link" data-scroll-target="#the-biggest-regret-of-fast.ai-students-">The biggest regret of fast.ai students:-</a></li>
-  <li><a href="#persistence-is-everything-" id="toc-persistence-is-everything-" class="nav-link" data-scroll-target="#persistence-is-everything-">Persistence is everything:-</a></li>
-  <li><a href="#change-is-about-what-not-to-do-" id="toc-change-is-about-what-not-to-do-" class="nav-link" data-scroll-target="#change-is-about-what-not-to-do-">Change is about what not to do:-</a></li>
-  <li><a href="#learning-might-just-be-enough" id="toc-learning-might-just-be-enough" class="nav-link" data-scroll-target="#learning-might-just-be-enough">Learning might just be enough</a></li>
-  <li><a href="#more-perspectives-on-mentoring-" id="toc-more-perspectives-on-mentoring-" class="nav-link" data-scroll-target="#more-perspectives-on-mentoring-">More perspectives on mentoring:-</a></li>
-  <li><a href="#tap-into-the-power-of-the-community-to-learn-faster" id="toc-tap-into-the-power-of-the-community-to-learn-faster" class="nav-link" data-scroll-target="#tap-into-the-power-of-the-community-to-learn-faster">Tap into the power of the community to learn faster</a></li>
-  <li><a href="#energize" id="toc-energize" class="nav-link" data-scroll-target="#energize">Energize</a></li>
+  <li><a href="#issue-with-rnns" id="toc-issue-with-rnns" class="nav-link active" data-scroll-target="#issue-with-rnns">Issue with RNNs</a></li>
+  <li><a href="#quotient-rule" id="toc-quotient-rule" class="nav-link" data-scroll-target="#quotient-rule">Quotient rule</a></li>
+  <li><a href="#transformers" id="toc-transformers" class="nav-link" data-scroll-target="#transformers">Transformers</a></li>
+  <li><a href="#single-head-vanilla-attention-pytorch-code" id="toc-single-head-vanilla-attention-pytorch-code" class="nav-link" data-scroll-target="#single-head-vanilla-attention-pytorch-code">Single Head Vanilla Attention PyTorch Code</a></li>
+  <li><a href="#linear-attention" id="toc-linear-attention" class="nav-link" data-scroll-target="#linear-attention">Linear Attention</a></li>
+  <li><a href="#single-head-linear-attention-pytorch-code" id="toc-single-head-linear-attention-pytorch-code" class="nav-link" data-scroll-target="#single-head-linear-attention-pytorch-code">Single Head Linear Attention PyTorch Code</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Attention Mechanism/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -354,11 +397,8 @@ ga('send', {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Meta Learning Book Chapter Wise Summary Points</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">Deep Learning</div>
-  </div>
-  </div>
+<h1 class="title">Different Attention Mechanisms</h1>
+</div>
 
 
 
@@ -374,7 +414,7 @@ ga('send', {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 6, 2024</p>
+      <p class="date">May 24, 2024</p>
     </div>
   </div>
   
@@ -386,284 +426,202 @@ ga('send', {
 </header>
 
 
-<section id="from-not-being-able-to-program-to-deep-learning-expert" class="level1">
-<h1>From not being able to program to deep learning expert</h1>
 <ul>
-<li>Understand the value of Stack Overflow, documentation and how to reach both.</li>
-<li>Learn to use a code editor really well.</li>
-<li>Learn to use git for version control.</li>
-<li>Learn how to use local or cloud VM.</li>
-<li>How to complete a lecture:-
+<li><p>In this blog, we will try to understand how different attention mechanisms work alongside vanilla attention from 2017 paper</p></li>
+<li><p>For the code part, you can checkout this <a href="https://github.com/riteshrm/Quantization-in-Depth-deeplearning.ai-">link</a></p></li>
+</ul>
+<section id="issue-with-rnns" class="level3">
+<h3 class="anchored" data-anchor-id="issue-with-rnns">Issue with RNNs</h3>
 <ul>
-<li>Watch the lecture</li>
-<li>Open the notebook and try to find out how all the pieces fit together.</li>
-<li>If you encounter some new functions then it will be good to know about them.</li>
-<li>Tweak the hyperparameters and see how it performs.</li>
-<li>Once you understand, try to create a new notebook recreating the training pipeline that is demonstrated in lecture.</li>
-<li>Now if everything is working well, then you might want to test the same technique on another dataset of similar type.</li>
+<li>Informaton Bottleneck:- If sentence is too much long, they needed to compress all the previous token information in just a single vector h</li>
+<li>Sequential Nature:- All the tokens being processed one by one</li>
+</ul>
+</section>
+<section id="quotient-rule" class="level3">
+<h3 class="anchored" data-anchor-id="quotient-rule">Quotient rule</h3>
+<ul>
+<li>Will be used while finding out the derivative of softmax</li>
+<li><span class="math inline">\(\left(\frac{u}{v}\right)' = \frac{u'v - uv'}{v^2}\)</span>.</li>
+</ul>
+</section>
+<section id="transformers" class="level3">
+<h3 class="anchored" data-anchor-id="transformers">Transformers</h3>
+<ul>
+<li>Given a sequence of length N, where each token is represented by Dmodel numbers, we compute three matrices
+<ul>
+<li>Query = XWq (what I’m looking for)</li>
+<li>Key = XWk (what I have)</li>
+<li>Value = XWv (the information I’ll give if I’m relevant)</li>
+<li>Wq and Wk are of same shape and to maintain the symmetry Wv is also kept to be of same shape, Wq,Wk [Dmodel, Dk] and Wv [Dmodel, Dv]</li>
+</ul></li>
+<li>Now to find out which key is more relevant to given queries we do matrix multiplication and the finally apply softmax to get probability
+<ul>
+<li>score = QueryKey^T</li>
+<li>attn = softmax(score/sqrt(Dk))</li>
+<li>Why scaling factor
+<ul>
+<li>this score dot product has variance of Dk, which causes instability in backpropagation
+<ul>
+<li>lets say we have two vectors q and k of dimension dk</li>
+<li>E[qi]=E[ki] = 0</li>
+<li>var[qi]=var[ki] = 1</li>
+<li>then E[q.k] = 0 but var[q.k] = dk <a href="https://funnywii.com/upload/proof.pdf">link</a></li>
+</ul></li>
+<li>the derivative of softmax contains some terms which if not normalizaied lead to gradient nearly 0 becuase of this larger variance</li>
+<li><span class="math display">\[\text{Softmax}(z_i) = \frac{e^{z_i}}{\sum_j e^{z_j}}\]</span></li>
+<li><span class="math display">\[\frac{\partial \text{Softmax}(z)_i}{\partial z_j} = \text{Softmax}(z)_i (\delta_{ij} - \text{Softmax}(z)_j)\]</span></li>
+<li>If <span class="math inline">\(z_i\)</span> is much larger than other elements, <span class="math inline">\(\text{Softmax}(z)_i \approx 1\)</span>.</li>
+<li>If <span class="math inline">\(z_i\)</span> is much smaller, <span class="math inline">\(\text{Softmax}(z)_i \approx 0\)</span>.</li>
+<li>So incase of jacobian matrix, considering a simple case where query 0 attends all the keys
+<ul>
+<li>Diagonal: <span class="math inline">\(s_1(1-s_1) \approx 1(0) = 0\)</span>.</li>
+<li>Off-Diagonal: <span class="math inline">\(-s_1 s_2 \approx -1(0) = 0\)</span>.</li>
+</ul></li>
+<li>to enforce unit variance, we apply normalization by dividng the score by standard deviation i.e.&nbsp;sqrt(Dk)</li>
+</ul></li>
 </ul></li>
 </ul>
 </section>
-<section id="theory-vs-practice-" class="level1">
-<h1>Theory vs practice:-</h1>
-<ul>
-<li>If you aim to reach the highest echelons of deep learning research, you first and foremost need to be a great practitioner!</li>
-<li>For best effects, use one cup of theory, one cup of practice. Rinse and repeat</li>
-<li>We are reading papers, but without training actual models, without the experience of applying what we are learning to real-life problem, we are missing a very important feedback loop.</li>
-</ul>
+<section id="single-head-vanilla-attention-pytorch-code" class="level3">
+<h3 class="anchored" data-anchor-id="single-head-vanilla-attention-pytorch-code">Single Head Vanilla Attention PyTorch Code</h3>
+<div id="74d92591" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> torch.device(<span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SingleHeadVanillaAttention(nn.Module):</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, in_features, out_features):</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.in_features <span class="op">=</span> in_features</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.out_features <span class="op">=</span> out_features</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wq <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.in_features, out_features <span class="op">=</span> <span class="va">self</span>.out_features)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wk <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.in_features, out_features <span class="op">=</span> <span class="va">self</span>.out_features)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wv <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.in_features, out_features <span class="op">=</span> <span class="va">self</span>.out_features)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> <span class="va">self</span>.Wq(x) <span class="co"># [B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> <span class="va">self</span>.Wk(x)   <span class="co">#[B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        value <span class="op">=</span> <span class="va">self</span>.Wv(x) <span class="co"># [B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">=</span> torch.matmul(query, key.transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>))<span class="op">/</span>(<span class="va">self</span>.out_features<span class="op">**</span><span class="fl">0.5</span>) <span class="co"># [B, N, Dk] * [B, Dk, N] -&gt; [B, N, N] TC=O(B*N^2*Dk)</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        attn <span class="op">=</span> F.softmax(scores, dim<span class="op">=-</span><span class="dv">1</span>) <span class="co"># [B, N, N]</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        final <span class="op">=</span> torch.matmul(attn, value) <span class="co"># [B, N, N] * [B, N, Dk] -&gt; [B, N, Dk]  TC=O(B*N^2*Dk)</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> final <span class="co"># [B, N, Dk]</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>Dmodel <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>Dk <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SingleHeadVanillaAttention(in_features <span class="op">=</span> Dmodel, out_features <span class="op">=</span> Dk).requires_grad_(<span class="va">False</span>).<span class="bu">eval</span>().to(device)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>n_tokens <span class="op">=</span> <span class="dv">16384</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>inp <span class="op">=</span> torch.randn(<span class="dv">1</span>, n_tokens, Dmodel, device<span class="op">=</span>device)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.time()</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>k<span class="op">=</span><span class="dv">50</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(k):</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> model(inp)</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time taken: </span><span class="sc">{</span>(time.time()<span class="op">-</span>start)<span class="op">/</span>k<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time taken: 0.442</code></pre>
+</div>
+</div>
 </section>
-<section id="programming-is-about-what-you-have-to-say-" class="level1">
-<h1>Programming is about what you have to say:-</h1>
+<section id="linear-attention" class="level3">
+<h3 class="anchored" data-anchor-id="linear-attention">Linear Attention</h3>
 <ul>
-<li>Your ability as a developer is measured by the utility of the things you can express in a language.</li>
-<li>Reading and writing a lot of code is the best way to learn a programming language.</li>
-</ul>
-</section>
-<section id="the-secret-of-good-developers-" class="level1">
-<h1>The secret of good developers:-</h1>
+<li><p>Instead of using softmax, it tries to make it more general where this softmax function can be replaced by any other function</p></li>
+<li><p>Kernel is some function which takes in two input vectors (query and key) and gives a single scalar output i.e.&nbsp;similarity score.</p></li>
+<li><p>This softmax can also be replaced by some kernel which is some kind of similarity function (i.e.&nbsp;to have property of a similarity function).</p></li>
+<li><p>Kernel can be decomposed into linear functions (feature functions)</p>
 <ul>
-<li>Go for long, uninterrupted sessions to avoid context switching.</li>
-</ul>
-</section>
-<section id="the-best-way-to-improve-as-a-developer-" class="level1">
-<h1>The best way to improve as a developer:-</h1>
-<ul>
-<li>You don’t sharpen your skills with resources, books, or articles. You sharpen your skills with practice. If you want to get better, go do the thing.</li>
-<li>Read and write a lot of code.</li>
-</ul>
-</section>
-<section id="how-to-use-your-tools-to-achieve-a-state-of-flow" class="level1">
-<h1>How to use your tools to achieve a state of flow</h1>
-<ul>
-<li>You are in a state of flow when nothing separates you and your work</li>
-<li>That’s why many programmers spend a lot of time studying their editors</li>
-<li>We are always somewhere between two extremes (state of flow)</li>
-<li>All we can do is take small steps and see if it is taking us towards the ideal.</li>
-<li>This can take our productivity to a whole new level.</li>
-</ul>
-</section>
-<section id="use-reality-as-your-mirror-" class="level1">
-<h1>Use reality as your mirror:-</h1>
-<ul>
-<li>If you want to live a different life tomorrow than you are living today, you have to put your beliefs to the test.</li>
-<li>The stronger the emotions involved in a situation, the higher the chance you are not seeing things clearly.</li>
-<li>Suppose you want to post something and you are afraid that people whom I respect will unfollow me or they will say I am stupid, but that doesn’t matter in the long run.</li>
-<li>Post it and you will learn on the way.</li>
-<li>Thinking about writing something isn’t doing the thing.</li>
-</ul>
-</section>
-<section id="do-genuine-work-it-compounds-" class="level1">
-<h1>Do genuine work (it compounds):-</h1>
-<ul>
-<li>Reading a book without taking notes is like discovering a new territory and forgetting to draw a map.</li>
-<li>Genuine work moves the atoms in the universe.</li>
-<li>Always make notes.</li>
-<li>Share whatever you have made.</li>
-<li>The more atoms you move the better the feedback you receive and the greater the extent to which you can reflect on what you are learning.</li>
-</ul>
-</section>
-<section id="the-hidden-game-of-machine-learning-" class="level1">
-<h1>The hidden game of machine learning:-</h1>
-<ul>
-<li>At the core of machine learning lies the ability to generalize to unseen data.</li>
-<li><a href="https://www.fast.ai/posts/2017-11-13-validation-sets.html">How (and why) to create a good validation set blog post by Rachel Thomas</a></li>
-<li><a href="https://work.caltech.edu/telecourse.html">Learning From Data: A short course by Yaser S. Abu-Mostafa</a></li>
-<li><a href="https://millengustavo.github.io/build-ml-app/">Building Machine Learning Powered Applications: Going from Idea to Product by Emmanuel Ameisen</a></li>
-</ul>
-</section>
-<section id="how-to-structure-a-machine-learning-project-" class="level1">
-<h1>How to structure a machine learning project:-</h1>
-<ul>
-<li><p>The main condition for a healthy machine learning project is a good train-val-test split.</p></li>
-<li><p>Always have a baseline to get to know whether i am going in right direction or not or what can be done next.</p></li>
-<li><p>Don’t run experiments just for the sake of tweaking hyperparameters, instead invest time in exploring other architectures, developing diagnostic code.</p></li>
-<li><p>The idea is to always move in small increments, using simpler models as a stepping stone to more complex ones.</p></li>
-<li><p>Define loss and implement it on simple model consisting of few layers and then check by passing a batch if output is not all zeros and the output shape is required shape.</p></li>
-<li><p>Create a subset of train data(1%) to check whether the modified code is working and the we are going in the right direction.</p></li>
-<li><p>Read as much as possible related to the domain you are working on so that our mind can work on the solution and analyze what to do next.</p></li>
-<li><p>Go slowly and give attention to each component of the pipeline and grow them systematically.</p></li>
-</ul>
-</section>
-<section id="how-to-win-at-kaggle-" class="level1">
-<h1>How to win at Kaggle:-</h1>
-<ul>
-<li><p>Join the competition early.</p></li>
-<li><p>Learn about the problem domain and data</p></li>
-<li><p>Write diagnostic code and identify where model is struggling.</p></li>
-<li><p>Follow Kaggle forums and read daily.</p></li>
-<li><p>Try to find out the relevant research papers and see if it is useful in solving the problem.</p></li>
-<li><p>You can read blogs related to the problem you are solving.</p></li>
-<li><p>While early in the competition, try on different architectures instead of tweaking the hyperparameters.</p></li>
-<li><p>How do we know that we are moving in the right direction? So first of all create a baseline and make a submission. The submission can consist of all zeros.</p></li>
-<li><p>Try to find out a validation split that will track the public leaderboard.</p></li>
-<li><p>A proper validation split lies at the heart of any good Kaggle submission.</p></li>
-<li><p>To know that if we are going in the right direction, see if the local results matches with the leaderboard. If so then you are going in the right direction and if not then try to find out other ways of splitting the data or something else.</p></li>
-<li><p>You can do ensembling also. the idea is to cancel out the errors from individual model in a hope that their errors are not correlated.</p></li>
-<li><p>A related technique is training with cross-validation, where you train multiple models withholding different parts of the data for validation and then combine the results from them.</p></li>
-</ul>
-</section>
-<section id="the-best-hardware-for-deep-learning-" class="level1">
-<h1>The best hardware for deep learning:-</h1>
-<ul>
-<li><a href="https://timdettmers.com/2023/01/30/which-gpu-for-deep-learning/#more-6">Follow this blog to know more about GPUs</a></li>
-</ul>
-</section>
-<section id="debugging-with-ease-is-a-superpower-" class="level1">
-<h1>Debugging with ease is a superpower:-</h1>
-<ul>
-<li><a href="https://x.com/radekosmulski/status/945739571735748609">Radek Osmulski’s Favorite recent jupyter notebook discovery - the %debug magic:</a></li>
-</ul>
-</section>
-<section id="time-yourself-" class="level1">
-<h1>Time yourself:-</h1>
-<ul>
-<li>Always keep track of the time which you devote to various activities.</li>
-<li>%%timeit</li>
-</ul>
-</section>
-<section id="you-cant-learn-a-profession-by-studying-a-textbook-" class="level1">
-<h1>You can’t learn a profession by studying a textbook:-</h1>
-<ul>
-<li>Extensive practice is very important alongside theory.</li>
-</ul>
-</section>
-<section id="on-finding-a-job-" class="level1">
-<h1>On finding a job:-</h1>
-<ul>
-<li>The best approach is to showcase your work, by helping others.</li>
-<li>Reach out to the people who know you and can help you.</li>
-</ul>
-</section>
-<section id="the-deep-learning-party-is-on-twitter-" class="level1">
-<h1>The deep learning party is on Twitter:-</h1>
-<ul>
-<li>you will find all the amazing people there</li>
-</ul>
-</section>
-<section id="share-your-work-" class="level1">
-<h1>Share your work:-</h1>
-<ul>
-<li><a href="https://www.fast.ai/posts/2017-12-18-personal-brand.html">Making Peace with Personal Branding</a></li>
-</ul>
-</section>
-<section id="when-to-start-sharing-your-work-" class="level1">
-<h1>When to start sharing your work:-</h1>
-<ul>
-<li>The sooner, the better!</li>
-<li>With every piece that we produce, we hone our communication skills</li>
-</ul>
-</section>
-<section id="i-am-scared-to-share-my-work-help" class="level1">
-<h1>I am scared to share my work! Help!</h1>
-<ul>
-<li>Where some see failure, others see cheap feedback.</li>
-<li>If you don’t like something then you can always delete it.</li>
-</ul>
-</section>
-<section id="what-to-focus-on-in-sharing-your-work-" class="level1">
-<h1>What to focus on in sharing your work:-</h1>
-<ul>
-<li>Speak to your experience.</li>
-<li>You don’t have to share something outside of your experience.</li>
-</ul>
-</section>
-<section id="dont-lose-sight-of-what-is-important-" class="level1">
-<h1>Don’t lose sight of what is important:-</h1>
-<ul>
-<li>You won a Kaggle competition that’s good but never ever forget why you have started.</li>
-<li>You don’t need followers or likes or even social media to learn.</li>
-<li>Nearly all of the best DL engineers I(Radek Osmulski) know are either very quiet or completely silent on Twitter</li>
-</ul>
-</section>
-<section id="make-mental-space-for-what-matters-" class="level1">
-<h1>Make mental space for what matters:-</h1>
-<ul>
-<li>Peace of mind is the most important prerequisite for creative work.</li>
-<li>Avoid using social media too much!</li>
-</ul>
-</section>
-<section id="to-engage-afterburners-find-a-mentor-" class="level1">
-<h1>To engage afterburners, find a mentor:-</h1>
-<ul>
-<li>Find a mentor, who is good at something you care about.</li>
-<li>The mentor doesn’t need to know you.</li>
-<li>In general, we want to get answers from the people who are like us and have gone through that path and the people who are not like us to get to know about more ideas.</li>
-<li>Always make your message as concise and clear as you can.</li>
-</ul>
-</section>
-<section id="the-biggest-regret-of-fast.ai-students-" class="level1">
-<h1>The biggest regret of fast.ai students:-</h1>
-<ul>
-<li>I wished I spent more time coding and experimenting and less time studying in a more traditional sense.</li>
-<li>100% learning -&gt; x% doing/100-x% real learning.</li>
-<li>Shortest path to understand how something works leads through practice.</li>
-<li>80% doing and 20% reading theory.</li>
-</ul>
-</section>
-<section id="persistence-is-everything-" class="level1">
-<h1>Persistence is everything:-</h1>
-<ul>
-<li>At any given moment, as you put in the work, you can barely notice a difference in your life. But the longer you stay the course the more rewarding the journey becomes.</li>
-<li>Learning compounds and you need to give it time before you start seeing the exponential results.</li>
-<li>Combine persistence with community involvement and you cannot be stopped.</li>
-</ul>
-</section>
-<section id="change-is-about-what-not-to-do-" class="level1">
-<h1>Change is about what not to do:-</h1>
-<ul>
-<li>Ceasing how we have done things up to now is harder than taking on new approach.</li>
-<li>Try to find out the behaviors which are no longer helpful to pursuing your goals and replace them with some meaningful.</li>
-</ul>
-</section>
-<section id="learning-might-just-be-enough" class="level1">
-<h1>Learning might just be enough</h1>
-<ul>
-<li>A good strategy towards learning is to observe whether you are getting the results that you are after and if you are not then change your approach.</li>
-</ul>
-</section>
-<section id="more-perspectives-on-mentoring-" class="level1">
-<h1>More perspectives on mentoring:-</h1>
-<ul>
-<li>If you want to catch the attention of someone you admire give yourself a job working for them.</li>
-<li>Learn in public.
-<ul>
-<li>Write blogs and tutorials and cheatsheets.</li>
-<li>Speak at meetups and conferences.</li>
-<li>Ask and answer things on Stackoverflow or Reddit. Avoid the walled gardens like Slack and Discord, they’re not public.</li>
-<li>Make Youtube videos or Twitch streams.</li>
-<li>Start a newsletter.</li>
-<li>Draw cartoons</li>
+<li>K(a, b) = phi(a)Tphi(b)</li>
 </ul></li>
-<li>Make the thing you wish you had found when you were learning.</li>
-<li>Don’t judge results by claps or tweets or stars or upvotes, just talk to yourself from 3 months ago.</li>
-<li>by far the biggest beneficiary of you trying to help past you is future you. If others benefit, that’s icing.</li>
-<li>Don’t stop there:
-<ul>
-<li>Enjoyed a coding video? Reach out to the speaker/instructor and thank them, and ask questions.</li>
-<li>Make PR’s to libraries you use.</li>
-<li>Make your own libraries no one will ever use.</li>
-<li>Clone stuff you like, from scratch, to see how they work.</li>
-<li>Teach workshops.</li>
-<li>Go to conferences and summarize what you learned.</li>
-</ul></li>
-<li>Try your best to be right, but don’t worry when you’re wrong, and let the internet correct you when you are inevitably wrong.</li>
-<li>Talk while you code.</li>
-<li>Whenever someone wants some help, then you should be always ready to help them because these are some of the most in-demand people in tech.</li>
+<li><p>Feature function takes a vector as input and projects it into new feature space</p></li>
+<li><p>The basic idea is instead of doing complicated non-linear function like softmax, cant we just project a and b into highr dimensional space and just do the linear inner product</p></li>
+<li><p>The attention mechanism is defined as <span class="math inline">\(A_l(x) = V' = \text{softmax} \left( \frac{QK^T}{\sqrt{D}} \right) V\)</span>.</p></li>
+<li><p>We can make the above equation more generalised by using a simlarity function</p></li>
+<li><p><span class="math inline">\(V'_i = \frac{\sum_{j=1}^N \text{sim}(Q_i, K_j) V_j}{\sum_{j=1}^N \text{sim}(Q_i, K_j)}\)</span></p></li>
+<li><p>where we can think of <span class="math inline">\(\text{sim}(q, k) = \exp \left( \frac{q^T k}{\sqrt{D}} \right)\)</span></p></li>
+<li><p>only constraint on sim is to give non-negative outputs</p></li>
+<li><p>given a kernel with feature representation <span class="math inline">\(\varphi(x)\)</span>, we can rewrite the above equation</p></li>
+<li><p><span class="math inline">\(V'_i = \frac{\sum_{j=1}^N \phi(Q_i)^T \phi(K_j) V_j}{\sum_{j=1}^N \phi(Q_i)^T \phi(K_j)}\)</span></p></li>
+<li><p>By making the use of associative property of matrix multiplication, we can take out Q from summation, because it is independet of j</p></li>
+<li><p><span class="math inline">\(V'_i = \frac{\phi(Q_i)^T \sum_{j=1}^N \phi(K_j) V_j^T}{\phi(Q_i)^T \sum_{j=1}^N \phi(K_j)}\)</span> (4)</p></li>
+<li><p>And finally we can convert it into vectorized format</p></li>
+<li><p><span class="math inline">\(\left( \phi(Q) \phi(K)^T \right) V = \phi(Q) \left( \phi(K)^T V \right)\)</span></p></li>
+<li><p>It is linear because we can compute numerator and denominator and use it for all the queries [The eqn before vectorized one]</p></li>
+<li><p>For softmax attention, complexity is O(N^2 * max(D, M)), where D is dimensionality for query and key, M is for value</p></li>
+<li><p>For linear attention, complexity is O(NCM), where C is feature map projection dim and M is for value</p></li>
+<li><p>Linearization of exact spftmax attention is not feasible because of the exponential kernel, which is of infinte dimension and cant be stored on a computer (expansion of e^x is infinitely many terms)</p></li>
+<li><p>Thats why it is better to use some kind of polynomial feature representation</p></li>
+<li><p>The author chose elu instead of relu to avoid setting gradients to 0 when input was negative</p></li>
 </ul>
 </section>
-<section id="tap-into-the-power-of-the-community-to-learn-faster" class="level1">
-<h1>Tap into the power of the community to learn faster</h1>
-<ul>
-<li>Instead of asking questions only try to answer more.</li>
-<li>Joining community will help you in better communication, learn from other’s.</li>
-</ul>
-</section>
-<section id="energize" class="level1">
-<h1>Energize</h1>
-<ul>
-<li>Yoga can help.</li>
-<li>Time-restricted eating and its primary benefit is restore hormonal balance.</li>
-</ul>
+<section id="single-head-linear-attention-pytorch-code" class="level3">
+<h3 class="anchored" data-anchor-id="single-head-linear-attention-pytorch-code">Single Head Linear Attention PyTorch Code</h3>
+<div id="953f95c1" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> torch.device(<span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SingleHeadLinearaAttention(nn.Module):</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, in_features, out_features):</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.in_features <span class="op">=</span> in_features</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.out_features <span class="op">=</span> out_features</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wq <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.in_features, out_features <span class="op">=</span> <span class="va">self</span>.out_features)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wk <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.in_features, out_features <span class="op">=</span> <span class="va">self</span>.out_features)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wv <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.in_features, out_features <span class="op">=</span> <span class="va">self</span>.out_features)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> <span class="va">self</span>.Wq(x) <span class="co"># [B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> <span class="va">self</span>.Wk(x)   <span class="co">#[B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        value <span class="op">=</span> <span class="va">self</span>.Wv(x) <span class="co"># [B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> F.elu(query) <span class="op">+</span> <span class="dv">1</span> <span class="co"># [B, N, Dk]</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> F.elu(key) <span class="op">+</span> <span class="dv">1</span> <span class="co"># [B, N, Dk]</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">=</span> torch.matmul(key.transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>), value) <span class="co"># [B, Dk, N] * [B, N, Dk] -&gt; [B, Dk, Dk] TC=O(B*N*Dk^2)</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>        final <span class="op">=</span> torch.matmul(query, scores) <span class="co"># [B, N, Dk] * [B, Dk, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dk^2)</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        k_sum <span class="op">=</span> torch.<span class="bu">sum</span>(key, dim<span class="op">=-</span><span class="dv">2</span>).unsqueeze(<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>        normalizer <span class="op">=</span> torch.matmul(query, k_sum) <span class="co"># [B, N , Dk] * [B, Dk, 1] -&gt; [B, N, 1] TC=O(B*N*Dk)</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>        eps <span class="op">=</span> <span class="fl">1e-6</span> <span class="co"># To use in case we dont divide by 0</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> final<span class="op">/</span>(normalizer <span class="op">+</span> eps) <span class="co"># [B, N, Dk]</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>Dmodel <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>Dk <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SingleHeadLinearaAttention(in_features <span class="op">=</span> Dmodel, out_features <span class="op">=</span> Dk).requires_grad_(<span class="va">False</span>).<span class="bu">eval</span>().to(device)</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>n_tokens <span class="op">=</span> <span class="dv">16384</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>inp <span class="op">=</span> torch.randn(<span class="dv">1</span>, n_tokens, Dmodel, device<span class="op">=</span>device)</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.time()</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>k<span class="op">=</span><span class="dv">50</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(k):</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> model(inp)</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time taken: </span><span class="sc">{</span>(time.time()<span class="op">-</span>start)<span class="op">/</span>k<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time taken: 0.042</code></pre>
+</div>
+</div>
 
 
 </section>
@@ -1087,4 +1045,4 @@ ga('send', {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Attention Mechanism/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
