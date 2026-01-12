@@ -1,3 +1,6 @@
 .quarto
 _site
 _freeze
+random.ipynb
+/.quarto/
+**/*.quarto_ipynb

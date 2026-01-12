@@ -30,15 +30,17 @@ website:
         href: pages/about.qmd
       #- text: "Authoring"
         #href: pages/authoring.qmd
-      - text: "Blog"
+      - text: "Blog/Notes"
         href: blog.qmd
       #- text: "Research"
         #href: pages/research.qmd
       - text: "Resources"
         href: pages/resources.qmd
     right:
-      #- icon: twitter
-        #href: https://twitter.com/_riteshrm_/
+      # - icon: "bi bi-envelope"
+      #   href: "mailto:riteshkumarmaurya7379@gmail.com"
+      - icon: twitter
+        href: https://twitter.com/_riteshrm_/
       - icon: linkedin
         href: https://www.linkedin.com/in/riteshrm/
       - icon: github
