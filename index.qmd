@@ -3,7 +3,7 @@ title: "Ritesh Kumar Maurya"
 toc: false
 ---
 
-Hi there 👋. I am Ritesh Kumar Maurya. I work on [🧨 diffusion models](https://hf.co/docs/diffusers) at [Samsung R&D Institute Noida](https://research.samsung.com/sri-n). Know more about me
+Hi there 👋. I am Ritesh Kumar Maurya. I work at [Samsung R&D Institute India, Noida](https://research.samsung.com/sri-n). Know more about me
 from [here](https://riteshrm.github.io/pages/about.html). 
 
 

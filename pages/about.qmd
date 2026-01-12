@@ -5,7 +5,7 @@ aliases:
 permalink: /about
 toc: false
 ---
-I work on diffusion models at [Samsung R&D Institute Noida](https://research.samsung.com/sri-n). For more details on my work experience, check out my [LinkedIn profile](https://www.linkedin.com/in/riteshrm/).
+I work on diffusion models at [Samsung R&D Institute India, Noida](https://research.samsung.com/sri-n). For more details on my work experience, check out my [LinkedIn profile](https://www.linkedin.com/in/riteshrm/).
 
 
 <table>
@@ -19,8 +19,8 @@ I work on diffusion models at [Samsung R&D Institute Noida](https://research.sam
 
 ### Timeline
 
-| Position                               | Company                           | Duration                |
-|:--------------------------------------:|:---------------------------------:|:-----------------------:|
-| Engineer                               | Samsung R&D Institute Noida       | Jan 2024 - Present      |
-| Intern                                 | Samsung R&D Institute Noida       | Jan 2023 - Dec 2023     |
+| Position                               | Company                                | Duration                |
+|:--------------------------------------:|:--------------------------------------:|:-----------------------:|
+| Machine Learning Engineer              | Samsung R&D Institute India, Noida     | Jan 2024 - Present      |
+| Machine Learning Engineer Intern       | Samsung R&D Institute India, Noida     | Jan 2023 - Dec 2023     |
 

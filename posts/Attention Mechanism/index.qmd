@@ -1,14 +1,14 @@
 ---
-title: "Different Attention Mechanisms"
+title: "Attention"
 author: "Ritesh Kumar Maurya"
 date: "2026-01-12"
-categories: 
+categories: [Deep Learning]
 image: "attn.png"
 ---
 
-- In this blog, we will try to understand how different attention mechanisms work alongside vanilla attention from 2017 paper
+<!-- - In this blog, we will try to understand how different attention mechanisms work alongside vanilla attention from 2017 paper -->
 
-- For the code part, you can checkout this [link](https://github.com/riteshrm/Quantization-in-Depth-deeplearning.ai-)
+<!-- - For the code part, you can checkout this [link](https://github.com/riteshrm/Quantization-in-Depth-deeplearning.ai-) -->
 
 ### Issue with RNNs
 + Informaton Bottleneck:- If sentence is too much long, they needed to compress all the previous token information in just a single vector h
