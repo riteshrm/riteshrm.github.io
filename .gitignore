@@ -1,6 +1,7 @@
 .quarto
 _site
 _freeze
+tmp
 random.ipynb
 /.quarto/
 **/*.quarto_ipynb

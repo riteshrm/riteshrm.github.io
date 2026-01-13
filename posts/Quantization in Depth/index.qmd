@@ -539,7 +539,7 @@ replace_linear_with_target_and_quantize(model,
 model
 
 quantized_state_dict = model.state_dict()
-torch.save(quantized_state_dict, r"C:\wsl\random\models\quantized_state_dict.pth")
+torch.save(quantized_state_dict, r"/home/ritesh/github_repos/riteshrm.github.io/tmp/quantized_state_dict.pth")
 ```
 
 **How to upload on HF**
@@ -595,7 +595,7 @@ state_dict_cache_path = hf_hub_download(
 )
 
 ```{python}
-state_dict = torch.load(r"C:\wsl\random\models\quantized_state_dict.pth")
+state_dict = torch.load(r"/home/ritesh/github_repos/riteshrm.github.io/tmp/quantized_state_dict.pth")
 model.load_state_dict(state_dict, strict=True, assign=True)
 ```
 
