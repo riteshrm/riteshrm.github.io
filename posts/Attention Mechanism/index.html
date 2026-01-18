@@ -386,6 +386,8 @@ window.Quarto = {
   <li><a href="#quotient-rule" id="toc-quotient-rule" class="nav-link" data-scroll-target="#quotient-rule">Quotient rule</a></li>
   <li><a href="#transformers" id="toc-transformers" class="nav-link" data-scroll-target="#transformers">Transformers</a></li>
   <li><a href="#single-head-vanilla-attention-pytorch-code" id="toc-single-head-vanilla-attention-pytorch-code" class="nav-link" data-scroll-target="#single-head-vanilla-attention-pytorch-code">Single Head Vanilla Attention PyTorch Code</a></li>
+  <li><a href="#multi-head-vanilla-attention-for-loop-pytorch-code" id="toc-multi-head-vanilla-attention-for-loop-pytorch-code" class="nav-link" data-scroll-target="#multi-head-vanilla-attention-for-loop-pytorch-code">Multi Head Vanilla Attention For loop PyTorch Code</a></li>
+  <li><a href="#multi-head-vanilla-attention-pytorch-code" id="toc-multi-head-vanilla-attention-pytorch-code" class="nav-link" data-scroll-target="#multi-head-vanilla-attention-pytorch-code">Multi Head Vanilla Attention PyTorch Code</a></li>
   <li><a href="#linear-attention" id="toc-linear-attention" class="nav-link" data-scroll-target="#linear-attention">Linear Attention</a></li>
   <li><a href="#single-head-linear-attention-pytorch-code" id="toc-single-head-linear-attention-pytorch-code" class="nav-link" data-scroll-target="#single-head-linear-attention-pytorch-code">Single Head Linear Attention PyTorch Code</a></li>
   </ul>
@@ -448,25 +450,25 @@ window.Quarto = {
 <section id="transformers" class="level3">
 <h3 class="anchored" data-anchor-id="transformers">Transformers</h3>
 <ul>
-<li>Given a sequence of length N, where each token is represented by Dmodel numbers, we compute three matrices
+<li>Given a sequence of length N, where each token is represented by d_model numbers, we compute three matrices
 <ul>
 <li>Query = XWq (what I’m looking for)</li>
 <li>Key = XWk (what I have)</li>
 <li>Value = XWv (the information I’ll give if I’m relevant)</li>
-<li>Wq and Wk are of same shape and to maintain the symmetry Wv is also kept to be of same shape, Wq,Wk [Dmodel, Dk] and Wv [Dmodel, Dv]</li>
+<li>Wq and Wk are of same shape and to maintain the symmetry Wv is also kept to be of same shape, Wq,Wk [d_model, d_k] and Wv [d_model, Dv]</li>
 </ul></li>
 <li>Now to find out which key is more relevant to given queries we do matrix multiplication and the finally apply softmax to get probability
 <ul>
 <li>score = QueryKey^T</li>
-<li>attn = softmax(score/sqrt(Dk))</li>
+<li>attn = softmax(score/sqrt(d_k))</li>
 <li>Why scaling factor
 <ul>
-<li>this score dot product has variance of Dk, which causes instability in backpropagation
+<li>this score dot product has variance of d_k, which causes instability in backpropagation
 <ul>
-<li>lets say we have two vectors q and k of dimension dk</li>
+<li>lets say we have two vectors q and k of dimension d_k</li>
 <li>E[qi]=E[ki] = 0</li>
 <li>var[qi]=var[ki] = 1</li>
-<li>then E[q.k] = 0 but var[q.k] = dk <a href="https://funnywii.com/upload/proof.pdf">link</a></li>
+<li>then E[q.k] = 0 but var[q.k] = d_k <a href="https://funnywii.com/upload/proof.pdf">link</a></li>
 </ul></li>
 <li>the derivative of softmax contains some terms which if not normalizaied lead to gradient nearly 0 becuase of this larger variance</li>
 <li><span class="math display">\[\text{Softmax}(z_i) = \frac{e^{z_i}}{\sum_j e^{z_j}}\]</span></li>
@@ -478,14 +480,14 @@ window.Quarto = {
 <li>Diagonal: <span class="math inline">\(s_1(1-s_1) \approx 1(0) = 0\)</span>.</li>
 <li>Off-Diagonal: <span class="math inline">\(-s_1 s_2 \approx -1(0) = 0\)</span>.</li>
 </ul></li>
-<li>to enforce unit variance, we apply normalization by dividng the score by standard deviation i.e.&nbsp;sqrt(Dk)</li>
+<li>to enforce unit variance, we apply normalization by dividng the score by standard deviation i.e.&nbsp;sqrt(d_k)</li>
 </ul></li>
 </ul></li>
 </ul>
 </section>
 <section id="single-head-vanilla-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="single-head-vanilla-attention-pytorch-code">Single Head Vanilla Attention PyTorch Code</h3>
-<div id="d13484cc" class="cell" data-execution_count="1">
+<div id="f5e2006c" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
@@ -494,33 +496,33 @@ window.Quarto = {
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> torch.device(<span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SingleHeadVanillaAttention(nn.Module):</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, in_features, out_features):</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, d_model, d_k):</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.in_features <span class="op">=</span> in_features</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.out_features <span class="op">=</span> out_features</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wq <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.in_features, out_features <span class="op">=</span> <span class="va">self</span>.out_features)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wk <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.in_features, out_features <span class="op">=</span> <span class="va">self</span>.out_features)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wv <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.in_features, out_features <span class="op">=</span> <span class="va">self</span>.out_features)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.d_model <span class="op">=</span> d_model</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.d_k <span class="op">=</span> d_k</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wq <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.d_model, out_features <span class="op">=</span> <span class="va">self</span>.d_k)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wk <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.d_model, out_features <span class="op">=</span> <span class="va">self</span>.d_k)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wv <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.d_model, out_features <span class="op">=</span> <span class="va">self</span>.d_k)</span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> <span class="va">self</span>.Wq(x) <span class="co"># [B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> <span class="va">self</span>.Wk(x)   <span class="co">#[B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        value <span class="op">=</span> <span class="va">self</span>.Wv(x) <span class="co"># [B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> <span class="va">self</span>.Wq(x) <span class="co"># [B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> <span class="va">self</span>.Wk(x)   <span class="co">#[B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        value <span class="op">=</span> <span class="va">self</span>.Wv(x) <span class="co"># [B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">=</span> torch.matmul(query, key.transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>))<span class="op">/</span>(<span class="va">self</span>.out_features<span class="op">**</span><span class="fl">0.5</span>) <span class="co"># [B, N, Dk] * [B, Dk, N] -&gt; [B, N, N] TC=O(B*N^2*Dk)</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">=</span> torch.matmul(query, key.transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>))<span class="op">/</span>(<span class="va">self</span>.d_k<span class="op">**</span><span class="fl">0.5</span>) <span class="co"># [B, N, d_k] * [B, d_k, N] -&gt; [B, N, N] TC=O(B*N^2*d_k)</span></span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        attn <span class="op">=</span> F.softmax(scores, dim<span class="op">=-</span><span class="dv">1</span>) <span class="co"># [B, N, N]</span></span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        final <span class="op">=</span> torch.matmul(attn, value) <span class="co"># [B, N, N] * [B, N, Dk] -&gt; [B, N, Dk]  TC=O(B*N^2*Dk)</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> final <span class="co"># [B, N, Dk]</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        final <span class="op">=</span> torch.matmul(attn, value) <span class="co"># [B, N, N] * [B, N, d_k] -&gt; [B, N, d_k]  TC=O(B*N^2*d_k)</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> final <span class="co"># [B, N, d_k]</span></span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>Dmodel <span class="op">=</span> <span class="dv">512</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>Dk <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>d_k <span class="op">=</span> <span class="dv">512</span></span>
 <span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SingleHeadVanillaAttention(in_features <span class="op">=</span> Dmodel, out_features <span class="op">=</span> Dk).requires_grad_(<span class="va">False</span>).<span class="bu">eval</span>().to(device)</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SingleHeadVanillaAttention(d_model <span class="op">=</span> d_model, d_k <span class="op">=</span> d_k).requires_grad_(<span class="va">False</span>).<span class="bu">eval</span>().to(device)</span>
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>n_tokens <span class="op">=</span> <span class="dv">16384</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>inp <span class="op">=</span> torch.randn(<span class="dv">1</span>, n_tokens, Dmodel, device<span class="op">=</span>device)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>inp <span class="op">=</span> torch.randn(<span class="dv">1</span>, n_tokens, d_model, device<span class="op">=</span>device)</span>
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
 <span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.time()</span>
@@ -531,7 +533,131 @@ window.Quarto = {
 <span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
 <span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time taken: </span><span class="sc">{</span>(time.time()<span class="op">-</span>start)<span class="op">/</span>k<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 0.444</code></pre>
+<pre><code>Time taken: 0.457</code></pre>
+</div>
+</div>
+</section>
+<section id="multi-head-vanilla-attention-for-loop-pytorch-code" class="level3">
+<h3 class="anchored" data-anchor-id="multi-head-vanilla-attention-for-loop-pytorch-code">Multi Head Vanilla Attention For loop PyTorch Code</h3>
+<div id="1b1ce56c" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> torch.device(<span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MultiHeadVanillaAttention(nn.Module):</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, d_model, num_heads, head_dim<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.d_model <span class="op">=</span> d_model</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.num_heads <span class="op">=</span> num_heads</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> head_dim <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.d_k <span class="op">=</span> d_model<span class="op">//</span><span class="va">self</span>.num_heads</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.d_k <span class="op">=</span> head_dim</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wq <span class="op">=</span> nn.ModuleList([nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.d_model, out_features <span class="op">=</span> <span class="va">self</span>.d_k) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.num_heads)])</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wk <span class="op">=</span> nn.ModuleList([nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.d_model, out_features <span class="op">=</span> <span class="va">self</span>.d_k) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.num_heads)])</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wv <span class="op">=</span> nn.ModuleList([nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.d_model, out_features <span class="op">=</span> <span class="va">self</span>.d_k) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.num_heads)])</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.out <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.d_k <span class="op">*</span> <span class="va">self</span>.num_heads, out_features <span class="op">=</span> <span class="va">self</span>.d_model)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> [<span class="va">self</span>.Wq[i](x) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.num_heads)] <span class="co"># [B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> [<span class="va">self</span>.Wk[i](x) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.num_heads)]   <span class="co">#[B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        value <span class="op">=</span> [<span class="va">self</span>.Wv[i](x) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.num_heads)] <span class="co"># [B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">=</span> [torch.matmul(query[i], key[i].transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>))<span class="op">/</span>(<span class="va">self</span>.d_k<span class="op">**</span><span class="fl">0.5</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.num_heads)] <span class="co"># [B, N, d_k] * [B, d_k, N] -&gt; [B, N, N] TC=O(B*N^2*d_k)</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>        attn <span class="op">=</span> [F.softmax(scores[i], dim<span class="op">=-</span><span class="dv">1</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.num_heads)] <span class="co"># [B, N, N]</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>        final <span class="op">=</span> [torch.matmul(attn[i], value[i]) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.num_heads)] <span class="co"># [B, N, N] * [B, N, d_k] -&gt; [B, N, d_k]  TC=O(B*N^2*d_k)</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        final <span class="op">=</span> torch.cat(final, dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>        projout <span class="op">=</span> <span class="va">self</span>.out(final)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> projout <span class="co"># [B, N, d_model]</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>d_k <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> MultiHeadVanillaAttention(d_model <span class="op">=</span> d_model, num_heads<span class="op">=</span><span class="dv">2</span>, head_dim<span class="op">=</span><span class="dv">32</span>).requires_grad_(<span class="va">False</span>).<span class="bu">eval</span>().to(device)</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>n_tokens <span class="op">=</span> <span class="dv">16384</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>inp <span class="op">=</span> torch.randn(<span class="dv">1</span>, n_tokens, d_model, device<span class="op">=</span>device)</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.time()</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>k<span class="op">=</span><span class="dv">50</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(k):</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> model(inp)</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time taken: </span><span class="sc">{</span>(time.time()<span class="op">-</span>start)<span class="op">/</span>k<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time taken: 0.769</code></pre>
+</div>
+</div>
+</section>
+<section id="multi-head-vanilla-attention-pytorch-code" class="level3">
+<h3 class="anchored" data-anchor-id="multi-head-vanilla-attention-pytorch-code">Multi Head Vanilla Attention PyTorch Code</h3>
+<div id="555e4a1d" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> torch.device(<span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MultiHeadVanillaAttention(nn.Module):</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, d_model, head_dim, num_heads):</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.d_model <span class="op">=</span> d_model</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.d_k <span class="op">=</span> head_dim <span class="op">*</span> num_heads</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.head_dim <span class="op">=</span> head_dim</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.num_heads <span class="op">=</span> num_heads</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wq <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.d_model, out_features <span class="op">=</span> <span class="va">self</span>.d_k)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wk <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.d_model, out_features <span class="op">=</span> <span class="va">self</span>.d_k)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wv <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.d_model, out_features <span class="op">=</span> <span class="va">self</span>.d_k)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.out <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.d_k, out_features <span class="op">=</span> <span class="va">self</span>.d_model)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        batch_size <span class="op">=</span> x.shape[<span class="dv">0</span>]</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> <span class="va">self</span>.Wq(x) <span class="co"># [B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> <span class="va">self</span>.Wk(x)   <span class="co">#[B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>        value <span class="op">=</span> <span class="va">self</span>.Wv(x) <span class="co"># [B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> query.view(batch_size, <span class="op">-</span><span class="dv">1</span>, <span class="va">self</span>.num_heads, <span class="va">self</span>.head_dim).transpose(<span class="dv">1</span>, <span class="dv">2</span>) <span class="co"># [B, N, d_k] -&gt; [B, N, num_heads, head_dim] -&gt; [B, num_heads, N, head_dim]</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> key.view(batch_size, <span class="op">-</span><span class="dv">1</span>, <span class="va">self</span>.num_heads, <span class="va">self</span>.head_dim).transpose(<span class="dv">1</span>, <span class="dv">2</span>) <span class="co"># [B, N, d_k] -&gt; [B, N, num_heads, head_dim] -&gt; [B, num_heads, N, head_dim]</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        value <span class="op">=</span> value.view(batch_size, <span class="op">-</span><span class="dv">1</span>, <span class="va">self</span>.num_heads, <span class="va">self</span>.head_dim).transpose(<span class="dv">1</span>, <span class="dv">2</span>) <span class="co"># [B, N, d_k] -&gt; [B, N, num_heads, head_dim] -&gt; [B, num_heads, N, head_dim]</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">=</span> torch.matmul(query, key.transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>))<span class="op">/</span>(<span class="va">self</span>.head_dim<span class="op">**</span><span class="fl">0.5</span>) <span class="co"># [B, num_heads, N, head_dim] * [B, num_heads, head_dim, N] -&gt; [B, num_heads, N, N] TC=O(B*N^2*d_k)</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>        attn <span class="op">=</span> F.softmax(scores, dim<span class="op">=-</span><span class="dv">1</span>) <span class="co"># [B, num_heads, N, N]</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>        final <span class="op">=</span> torch.matmul(attn, value).permute(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>).reshape(batch_size, <span class="op">-</span><span class="dv">1</span>, <span class="va">self</span>.d_k) <span class="co"># [B, num_heads, N, N] * [B, num_heads, N, head_dim] -&gt; [B, N, d_k]  TC=O(B*N^2*d_k)</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>        projout <span class="op">=</span> <span class="va">self</span>.out(final) <span class="co"># [B, N, d_k] -&gt; [B, N, d_model]</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> projout <span class="co"># [B, N, d_model]</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>d_k <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> MultiHeadVanillaAttention(d_model <span class="op">=</span> d_model, num_heads<span class="op">=</span><span class="dv">2</span>, head_dim<span class="op">=</span><span class="dv">32</span>).requires_grad_(<span class="va">False</span>).<span class="bu">eval</span>().to(device)</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>n_tokens <span class="op">=</span> <span class="dv">16384</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>inp <span class="op">=</span> torch.randn(<span class="dv">1</span>, n_tokens, d_model, device<span class="op">=</span>device)</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.time()</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>k<span class="op">=</span><span class="dv">50</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(k):</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> model(inp)</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time taken: </span><span class="sc">{</span>(time.time()<span class="op">-</span>start)<span class="op">/</span>k<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time taken: 2.617</code></pre>
 </div>
 </div>
 </section>
@@ -568,59 +694,59 @@ window.Quarto = {
 </section>
 <section id="single-head-linear-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="single-head-linear-attention-pytorch-code">Single Head Linear Attention PyTorch Code</h3>
-<div id="5060c1b3" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> torch.device(<span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SingleHeadLinearaAttention(nn.Module):</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, in_features, out_features):</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.in_features <span class="op">=</span> in_features</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.out_features <span class="op">=</span> out_features</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wq <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.in_features, out_features <span class="op">=</span> <span class="va">self</span>.out_features)</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wk <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.in_features, out_features <span class="op">=</span> <span class="va">self</span>.out_features)</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wv <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.in_features, out_features <span class="op">=</span> <span class="va">self</span>.out_features)</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> <span class="va">self</span>.Wq(x) <span class="co"># [B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> <span class="va">self</span>.Wk(x)   <span class="co">#[B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        value <span class="op">=</span> <span class="va">self</span>.Wv(x) <span class="co"># [B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> F.elu(query) <span class="op">+</span> <span class="dv">1</span> <span class="co"># [B, N, Dk]</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> F.elu(key) <span class="op">+</span> <span class="dv">1</span> <span class="co"># [B, N, Dk]</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">=</span> torch.matmul(key.transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>), value) <span class="co"># [B, Dk, N] * [B, N, Dk] -&gt; [B, Dk, Dk] TC=O(B*N*Dk^2)</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>        final <span class="op">=</span> torch.matmul(query, scores) <span class="co"># [B, N, Dk] * [B, Dk, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dk^2)</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        k_sum <span class="op">=</span> torch.<span class="bu">sum</span>(key, dim<span class="op">=-</span><span class="dv">2</span>).unsqueeze(<span class="op">-</span><span class="dv">1</span>)</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>        normalizer <span class="op">=</span> torch.matmul(query, k_sum) <span class="co"># [B, N , Dk] * [B, Dk, 1] -&gt; [B, N, 1] TC=O(B*N*Dk)</span></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>        eps <span class="op">=</span> <span class="fl">1e-6</span> <span class="co"># To use in case we dont divide by 0</span></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> final<span class="op">/</span>(normalizer <span class="op">+</span> eps) <span class="co"># [B, N, Dk]</span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>Dmodel <span class="op">=</span> <span class="dv">512</span></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>Dk <span class="op">=</span> <span class="dv">512</span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SingleHeadLinearaAttention(in_features <span class="op">=</span> Dmodel, out_features <span class="op">=</span> Dk).requires_grad_(<span class="va">False</span>).<span class="bu">eval</span>().to(device)</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>n_tokens <span class="op">=</span> <span class="dv">16384</span></span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>inp <span class="op">=</span> torch.randn(<span class="dv">1</span>, n_tokens, Dmodel, device<span class="op">=</span>device)</span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.time()</span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>k<span class="op">=</span><span class="dv">50</span></span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(k):</span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> model(inp)</span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time taken: </span><span class="sc">{</span>(time.time()<span class="op">-</span>start)<span class="op">/</span>k<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="a492edb0" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> torch.device(<span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SingleHeadLinearaAttention(nn.Module):</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, in_features, out_features):</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.in_features <span class="op">=</span> in_features</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.out_features <span class="op">=</span> out_features</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wq <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.in_features, out_features <span class="op">=</span> <span class="va">self</span>.out_features)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wk <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.in_features, out_features <span class="op">=</span> <span class="va">self</span>.out_features)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Wv <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> <span class="va">self</span>.in_features, out_features <span class="op">=</span> <span class="va">self</span>.out_features)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> <span class="va">self</span>.Wq(x) <span class="co"># [B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> <span class="va">self</span>.Wk(x)   <span class="co">#[B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        value <span class="op">=</span> <span class="va">self</span>.Wv(x) <span class="co"># [B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> F.elu(query) <span class="op">+</span> <span class="dv">1</span> <span class="co"># [B, N, d_k]</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> F.elu(key) <span class="op">+</span> <span class="dv">1</span> <span class="co"># [B, N, d_k]</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">=</span> torch.matmul(key.transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>), value) <span class="co"># [B, d_k, N] * [B, N, d_k] -&gt; [B, d_k, d_k] TC=O(B*N*d_k^2)</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>        final <span class="op">=</span> torch.matmul(query, scores) <span class="co"># [B, N, d_k] * [B, d_k, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_k^2)</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        k_sum <span class="op">=</span> torch.<span class="bu">sum</span>(key, dim<span class="op">=-</span><span class="dv">2</span>).unsqueeze(<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        normalizer <span class="op">=</span> torch.matmul(query, k_sum) <span class="co"># [B, N , d_k] * [B, d_k, 1] -&gt; [B, N, 1] TC=O(B*N*d_k)</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>        eps <span class="op">=</span> <span class="fl">1e-6</span> <span class="co"># To use in case we dont divide by 0</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> final<span class="op">/</span>(normalizer <span class="op">+</span> eps) <span class="co"># [B, N, d_k]</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>d_k <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SingleHeadLinearaAttention(in_features <span class="op">=</span> d_model, out_features <span class="op">=</span> d_k).requires_grad_(<span class="va">False</span>).<span class="bu">eval</span>().to(device)</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>n_tokens <span class="op">=</span> <span class="dv">16384</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>inp <span class="op">=</span> torch.randn(<span class="dv">1</span>, n_tokens, d_model, device<span class="op">=</span>device)</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.time()</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>k<span class="op">=</span><span class="dv">50</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(k):</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> model(inp)</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time taken: </span><span class="sc">{</span>(time.time()<span class="op">-</span>start)<span class="op">/</span>k<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 0.039</code></pre>
+<pre><code>Time taken: 0.038</code></pre>
 </div>
 </div>
 

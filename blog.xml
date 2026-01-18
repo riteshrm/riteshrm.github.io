@@ -10,7 +10,244 @@
 <atom:link href="https://riteshrm.github.io/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Personal site of Ritesh Kumar Maurya.</description>
 <generator>quarto-1.8.26</generator>
-<lastBuildDate>Mon, 12 Jan 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 13 Jan 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>AI Engineering By Chip Huyen</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/AI Engineering By Chip Huyen/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<ul>
+<li>This is completely based on <a href="https://www.oreilly.com/library/view/ai-engineering/9781098166298/">AI Engineering By Chip Huyen</a></li>
+</ul>
+<!-- - For the code part, you can checkout this [link](https://github.com/riteshrm/Quantization-Fundamentals-deeplearning.ai-) -->
+<section id="chapter-1-introduction-to-building-ai-applications-with-foundation-models" class="level1">
+<h1>Chapter 1 Introduction to Building AI Applications with Foundation Models</h1>
+<section id="language-models-lms" class="level2">
+<h2 class="anchored" data-anchor-id="language-models-lms">Language Models (LMs)</h2>
+<section id="masked-language-models-mlm" class="level3">
+<h3 class="anchored" data-anchor-id="masked-language-models-mlm">Masked Language Models (MLM)</h3>
+<ul>
+<li>Predict missing tokens in a sentence<br>
+<em>Example:</em> <code>My favorite __ is blue</code></li>
+<li>Use <strong>bidirectional context</strong> (both previous and next tokens)</li>
+<li>Common use cases:
+<ul>
+<li>Sentiment analysis</li>
+<li>Text classification</li>
+<li>Code debugging (requires full contextual understanding)</li>
+</ul></li>
+<li><strong>Example:</strong> BERT (Bidirectional Encoder Representations from Transformers)</li>
+</ul>
+</section>
+<section id="generative-language-models" class="level3">
+<h3 class="anchored" data-anchor-id="generative-language-models">Generative Language Models</h3>
+<ul>
+<li>A language model can generate <strong>infinite outputs</strong> using a <strong>finite vocabulary</strong></li>
+<li>Models capable of producing open-ended outputs are called <strong>generative models</strong></li>
+<li>This forms the basis of <strong>Generative AI</strong></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="learning-paradigms" class="level2">
+<h2 class="anchored" data-anchor-id="learning-paradigms">Learning Paradigms</h2>
+<section id="self-supervised-learning" class="level3">
+<h3 class="anchored" data-anchor-id="self-supervised-learning">Self-Supervised Learning</h3>
+<ul>
+<li>Labels are automatically derived from the input data itself</li>
+</ul>
+</section>
+<section id="unsupervised-learning" class="level3">
+<h3 class="anchored" data-anchor-id="unsupervised-learning">Unsupervised Learning</h3>
+<ul>
+<li>No explicit labels are required</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="when-to-outsource-model-building" class="level2">
+<h2 class="anchored" data-anchor-id="when-to-outsource-model-building">When to Outsource Model Building</h2>
+<section id="build-in-house-when" class="level3">
+<h3 class="anchored" data-anchor-id="build-in-house-when">Build In-House When</h3>
+<ul>
+<li>The model is critical to business differentiation</li>
+<li>There is a risk of exposing intellectual property to competitors</li>
+</ul>
+</section>
+<section id="outsource-when" class="level3">
+<h3 class="anchored" data-anchor-id="outsource-when">Outsource When</h3>
+<ul>
+<li>It improves productivity and profitability</li>
+<li>It provides better performance and multiple vendor options</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="role-of-ai-in-products" class="level2">
+<h2 class="anchored" data-anchor-id="role-of-ai-in-products">Role of AI in Products</h2>
+<section id="critical-vs-complementary" class="level3">
+<h3 class="anchored" data-anchor-id="critical-vs-complementary">Critical vs Complementary</h3>
+<ul>
+<li><strong>Complementary:</strong><br>
+The application can function without AI (e.g., Gmail)</li>
+<li><strong>Critical:</strong><br>
+The application cannot function without AI (e.g., face recognition)<br>
+Requires high robustness and reliability</li>
+</ul>
+</section>
+<section id="reactive-vs-proactive" class="level3">
+<h3 class="anchored" data-anchor-id="reactive-vs-proactive">Reactive vs Proactive</h3>
+<ul>
+<li><strong>Reactive:</strong><br>
+Responds to user inputs (e.g., chat-based responses)</li>
+<li><strong>Proactive:</strong><br>
+Takes initiative (e.g., traffic alerts in navigation apps)</li>
+</ul>
+</section>
+<section id="static-vs-dynamic" class="level3">
+<h3 class="anchored" data-anchor-id="static-vs-dynamic">Static vs Dynamic</h3>
+<ul>
+<li><strong>Static:</strong><br>
+Features are updated only during application upgrades</li>
+<li><strong>Dynamic:</strong><br>
+Features evolve continuously based on user feedback</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="automation-in-products-microsoft-framework" class="level2">
+<h2 class="anchored" data-anchor-id="automation-in-products-microsoft-framework">Automation in Products (Microsoft Framework)</h2>
+<ul>
+<li><strong>Crawl:</strong><br>
+Human involvement is required</li>
+<li><strong>Walk:</strong><br>
+AI assists and interacts with internal employees</li>
+<li><strong>Run:</strong><br>
+AI directly interacts with end users</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Key Insight
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Achieving <strong>0–60% automation is relatively easy</strong>, but moving from <strong>60–100% automation is extremely challenging</strong>.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="three-layers-of-the-ai-stack" class="level2">
+<h2 class="anchored" data-anchor-id="three-layers-of-the-ai-stack">Three Layers of the AI Stack</h2>
+<section id="application-development-layer" class="level3">
+<h3 class="anchored" data-anchor-id="application-development-layer">Application Development Layer</h3>
+<ul>
+<li>AI Interface</li>
+<li>Prompt Engineering</li>
+<li>Context Construction</li>
+<li>Evaluation</li>
+</ul>
+</section>
+<section id="model-development-layer" class="level3">
+<h3 class="anchored" data-anchor-id="model-development-layer">Model Development Layer</h3>
+<ul>
+<li>Inference Optimization</li>
+<li>Dataset Engineering</li>
+<li>Modeling and Training</li>
+<li>Evaluation</li>
+</ul>
+</section>
+<section id="infrastructure-layer" class="level3">
+<h3 class="anchored" data-anchor-id="infrastructure-layer">Infrastructure Layer</h3>
+<ul>
+<li>Compute Management</li>
+<li>Data Management</li>
+<li>Model Serving</li>
+<li>Monitoring</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="ai-engineering-vs-ml-engineering" class="level2">
+<h2 class="anchored" data-anchor-id="ai-engineering-vs-ml-engineering">AI Engineering vs ML Engineering</h2>
+<section id="ai-engineering" class="level3">
+<h3 class="anchored" data-anchor-id="ai-engineering">AI Engineering</h3>
+<ul>
+<li>Uses pretrained models</li>
+<li>Works with large-scale models</li>
+<li>Requires higher compute resources</li>
+<li>Workflow:<br>
+<strong>Product → Data → Model</strong></li>
+</ul>
+</section>
+<section id="ml-engineering" class="level3">
+<h3 class="anchored" data-anchor-id="ml-engineering">ML Engineering</h3>
+<ul>
+<li>Trains models from scratch</li>
+<li>Requires fewer resources</li>
+<li>Workflow:<br>
+<strong>Data → Model → Product</strong></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="adapting-pretrained-models" class="level2">
+<h2 class="anchored" data-anchor-id="adapting-pretrained-models">Adapting Pretrained Models</h2>
+<ul>
+<li><strong>Prompt Engineering</strong></li>
+<li><strong>Fine-tuning</strong>
+<ul>
+<li>Training a pretrained model on a new task not seen during pretraining</li>
+</ul></li>
+</ul>
+<hr>
+</section>
+<section id="training-stages" class="level2">
+<h2 class="anchored" data-anchor-id="training-stages">Training Stages</h2>
+<section id="pretraining" class="level3">
+<h3 class="anchored" data-anchor-id="pretraining">Pretraining</h3>
+<ul>
+<li>Resource-intensive (large data and compute)</li>
+<li>Model weights initialized randomly</li>
+<li>Trained for general text completion</li>
+</ul>
+</section>
+<section id="fine-tuning" class="level3">
+<h3 class="anchored" data-anchor-id="fine-tuning">Fine-tuning</h3>
+<ul>
+<li>Requires significantly less data and compute</li>
+<li>Adapts the model to task-specific objectives</li>
+</ul>
+</section>
+<section id="post-training" class="level3">
+<h3 class="anchored" data-anchor-id="post-training">Post-training</h3>
+<ul>
+<li>Often used interchangeably with fine-tuning</li>
+<li><strong>Model developers:</strong><br>
+Perform post-training before releasing the model (e.g., instruction-following)</li>
+<li><strong>Application developers:</strong><br>
+Fine-tune released models for specific downstream tasks</li>
+</ul>
+
+
+</section>
+</section>
+</section>
+
+ ]]></description>
+  <category>Applied ML</category>
+  <guid>https://riteshrm.github.io/posts/AI Engineering By Chip Huyen/</guid>
+  <pubDate>Tue, 13 Jan 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/AI Engineering By Chip Huyen/cover.png" medium="image" type="image/png" height="187" width="144"/>
+</item>
 <item>
   <title>Attention</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
@@ -40,25 +277,25 @@
 <section id="transformers" class="level3">
 <h3 class="anchored" data-anchor-id="transformers">Transformers</h3>
 <ul>
-<li>Given a sequence of length N, where each token is represented by Dmodel numbers, we compute three matrices
+<li>Given a sequence of length N, where each token is represented by d_model numbers, we compute three matrices
 <ul>
 <li>Query = XWq (what I’m looking for)</li>
 <li>Key = XWk (what I have)</li>
 <li>Value = XWv (the information I’ll give if I’m relevant)</li>
-<li>Wq and Wk are of same shape and to maintain the symmetry Wv is also kept to be of same shape, Wq,Wk [Dmodel, Dk] and Wv [Dmodel, Dv]</li>
+<li>Wq and Wk are of same shape and to maintain the symmetry Wv is also kept to be of same shape, Wq,Wk [d_model, d_k] and Wv [d_model, Dv]</li>
 </ul></li>
 <li>Now to find out which key is more relevant to given queries we do matrix multiplication and the finally apply softmax to get probability
 <ul>
 <li>score = QueryKey^T</li>
-<li>attn = softmax(score/sqrt(Dk))</li>
+<li>attn = softmax(score/sqrt(d_k))</li>
 <li>Why scaling factor
 <ul>
-<li>this score dot product has variance of Dk, which causes instability in backpropagation
+<li>this score dot product has variance of d_k, which causes instability in backpropagation
 <ul>
-<li>lets say we have two vectors q and k of dimension dk</li>
+<li>lets say we have two vectors q and k of dimension d_k</li>
 <li>E[qi]=E[ki] = 0</li>
 <li>var[qi]=var[ki] = 1</li>
-<li>then E[q.k] = 0 but var[q.k] = dk <a href="https://funnywii.com/upload/proof.pdf">link</a></li>
+<li>then E[q.k] = 0 but var[q.k] = d_k <a href="https://funnywii.com/upload/proof.pdf">link</a></li>
 </ul></li>
 <li>the derivative of softmax contains some terms which if not normalizaied lead to gradient nearly 0 becuase of this larger variance</li>
 <li><img src="https://latex.codecogs.com/png.latex?%5Ctext%7BSoftmax%7D(z_i)%20=%20%5Cfrac%7Be%5E%7Bz_i%7D%7D%7B%5Csum_j%20e%5E%7Bz_j%7D%7D"></li>
@@ -70,14 +307,14 @@
 <li>Diagonal: <img src="https://latex.codecogs.com/png.latex?s_1(1-s_1)%20%5Capprox%201(0)%20=%200">.</li>
 <li>Off-Diagonal: <img src="https://latex.codecogs.com/png.latex?-s_1%20s_2%20%5Capprox%20-1(0)%20=%200">.</li>
 </ul></li>
-<li>to enforce unit variance, we apply normalization by dividng the score by standard deviation i.e.&nbsp;sqrt(Dk)</li>
+<li>to enforce unit variance, we apply normalization by dividng the score by standard deviation i.e.&nbsp;sqrt(d_k)</li>
 </ul></li>
 </ul></li>
 </ul>
 </section>
 <section id="single-head-vanilla-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="single-head-vanilla-attention-pytorch-code">Single Head Vanilla Attention PyTorch Code</h3>
-<div id="d13484cc" class="cell" data-execution_count="1">
+<div id="f5e2006c" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -120,7 +357,7 @@ font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
 background-color: null;
-font-style: inherit;">self</span>, in_features, out_features):</span>
+font-style: inherit;">self</span>, d_model, d_k):</span>
 <span id="cb1-10">        <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">super</span>().<span class="fu" style="color: #4758AB;
@@ -128,14 +365,14 @@ background-color: null;
 font-style: inherit;">__init__</span>()</span>
 <span id="cb1-11">        <span class="va" style="color: #111111;
 background-color: null;
-font-style: inherit;">self</span>.in_features <span class="op" style="color: #5E5E5E;
+font-style: inherit;">self</span>.d_model <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">=</span> in_features</span>
+font-style: inherit;">=</span> d_model</span>
 <span id="cb1-12">        <span class="va" style="color: #111111;
 background-color: null;
-font-style: inherit;">self</span>.out_features <span class="op" style="color: #5E5E5E;
+font-style: inherit;">self</span>.d_k <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">=</span> out_features</span>
+font-style: inherit;">=</span> d_k</span>
 <span id="cb1-13">        <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.Wq <span class="op" style="color: #5E5E5E;
@@ -144,11 +381,11 @@ font-style: inherit;">=</span> nn.Linear(in_features <span class="op" style="col
 background-color: null;
 font-style: inherit;">=</span> <span class="va" style="color: #111111;
 background-color: null;
-font-style: inherit;">self</span>.in_features, out_features <span class="op" style="color: #5E5E5E;
+font-style: inherit;">self</span>.d_model, out_features <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="va" style="color: #111111;
 background-color: null;
-font-style: inherit;">self</span>.out_features)</span>
+font-style: inherit;">self</span>.d_k)</span>
 <span id="cb1-14">        <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.Wk <span class="op" style="color: #5E5E5E;
@@ -157,11 +394,11 @@ font-style: inherit;">=</span> nn.Linear(in_features <span class="op" style="col
 background-color: null;
 font-style: inherit;">=</span> <span class="va" style="color: #111111;
 background-color: null;
-font-style: inherit;">self</span>.in_features, out_features <span class="op" style="color: #5E5E5E;
+font-style: inherit;">self</span>.d_model, out_features <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="va" style="color: #111111;
 background-color: null;
-font-style: inherit;">self</span>.out_features)</span>
+font-style: inherit;">self</span>.d_k)</span>
 <span id="cb1-15">        <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.Wv <span class="op" style="color: #5E5E5E;
@@ -170,11 +407,11 @@ font-style: inherit;">=</span> nn.Linear(in_features <span class="op" style="col
 background-color: null;
 font-style: inherit;">=</span> <span class="va" style="color: #111111;
 background-color: null;
-font-style: inherit;">self</span>.in_features, out_features <span class="op" style="color: #5E5E5E;
+font-style: inherit;">self</span>.d_model, out_features <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="va" style="color: #111111;
 background-color: null;
-font-style: inherit;">self</span>.out_features)</span>
+font-style: inherit;">self</span>.d_k)</span>
 <span id="cb1-16"></span>
 <span id="cb1-17">    <span class="kw" style="color: #003B4F;
 background-color: null;
@@ -188,21 +425,21 @@ font-style: inherit;">=</span> <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.Wq(x) <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># [B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
+font-style: inherit;"># [B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
 <span id="cb1-19">        key <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.Wk(x)   <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">#[B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
+font-style: inherit;">#[B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
 <span id="cb1-20">        value <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.Wv(x) <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># [B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
+font-style: inherit;"># [B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
 <span id="cb1-21"></span>
 <span id="cb1-22">        scores <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -218,13 +455,13 @@ font-style: inherit;">2</span>))<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">/</span>(<span class="va" style="color: #111111;
 background-color: null;
-font-style: inherit;">self</span>.out_features<span class="op" style="color: #5E5E5E;
+font-style: inherit;">self</span>.d_k<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">**</span><span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.5</span>) <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># [B, N, Dk] * [B, Dk, N] -&gt; [B, N, N] TC=O(B*N^2*Dk)</span></span>
+font-style: inherit;"># [B, N, d_k] * [B, d_k, N] -&gt; [B, N, N] TC=O(B*N^2*d_k)</span></span>
 <span id="cb1-23"></span>
 <span id="cb1-24">        attn <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -240,20 +477,20 @@ font-style: inherit;"># [B, N, N]</span></span>
 background-color: null;
 font-style: inherit;">=</span> torch.matmul(attn, value) <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># [B, N, N] * [B, N, Dk] -&gt; [B, N, Dk]  TC=O(B*N^2*Dk)</span></span>
+font-style: inherit;"># [B, N, N] * [B, N, d_k] -&gt; [B, N, d_k]  TC=O(B*N^2*d_k)</span></span>
 <span id="cb1-27">        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> final <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># [B, N, Dk]</span></span>
+font-style: inherit;"># [B, N, d_k]</span></span>
 <span id="cb1-28"></span>
-<span id="cb1-29">Dmodel <span class="op" style="color: #5E5E5E;
+<span id="cb1-29">d_model <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">512</span></span>
-<span id="cb1-30">Dk <span class="op" style="color: #5E5E5E;
+<span id="cb1-30">d_k <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
 background-color: null;
@@ -261,11 +498,11 @@ font-style: inherit;">512</span></span>
 <span id="cb1-31"></span>
 <span id="cb1-32">model <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">=</span> SingleHeadVanillaAttention(in_features <span class="op" style="color: #5E5E5E;
+font-style: inherit;">=</span> SingleHeadVanillaAttention(d_model <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">=</span> Dmodel, out_features <span class="op" style="color: #5E5E5E;
+font-style: inherit;">=</span> d_model, d_k <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">=</span> Dk).requires_grad_(<span class="va" style="color: #111111;
+font-style: inherit;">=</span> d_k).requires_grad_(<span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">False</span>).<span class="bu" style="color: null;
 background-color: null;
@@ -280,7 +517,7 @@ font-style: inherit;">16384</span></span>
 background-color: null;
 font-style: inherit;">=</span> torch.randn(<span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">1</span>, n_tokens, Dmodel, device<span class="op" style="color: #5E5E5E;
+font-style: inherit;">1</span>, n_tokens, d_model, device<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>device)</span>
 <span id="cb1-36"></span>
@@ -326,7 +563,786 @@ font-style: inherit;">:.3f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 0.444</code></pre>
+<pre><code>Time taken: 0.457</code></pre>
+</div>
+</div>
+</section>
+<section id="multi-head-vanilla-attention-for-loop-pytorch-code" class="level3">
+<h3 class="anchored" data-anchor-id="multi-head-vanilla-attention-for-loop-pytorch-code">Multi Head Vanilla Attention For loop PyTorch Code</h3>
+<div id="1b1ce56c" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb3-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> nn</span>
+<span id="cb3-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn.functional <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> F</span>
+<span id="cb3-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> time</span>
+<span id="cb3-5"></span>
+<span id="cb3-6">device <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.device(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"cuda"</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> torch.cuda.is_available() <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"cpu"</span>)</span>
+<span id="cb3-7"></span>
+<span id="cb3-8"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> MultiHeadVanillaAttention(nn.Module):</span>
+<span id="cb3-9">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, d_model, num_heads, head_dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>):</span>
+<span id="cb3-10">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">super</span>().<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>()</span>
+<span id="cb3-11">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> d_model</span>
+<span id="cb3-12">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.num_heads <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> num_heads</span>
+<span id="cb3-13">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> head_dim <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">is</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>:</span>
+<span id="cb3-14">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_k <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> d_model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.num_heads</span>
+<span id="cb3-15">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span>:</span>
+<span id="cb3-16">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_k <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> head_dim</span>
+<span id="cb3-17">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.Wq <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.ModuleList([nn.Linear(in_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_model, out_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_k) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.num_heads)])</span>
+<span id="cb3-18">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.Wk <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.ModuleList([nn.Linear(in_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_model, out_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_k) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.num_heads)])</span>
+<span id="cb3-19">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.Wv <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.ModuleList([nn.Linear(in_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_model, out_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_k) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.num_heads)])</span>
+<span id="cb3-20">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.out <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Linear(in_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_k <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.num_heads, out_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_model)</span>
+<span id="cb3-21"></span>
+<span id="cb3-22">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> forward(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, x):</span>
+<span id="cb3-23">        query <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.Wq[i](x) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.num_heads)] <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb3-24">        key <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.Wk[i](x) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.num_heads)]   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#[B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb3-25">        value <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.Wv[i](x) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.num_heads)] <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb3-26"></span>
+<span id="cb3-27">        scores <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [torch.matmul(query[i], key[i].transpose(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>))<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_k<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.5</span>) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.num_heads)] <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [B, N, d_k] * [B, d_k, N] -&gt; [B, N, N] TC=O(B*N^2*d_k)</span></span>
+<span id="cb3-28"></span>
+<span id="cb3-29">        attn <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [F.softmax(scores[i], dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.num_heads)] <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [B, N, N]</span></span>
+<span id="cb3-30"></span>
+<span id="cb3-31">        final <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [torch.matmul(attn[i], value[i]) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.num_heads)] <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [B, N, N] * [B, N, d_k] -&gt; [B, N, d_k]  TC=O(B*N^2*d_k)</span></span>
+<span id="cb3-32">        final <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.cat(final, dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb3-33"></span>
+<span id="cb3-34">        projout <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.out(final)</span>
+<span id="cb3-35"></span>
+<span id="cb3-36">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> projout <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [B, N, d_model]</span></span>
+<span id="cb3-37"></span>
+<span id="cb3-38">d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">512</span></span>
+<span id="cb3-39">d_k <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">512</span></span>
+<span id="cb3-40"></span>
+<span id="cb3-41">model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> MultiHeadVanillaAttention(d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> d_model, num_heads<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, head_dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">32</span>).requires_grad_(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">eval</span>().to(device)</span>
+<span id="cb3-42"></span>
+<span id="cb3-43">n_tokens <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16384</span></span>
+<span id="cb3-44">inp <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.randn(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, n_tokens, d_model, device<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>device)</span>
+<span id="cb3-45"></span>
+<span id="cb3-46">torch.cuda.synchronize()</span>
+<span id="cb3-47">start <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> time.time()</span>
+<span id="cb3-48">k<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span></span>
+<span id="cb3-49"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(k):</span>
+<span id="cb3-50">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">with</span> torch.no_grad():</span>
+<span id="cb3-51">        out <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model(inp)</span>
+<span id="cb3-52">torch.cuda.synchronize()</span>
+<span id="cb3-53"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Time taken: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>(time.time()<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>start)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>k<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.3f}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time taken: 0.769</code></pre>
+</div>
+</div>
+</section>
+<section id="multi-head-vanilla-attention-pytorch-code" class="level3">
+<h3 class="anchored" data-anchor-id="multi-head-vanilla-attention-pytorch-code">Multi Head Vanilla Attention PyTorch Code</h3>
+<div id="555e4a1d" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb5-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> nn</span>
+<span id="cb5-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn.functional <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> F</span>
+<span id="cb5-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> time</span>
+<span id="cb5-5"></span>
+<span id="cb5-6">device <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.device(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"cuda"</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> torch.cuda.is_available() <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"cpu"</span>)</span>
+<span id="cb5-7"></span>
+<span id="cb5-8"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> MultiHeadVanillaAttention(nn.Module):</span>
+<span id="cb5-9">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, d_model, head_dim, num_heads):</span>
+<span id="cb5-10">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">super</span>().<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>()</span>
+<span id="cb5-11">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> d_model</span>
+<span id="cb5-12">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_k <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> head_dim <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> num_heads</span>
+<span id="cb5-13">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.head_dim <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> head_dim</span>
+<span id="cb5-14">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.num_heads <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> num_heads</span>
+<span id="cb5-15">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.Wq <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Linear(in_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_model, out_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_k)</span>
+<span id="cb5-16">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.Wk <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Linear(in_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_model, out_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_k)</span>
+<span id="cb5-17">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.Wv <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Linear(in_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_model, out_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_k)</span>
+<span id="cb5-18"></span>
+<span id="cb5-19">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.out <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Linear(in_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_k, out_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_model)</span>
+<span id="cb5-20">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> forward(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, x):</span>
+<span id="cb5-21">        batch_size <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> x.shape[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]</span>
+<span id="cb5-22">        query <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.Wq(x) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb5-23">        key <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.Wk(x)   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#[B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb5-24">        value <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.Wv(x) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb5-25"></span>
+<span id="cb5-26">        query <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> query.view(batch_size, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.num_heads, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.head_dim).transpose(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [B, N, d_k] -&gt; [B, N, num_heads, head_dim] -&gt; [B, num_heads, N, head_dim]</span></span>
+<span id="cb5-27">        key <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> key.view(batch_size, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.num_heads, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.head_dim).transpose(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [B, N, d_k] -&gt; [B, N, num_heads, head_dim] -&gt; [B, num_heads, N, head_dim]</span></span>
+<span id="cb5-28">        value <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> value.view(batch_size, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.num_heads, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.head_dim).transpose(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [B, N, d_k] -&gt; [B, N, num_heads, head_dim] -&gt; [B, num_heads, N, head_dim]</span></span>
+<span id="cb5-29"></span>
+<span id="cb5-30"></span>
+<span id="cb5-31">        scores <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.matmul(query, key.transpose(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>))<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.head_dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.5</span>) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [B, num_heads, N, head_dim] * [B, num_heads, head_dim, N] -&gt; [B, num_heads, N, N] TC=O(B*N^2*d_k)</span></span>
+<span id="cb5-32"></span>
+<span id="cb5-33">        attn <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> F.softmax(scores, dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [B, num_heads, N, N]</span></span>
+<span id="cb5-34"></span>
+<span id="cb5-35">        final <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.matmul(attn, value).permute(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>).reshape(batch_size, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.d_k) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [B, num_heads, N, N] * [B, num_heads, N, head_dim] -&gt; [B, N, d_k]  TC=O(B*N^2*d_k)</span></span>
+<span id="cb5-36">        projout <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.out(final) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [B, N, d_k] -&gt; [B, N, d_model]</span></span>
+<span id="cb5-37">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> projout <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># [B, N, d_model]</span></span>
+<span id="cb5-38"></span>
+<span id="cb5-39"></span>
+<span id="cb5-40">d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">512</span></span>
+<span id="cb5-41">d_k <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">512</span></span>
+<span id="cb5-42"></span>
+<span id="cb5-43">model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> MultiHeadVanillaAttention(d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> d_model, num_heads<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, head_dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">32</span>).requires_grad_(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">eval</span>().to(device)</span>
+<span id="cb5-44"></span>
+<span id="cb5-45">n_tokens <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16384</span></span>
+<span id="cb5-46">inp <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.randn(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, n_tokens, d_model, device<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>device)</span>
+<span id="cb5-47"></span>
+<span id="cb5-48">torch.cuda.synchronize()</span>
+<span id="cb5-49">start <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> time.time()</span>
+<span id="cb5-50">k<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span></span>
+<span id="cb5-51"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(k):</span>
+<span id="cb5-52">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">with</span> torch.no_grad():</span>
+<span id="cb5-53">        out <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model(inp)</span>
+<span id="cb5-54">torch.cuda.synchronize()</span>
+<span id="cb5-55"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Time taken: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>(time.time()<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>start)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>k<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.3f}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time taken: 2.617</code></pre>
 </div>
 </div>
 </section>
@@ -363,25 +1379,25 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
 </section>
 <section id="single-head-linear-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="single-head-linear-attention-pytorch-code">Single Head Linear Attention PyTorch Code</h3>
-<div id="5060c1b3" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
+<div id="a492edb0" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
-<span id="cb3-2"><span class="im" style="color: #00769E;
+<span id="cb7-2"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch.nn <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">as</span> nn</span>
-<span id="cb3-3"><span class="im" style="color: #00769E;
+<span id="cb7-3"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch.nn.functional <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">as</span> F</span>
-<span id="cb3-4"><span class="im" style="color: #00769E;
+<span id="cb7-4"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> time</span>
-<span id="cb3-5"></span>
-<span id="cb3-6">device <span class="op" style="color: #5E5E5E;
+<span id="cb7-5"></span>
+<span id="cb7-6">device <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> torch.device(<span class="st" style="color: #20794D;
 background-color: null;
@@ -394,12 +1410,12 @@ font-weight: bold;
 font-style: inherit;">else</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"cpu"</span>)</span>
-<span id="cb3-7"></span>
-<span id="cb3-8"><span class="kw" style="color: #003B4F;
+<span id="cb7-7"></span>
+<span id="cb7-8"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">class</span> SingleHeadLinearaAttention(nn.Module):</span>
-<span id="cb3-9">    <span class="kw" style="color: #003B4F;
+<span id="cb7-9">    <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
@@ -407,22 +1423,22 @@ background-color: null;
 font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>, in_features, out_features):</span>
-<span id="cb3-10">        <span class="bu" style="color: null;
+<span id="cb7-10">        <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">super</span>().<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">__init__</span>()</span>
-<span id="cb3-11">        <span class="va" style="color: #111111;
+<span id="cb7-11">        <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.in_features <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> in_features</span>
-<span id="cb3-12">        <span class="va" style="color: #111111;
+<span id="cb7-12">        <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.out_features <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> out_features</span>
-<span id="cb3-13">        <span class="va" style="color: #111111;
+<span id="cb7-13">        <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.Wq <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -435,7 +1451,7 @@ background-color: null;
 font-style: inherit;">=</span> <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.out_features)</span>
-<span id="cb3-14">        <span class="va" style="color: #111111;
+<span id="cb7-14">        <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.Wk <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -448,7 +1464,7 @@ background-color: null;
 font-style: inherit;">=</span> <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.out_features)</span>
-<span id="cb3-15">        <span class="va" style="color: #111111;
+<span id="cb7-15">        <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.Wv <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -461,36 +1477,36 @@ background-color: null;
 font-style: inherit;">=</span> <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.out_features)</span>
-<span id="cb3-16"></span>
-<span id="cb3-17">    <span class="kw" style="color: #003B4F;
+<span id="cb7-16"></span>
+<span id="cb7-17">    <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> forward(<span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>, x):</span>
-<span id="cb3-18">        query <span class="op" style="color: #5E5E5E;
+<span id="cb7-18">        query <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.Wq(x) <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># [B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
-<span id="cb3-19">        key <span class="op" style="color: #5E5E5E;
+font-style: inherit;"># [B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb7-19">        key <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.Wk(x)   <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">#[B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
-<span id="cb3-20">        value <span class="op" style="color: #5E5E5E;
+font-style: inherit;">#[B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb7-20">        value <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.Wv(x) <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># [B, N, Dmodel] * [Dmodel, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dmodel*Dk)</span></span>
-<span id="cb3-21"></span>
-<span id="cb3-22">        query <span class="op" style="color: #5E5E5E;
+font-style: inherit;"># [B, N, d_model] * [d_model, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_model*d_k)</span></span>
+<span id="cb7-21"></span>
+<span id="cb7-22">        query <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> F.elu(query) <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -498,8 +1514,8 @@ font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span> <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># [B, N, Dk]</span></span>
-<span id="cb3-23">        key <span class="op" style="color: #5E5E5E;
+font-style: inherit;"># [B, N, d_k]</span></span>
+<span id="cb7-23">        key <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> F.elu(key) <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -507,9 +1523,9 @@ font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span> <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># [B, N, Dk]</span></span>
-<span id="cb3-24"></span>
-<span id="cb3-25">        scores <span class="op" style="color: #5E5E5E;
+font-style: inherit;"># [B, N, d_k]</span></span>
+<span id="cb7-24"></span>
+<span id="cb7-25">        scores <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> torch.matmul(key.transpose(<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -521,14 +1537,14 @@ font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">2</span>), value) <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># [B, Dk, N] * [B, N, Dk] -&gt; [B, Dk, Dk] TC=O(B*N*Dk^2)</span></span>
-<span id="cb3-26"></span>
-<span id="cb3-27">        final <span class="op" style="color: #5E5E5E;
+font-style: inherit;"># [B, d_k, N] * [B, N, d_k] -&gt; [B, d_k, d_k] TC=O(B*N*d_k^2)</span></span>
+<span id="cb7-26"></span>
+<span id="cb7-27">        final <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> torch.matmul(query, scores) <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># [B, N, Dk] * [B, Dk, Dk] -&gt; [B, N, Dk] TC=O(B*N*Dk^2)</span></span>
-<span id="cb3-28">        k_sum <span class="op" style="color: #5E5E5E;
+font-style: inherit;"># [B, N, d_k] * [B, d_k, d_k] -&gt; [B, N, d_k] TC=O(B*N*d_k^2)</span></span>
+<span id="cb7-28">        k_sum <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> torch.<span class="bu" style="color: null;
 background-color: null;
@@ -541,21 +1557,21 @@ background-color: null;
 font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>)</span>
-<span id="cb3-29"></span>
-<span id="cb3-30">        normalizer <span class="op" style="color: #5E5E5E;
+<span id="cb7-29"></span>
+<span id="cb7-30">        normalizer <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> torch.matmul(query, k_sum) <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># [B, N , Dk] * [B, Dk, 1] -&gt; [B, N, 1] TC=O(B*N*Dk)</span></span>
-<span id="cb3-31">        eps <span class="op" style="color: #5E5E5E;
+font-style: inherit;"># [B, N , d_k] * [B, d_k, 1] -&gt; [B, N, 1] TC=O(B*N*d_k)</span></span>
+<span id="cb7-31">        eps <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1e-6</span> <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># To use in case we dont divide by 0</span></span>
-<span id="cb3-32"></span>
-<span id="cb3-33">        <span class="cf" style="color: #003B4F;
+<span id="cb7-32"></span>
+<span id="cb7-33">        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> final<span class="op" style="color: #5E5E5E;
@@ -564,54 +1580,54 @@ font-style: inherit;">/</span>(normalizer <span class="op" style="color: #5E5E5E
 background-color: null;
 font-style: inherit;">+</span> eps) <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># [B, N, Dk]</span></span>
-<span id="cb3-34"></span>
-<span id="cb3-35">Dmodel <span class="op" style="color: #5E5E5E;
+font-style: inherit;"># [B, N, d_k]</span></span>
+<span id="cb7-34"></span>
+<span id="cb7-35">d_model <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">512</span></span>
-<span id="cb3-36">Dk <span class="op" style="color: #5E5E5E;
+<span id="cb7-36">d_k <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">512</span></span>
-<span id="cb3-37"></span>
-<span id="cb3-38">model <span class="op" style="color: #5E5E5E;
+<span id="cb7-37"></span>
+<span id="cb7-38">model <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> SingleHeadLinearaAttention(in_features <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">=</span> Dmodel, out_features <span class="op" style="color: #5E5E5E;
+font-style: inherit;">=</span> d_model, out_features <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">=</span> Dk).requires_grad_(<span class="va" style="color: #111111;
+font-style: inherit;">=</span> d_k).requires_grad_(<span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">False</span>).<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">eval</span>().to(device)</span>
-<span id="cb3-39"></span>
-<span id="cb3-40">n_tokens <span class="op" style="color: #5E5E5E;
+<span id="cb7-39"></span>
+<span id="cb7-40">n_tokens <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">16384</span></span>
-<span id="cb3-41">inp <span class="op" style="color: #5E5E5E;
+<span id="cb7-41">inp <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> torch.randn(<span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">1</span>, n_tokens, Dmodel, device<span class="op" style="color: #5E5E5E;
+font-style: inherit;">1</span>, n_tokens, d_model, device<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>device)</span>
-<span id="cb3-42"></span>
-<span id="cb3-43">torch.cuda.synchronize()</span>
-<span id="cb3-44">start <span class="op" style="color: #5E5E5E;
+<span id="cb7-42"></span>
+<span id="cb7-43">torch.cuda.synchronize()</span>
+<span id="cb7-44">start <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> time.time()</span>
-<span id="cb3-45">k<span class="op" style="color: #5E5E5E;
+<span id="cb7-45">k<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">50</span></span>
-<span id="cb3-46"><span class="cf" style="color: #003B4F;
+<span id="cb7-46"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
@@ -620,15 +1636,15 @@ font-weight: bold;
 font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">range</span>(k):</span>
-<span id="cb3-47">    <span class="cf" style="color: #003B4F;
+<span id="cb7-47">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">with</span> torch.no_grad():</span>
-<span id="cb3-48">        out <span class="op" style="color: #5E5E5E;
+<span id="cb7-48">        out <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> model(inp)</span>
-<span id="cb3-49">torch.cuda.synchronize()</span>
-<span id="cb3-50"><span class="bu" style="color: null;
+<span id="cb7-49">torch.cuda.synchronize()</span>
+<span id="cb7-50"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
 background-color: null;
@@ -644,7 +1660,7 @@ font-style: inherit;">:.3f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 0.039</code></pre>
+<pre><code>Time taken: 0.038</code></pre>
 </div>
 </div>
 
@@ -998,7 +2014,7 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
 <li>r = s(q-z) q = int(round(r/s+z))</li>
 </ul></li>
 </ul>
-<div id="6815bb53" class="cell" data-execution_count="1">
+<div id="c5fe23e1" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -1329,7 +2345,7 @@ font-style: inherit;">=</span> linear_dequantization(</span>
 </ul></li>
 </ul></li>
 </ul>
-<div id="50398d43" class="cell" data-execution_count="2">
+<div id="1898040d" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -1443,7 +2459,7 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 <li>q = int(round(r/s))</li>
 <li>s = r_max/q_max</li>
 </ul>
-<div id="ab03eccd" class="cell" data-execution_count="3">
+<div id="7ef43c75" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -1542,7 +2558,7 @@ font-style: inherit;">return</span> quantized_tensor, scale</span></code></pre><
 <ul>
 <li>we usually use per channel quantization in int8</li>
 </ul>
-<div id="8d88c430" class="cell" data-execution_count="4">
+<div id="8f9de23f" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -1631,7 +2647,7 @@ font-style: inherit;">return</span> quantized_tensor, scale</span></code></pre><
 </ul></li>
 </ul></li>
 </ul>
-<div id="263d6eaa" class="cell" data-execution_count="5">
+<div id="820ef550" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -1744,7 +2760,7 @@ font-style: inherit;">return</span> dequantized_tensor</span></code></pre></div>
 </section>
 <section id="custom-build-an-8-bit-quantizer" class="level3">
 <h3 class="anchored" data-anchor-id="custom-build-an-8-bit-quantizer">Custom Build an 8-Bit Quantizer</h3>
-<div id="03fed75b" class="cell" data-execution_count="6">
+<div id="00cb1c59" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#W8A16LinearLayer</span></span>
@@ -1795,7 +2811,7 @@ background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> output</span></code></pre></div></div>
 </div>
-<div id="499dd61b" class="cell" data-execution_count="7">
+<div id="04786d79" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -1903,7 +2919,7 @@ font-style: inherit;">[0m"</span>)</span></code></pre></div></div>
 <li><p>This way instead of storing a parameter, we just store a buffer, meaning we don’t need to compute gradients on the tensor.</p></li>
 <li><p>You can initialize it with whatever dtype you want.</p></li>
 </ul>
-<div id="1626a9ee" class="cell" data-execution_count="8">
+<div id="9ebeddc0" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -2024,7 +3040,7 @@ background-color: null;
 font-style: inherit;">self</span>.bias)</span></code></pre></div></div>
 </div>
 <p><strong>Quantize a Base Model</strong></p>
-<div id="4c2f2317" class="cell" data-execution_count="9">
+<div id="21fc86a3" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -2245,20 +3261,20 @@ background-color: null;
 font-style: inherit;">abs</span>().mean())</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Weights before:
- tensor([[-128,   24,  -55,   18],
-        [  24,  -95,   84,   47],
-        [  84,   41,  -76,   51],
-        [  73,  -22,   38, -126],
-        [-115,  -83,   55,  -76],
-        [  90,  -31,   -8,   64],
-        [ 117,  115,  -45,   34],
-        [ 120,   19,   26, -103]], dtype=torch.int8)
+ tensor([[  62,  -21,   30,   23],
+        [  -8,  -53,  -29,  101],
+        [  76,  -19,  -89, -122],
+        [  59,  -51,  -86,  111],
+        [ -44,   94,  -11,   84],
+        [-122,   57,   -3,   68],
+        [  -5,   62,   79,   78],
+        [ -10,   67,  -34,  -18]], dtype=torch.int8)
 Weights After:
- tensor([[-127,   -3,  -41,  -80,   -3,   28,   50,   34],
-        [  25,   31, -127,   59,   64,  -98,  -23,   74],
-        [-123,  -49,  -13,   73,   -7,   -2,  102,  127],
-        [   6,   -2, -127,  -69, -124,  -40,   38,   33]], dtype=torch.int8)
-Average quantiation error:- tensor(0.0025, dtype=torch.bfloat16)</code></pre>
+ tensor([[-127,   66,  -57,   17,  -43, -120,   46,  -27],
+        [ -82,  -80,   83,  -60,  127,  -49,  -38,  -19],
+        [  -2,   74,  126,  -46,   53,    0,  127,   63],
+        [-117,  127,   96,   -6,   45,   78,  -11,   28]], dtype=torch.int8)
+Average quantiation error:- tensor(0.0022, dtype=torch.bfloat16)</code></pre>
 </div>
 </div>
 </section>
@@ -2267,7 +3283,7 @@ Average quantiation error:- tensor(0.0025, dtype=torch.bfloat16)</code></pre>
 <ul>
 <li>For language models, it better to not quantize the last layer.</li>
 </ul>
-<div id="f86cef17" class="cell" data-execution_count="10">
+<div id="c93a76f1" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -2573,7 +3589,7 @@ model_2 DummyModel(
 </section>
 <section id="quantize-any-open-source-pytorch-model" class="level3">
 <h3 class="anchored" data-anchor-id="quantize-any-open-source-pytorch-model">Quantize any Open Source PyTorch Model</h3>
-<div id="a5ef87be" class="cell" data-execution_count="11">
+<div id="ab608af0" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> transformers <span class="im" style="color: #00769E;
@@ -2759,7 +3775,7 @@ def hello_world():
 <li>Replace the original layers with the quantized layers</li>
 <li>Load the quantized weights from huggingfacehub</li>
 </ul>
-<div id="ba0071d8" class="cell" data-execution_count="12">
+<div id="256fa1d0" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -2822,7 +3838,7 @@ font-style: inherit;">pth"</span>)</span></code></pre></div></div>
 <p>api = HfApi()</p>
 <p>create_repo(your_repo_id)</p>
 <p>api.upload_file( path_or_fileobj=“quantized_state_dict.pth”, path_in_repo=“quantized_state_dict.pth”, repo_id=your_repo_id )</p>
-<div id="553244ed" class="cell" data-execution_count="13">
+<div id="46e0b9a6" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -2878,7 +3894,7 @@ font-style: inherit;">break</span></span></code></pre></div></div>
 tensor(..., device='meta', size=(50272, 768), requires_grad=True)</code></pre>
 </div>
 </div>
-<div id="50078957" class="cell" data-execution_count="14">
+<div id="3453174e" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1">model</span></code></pre></div></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>OPTForCausalLM(
@@ -2908,7 +3924,7 @@ tensor(..., device='meta', size=(50272, 768), requires_grad=True)</code></pre>
 )</code></pre>
 </div>
 </div>
-<div id="e980dcd5" class="cell" data-execution_count="15">
+<div id="aa6dc189" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1">replace_linear_with_target(model, W8A16LinearLayer, [<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"lm_head"</span>])</span>
@@ -2944,7 +3960,7 @@ font-style: inherit;">"lm_head"</span>])</span>
 <p><strong>If loading from HF</strong></p>
 <p>from huggingface_hub import hf_hub_download</p>
 <p>state_dict_cache_path = hf_hub_download( “ybelkada/opt-125m-quantized-dlai”, “quantized_state_dict.pth” )</p>
-<div id="2a941e43" class="cell" data-execution_count="16">
+<div id="87fc6cff" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1">state_dict <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> torch.load(<span class="vs" style="color: #20794D;
@@ -2972,14 +3988,14 @@ font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">True</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_8991/1695582919.py:1: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+<pre><code>/tmp/ipykernel_29119/1695582919.py:1: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   state_dict = torch.load(r"/home/ritesh/github_repos/riteshrm.github.io/tmp/quantized_state_dict.pth")</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>&lt;All keys matched successfully&gt;</code></pre>
 </div>
 </div>
-<div id="700ae6ef" class="cell" data-execution_count="17">
+<div id="588d3eb2" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> transformers <span class="im" style="color: #00769E;
@@ -3020,7 +4036,7 @@ font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">10</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
-<pre><code>[{'generated_text': "Hello today I am giving a course about the history of the world's largest oil producer,"}]</code></pre>
+<pre><code>[{'generated_text': 'Hello today I am giving a course about the new generation of the Internet.\nI am'}]</code></pre>
 </div>
 </div>
 </section>
@@ -3056,7 +4072,7 @@ font-style: inherit;">10</span>)</span></code></pre></div></div>
 </section>
 <section id="packing-2-bit-weights" class="level3">
 <h3 class="anchored" data-anchor-id="packing-2-bit-weights">Packing 2-bit Weights</h3>
-<div id="7e0b2f60" class="cell" data-execution_count="18">
+<div id="1f83af6a" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -3390,7 +4406,7 @@ font-style: inherit;">2</span>)</span></code></pre></div></div>
 </section>
 <section id="unpacking-2-bit-weights" class="level3">
 <h3 class="anchored" data-anchor-id="unpacking-2-bit-weights">Unpacking 2-Bit Weights</h3>
-<div id="2df1094e" class="cell" data-execution_count="19">
+<div id="1d058fdc" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -3854,7 +4870,7 @@ Fig.1 - A layer of Neural Network.
 <ul>
 <li>You can use below mentioned code to find out the more info</li>
 </ul>
-<div id="73e08b39" class="cell" data-execution_count="1">
+<div id="04ba2c0a" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -3956,7 +4972,7 @@ font-style: inherit;">print</span>(torch.iinfo(torch.int8))</span></code></pre><
 </tr>
 </tbody>
 </table>
-<div id="27f75af0" class="cell" data-execution_count="2">
+<div id="f11d4abb" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
