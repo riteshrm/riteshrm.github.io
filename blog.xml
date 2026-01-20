@@ -236,8 +236,472 @@ Perform post-training before releasing the model (e.g., instruction-following)</
 <li><strong>Application developers:</strong><br>
 Fine-tune released models for specific downstream tasks</li>
 </ul>
+</section>
+</section>
+</section>
+<section id="chapter-2-understanding-foundation-models" class="level1">
+<h1>Chapter 2 Understanding Foundation Models</h1>
+<section id="model-performance-fundamentals" class="level2">
+<h2 class="anchored" data-anchor-id="model-performance-fundamentals">Model Performance Fundamentals</h2>
+<ul>
+<li>Model performance depends on both:
+<ul>
+<li><strong>Training process</strong></li>
+<li><strong>Sampling (decoding) strategy</strong></li>
+</ul></li>
+<li>An AI model is only as good as the <strong>data it is trained on</strong></li>
+<li>The <em>“use what we have, not what we want”</em> dataset mindset often leads to:
+<ul>
+<li>Strong performance on training data</li>
+<li>Weak performance on real-world tasks</li>
+</ul></li>
+<li><strong>Small, high-quality datasets</strong> can outperform <strong>large, low-quality datasets</strong></li>
+</ul>
+<hr>
+</section>
+<section id="rnns-vs-transformers" class="level2">
+<h2 class="anchored" data-anchor-id="rnns-vs-transformers">RNNs vs Transformers</h2>
+<ul>
+<li><strong>Recurrent Neural Networks (RNNs)</strong>
+<ul>
+<li>Generate text using a compressed <strong>summary of the book</strong></li>
+<li>Struggle with long-range dependencies</li>
+</ul></li>
+<li><strong>Transformers</strong>
+<ul>
+<li>Attend directly to many tokens at once</li>
+<li>Comparable to generating text using <strong>entire pages of a book</strong></li>
+<li>Enable long-context modeling via attention</li>
+</ul></li>
+</ul>
+<hr>
+</section>
+<section id="transformer-architecture" class="level2">
+<h2 class="anchored" data-anchor-id="transformer-architecture">Transformer Architecture</h2>
+<section id="transformer-block" class="level3">
+<h3 class="anchored" data-anchor-id="transformer-block">Transformer Block</h3>
+<p>Each transformer block consists of: - Attention module - MLP (feedforward network)</p>
+</section>
+<section id="transformer-based-language-model" class="level3">
+<h3 class="anchored" data-anchor-id="transformer-based-language-model">Transformer-Based Language Model</h3>
+<p>A typical transformer-based LM includes:</p>
+<ul>
+<li><strong>Embedding Module (pre-transformer)</strong>
+<ul>
+<li>Converts tokens into embedding vectors</li>
+</ul></li>
+<li><strong>Transformer Blocks</strong></li>
+<li><strong>Model Head (post-transformer)</strong>
+<ul>
+<li>Converts hidden states into token probabilities</li>
+</ul></li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/AI Engineering By Chip Huyen/weight_visualization.png" style="width:80%" class="figure-img">
+<figcaption>
+Figure 2.1: Visualization of the weight composition of a transformer model.
+</figcaption>
+</figure>
+<hr>
+</section>
+</section>
+<section id="alternatives-to-transformers" class="level2">
+<h2 class="anchored" data-anchor-id="alternatives-to-transformers">Alternatives to Transformers</h2>
+<ul>
+<li><strong>RWKV</strong>
+<ul>
+<li>RNN-based architecture</li>
+<li>No fixed context-length limitation</li>
+<li>Performance on extremely long contexts is not guaranteed</li>
+</ul></li>
+<li><strong>State Space Models (SSMs)</strong>
+<ul>
+<li>Designed for long-range memory</li>
+<li>Promising alternative to attention</li>
+<li>Examples:
+<ul>
+<li>Mamba</li>
+<li>Jamba (Hybrid of Transformer and Mamba)</li>
+</ul></li>
+</ul></li>
+</ul>
+<hr>
+</section>
+<section id="training-tokens-and-scaling-laws" class="level2">
+<h2 class="anchored" data-anchor-id="training-tokens-and-scaling-laws">Training Tokens and Scaling Laws</h2>
+<ul>
+<li><p><img src="https://latex.codecogs.com/png.latex?%5Ctext%7BTotal%20Training%20Tokens%7D%20=%20%5Ctext%7BEpochs%7D%20%5Ctimes%20%5Ctext%7BTokens%20per%20epoch%7D"></p></li>
+<li><p><strong>Chinchilla Scaling Law</strong></p>
+<ul>
+<li>Optimal training tokens ≈ <strong>20× model parameters</strong></li>
+</ul></li>
+<li><p>Research from Microsoft and OpenAI suggests:</p>
+<ul>
+<li>Hyperparameters can be transferred from a <strong>40M</strong> model to a <strong>6.7B</strong> model</li>
+</ul></li>
+</ul>
+<hr>
+</section>
+<section id="pre-training-and-post-training" class="level2">
+<h2 class="anchored" data-anchor-id="pre-training-and-post-training">Pre-training and Post-training</h2>
+<ul>
+<li><strong>Pre-training</strong>
+<ul>
+<li>Equivalent to <em>reading to acquire knowledge</em></li>
+<li>Resource-intensive</li>
+<li>Produces general-purpose representations</li>
+</ul></li>
+<li><strong>Post-training</strong>
+<ul>
+<li>Equivalent to <em>learning how to use knowledge</em></li>
+<li>Includes instruction tuning, alignment, and RLHF</li>
+</ul></li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/AI Engineering By Chip Huyen/traing_work_flow_of_llm.png" style="width:80%" class="figure-img">
+<figcaption>
+Figure 2.2: Training workflow of a large language model.
+</figcaption>
+</figure>
+<ul>
+<li>Training only on high-quality data without pre-training is possible, but <strong>pre-training followed by post-training yields superior results</strong></li>
+</ul>
+<hr>
+</section>
+<section id="reinforcement-learning-from-human-feedback-rlhf" class="level2">
+<h2 class="anchored" data-anchor-id="reinforcement-learning-from-human-feedback-rlhf">Reinforcement Learning from Human Feedback (RLHF)</h2>
+<p>RLHF is a two-stage process for aligning language models with human preferences:</p>
+<ol type="1">
+<li><strong>Train a reward model</strong> that scores the foundation model’s outputs</li>
+<li><strong>Optimize the foundation model</strong> to generate responses that maximize the reward model’s score</li>
+</ol>
+</section>
+<section id="preference-data-structure" class="level2">
+<h2 class="anchored" data-anchor-id="preference-data-structure">Preference Data Structure</h2>
+<p>Instead of using scalar scores (which vary across individuals), RLHF uses comparative preferences:</p>
+<ul>
+<li>Each training example consists of: <img src="https://latex.codecogs.com/png.latex?(prompt,%20winning%5C_response,%20losing%5C_response)"></li>
+<li>This pairwise comparison approach captures relative quality more reliably than absolute ratings</li>
+</ul>
+</section>
+<section id="reward-model-training" class="level2">
+<h2 class="anchored" data-anchor-id="reward-model-training">Reward Model Training</h2>
+<section id="objective" class="level3">
+<h3 class="anchored" data-anchor-id="objective">Objective</h3>
+<p>Maximize the score difference between winning and losing responses for each prompt.</p>
+</section>
+<section id="mathematical-formulation" class="level3">
+<h3 class="anchored" data-anchor-id="mathematical-formulation">Mathematical Formulation</h3>
+<p><strong>Notation:</strong></p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?r">: reward model</li>
+<li><img src="https://latex.codecogs.com/png.latex?x">: prompt</li>
+<li><img src="https://latex.codecogs.com/png.latex?y_w">: winning response</li>
+<li><img src="https://latex.codecogs.com/png.latex?y_l">: losing response</li>
+<li><img src="https://latex.codecogs.com/png.latex?s_w%20=%20r(x,%20y_w)">: reward score for winning response</li>
+<li><img src="https://latex.codecogs.com/png.latex?s_l%20=%20r(x,%20y_l)">: reward score for losing response</li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Csigma">: sigmoid function</li>
+</ul>
+<p><strong>Loss Function:</strong></p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cmathcal%7BL%7D%20=%20-%5Clog(%5Csigma(s_w%20-%20s_l))%0A"></p>
+<p>where <img src="https://latex.codecogs.com/png.latex?%5Csigma(z)%20=%20%5Cfrac%7B1%7D%7B1%20+%20e%5E%7B-z%7D%7D"></p>
+<p><strong>Goal:</strong> Minimize this loss function across all preference pairs</p>
+</section>
+<section id="model-architecture-choices" class="level3">
+<h3 class="anchored" data-anchor-id="model-architecture-choices">Model Architecture Choices</h3>
+<p>The reward model can be:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Reward Model Options
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Trained from scratch</strong> on preference data</li>
+<li><strong>Fine-tuned from a foundation model</strong> (often preferred, as the reward model should ideally match the capability level of the model being optimized)</li>
+<li><strong>A smaller model</strong> (can also work effectively in practice, offering computational efficiency)</li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="key-insights" class="level2">
+<h2 class="anchored" data-anchor-id="key-insights">Key Insights</h2>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Important Takeaways
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Pairwise preferences are more consistent and reliable than absolute ratings</li>
+<li>The sigmoid in the loss function ensures the model learns relative differences in quality</li>
+<li>The reward model’s capacity should generally align with the foundation model it’s evaluating</li>
+</ul>
+</div>
+</div>
+<hr>
+</section>
+<section id="sampling-strategies-and-model-hallucination" class="level2">
+<h2 class="anchored" data-anchor-id="sampling-strategies-and-model-hallucination">Sampling Strategies and Model Hallucination</h2>
+<section id="temperature-based-sampling" class="level3">
+<h3 class="anchored" data-anchor-id="temperature-based-sampling">Temperature-Based Sampling</h3>
+<section id="core-formula" class="level4">
+<h4 class="anchored" data-anchor-id="core-formula">Core Formula</h4>
+<p><img src="https://latex.codecogs.com/png.latex?%0AP(token)%20=%20%5Ctext%7Bsoftmax%7D%5Cleft(%5Cfrac%7B%5Ctext%7Blogits%7D%7D%7B%5Ctext%7Btemperature%7D%7D%5Cright)%0A"></p>
+</section>
+</section>
+<section id="temperature-effects" class="level3">
+<h3 class="anchored" data-anchor-id="temperature-effects">Temperature Effects</h3>
+<ul>
+<li><strong>Higher temperature</strong> reduces the probability of common tokens, thereby increasing the probability of rare tokens</li>
+<li>This enables more <strong>creative and diverse responses</strong></li>
+<li><strong>Standard value</strong>: Temperature of <strong>0.7</strong> balances creativity with coherent generation</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Monitoring Model Learning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To identify if a model is learning, examine the probability distributions. If probabilities remain random across training, the model is not learning effectively.</p>
+</div>
+</div>
+</section>
+<section id="numerical-stability" class="level3">
+<h3 class="anchored" data-anchor-id="numerical-stability">Numerical Stability</h3>
+<p>To avoid underflow issues (since probabilities can be extremely small), we use <strong>log probabilities</strong> in practice.</p>
+</section>
+</section>
+<section id="advanced-sampling-strategies" class="level2">
+<h2 class="anchored" data-anchor-id="advanced-sampling-strategies">Advanced Sampling Strategies</h2>
+<section id="top-k-sampling" class="level3">
+<h3 class="anchored" data-anchor-id="top-k-sampling">Top-k Sampling</h3>
+<ul>
+<li>Select the <strong>k largest logits</strong></li>
+<li>Apply softmax only to these k tokens to compute probabilities</li>
+<li><strong>Benefit</strong>: Reduces computational cost and filters out unlikely tokens</li>
+</ul>
+</section>
+<section id="top-p-nucleus-sampling" class="level3">
+<h3 class="anchored" data-anchor-id="top-p-nucleus-sampling">Top-p (Nucleus) Sampling</h3>
+<ul>
+<li>Find the <strong>smallest set of tokens</strong> whose cumulative probabilities sum to <img src="https://latex.codecogs.com/png.latex?p"></li>
+<li><strong>Process</strong>: Sort tokens by probability (descending order) and keep adding until cumulative probability reaches <img src="https://latex.codecogs.com/png.latex?p"></li>
+<li>More adaptive than top-k as the number of considered tokens varies</li>
+</ul>
+</section>
+<section id="min-p-sampling" class="level3">
+<h3 class="anchored" data-anchor-id="min-p-sampling">Min-p Sampling</h3>
+<ul>
+<li>Set a <strong>minimum probability threshold</strong> for tokens to be considered</li>
+<li>Any token with probability below this threshold is excluded from sampling</li>
+</ul>
+</section>
+<section id="best-of-n-sampling" class="level3">
+<h3 class="anchored" data-anchor-id="best-of-n-sampling">Best-of-N Sampling</h3>
+<ul>
+<li>Generate <strong>multiple responses</strong> for the same prompt</li>
+<li>Select the response with the <strong>maximum average probability</strong></li>
+<li>Improves output quality at the cost of increased compute</li>
+</ul>
+</section>
+</section>
+<section id="handling-structured-outputs" class="level2">
+<h2 class="anchored" data-anchor-id="handling-structured-outputs">Handling Structured Outputs</h2>
+<section id="prompting-techniques" class="level3">
+<h3 class="anchored" data-anchor-id="prompting-techniques">1. Prompting Techniques</h3>
+<ul>
+<li><strong>Better prompt engineering</strong> with clear instructions</li>
+<li><strong>Two-query approach</strong>:
+<ul>
+<li>First query generates the response</li>
+<li>Second query validates the response format</li>
+</ul></li>
+</ul>
+</section>
+<section id="post-processing" class="level3">
+<h3 class="anchored" data-anchor-id="post-processing">2. Post-Processing</h3>
+<ul>
+<li>Identify <strong>repeated common mistakes</strong> in model outputs</li>
+<li>Write scripts to correct these systematic errors</li>
+<li>Works well when the model produces mostly correct formats with predictable issues</li>
+</ul>
+</section>
+<section id="constrained-sampling" class="level3">
+<h3 class="anchored" data-anchor-id="constrained-sampling">3. Constrained Sampling</h3>
+<ul>
+<li>Sample only from a <strong>selected set of valid tokens</strong></li>
+<li><strong>Example</strong>: In JSON generation, prevent invalid syntax like <code>{{</code> without an intervening key</li>
+<li>Enforces grammatical/syntactic correctness at the token level</li>
+</ul>
+</section>
+<section id="test-time-compute" class="level3">
+<h3 class="anchored" data-anchor-id="test-time-compute">4. Test-Time Compute</h3>
+<ul>
+<li>Generate multiple candidate responses</li>
+<li>Use a selection mechanism to output the best one</li>
+<li>Trade compute for quality</li>
+</ul>
+</section>
+<section id="fine-tuning-1" class="level3">
+<h3 class="anchored" data-anchor-id="fine-tuning-1">5. Fine-Tuning</h3>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Best Solution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Fine-tuning is the most effective approach for structured outputs:</p>
+<ul>
+<li><strong>Full model fine-tuning</strong> (better if resources available)</li>
+<li><strong>Partial fine-tuning</strong> (LoRA, adapters, etc.)</li>
+<li>Directly teaches the model the desired output format</li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="model-hallucination" class="level2">
+<h2 class="anchored" data-anchor-id="model-hallucination">Model Hallucination</h2>
+<section id="definition" class="level3">
+<h3 class="anchored" data-anchor-id="definition">Definition</h3>
+<p><strong>Hallucination</strong> occurs when a model generates responses that are <strong>not grounded in factual information</strong>.</p>
+</section>
+<section id="consistency-issues" class="level3">
+<h3 class="anchored" data-anchor-id="consistency-issues">Consistency Issues</h3>
+<p>Due to the <strong>probabilistic nature</strong> of language models:</p>
+<ul>
+<li>Same prompt can produce <strong>multiple different outputs</strong></li>
+<li>This inconsistency can be problematic for production systems</li>
+</ul>
+<section id="mitigation-strategies" class="level4">
+<h4 class="anchored" data-anchor-id="mitigation-strategies">Mitigation Strategies</h4>
+<ol type="1">
+<li><strong>Caching</strong>: Store responses for repeated queries to ensure consistency</li>
+<li><strong>Sampling adjustments</strong>: Modify temperature, top-k, or top-p parameters</li>
+<li><strong>Deterministic seeds</strong>: Use fixed random seeds</li>
+</ol>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>No Perfect Solution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Even with these techniques, <strong>100% consistency is not guaranteed</strong>. Hardware differences in floating-point computation can lead to variations across different systems.</p>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="why-models-hallucinate" class="level2">
+<h2 class="anchored" data-anchor-id="why-models-hallucinate">Why Models Hallucinate</h2>
+<section id="hypothesis-1-self-supervision-is-the-culprit" class="level3">
+<h3 class="anchored" data-anchor-id="hypothesis-1-self-supervision-is-the-culprit">Hypothesis 1: Self-Supervision is the Culprit</h3>
+<p><strong>Problem</strong>: Models cannot differentiate between:</p>
+<ul>
+<li><strong>Given data</strong> (the prompt)</li>
+<li><strong>Generated data</strong> (their own outputs)</li>
+</ul>
+<section id="example-scenario" class="level4">
+<h4 class="anchored" data-anchor-id="example-scenario">Example Scenario</h4>
+<ol type="1">
+<li><strong>Prompt</strong>: “Who is Chip Huyen?”</li>
+<li><strong>Model generates</strong>: “Chip Huyen is an architect”</li>
+<li><strong>Next token generation</strong>: The model treats “Chip Huyen is an architect” as a fact, just like the original prompt</li>
+<li><strong>Consequence</strong>: If the initial generation is incorrect, the model will continue to justify and build upon the incorrect information</li>
+</ol>
+</section>
+<section id="mitigation-techniques" class="level4">
+<h4 class="anchored" data-anchor-id="mitigation-techniques">Mitigation Techniques</h4>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Approach 1: Reinforcement Learning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>From RL perspective, train the model to differentiate between:</p>
+<ul>
+<li><strong>Observations about the world</strong> (given text/prompt)</li>
+<li><strong>Model’s actions</strong> (generated text)</li>
+</ul>
+<p>This helps the model maintain awareness of what is given vs.&nbsp;what it produces.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Approach 2: Supervised Fine-Tuning with Counterfactuals
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Include both <strong>factual</strong> and <strong>counterfactual</strong> examples in training data, explicitly teaching the model to recognize and avoid false information.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="hypothesis-2-supervision-is-the-culprit" class="level3">
+<h3 class="anchored" data-anchor-id="hypothesis-2-supervision-is-the-culprit">Hypothesis 2: Supervision is the Culprit</h3>
+<p><strong>Problem</strong>: Conflict between the model’s internal knowledge and labeler knowledge during SFT (Supervised Fine-Tuning).</p>
+<section id="the-issue" class="level4">
+<h4 class="anchored" data-anchor-id="the-issue">The Issue</h4>
+<ul>
+<li>During SFT, models are trained on responses written by <strong>human labelers</strong></li>
+<li>Labelers use their own knowledge to write responses</li>
+<li>The <strong>model may not have access</strong> to the same knowledge base</li>
+<li>Result: The model learns to produce responses it cannot properly ground, leading to hallucination</li>
+</ul>
+</section>
+<section id="better-approach" class="level4">
+<h4 class="anchored" data-anchor-id="better-approach">Better Approach</h4>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution: Include Reasoning Chains
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When creating training data:</p>
+<ol type="1">
+<li><strong>Document the information sources</strong> used to arrive at the response</li>
+<li><strong>Include reasoning steps</strong> that show how the conclusion was reached</li>
+<li>This allows the model to understand <strong>not just what to say</strong>, but <strong>why</strong> and <strong>based on what information</strong></li>
+</ol>
+</div>
+</div>
 
 
+</section>
 </section>
 </section>
 </section>
