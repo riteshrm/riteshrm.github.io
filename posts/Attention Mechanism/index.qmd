@@ -20,21 +20,21 @@ image: "attn.png"
 
 
 ### Transformers
-+ Given a sequence of length N, where each token is represented by Dmodel numbers, we compute three matrices
++ Given a sequence of length N, where each token is represented by d_model numbers, we compute three matrices
   - Query = XWq (what I’m looking for)
   - Key = XWk (what I have)
   - Value = XWv (the information I’ll give if I’m relevant)
-  - Wq and Wk are of same shape and to maintain the symmetry Wv is also kept to be of same shape, Wq,Wk [Dmodel, Dk] and Wv [Dmodel, Dv]
+  - Wq and Wk are of same shape and to maintain the symmetry Wv is also kept to be of same shape, Wq,Wk [d_model, d_k] and Wv [d_model, Dv]
 
 + Now to find out which key is more relevant to given queries we do matrix multiplication and the finally apply softmax to get probability
   - score = QueryKey^T
-  - attn = softmax(score/sqrt(Dk))
+  - attn = softmax(score/sqrt(d_k))
   - Why scaling factor
-    - this score dot product has variance of Dk, which causes instability in backpropagation
-      + lets say we have two vectors q and k of dimension dk
+    - this score dot product has variance of d_k, which causes instability in backpropagation
+      + lets say we have two vectors q and k of dimension d_k
       + E[qi]=E[ki] = 0
       + var[qi]=var[ki] = 1
-      + then E[q.k] = 0 but var[q.k] = dk [link](https://funnywii.com/upload/proof.pdf) 
+      + then E[q.k] = 0 but var[q.k] = d_k [link](https://funnywii.com/upload/proof.pdf) 
     - the derivative of softmax contains some terms which if not normalizaied lead to gradient nearly 0 becuase of this larger variance
     - $$\text{Softmax}(z_i) = \frac{e^{z_i}}{\sum_j e^{z_j}}$$
     - $$\frac{\partial \text{Softmax}(z)_i}{\partial z_j} = \text{Softmax}(z)_i (\delta_{ij} - \text{Softmax}(z)_j)$$
@@ -43,7 +43,7 @@ image: "attn.png"
     - So incase of jacobian matrix, considering a simple case where query 0 attends all the keys
       - Diagonal: $s_1(1-s_1) \approx 1(0) = 0$.
       - Off-Diagonal: $-s_1 s_2 \approx -1(0) = 0$.
-    - to enforce unit variance, we apply normalization by dividng the score by standard deviation i.e. sqrt(Dk)
+    - to enforce unit variance, we apply normalization by dividng the score by standard deviation i.e. sqrt(d_k)
 
 ### Single Head Vanilla Attention PyTorch Code
 ```{python}
@@ -55,33 +55,151 @@ import time
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class SingleHeadVanillaAttention(nn.Module):
-    def __init__(self, in_features, out_features):
+    def __init__(self, d_model, d_k):
         super().__init__()
-        self.in_features = in_features
-        self.out_features = out_features
-        self.Wq = nn.Linear(in_features = self.in_features, out_features = self.out_features)
-        self.Wk = nn.Linear(in_features = self.in_features, out_features = self.out_features)
-        self.Wv = nn.Linear(in_features = self.in_features, out_features = self.out_features)
+        self.d_model = d_model
+        self.d_k = d_k
+        self.Wq = nn.Linear(in_features = self.d_model, out_features = self.d_k)
+        self.Wk = nn.Linear(in_features = self.d_model, out_features = self.d_k)
+        self.Wv = nn.Linear(in_features = self.d_model, out_features = self.d_k)
 
     def forward(self, x):
-        query = self.Wq(x) # [B, N, Dmodel] * [Dmodel, Dk] -> [B, N, Dk] TC=O(B*N*Dmodel*Dk)
-        key = self.Wk(x)   #[B, N, Dmodel] * [Dmodel, Dk] -> [B, N, Dk] TC=O(B*N*Dmodel*Dk)
-        value = self.Wv(x) # [B, N, Dmodel] * [Dmodel, Dk] -> [B, N, Dk] TC=O(B*N*Dmodel*Dk)
+        query = self.Wq(x) # [B, N, d_model] * [d_model, d_k] -> [B, N, d_k] TC=O(B*N*d_model*d_k)
+        key = self.Wk(x)   #[B, N, d_model] * [d_model, d_k] -> [B, N, d_k] TC=O(B*N*d_model*d_k)
+        value = self.Wv(x) # [B, N, d_model] * [d_model, d_k] -> [B, N, d_k] TC=O(B*N*d_model*d_k)
 
-        scores = torch.matmul(query, key.transpose(-1, -2))/(self.out_features**0.5) # [B, N, Dk] * [B, Dk, N] -> [B, N, N] TC=O(B*N^2*Dk)
+        scores = torch.matmul(query, key.transpose(-1, -2))/(self.d_k**0.5) # [B, N, d_k] * [B, d_k, N] -> [B, N, N] TC=O(B*N^2*d_k)
 
         attn = F.softmax(scores, dim=-1) # [B, N, N]
 
-        final = torch.matmul(attn, value) # [B, N, N] * [B, N, Dk] -> [B, N, Dk]  TC=O(B*N^2*Dk)
-        return final # [B, N, Dk]
+        final = torch.matmul(attn, value) # [B, N, N] * [B, N, d_k] -> [B, N, d_k]  TC=O(B*N^2*d_k)
+        return final # [B, N, d_k]
 
-Dmodel = 512
-Dk = 512
+d_model = 512
+d_k = 512
 
-model = SingleHeadVanillaAttention(in_features = Dmodel, out_features = Dk).requires_grad_(False).eval().to(device)
+model = SingleHeadVanillaAttention(d_model = d_model, d_k = d_k).requires_grad_(False).eval().to(device)
 
 n_tokens = 16384
-inp = torch.randn(1, n_tokens, Dmodel, device=device)
+inp = torch.randn(1, n_tokens, d_model, device=device)
+
+torch.cuda.synchronize()
+start = time.time()
+k=50
+for _ in range(k):
+    with torch.no_grad():
+        out = model(inp)
+torch.cuda.synchronize()
+print(f"Time taken: {(time.time()-start)/k:.3f}")
+
+```
+
+### Multi Head Vanilla Attention For loop PyTorch Code
+```{python}
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import time
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+class MultiHeadVanillaAttention(nn.Module):
+    def __init__(self, d_model, num_heads, head_dim=None):
+        super().__init__()
+        self.d_model = d_model
+        self.num_heads = num_heads
+        if head_dim is None:
+            self.d_k = d_model//self.num_heads
+        else:
+            self.d_k = head_dim
+        self.Wq = nn.ModuleList([nn.Linear(in_features = self.d_model, out_features = self.d_k) for _ in range(self.num_heads)])
+        self.Wk = nn.ModuleList([nn.Linear(in_features = self.d_model, out_features = self.d_k) for _ in range(self.num_heads)])
+        self.Wv = nn.ModuleList([nn.Linear(in_features = self.d_model, out_features = self.d_k) for _ in range(self.num_heads)])
+        self.out = nn.Linear(in_features = self.d_k * self.num_heads, out_features = self.d_model)
+
+    def forward(self, x):
+        query = [self.Wq[i](x) for i in range(self.num_heads)] # [B, N, d_model] * [d_model, d_k] -> [B, N, d_k] TC=O(B*N*d_model*d_k)
+        key = [self.Wk[i](x) for i in range(self.num_heads)]   #[B, N, d_model] * [d_model, d_k] -> [B, N, d_k] TC=O(B*N*d_model*d_k)
+        value = [self.Wv[i](x) for i in range(self.num_heads)] # [B, N, d_model] * [d_model, d_k] -> [B, N, d_k] TC=O(B*N*d_model*d_k)
+
+        scores = [torch.matmul(query[i], key[i].transpose(-1, -2))/(self.d_k**0.5) for i in range(self.num_heads)] # [B, N, d_k] * [B, d_k, N] -> [B, N, N] TC=O(B*N^2*d_k)
+
+        attn = [F.softmax(scores[i], dim=-1) for i in range(self.num_heads)] # [B, N, N]
+
+        final = [torch.matmul(attn[i], value[i]) for i in range(self.num_heads)] # [B, N, N] * [B, N, d_k] -> [B, N, d_k]  TC=O(B*N^2*d_k)
+        final = torch.cat(final, dim=-1)
+
+        projout = self.out(final)
+
+        return projout # [B, N, d_model]
+
+d_model = 512
+d_k = 512
+
+model = MultiHeadVanillaAttention(d_model = d_model, num_heads=2, head_dim=32).requires_grad_(False).eval().to(device)
+
+n_tokens = 16384
+inp = torch.randn(1, n_tokens, d_model, device=device)
+
+torch.cuda.synchronize()
+start = time.time()
+k=50
+for _ in range(k):
+    with torch.no_grad():
+        out = model(inp)
+torch.cuda.synchronize()
+print(f"Time taken: {(time.time()-start)/k:.3f}")
+
+```
+
+### Multi Head Vanilla Attention PyTorch Code
+```{python}
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import time
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+class MultiHeadVanillaAttention(nn.Module):
+    def __init__(self, d_model, head_dim, num_heads):
+        super().__init__()
+        self.d_model = d_model
+        self.d_k = head_dim * num_heads
+        self.head_dim = head_dim
+        self.num_heads = num_heads
+        self.Wq = nn.Linear(in_features = self.d_model, out_features = self.d_k)
+        self.Wk = nn.Linear(in_features = self.d_model, out_features = self.d_k)
+        self.Wv = nn.Linear(in_features = self.d_model, out_features = self.d_k)
+
+        self.out = nn.Linear(in_features = self.d_k, out_features = self.d_model)
+    def forward(self, x):
+        batch_size = x.shape[0]
+        query = self.Wq(x) # [B, N, d_model] * [d_model, d_k] -> [B, N, d_k] TC=O(B*N*d_model*d_k)
+        key = self.Wk(x)   #[B, N, d_model] * [d_model, d_k] -> [B, N, d_k] TC=O(B*N*d_model*d_k)
+        value = self.Wv(x) # [B, N, d_model] * [d_model, d_k] -> [B, N, d_k] TC=O(B*N*d_model*d_k)
+
+        query = query.view(batch_size, -1, self.num_heads, self.head_dim).transpose(1, 2) # [B, N, d_k] -> [B, N, num_heads, head_dim] -> [B, num_heads, N, head_dim]
+        key = key.view(batch_size, -1, self.num_heads, self.head_dim).transpose(1, 2) # [B, N, d_k] -> [B, N, num_heads, head_dim] -> [B, num_heads, N, head_dim]
+        value = value.view(batch_size, -1, self.num_heads, self.head_dim).transpose(1, 2) # [B, N, d_k] -> [B, N, num_heads, head_dim] -> [B, num_heads, N, head_dim]
+
+
+        scores = torch.matmul(query, key.transpose(-1, -2))/(self.head_dim**0.5) # [B, num_heads, N, head_dim] * [B, num_heads, head_dim, N] -> [B, num_heads, N, N] TC=O(B*N^2*d_k)
+
+        attn = F.softmax(scores, dim=-1) # [B, num_heads, N, N]
+
+        final = torch.matmul(attn, value).permute(0, 2, 1, 3).reshape(batch_size, -1, self.d_k) # [B, num_heads, N, N] * [B, num_heads, N, head_dim] -> [B, N, d_k]  TC=O(B*N^2*d_k)
+        projout = self.out(final) # [B, N, d_k] -> [B, N, d_model]
+        return projout # [B, N, d_model]
+
+
+d_model = 512
+d_k = 512
+
+model = MultiHeadVanillaAttention(d_model = d_model, num_heads=2, head_dim=32).requires_grad_(False).eval().to(device)
+
+n_tokens = 16384
+inp = torch.randn(1, n_tokens, d_model, device=device)
 
 torch.cuda.synchronize()
 start = time.time()
@@ -141,30 +259,30 @@ class SingleHeadLinearaAttention(nn.Module):
         self.Wv = nn.Linear(in_features = self.in_features, out_features = self.out_features)
 
     def forward(self, x):
-        query = self.Wq(x) # [B, N, Dmodel] * [Dmodel, Dk] -> [B, N, Dk] TC=O(B*N*Dmodel*Dk)
-        key = self.Wk(x)   #[B, N, Dmodel] * [Dmodel, Dk] -> [B, N, Dk] TC=O(B*N*Dmodel*Dk)
-        value = self.Wv(x) # [B, N, Dmodel] * [Dmodel, Dk] -> [B, N, Dk] TC=O(B*N*Dmodel*Dk)
+        query = self.Wq(x) # [B, N, d_model] * [d_model, d_k] -> [B, N, d_k] TC=O(B*N*d_model*d_k)
+        key = self.Wk(x)   #[B, N, d_model] * [d_model, d_k] -> [B, N, d_k] TC=O(B*N*d_model*d_k)
+        value = self.Wv(x) # [B, N, d_model] * [d_model, d_k] -> [B, N, d_k] TC=O(B*N*d_model*d_k)
 
-        query = F.elu(query) + 1 # [B, N, Dk]
-        key = F.elu(key) + 1 # [B, N, Dk]
+        query = F.elu(query) + 1 # [B, N, d_k]
+        key = F.elu(key) + 1 # [B, N, d_k]
 
-        scores = torch.matmul(key.transpose(-1, -2), value) # [B, Dk, N] * [B, N, Dk] -> [B, Dk, Dk] TC=O(B*N*Dk^2)
+        scores = torch.matmul(key.transpose(-1, -2), value) # [B, d_k, N] * [B, N, d_k] -> [B, d_k, d_k] TC=O(B*N*d_k^2)
 
-        final = torch.matmul(query, scores) # [B, N, Dk] * [B, Dk, Dk] -> [B, N, Dk] TC=O(B*N*Dk^2)
+        final = torch.matmul(query, scores) # [B, N, d_k] * [B, d_k, d_k] -> [B, N, d_k] TC=O(B*N*d_k^2)
         k_sum = torch.sum(key, dim=-2).unsqueeze(-1)
 
-        normalizer = torch.matmul(query, k_sum) # [B, N , Dk] * [B, Dk, 1] -> [B, N, 1] TC=O(B*N*Dk)
+        normalizer = torch.matmul(query, k_sum) # [B, N , d_k] * [B, d_k, 1] -> [B, N, 1] TC=O(B*N*d_k)
         eps = 1e-6 # To use in case we dont divide by 0
 
-        return final/(normalizer + eps) # [B, N, Dk]
+        return final/(normalizer + eps) # [B, N, d_k]
 
-Dmodel = 512
-Dk = 512
+d_model = 512
+d_k = 512
 
-model = SingleHeadLinearaAttention(in_features = Dmodel, out_features = Dk).requires_grad_(False).eval().to(device)
+model = SingleHeadLinearaAttention(in_features = d_model, out_features = d_k).requires_grad_(False).eval().to(device)
 
 n_tokens = 16384
-inp = torch.randn(1, n_tokens, Dmodel, device=device)
+inp = torch.randn(1, n_tokens, d_model, device=device)
 
 torch.cuda.synchronize()
 start = time.time()

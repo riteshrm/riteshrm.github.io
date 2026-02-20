@@ -3,6 +3,7 @@ project:
     
 format:
   html:
+    html-math-method: katex
     theme:
       light: flatly
       dark: darkly
@@ -10,7 +11,7 @@ format:
     toc: true
 
 website:
-  title: "Ritesh Kumar Maurya"
+  title: "About Me"
   site-url: "https://riteshrm.github.io/"
   description: "Personal site of Ritesh Kumar Maurya."
   favicon: posts/favicon.ico
@@ -26,16 +27,8 @@ website:
   navbar:
     background: primary
     left:
-      - text: "About Me"
-        href: pages/about.qmd
-      #- text: "Authoring"
-        #href: pages/authoring.qmd
       - text: "Blog/Notes"
         href: blog.qmd
-      #- text: "Research"
-        #href: pages/research.qmd
-      - text: "Resources"
-        href: pages/resources.qmd
     right:
       # - icon: "bi bi-envelope"
       #   href: "mailto:riteshkumarmaurya7379@gmail.com"

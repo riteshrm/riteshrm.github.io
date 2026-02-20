@@ -1,15 +1,18 @@
----
-title: "Ritesh Kumar Maurya"
-toc: false
----
-
-Hi there 👋. I am Ritesh Kumar Maurya. I work at [Samsung R&D Institute India, Noida](https://research.samsung.com/sri-n). Know more about me
-from [here](https://riteshrm.github.io/pages/about.html). 
+I work at [Samsung R&D Institute India, Noida](https://research.samsung.com/sri-n). For more details on my work experience, check out my [LinkedIn profile](https://www.linkedin.com/in/riteshrm/).
 
 
+<table>
+  <tr>
+    <td><a href="https://github.com/riteshrm"><img src="https://img.shields.io/github/followers/riteshrm.svg?label=GitHub&style=social" alt="GitHub"></a></td>
+    <td><a href="https://twitter.com/_riteshrm_"><img src="https://img.shields.io/twitter/follow/%5Friteshrm%5F?label=Twitter&style=social" alt="Twitter"></a></td>
+    <td><a href="https://www.linkedin.com/in/riteshrm"><img src="https://img.shields.io/badge/LinkedIn--_.svg?style=social&logo=linkedin" alt="LinkedIn"></a></td>
+    <td><a href="mailto:riteshkumarmaurya7379@gmail.com"><img src="https://img.shields.io/badge/Gmail--_.svg?style=social&logo=gmail" alt="Gmail"></a></td>
+  </tr>
+</table>
 
-The structure of this website is inspired by [Sayak's site](https://sayak.dev/).
+### Timeline
 
-<center>
-<img src="posts/dp.png" width=350/>
-</center>
+| Position                               | Company                                | Duration                |
+|:--------------------------------------:|:--------------------------------------:|:-----------------------:|
+| Machine Learning Engineer              | Samsung R&D Institute India, Noida     | Jan 2024 - Present      |
+| Machine Learning Engineer Intern       | Samsung R&D Institute India, Noida     | Jan 2023 - Dec 2023     |
