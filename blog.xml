@@ -5,7 +5,7 @@
       xmlns:dc="http://purl.org/dc/elements/1.1/" 
       version="2.0">
 <channel>
-<title>Ritesh Kumar Maurya</title>
+<title>About Me</title>
 <link>https://riteshrm.github.io/blog.html</link>
 <atom:link href="https://riteshrm.github.io/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Personal site of Ritesh Kumar Maurya.</description>
@@ -140,7 +140,7 @@ AI directly interacts with end users</li>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Achieving <strong>0–60% automation is relatively easy</strong>, but moving from <strong>60–100% automation is extremely challenging</strong>.</p>
+<p>Achieving <strong>0–60% performance is relatively easy</strong>, but moving from <strong>60–100% is extremely challenging</strong>.</p>
 </div>
 </div>
 <hr>
@@ -375,23 +375,22 @@ Figure 2.2: Training workflow of a large language model.
 <li><strong>Train a reward model</strong> that scores the foundation model’s outputs</li>
 <li><strong>Optimize the foundation model</strong> to generate responses that maximize the reward model’s score</li>
 </ol>
-</section>
-<section id="preference-data-structure" class="level2">
-<h2 class="anchored" data-anchor-id="preference-data-structure">Preference Data Structure</h2>
+<section id="preference-data-structure" class="level3">
+<h3 class="anchored" data-anchor-id="preference-data-structure">Preference Data Structure</h3>
 <p>Instead of using scalar scores (which vary across individuals), RLHF uses comparative preferences:</p>
 <ul>
 <li>Each training example consists of: <img src="https://latex.codecogs.com/png.latex?(prompt,%20winning%5C_response,%20losing%5C_response)"></li>
 <li>This pairwise comparison approach captures relative quality more reliably than absolute ratings</li>
 </ul>
 </section>
-<section id="reward-model-training" class="level2">
-<h2 class="anchored" data-anchor-id="reward-model-training">Reward Model Training</h2>
-<section id="objective" class="level3">
-<h3 class="anchored" data-anchor-id="objective">Objective</h3>
+<section id="reward-model-training" class="level3">
+<h3 class="anchored" data-anchor-id="reward-model-training">Reward Model Training</h3>
+<section id="objective" class="level4">
+<h4 class="anchored" data-anchor-id="objective">Objective</h4>
 <p>Maximize the score difference between winning and losing responses for each prompt.</p>
 </section>
-<section id="mathematical-formulation" class="level3">
-<h3 class="anchored" data-anchor-id="mathematical-formulation">Mathematical Formulation</h3>
+<section id="mathematical-formulation" class="level4">
+<h4 class="anchored" data-anchor-id="mathematical-formulation">Mathematical Formulation</h4>
 <p><strong>Notation:</strong></p>
 <ul>
 <li><img src="https://latex.codecogs.com/png.latex?r">: reward model</li>
@@ -407,8 +406,8 @@ Figure 2.2: Training workflow of a large language model.
 <p>where <img src="https://latex.codecogs.com/png.latex?%5Csigma(z)%20=%20%5Cfrac%7B1%7D%7B1%20+%20e%5E%7B-z%7D%7D"></p>
 <p><strong>Goal:</strong> Minimize this loss function across all preference pairs</p>
 </section>
-<section id="model-architecture-choices" class="level3">
-<h3 class="anchored" data-anchor-id="model-architecture-choices">Model Architecture Choices</h3>
+<section id="model-architecture-choices" class="level4">
+<h4 class="anchored" data-anchor-id="model-architecture-choices">Model Architecture Choices</h4>
 <p>The reward model can be:</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -429,8 +428,8 @@ Figure 2.2: Training workflow of a large language model.
 </div>
 </section>
 </section>
-<section id="key-insights" class="level2">
-<h2 class="anchored" data-anchor-id="key-insights">Key Insights</h2>
+<section id="key-insights" class="level3">
+<h3 class="anchored" data-anchor-id="key-insights">Key Insights</h3>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -449,6 +448,7 @@ Figure 2.2: Training workflow of a large language model.
 </div>
 </div>
 <hr>
+</section>
 </section>
 <section id="sampling-strategies-and-model-hallucination" class="level2">
 <h2 class="anchored" data-anchor-id="sampling-strategies-and-model-hallucination">Sampling Strategies and Model Hallucination</h2>
@@ -699,10 +699,200 @@ Figure 2.2: Training workflow of a large language model.
 </ol>
 </div>
 </div>
-
-
 </section>
 </section>
+</section>
+</section>
+<section id="chapter-3-evaluation-methodology" class="level1">
+<h1>Chapter 3 Evaluation Methodology</h1>
+<section id="challenges-of-evaluating-foundation-models" class="level2">
+<h2 class="anchored" data-anchor-id="challenges-of-evaluating-foundation-models">Challenges of Evaluating Foundation Models</h2>
+<ul>
+<li><p>As AI becomes more intelligent, it is hard to evaluate them. Most people can evalaute the 1st grade maths but not phd level</p></li>
+<li><p>There are so many possibilities for a single query since foundation models are open-ended not like ML classification models, where it is wrong if predicts y instead of x</p></li>
+<li><p>For most of the models, their architecture, training data, training processes are not exposed, so we dont know whether we are evaulating it on wrng task or not</p></li>
+<li><p>Evaluation is not about only assessing the model’s performance on specific task, it also helps in finding out the potenital and limitations of foundation model</p></li>
+</ul>
+</section>
+<section id="language-modeling-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="language-modeling-metrics">Language Modeling Metrics</h2>
+<ul>
+<li>Entropy:- is how much information a token carries, Higher the entropy more info and more bits are needed to represent
+<ul>
+<li>Consider two languages one with 2 tokens and other with 4 tokens, both have 1 and 2 entropy respetively. thus making hardr for prediction whn entropy is 4</li>
+<li>Entropy is basically how hard it is to predict next token</li>
+</ul></li>
+<li>Cross Entropy:- how much difficult it is to predict next token by a language model on a dataset</li>
+<li>A language model is trained to minimize its cross entropy with respect to training data
+<ul>
+<li>H(P, Q) = H(P) + Dkl(P||Q)</li>
+<li>where H(P, Q) is entropy of P(true distribtuion) with respect to Q(distribution learned by model)</li>
+<li>while traing a language model, we want to minimize this</li>
+</ul></li>
+<li>Bits-per-character and Bits-per-byte
+<ul>
+<li>BPC:- bits required to represent a token, eg. if a tokenizer takes 6 bits to represnt a token and token have 2 chars then BPC is 3</li>
+<li>Since there can be multiple encoding schemes[ASCII(7 bits), UTF-8(8-32bits)], bits-per-character will differ</li>
+<li>BPB:- bits a language model need to represent 1 byte of training data
+<ul>
+<li>lets say BPC is 3 of the trained model and 7 bits are required to represent a single character of training datta then we can say that
+<ul>
+<li>7 bit of data is beng represnted using 3 bit</li>
+<li>1 bit of data is being represented using 3/7 bits</li>
+<li>so for 1 byte i.e.&nbsp;8bit it is 24/7</li>
+<li>it simply means that 3.43 bits are needed by model to represnt 1 byte of training data</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Perplexity
+<ul>
+<li>It is the exponential of entropy and cross entropy</li>
+<li>PPL(P) = 2^H(P)</li>
+<li>PPL(P, Q) = 2^H(P, Q)</li>
+<li>If cross entropy measures how difficult it is to pedict next token then ppl defines how uncertain it for predicting the next token, i.e.&nbsp;higher the ppl more will be options</li>
+<li>If base 2 then bits and if base is e then nat</li>
+</ul></li>
+<li>Perplexity Interpretation and Use Cases
+<ul>
+<li>More structured data gives lower PPL. HTML will have lower PPL compared to everyday text since after <code>&lt;head&gt;</code> there will always be <code>&lt;/head&gt;</code>.</li>
+<li>The bigger the vocabulary, the higher the PPL since there will be lot of the options for predicting</li>
+<li>The longer the cntext length, the less will be PPL i.e if a model have more context then it will have less uncertainty in predicting next token</li>
+<li>PPL can be used to identify if the model was trained on given dataset or not, since if the model has seen the data in training time then it will have lower PPL otherwise higher PPL</li>
+</ul></li>
+<li>Post-training techniques like SFT or RLHF may lead to increase in PPL, since they gets modified for completion task from next token prediction</li>
+<li>Formula to calculate PPL given n tokens</li>
+</ul>
+</section>
+<section id="exact-evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="exact-evaluation">Exact Evaluation</h2>
+<ul>
+<li>Functional Correcteness
+<ul>
+<li>Whether the model is generating the intended texts or not e.g.&nbsp;if asked to create a website whether the created website is as intended or not</li>
+<li>Functional correctness of codes can be automated easily by passing the genertaed code to a particular interpreter to check if the ouput from the generated code is same as the expected one or not</li>
+<li>pass<code>@k</code> x%:- fraction of passed sample cases at generation number k</li>
+</ul></li>
+<li>Similarity measurements against reference data
+<ul>
+<li>Generated responses that are more similar to the reference responses are considered to be better</li>
+<li>There are 4 ways to measure similarity between two open-ended texts:-
+<ul>
+<li>Ask an evaluator, whether the two texts are same or not</li>
+<li>Exact match: Does generated response matches exactly with one of the reference responses</li>
+<li>Lexical similarity: How similar generated response looks to the refernce response</li>
+<li>Semantic Similarity: How close they are semantically in meaning</li>
+</ul></li>
+<li>Exact Match:-
+<ul>
+<li>When we hvae to generate short answers or deterministic ouputs.</li>
+<li>It gives output either 1 or 0</li>
+<li>2+3=?. If genertaed response is 5 or “The answer is 5” is acceptable</li>
+<li>If the input was “Birthday of XYZ” and if it gives correct year but not date then it is considered wrong</li>
+<li>but in case of translation there might be multiple sequence possible for a given text</li>
+</ul></li>
+<li>Lexical Similarity:-
+<ul>
+<li>One way is to count the number of tokens which are in common [can be increased to n-gram tokens instead of comparing 1 token (what percentage of reference responses is also in the generated responses)]</li>
+<li>Use some fuzzy logic i.e.&nbsp;edit distance [insert, delete substitute] to check how much edits are need to get the same text</li>
+<li>Common metrices are BLEU, ROUGE, METEOR++, TER, CIDEr</li>
+<li>Some cons are that:-
+<ul>
+<li>we have to curate all the possible reference data samples.</li>
+<li>It is also possible that the model generates a good quality text and gets lower score because the generated text was not found in refernce data</li>
+<li>It is also possible that refernce data is wrong, so reference based evaluations are not good considering refernce free ones</li>
+<li>Also it is not possible to blindly trust this metric. eg. on some code benchmark BLUE score was same for incorrect as well as correct ouputs</li>
+</ul></li>
+</ul></li>
+<li>Semantic Similarity:-
+<ul>
+<li>It calculates the similarity in semantics by converting given texts in to embedding</li>
+<li>Cosine similarity is used to find out the similarity</li>
+<li>1 if they are almost similar, -1 if they are completely opposite</li>
+<li>This is under exact match, because embedding generation algo might differ but calculation of semnatic similary will be same</li>
+<li>Metric for semantic textual similarity
+<ul>
+<li>BERTScore:- Embeddings are generated by BERT</li>
+<li>MoverScore:- Embeddings are generated by mixture of algorithms</li>
+</ul></li>
+<li>Cons is that what if embeding generation module is not perfect then even if two texts are semantical same, it will say otherwise and there is an overhead of compuatation of embedding</li>
+</ul></li>
+</ul></li>
+<li>Benchmark that measures the embedding quality on various tasks is MTEB[Massive Text Embedding Benchmark]</li>
+</ul>
+</section>
+<section id="ai-as-a-judge" class="level2">
+<h2 class="anchored" data-anchor-id="ai-as-a-judge">AI as a Judge</h2>
+<ul>
+<li><p>AI judges are cheap in comparison of humans</p></li>
+<li><p>There are three ways you can use AI to evaluate:-</p>
+<ul>
+<li>Using the AI itslef which generated the response</li>
+<li>Using AI to compare against a given refernce data</li>
+<li>Using another response</li>
+</ul></li>
+<li><p>Use discrete scoring, less the options for scoring better will be the evaluation by AI</p></li>
+<li><p>Evaluation can also be made better by giving the possible examples for each category or score</p></li>
+<li><p>Limitations:</p>
+<ul>
+<li>Inconsistency:- Since they are probabilistic, they will give different output for the same prompt</li>
+<li>Criteria-Ambiguity:- Some AI evaluators give yes no, some give 1-5 or 1-2. What is the evaluator changed or the prompt used was changed</li>
+<li>Increased Cost &amp; Latency:- Using AI evaluations can add upto to inference cost as well as add latency to the whole pipeline</li>
+<li>Biases of AI as a judge:- AI evalators tend to prefer their reponses over the responses generated other models even it is not correct
+<ul>
+<li>first postion bias as they tend to prefer first option as opposite of humans, where they prefer last option</li>
+<li>verbosity bias is favouring lengthier outputs even if it is wrong</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="what-models-can-act-as-a-judge" class="level2">
+<h2 class="anchored" data-anchor-id="what-models-can-act-as-a-judge">What models can act as a Judge?</h2>
+<ul>
+<li>Strong Model as Judge
+<ul>
+<li>Evaluate a subset of responses generated by a stronger model</li>
+</ul></li>
+<li>Same model as Judge
+<ul>
+<li>It is like cheating, but it would help in sanity check that if the model itself thnks the output is not correct then the model itself is not good</li>
+</ul></li>
+<li>Weaker model as judge
+<ul>
+<li>Since judging is easier than generating a response</li>
+</ul></li>
+<li>Specialised AI Judges
+<ul>
+<li>Reward model:- Given a pair of prompt and response, it gives a score of how good response is</li>
+<li>Refrence based Judge:- Evaluate similarity score or quality against given refernce responses</li>
+<li>Preference Model:- Given multiple response for a prompt, they provide ranking</li>
+</ul></li>
+</ul>
+</section>
+<section id="ranking-models-with-comparative-evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="ranking-models-with-comparative-evaluation">Ranking Models with Comparative Evaluation</h2>
+<ul>
+<li>We evaluate models, not because we want to check their scores but to find out which one is better for our use case</li>
+<li>Pointwise Evaluation is evaluating each model independenlty and then comapring their scores</li>
+<li>Comaparative Evaluation is evaluating models against each other and then ranking them from comparative results. For e.g.&nbsp;asking the participants to dance simultaneusly and then judge them</li>
+<li>Comparative evaluation is better since we have to compare responses instead of giving score to each response</li>
+<li>One think to note is that responses can not be calculated solely based on preference for example there are some questions which needs to be judged by correctness</li>
+<li>Also giving two responses for a math problem and then asking the user to give the prefernce score. If user know about that problem then why would he had asked about it</li>
+<li>Basically for a preference based voting only works when voters are knowledgeable in the subject</li>
+<li>There is a difference between A/B testing and comparative evaluation
+<ul>
+<li>in A/B testing we use same model to get the outputs</li>
+<li>in comparative evaluation, we use different models for same input to get different outputs</li>
+</ul></li>
+</ul>
+</section>
+<section id="challeneges-of-comparative-evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="challeneges-of-comparative-evaluation">Challeneges of Comparative Evaluation</h2>
+<ul>
+<li>Scalibility Bottleneck:- Comparartive Evaluations are data intensive. Whenever a new model comes in we have to evaluate it against existing ones which will change the ranking. There is also no clearity on transitivity if A better than B and B is better than C then it does not imply that A is better than C. To mititgate these issues, we can design a matching algorithm which will help try to distinguish when there is more confusion between two models rather than evaluation two models which are already far from each other in performance</li>
+<li>Lack of standardization and quality control:- There is not a standard way to evaluate. Someone on internet might prefer facts instead of gramaically, some might prefer toxic contents which is good and bad also. There is also lack of prompts to evaluate for example there might be 305</li>
+</ul>
+
+
 </section>
 </section>
 
