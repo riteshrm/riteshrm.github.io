@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/Position Encoding/index.html",
       "/posts/AI Engineering By Chip Huyen/index.html",
       "/posts/Attention Mechanism/index.html",
       "/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html",

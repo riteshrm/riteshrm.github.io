@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Ritesh Kumar Maurya">
+<meta name="dcterms.date" content="2026-04-06">
 
-<title>About Me</title>
+<title>Position Embedding – About Me</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,26 +25,26 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<link href="./posts/favicon.ico" rel="icon">
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b758ccaa5987ceb1b75504551e579abf.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-9119c69a4cdc82f70dbbf81eb1a627b6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-9dcdf6b47dda8272a20b248413642b2c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-9119c69a4cdc82f70dbbf81eb1a627b6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<script src="site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<link href="../../posts/favicon.ico" rel="icon">
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b758ccaa5987ceb1b75504551e579abf.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-9119c69a4cdc82f70dbbf81eb1a627b6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-9dcdf6b47dda8272a20b248413642b2c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-9119c69a4cdc82f70dbbf81eb1a627b6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -73,15 +75,64 @@ ga('send', {
 });
 </script>
 
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
 
-<link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="About Me">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Position Embedding – About Me">
 <meta property="og:description" content="Personal site of Ritesh Kumar Maurya.">
+<meta property="og:image" content="https://riteshrm.github.io/posts/Position Encoding/thumbnail.png">
 <meta property="og:site_name" content="About Me">
-<meta name="twitter:title" content="About Me">
+<meta property="og:image:height" content="1024">
+<meta property="og:image:width" content="1536">
+<meta name="twitter:title" content="Position Embedding – About Me">
 <meta name="twitter:description" content="Personal site of Ritesh Kumar Maurya.">
+<meta name="twitter:image" content="https://riteshrm.github.io/posts/Position Encoding/thumbnail.png">
 <meta name="twitter:creator" content="@_riteshrm_">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image-height" content="1024">
+<meta name="twitter:image-width" content="1536">
 </head>
 
 <body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -253,7 +304,7 @@ ga('send', {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">About Me</span>
     </a>
   </div>
@@ -263,7 +314,7 @@ ga('send', {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link" href="../../blog.html"> 
 <span class="menu-text">Blog/Notes</span></a>
   </li>  
 </ul>
@@ -309,62 +360,353 @@ ga('send', {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#timeline" id="toc-timeline" class="nav-link active" data-scroll-target="#timeline">Timeline</a></li>
+  <li><a href="#positional-encoding-pe" id="toc-positional-encoding-pe" class="nav-link active" data-scroll-target="#positional-encoding-pe">Positional Encoding (PE)</a></li>
+  <li><a href="#attempted-solution" id="toc-attempted-solution" class="nav-link" data-scroll-target="#attempted-solution">Attempted Solution</a></li>
+  <li><a href="#sinusoidal-positional-encoding" id="toc-sinusoidal-positional-encoding" class="nav-link" data-scroll-target="#sinusoidal-positional-encoding">Sinusoidal Positional Encoding</a>
+  <ul class="collapse">
+  <li><a href="#lets-see-only-sine-for-intuition" id="toc-lets-see-only-sine-for-intuition" class="nav-link" data-scroll-target="#lets-see-only-sine-for-intuition">Lets see only sine for intuition</a></li>
+  <li><a href="#key-observations" id="toc-key-observations" class="nav-link" data-scroll-target="#key-observations">Key Observations</a></li>
+  <li><a href="#connection-to-binary-encoding" id="toc-connection-to-binary-encoding" class="nav-link" data-scroll-target="#connection-to-binary-encoding">Connection to Binary Encoding</a>
+  <ul class="collapse">
+  <li><a href="#locality-insight" id="toc-locality-insight" class="nav-link" data-scroll-target="#locality-insight">Locality Insight</a></li>
+  <li><a href="#global-insight" id="toc-global-insight" class="nav-link" data-scroll-target="#global-insight">Global Insight</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#why-10000" id="toc-why-10000" class="nav-link" data-scroll-target="#why-10000">Why 10000?</a>
+  <ul class="collapse">
+  <li><a href="#what-happens-if-we-chose-100" id="toc-what-happens-if-we-chose-100" class="nav-link" data-scroll-target="#what-happens-if-we-chose-100">What happens if we chose 100</a></li>
+  <li><a href="#what-happens-if-we-chose-100000" id="toc-what-happens-if-we-chose-100000" class="nav-link" data-scroll-target="#what-happens-if-we-chose-100000">What happens if we chose 100000</a></li>
+  <li><a href="#how-does-10k-solves-above-problems" id="toc-how-does-10k-solves-above-problems" class="nav-link" data-scroll-target="#how-does-10k-solves-above-problems">How does 10k solves above problems</a></li>
+  </ul></li>
+  <li><a href="#why-include-cosine-also" id="toc-why-include-cosine-also" class="nav-link" data-scroll-target="#why-include-cosine-also">Why include cosine also</a></li>
+  <li><a href="#rope-rotary-position-embedding" id="toc-rope-rotary-position-embedding" class="nav-link" data-scroll-target="#rope-rotary-position-embedding">RoPE [Rotary Position Embedding]</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Position Encoding/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Position Embedding</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Deep Learning</div>
+  </div>
+  </div>
 
 
 
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ritesh Kumar Maurya </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 6, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
 
 
-<p>Hi there 👋 I am Ritesh. I work at <a href="https://research.samsung.com/sri-n">Samsung R&amp;D Institute India, Noida</a>. For more details on my work experience, check out my <a href="https://www.linkedin.com/in/riteshrm/">LinkedIn profile</a>.</p>
-<table>
-<tbody><tr>
-<td>
-<a href="https://github.com/riteshrm"><img src="https://img.shields.io/github/followers/riteshrm.svg?label=GitHub&amp;style=social" alt="GitHub"></a>
-</td>
-<td>
-<a href="https://twitter.com/_riteshrm_"><img src="https://img.shields.io/twitter/follow/%5Friteshrm%5F?label=Twitter&amp;style=social" alt="Twitter"></a>
-</td>
-<td>
-<a href="https://www.linkedin.com/in/riteshrm"><img src="https://img.shields.io/badge/LinkedIn--_.svg?style=social&amp;logo=linkedin" alt="LinkedIn"></a>
-</td>
-<td>
-<a href="mailto:riteshkumarmaurya7379@gmail.com"><img src="https://img.shields.io/badge/Gmail--_.svg?style=social&amp;logo=gmail" alt="Gmail"></a>
-</td>
-</tr>
-</tbody></table>
-<section id="timeline" class="level3">
-<h3 class="anchored" data-anchor-id="timeline">Timeline</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 38%">
-<col style="width: 38%">
-<col style="width: 23%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;">Position</th>
-<th style="text-align: center;">Company</th>
-<th style="text-align: center;">Duration</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">Machine Learning Engineer</td>
-<td style="text-align: center;">Samsung R&amp;D Institute India, Noida</td>
-<td style="text-align: center;">Jan 2024 - Present</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">Machine Learning Engineer Intern</td>
-<td style="text-align: center;">Samsung R&amp;D Institute India, Noida</td>
-<td style="text-align: center;">Jan 2023 - Dec 2023</td>
-</tr>
-</tbody>
-</table>
+</header>
+
+
+<section id="positional-encoding-pe" class="level1">
+<h1>Positional Encoding (PE)</h1>
+<ul>
+<li>RNNs process tokens sequentially so they have information about the position of tokens of a given sequence.</li>
+<li>Transformers process all the tokens simultaneously where each token attends to every other token.</li>
+<li><em>For Example:</em>:-
+<ul>
+<li>my daughter called her brother [where each word is a token]</li>
+<li>in above sentence <strong>my</strong> will attend to all other tokens and similarly others will also attend other tokens.</li>
+<li>now consider other permutation of above sequence her daughter called my brother</li>
+<li>even in above example, permutation is different but transformers will find out the same context for each word as above one</li>
+<li>a simple explanation would be consider <strong>my</strong> and <strong>her</strong>
+<ul>
+<li>the attention between these will be same for both of the sequnces, but both of them corresponds to different meaning.</li>
+<li>so to have different attentions for different sequences we need to inject some information about the positions of words also.</li>
+</ul></li>
+</ul></li>
+</ul>
+<hr>
+</section>
+<section id="attempted-solution" class="level1">
+<h1>Attempted Solution</h1>
+<ul>
+<li><p>Use the index of tokens directly as positon information for a given sequnce. However, when we add token embedding with this position indexs, positional information will over power the content signal and also, the rightmost tokens will dominate.</p></li>
+<li><p>Now, to solve this, we can normalize the positional information i.e.&nbsp;normalize with the length of sequence. But now we have another problem, all of the sequences will never be of same length, so each position information will keep varying. For example lets consider two sequences</p>
+<ol type="1">
+<li>I am going PE:=[0/3 1/3 2/3]</li>
+<li>All of us are going PE:=[0/5 1/5 2/5]</li>
+</ol></li>
+<li><p>As we can see in above example, in sequence we are normalizing by 3 and in 2nd one by 5, which is not good for a model to learn like one time we are saying that 2nd positions value is 0.33 and in the next sequence we are saying no no, its 0.2</p></li>
+</ul>
+<hr>
+</section>
+<section id="sinusoidal-positional-encoding" class="level1">
+<h1>Sinusoidal Positional Encoding</h1>
+<ul>
+<li><p>The authors of the Transformer paper introduced sinusoidal functions to address this issue.</p></li>
+<li><p>The positional encoding is defined as:</p>
+<ul>
+<li>For even indices:</li>
+</ul>
+<p><span class="math display">
+PE(pos, 2i) = \sin\left(\frac{pos}{10000^{\frac{2i}{d_{model}}}}\right)
+</span></p>
+<ul>
+<li>For odd indices:</li>
+</ul></li>
+</ul>
+<p><span class="math display">
+PE(pos, 2i + 1) = \cos\left(\frac{pos}{10000^{\frac{2i}{d_{model}}}}\right)
+</span></p>
+<ul>
+<li><em>where</em>
+<ul>
+<li>pos is the position of token</li>
+<li><span class="math inline">d_{model}</span> is dimensionality of position embedding</li>
+<li>i is index of embedding dimension where i runs from 0 to <span class="math inline">d_{model}</span>/2 -1 [each value of i corresponds to one frequency of sinusoid]</li>
+</ul></li>
+</ul>
+<section id="lets-see-only-sine-for-intuition" class="level2">
+<h2 class="anchored" data-anchor-id="lets-see-only-sine-for-intuition">Lets see only sine for intuition</h2>
+<figure style="text-align: center;" class="figure">
+<img src="scale_factor.png" style="width:80%" class="figure-img">
+<figcaption>
+As dimension index increases, scaling factor also increases
+</figcaption>
+</figure>
+<ul>
+<li><p>As the scaling factor increases, the period of sin wave increases frequency decreases i.e.&nbsp;the repeatation of values decreases.</p></li>
+<li><p>We can also say that as scale factor increases, the oscillation becomes slower.</p></li>
+<li><p>Dimension 0 i.e.&nbsp;lower dimension can incorporate fine grained local positional information.</p></li>
+<li><p>Value at k is far different than value at k + 5 as we can see from below figure.</p></li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="dim_0_sin.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<hr>
+<ul>
+<li>Dimension 255 i.e.&nbsp;higher dimensions incorporates global positional information</li>
+<li>Value at k and k+5 is nearly similar but at k and k+200 is quite different as we can see from the below figure.</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="dim_255_sin.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<hr>
+<ul>
+<li>Basically given a particular position pos, it gets mapped to various sine waves which incroporates local as well as global information as we can see from below figure.</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="sine_wave.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+</section>
+<section id="key-observations" class="level2">
+<h2 class="anchored" data-anchor-id="key-observations">Key Observations</h2>
+<ul>
+<li>Earlier indices (smaller ( i )):
+<ul>
+<li>Capture <strong>short-range information</strong></li>
+<li>High-frequency variations</li>
+</ul></li>
+<li>Later indices (larger ( i )):
+<ul>
+<li>Capture <strong>long-range information</strong></li>
+<li>Low-frequency variations</li>
+</ul></li>
+<li>This creates a mix of:
+<ul>
+<li>Short-range patterns (rapid oscillations)</li>
+<li>Long-range patterns (slow oscillations)</li>
+</ul></li>
+</ul>
+</section>
+<section id="connection-to-binary-encoding" class="level2">
+<h2 class="anchored" data-anchor-id="connection-to-binary-encoding">Connection to Binary Encoding</h2>
+<ul>
+<li>As frequency decreases, <strong>bit significance increases</strong></li>
+<li>Similar to binary representation:
+<ul>
+<li>Rightmost bits → change frequently (low significance)</li>
+<li>Leftmost bits → change slowly (high significance)</li>
+</ul></li>
+<li>Moving from right → left:
+<ul>
+<li>Repetition decreases</li>
+<li>Importance increases</li>
+</ul></li>
+<li>And this is what we want from a positonal encoding, where it can help in differentiate local as well as global tokens.</li>
+<li>But since Binary Encodings are discrete and does not change smoothly for example BE of 3 is 11 and BE of 4 is 100, which is not continuous whereas sinusoidal waves are continuos and change smoothly from pos to pos + 1.</li>
+</ul>
+<hr>
+<section id="locality-insight" class="level3">
+<h3 class="anchored" data-anchor-id="locality-insight">Locality Insight</h3>
+<p>For small values of i:</p>
+<ul>
+<li>PE(pos) and PE(pos + 1) are <strong>very different</strong></li>
+<li>PE(pos) and PE(pos + k) are <strong>more similar for larger k</strong></li>
+</ul>
+<p>Implication:</p>
+<ul>
+<li>Helps distinguish <strong>nearby tokens</strong></li>
+</ul>
+<hr>
+</section>
+<section id="global-insight" class="level3">
+<h3 class="anchored" data-anchor-id="global-insight">Global Insight</h3>
+<p>For large values of i:</p>
+<ul>
+<li>PE(pos) and PE(pos + 1) are <strong>more similar</strong></li>
+<li>PE(pos) and PE(pos + k) are <strong>very different for larger k</strong></li>
+</ul>
+<p>Implication:</p>
+<ul>
+<li>Helps distinguish <strong>Far-apart tokens</strong></li>
+</ul>
+<hr>
+</section>
+</section>
+</section>
+<section id="why-10000" class="level1">
+<h1>Why 10000?</h1>
+<section id="what-happens-if-we-chose-100" class="level2">
+<h2 class="anchored" data-anchor-id="what-happens-if-we-chose-100">What happens if we chose 100</h2>
+<ul>
+<li>From below graph we can see that even higher dimension starts repeating themselves i.e.&nbsp;their frequency increases and thus we cant distinguish between far-apart tokens</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="100_SF.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<ul>
+<li>For example lets calculate cosine similarity between PE[128:256] of 500th position to everyone other position.</li>
+<li>The cosine similarity will change drastically as we can see in the below figure, whereas we want higher dimensions to change smoothly.</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="cs2_100.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<ul>
+<li>The cosine similarity between PE[0:128] of 500th position to everyone other position.</li>
+<li>The cosine similarity decreases drastically to zero even with position difference of 10 only, whereas we want it to decrease smoothly but not in a agressive way.</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="cs1_100.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+</section>
+<section id="what-happens-if-we-chose-100000" class="level2">
+<h2 class="anchored" data-anchor-id="what-happens-if-we-chose-100000">What happens if we chose 100000</h2>
+<ul>
+<li>And if we chose 100K as scalin factor then from below figure we can see that even the earlier dimensions have reduced frequency and thus we can’t differentiate between two local positons</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="100k_SF.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<ul>
+<li>For example lets calculate cosine similarity between PE[128:256] of 500th position to everyone other position, in this case similarity barely changes as we can see from below figure.</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="cs2_100k.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<ul>
+<li>The cosine similarity between PE[0:128] of 500th position to everyone other position.</li>
+<li>The cosine similarity remains mostly same even with position difference of 50, whereas we want it to decrease smoothly.</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="cs1_100k.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+</section>
+<section id="how-does-10k-solves-above-problems" class="level2">
+<h2 class="anchored" data-anchor-id="how-does-10k-solves-above-problems">How does 10k solves above problems</h2>
+<ul>
+<li>And as suggested in paper, if we chose 10k. It is somehting like sweet spot where earlier dimensions have higher frequency thus helping in distinguishing between local positions and later dimensions have lower frequency thus helping in capturing long range positional differences.</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="10k_SF.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<ul>
+<li>As we can see from below graphs it solves the problem of cosine similarity between PE of 500th position and every other position</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="cs2_10k.png" style="width:80%" class="figure-img">
+<figcaption>
+Higher dimension similarity changes smoothly to capture global information
+</figcaption>
+</figure>
+<figure style="text-align: center;" class="figure">
+<img src="cs1_10k.png" style="width:80%" class="figure-img">
+<figcaption>
+Lower dimension similarity changes somewhat aggressively to capture local information
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="why-include-cosine-also" class="level1">
+<h1>Why include cosine also</h1>
+<ul>
+<li>It allows, the PE across all postions to have simple linear relationship.</li>
+<li>Generally:
+<ul>
+<li>x = <span class="math inline">\cos(\theta)</span></li>
+<li>y = <span class="math inline">\sin(\theta)</span></li>
+</ul></li>
+<li>But in paper:
+<ul>
+<li>x = <span class="math inline">\sin(\theta)</span></li>
+<li>y = <span class="math inline">\cos(\theta)</span></li>
+</ul></li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="first_cos.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<figure style="text-align: center;" class="figure">
+<img src="first_cos2.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<figure style="text-align: center;" class="figure">
+<img src="first_cos3.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<ul>
+<li>As we can see from above equations, PE[pos+k] = <span class="math inline">T_{k}</span> PE[pos]</li>
+</ul>
+</section>
+<section id="rope-rotary-position-embedding" class="level1">
+<h1>RoPE [Rotary Position Embedding]</h1>
 
 
 </section>
@@ -788,4 +1130,4 @@ ga('send', {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Position Encoding/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
