@@ -5,7 +5,7 @@
       xmlns:dc="http://purl.org/dc/elements/1.1/" 
       version="2.0">
 <channel>
-<title>About Me</title>
+<title>Ritesh Kumar Maurya</title>
 <link>https://riteshrm.github.io/blog.html</link>
 <atom:link href="https://riteshrm.github.io/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Personal site of Ritesh Kumar Maurya.</description>
@@ -76,6 +76,177 @@
 <li>i is index of embedding dimension where i runs from 0 to <img src="https://latex.codecogs.com/png.latex?d_%7Bmodel%7D">/2 -1 [each value of i corresponds to one frequency of sinusoid]</li>
 </ul></li>
 </ul>
+<section id="below-is-python-code-for-getting-1d-sinusoidal-postion-embedding" class="level2">
+<h2 class="anchored" data-anchor-id="below-is-python-code-for-getting-1d-sinusoidal-postion-embedding">Below is python code for getting 1D Sinusoidal Postion Embedding</h2>
+<div id="054d86ef" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Union</span>
+<span id="cb1-3"></span>
+<span id="cb1-4"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_1d_sin_cos_pe(d_model:<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>, pos:Union[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>]):</span>
+<span id="cb1-5">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">type</span>(pos)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>:</span>
+<span id="cb1-6">        pos <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [pos]</span>
+<span id="cb1-7">    n_tokens <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(pos)</span>
+<span id="cb1-8">    pos <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor(pos).reshape(n_tokens, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb1-9">    div_term <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10000</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>i<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>d_model) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(d_model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)])</span>
+<span id="cb1-10">    sinPE <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.sin(pos<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>div_term)</span>
+<span id="cb1-11">    cosPE <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.cos(pos<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>div_term)</span>
+<span id="cb1-12">    combinedPE <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.zeros(n_tokens, d_model)</span>
+<span id="cb1-13">    combinedPE[:, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>::<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> sinPE</span>
+<span id="cb1-14">    combinedPE[:, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>::<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> cosPE</span>
+<span id="cb1-15"></span>
+<span id="cb1-16">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> combinedPE</span>
+<span id="cb1-17"></span>
+<span id="cb1-18"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># For single position</span></span>
+<span id="cb1-19">d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">512</span></span>
+<span id="cb1-20">pos <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span>
+<span id="cb1-21">pe2 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_1d_sin_cos_pe(d_model, pos)</span>
+<span id="cb1-22"></span>
+<span id="cb1-23">d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">512</span></span>
+<span id="cb1-24">pos <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span></span>
+<span id="cb1-25">pe3 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_1d_sin_cos_pe(d_model, pos)</span>
+<span id="cb1-26"></span>
+<span id="cb1-27">combinedPE <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.cat([pe2, pe3], dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>)</span>
+<span id="cb1-28"></span>
+<span id="cb1-29"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># For multiple positions </span></span>
+<span id="cb1-30">d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">512</span></span>
+<span id="cb1-31">pos <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>]</span>
+<span id="cb1-32">pe <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_1d_sin_cos_pe(d_model, pos)</span>
+<span id="cb1-33"></span>
+<span id="cb1-34"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(torch.equal(combinedPE, pe))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True</code></pre>
+</div>
+</div>
+</section>
 <section id="lets-see-only-sine-for-intuition" class="level2">
 <h2 class="anchored" data-anchor-id="lets-see-only-sine-for-intuition">Lets see only sine for intuition</h2>
 <figure style="text-align: center;" class="figure">
@@ -303,6 +474,31 @@ Lower dimension similarity changes somewhat aggressively to capture local inform
 </section>
 <section id="rope-rotary-position-embedding" class="level1">
 <h1>RoPE [Rotary Position Embedding]</h1>
+<ul>
+<li><p>It captures how two tokens are positioned with respect to each other</p></li>
+<li><p>For Example:-</p>
+<ul>
+<li>my daughter called her brother last night</li>
+<li>0 1 (n) 2 (m) 3 4 5 6</li>
+<li>Absolute Position Embedding of token daughter depends on position of token i.e.&nbsp;1 (n)</li>
+<li>Relative Position Embedding of token ‘daughter’ with respect to token ‘called’ -1 (n-m)
+<ul>
+<li>Where -1 or in general it will tell whether token ‘daughter’ is before or after ‘called’ and at what distance.</li>
+</ul></li>
+</ul></li>
+<li><p>Query at position m attends Key at position n and to calculate attention score, it depends more on relative position than absolute position.</p></li>
+<li><p>last night my daughter called her brother</p></li>
+<li><p>0 1 2 3 4 5 6</p></li>
+<li><p>In above sentence even though the APE is different compared to previous sentence their RPE is still the same</p></li>
+<li><p>In case of APE, there is linear relationship between tokens at pos and pos + k, and we expect our model to learn this relationship</p>
+<ul>
+<li>PE_{pos + k} = T^k * PE_{pos}</li>
+</ul></li>
+<li><p>In case of RPE, we are explicitly telling our model that these two tkens are at k tokens apart</p></li>
+</ul>
+<p>in this quarto page i am getting two different links one with About Me and another with Ritesh Kumar Maurya and both of them are displaying same content</p>
+<p>how can i get only About Me and Blog/Notes only</p>
+<p>dont make any changes just suggest me what should i do</p>
 
 
 </section>

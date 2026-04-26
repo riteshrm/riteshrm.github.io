@@ -9,7 +9,7 @@
 <meta name="author" content="Ritesh Kumar Maurya">
 <meta name="dcterms.date" content="2026-04-06">
 
-<title>Position Embedding – About Me</title>
+<title>Position Embedding – Ritesh Kumar Maurya</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -41,9 +76,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-9119c69a4cdc82f70dbbf81eb1a627b6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-9dcdf6b47dda8272a20b248413642b2c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-9119c69a4cdc82f70dbbf81eb1a627b6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-e22af750838b8708ff2c979203820c49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "language": {
@@ -120,13 +155,13 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="Position Embedding – About Me">
+<meta property="og:title" content="Position Embedding – Ritesh Kumar Maurya">
 <meta property="og:description" content="Personal site of Ritesh Kumar Maurya.">
 <meta property="og:image" content="https://riteshrm.github.io/posts/Position Encoding/thumbnail.png">
-<meta property="og:site_name" content="About Me">
+<meta property="og:site_name" content="Ritesh Kumar Maurya">
 <meta property="og:image:height" content="1024">
 <meta property="og:image:width" content="1536">
-<meta name="twitter:title" content="Position Embedding – About Me">
+<meta name="twitter:title" content="Position Embedding – Ritesh Kumar Maurya">
 <meta name="twitter:description" content="Personal site of Ritesh Kumar Maurya.">
 <meta name="twitter:image" content="https://riteshrm.github.io/posts/Position Encoding/thumbnail.png">
 <meta name="twitter:creator" content="@_riteshrm_">
@@ -364,6 +399,7 @@ window.Quarto = {
   <li><a href="#attempted-solution" id="toc-attempted-solution" class="nav-link" data-scroll-target="#attempted-solution">Attempted Solution</a></li>
   <li><a href="#sinusoidal-positional-encoding" id="toc-sinusoidal-positional-encoding" class="nav-link" data-scroll-target="#sinusoidal-positional-encoding">Sinusoidal Positional Encoding</a>
   <ul class="collapse">
+  <li><a href="#below-is-python-code-for-getting-1d-sinusoidal-postion-embedding" id="toc-below-is-python-code-for-getting-1d-sinusoidal-postion-embedding" class="nav-link" data-scroll-target="#below-is-python-code-for-getting-1d-sinusoidal-postion-embedding">Below is python code for getting 1D Sinusoidal Postion Embedding</a></li>
   <li><a href="#lets-see-only-sine-for-intuition" id="toc-lets-see-only-sine-for-intuition" class="nav-link" data-scroll-target="#lets-see-only-sine-for-intuition">Lets see only sine for intuition</a></li>
   <li><a href="#key-observations" id="toc-key-observations" class="nav-link" data-scroll-target="#key-observations">Key Observations</a></li>
   <li><a href="#connection-to-binary-encoding" id="toc-connection-to-binary-encoding" class="nav-link" data-scroll-target="#connection-to-binary-encoding">Connection to Binary Encoding</a>
@@ -480,6 +516,48 @@ PE(pos, 2i + 1) = \cos\left(\frac{pos}{10000^{\frac{2i}{d_{model}}}}\right)
 <li>i is index of embedding dimension where i runs from 0 to <span class="math inline">d_{model}</span>/2 -1 [each value of i corresponds to one frequency of sinusoid]</li>
 </ul></li>
 </ul>
+<section id="below-is-python-code-for-getting-1d-sinusoidal-postion-embedding" class="level2">
+<h2 class="anchored" data-anchor-id="below-is-python-code-for-getting-1d-sinusoidal-postion-embedding">Below is python code for getting 1D Sinusoidal Postion Embedding</h2>
+<div id="054d86ef" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Union</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_1d_sin_cos_pe(d_model:<span class="bu">int</span>, pos:Union[<span class="bu">int</span>, <span class="bu">list</span>]):</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">type</span>(pos)<span class="op">==</span><span class="bu">int</span>:</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        pos <span class="op">=</span> [pos]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    n_tokens <span class="op">=</span> <span class="bu">len</span>(pos)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    pos <span class="op">=</span> torch.tensor(pos).reshape(n_tokens, <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    div_term <span class="op">=</span> torch.tensor([<span class="dv">10000</span><span class="op">**</span>(<span class="dv">2</span><span class="op">*</span>i<span class="op">/</span>d_model) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(d_model<span class="op">//</span><span class="dv">2</span>)])</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    sinPE <span class="op">=</span> torch.sin(pos<span class="op">/</span>div_term)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    cosPE <span class="op">=</span> torch.cos(pos<span class="op">/</span>div_term)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    combinedPE <span class="op">=</span> torch.zeros(n_tokens, d_model)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    combinedPE[:, <span class="dv">0</span>::<span class="dv">2</span>] <span class="op">=</span> sinPE</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    combinedPE[:, <span class="dv">1</span>::<span class="dv">2</span>] <span class="op">=</span> cosPE</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> combinedPE</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># For single position</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>pos <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>pe2 <span class="op">=</span> get_1d_sin_cos_pe(d_model, pos)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>pos <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>pe3 <span class="op">=</span> get_1d_sin_cos_pe(d_model, pos)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>combinedPE <span class="op">=</span> torch.cat([pe2, pe3], dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co"># For multiple positions </span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>pos <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>pe <span class="op">=</span> get_1d_sin_cos_pe(d_model, pos)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(torch.equal(combinedPE, pe))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True</code></pre>
+</div>
+</div>
+</section>
 <section id="lets-see-only-sine-for-intuition" class="level2">
 <h2 class="anchored" data-anchor-id="lets-see-only-sine-for-intuition">Lets see only sine for intuition</h2>
 <figure style="text-align: center;" class="figure">
@@ -707,6 +785,31 @@ Lower dimension similarity changes somewhat aggressively to capture local inform
 </section>
 <section id="rope-rotary-position-embedding" class="level1">
 <h1>RoPE [Rotary Position Embedding]</h1>
+<ul>
+<li><p>It captures how two tokens are positioned with respect to each other</p></li>
+<li><p>For Example:-</p>
+<ul>
+<li>my daughter called her brother last night</li>
+<li>0 1 (n) 2 (m) 3 4 5 6</li>
+<li>Absolute Position Embedding of token daughter depends on position of token i.e.&nbsp;1 (n)</li>
+<li>Relative Position Embedding of token ‘daughter’ with respect to token ‘called’ -1 (n-m)
+<ul>
+<li>Where -1 or in general it will tell whether token ‘daughter’ is before or after ‘called’ and at what distance.</li>
+</ul></li>
+</ul></li>
+<li><p>Query at position m attends Key at position n and to calculate attention score, it depends more on relative position than absolute position.</p></li>
+<li><p>last night my daughter called her brother</p></li>
+<li><p>0 1 2 3 4 5 6</p></li>
+<li><p>In above sentence even though the APE is different compared to previous sentence their RPE is still the same</p></li>
+<li><p>In case of APE, there is linear relationship between tokens at pos and pos + k, and we expect our model to learn this relationship</p>
+<ul>
+<li>PE_{pos + k} = T^k * PE_{pos}</li>
+</ul></li>
+<li><p>In case of RPE, we are explicitly telling our model that these two tkens are at k tokens apart</p></li>
+</ul>
+<p>in this quarto page i am getting two different links one with About Me and another with Ritesh Kumar Maurya and both of them are displaying same content</p>
+<p>how can i get only About Me and Blog/Notes only</p>
+<p>dont make any changes just suggest me what should i do</p>
 
 
 </section>
