@@ -10,7 +10,131 @@
 <atom:link href="https://riteshrm.github.io/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Personal site of Ritesh Kumar Maurya.</description>
 <generator>quarto-1.8.26</generator>
-<lastBuildDate>Mon, 06 Apr 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 07 Apr 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Rotary Position Embedding</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/Rotary Position Embedding/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<ul>
+<li>In this post we will try to understand RoPE.</li>
+</ul>
+<section id="why-relative-position-embedding" class="level2">
+<h2 class="anchored" data-anchor-id="why-relative-position-embedding">Why Relative Position Embedding?</h2>
+<ul>
+<li><p>It captures how two tokens are positioned with respect to each other</p></li>
+<li><p>For Example:-</p>
+<ul>
+<li><pre class="text"><code>  my daughter called her brother last night  [Sentence:-1]
+  0     1 (n)  2 (m)  3    4      5     6</code></pre></li>
+<li>Absolute Position Embedding of token daughter depends on position of token i.e.&nbsp;1 (n)</li>
+<li>Relative Position Embedding of token ‘daughter’ with respect to token ‘called’ -1 (n-m)
+<ul>
+<li>Where -1 or in general it will tell whether token ‘daughter’ is before or after ‘called’ and at what distance.</li>
+</ul></li>
+</ul></li>
+<li><p>Query at position m attends Key at position n and to calculate attention score, it depends more on relative position than absolute position.</p></li>
+<li><pre class="text"><code>  last night my daughter called her brother  [Sentence:-2]
+  0      1    2    3        4    5     6</code></pre></li>
+<li><p>In above sentence even though the APE is different compared to previous sentence their RPE is still the same</p></li>
+<li><p>In case of APE, there is linear relationship between tokens at pos and pos + k, and we expect our model to learn this relationship</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?PE_%7Bpos%20+%20k%7D"> = <img src="https://latex.codecogs.com/png.latex?T%5Ek"> * <img src="https://latex.codecogs.com/png.latex?PE_%7Bpos%7D"></li>
+</ul></li>
+<li><p>In case of RPE, we are explicitly telling our model that these two tkens are at k tokens apart</p></li>
+<li><p>Below table defines a summary of APE vs RPE</p></li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 31%">
+<col style="width: 59%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Sentence</th>
+<th style="text-align: center;">APE</th>
+<th style="text-align: center;">RPE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">tokens are at 1st and 2nd Position</td>
+<td style="text-align: center;">tokens are at (-1) tokens apart, where daughter comes before called</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">tokens are at 1st and 2nd Position</td>
+<td style="text-align: center;">tokens are at (-1) tokens apart, where daughter comes before called</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>As we can gneralise from above table that the two tokens which generally comes together or at k tokens apart, RPE will be same in suh cases whereas in case of APE, it will differe for each sentence which model have to learn to generalise better</li>
+<li>So instead of saying i am at this position or that position, it would be better to explicitly mention that we are at k tokens apart</li>
+</ul>
+</section>
+<section id="rope" class="level1">
+<h1>RoPE</h1>
+<ul>
+<li><p>Let’s say we have a 2D vector anw we want to rotate it by angle <img src="https://latex.codecogs.com/png.latex?%5Ctheta">, where it was earlier at <img src="https://latex.codecogs.com/png.latex?%5Calpha"> with magnitude r</p></li>
+<li><p>We can write initial <img src="https://latex.codecogs.com/png.latex?x"> and <img src="https://latex.codecogs.com/png.latex?y"> as:</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?x"> = <img src="https://latex.codecogs.com/png.latex?r*%5Ccos(%5Ctheta)"></li>
+<li><img src="https://latex.codecogs.com/png.latex?y"> = <img src="https://latex.codecogs.com/png.latex?r*%5Csin(%5Ctheta)"></li>
+</ul></li>
+<li><p>If we rotate it by <img src="https://latex.codecogs.com/png.latex?%5Calpha">, then:</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?x'"> = <img src="https://latex.codecogs.com/png.latex?r*%5Ccos(%5Ctheta%20+%20%5Calpha)"> = <img src="https://latex.codecogs.com/png.latex?r(%5Ccos(%5Ctheta)%5Ccos(%5Calpha)%20-%20%5Csin(%5Ctheta)%5Csin(%5Calpha))"></li>
+<li><img src="https://latex.codecogs.com/png.latex?y'"> = <img src="https://latex.codecogs.com/png.latex?r*%5Csin(%5Ctheta%20+%20%5Calpha)"> = <img src="https://latex.codecogs.com/png.latex?r(%5Csin(%5Ctheta)%5Ccos(%5Calpha)%20+%20%5Ccos(%5Ctheta)%5Csin(%5Calpha))"></li>
+</ul></li>
+<li><p>If we represent: <img src="https://latex.codecogs.com/png.latex?%0AR(%5Ctheta)%20=%20%5Cbegin%7Bbmatrix%7D%0A%5Ccos(%5Ctheta)%20&amp;%20-%5Csin(%5Ctheta)%20%5C%5C%0A%5Csin(%5Ctheta)%20&amp;%20%5Ccos(%5Ctheta)%20%5C%5C%0A%5Cend%7Bbmatrix%7D%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Az'%20=%20%5Cbegin%7Bbmatrix%7D%0Ax'%20%5C%5C%0Ay'%20%5C%5C%0A%5Cend%7Bbmatrix%7D%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Az%20=%20%5Cbegin%7Bbmatrix%7D%0Ax%20%5C%5C%0Ay%20%5C%5C%0A%5Cend%7Bbmatrix%7D%0A"></p></li>
+<li><p>Then we can write <img src="https://latex.codecogs.com/png.latex?z'%20=%20R(%5Ctheta)z"></p></li>
+<li><p>Below two properties which will be used later:</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?R(-%5Ctheta)"> = <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta)%5ET"> which gives</li>
+<li><img src="https://latex.codecogs.com/png.latex?R(%5Ctheta)%5ET"> <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta)"> = I [Identity Matrix]</li>
+<li><img src="https://latex.codecogs.com/png.latex?R(%5Ctheta_%7B1%7D)"> <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta_%7B2%7D)"> = <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta_%7B1%7D%20+%20%5Ctheta_%7B2%7D)"></li>
+</ul></li>
+<li><p>RoPE rotates the embeddings</p></li>
+<li><p>Let’s say q(query) at m and k(key) at n</p></li>
+<li><p>Then dot product between q and k would be</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?(R(m%5Ctheta)q_%7Bm%7D)%5ETR(n%5Ctheta)k_%7Bn%7D"></li>
+<li>= <img src="https://latex.codecogs.com/png.latex?q_%7Bm%7D%5ETR(m%5Ctheta)R(n%5Ctheta)k_%7Bn%7D"></li>
+<li>Since <img src="https://latex.codecogs.com/png.latex?R(-%5Ctheta)"> = <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta)%5ET">, so <img src="https://latex.codecogs.com/png.latex?R(-m%5Ctheta)"> = <img src="https://latex.codecogs.com/png.latex?R(m%5Ctheta)%5ET"></li>
+<li>this gives <img src="https://latex.codecogs.com/png.latex?q_%7Bm%7D%5ETR(-m%5Ctheta)R(n%5Ctheta)k_%7Bn%7D"></li>
+<li>now since <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta_%7B1%7D)"> <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta_%7B2%7D)"> = <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta_%7B1%7D%20+%20%5Ctheta_%7B2%7D)"></li>
+<li>this gives <img src="https://latex.codecogs.com/png.latex?q_%7Bm%7D%5ETR((n-m)%5Ctheta)k_%7Bn%7D"></li>
+<li>In above eqn attention score now explicitly depends on relative distance between q and k</li>
+<li>So if relative distance changes then only this factor will change</li>
+</ul></li>
+</ul>
+<section id="implementation" class="level3">
+<h3 class="anchored" data-anchor-id="implementation">Implementation</h3>
+<ul>
+<li>Treat a pair as single 2D vector space and rotate it independently</li>
+<li>For example lets say we have d_model of 256 then we will have 128 2D vectors and we can rotate those pairs independently</li>
+</ul>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>Deep Learning</category>
+  <guid>https://riteshrm.github.io/posts/Rotary Position Embedding/</guid>
+  <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/Rotary Position Embedding/rotary_thumbnail_resized.png" medium="image" type="image/png" height="82" width="144"/>
+</item>
 <item>
   <title>Position Embedding</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
@@ -78,7 +202,7 @@
 </ul>
 <section id="below-is-python-code-for-getting-1d-sinusoidal-postion-embedding" class="level2">
 <h2 class="anchored" data-anchor-id="below-is-python-code-for-getting-1d-sinusoidal-postion-embedding">Below is python code for getting 1D Sinusoidal Postion Embedding</h2>
-<div id="054d86ef" class="cell" data-execution_count="1">
+<div id="09d1eda9" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -471,34 +595,6 @@ Lower dimension similarity changes somewhat aggressively to capture local inform
 <ul>
 <li>As we can see from above equations, PE[pos+k] = <img src="https://latex.codecogs.com/png.latex?T_%7Bk%7D"> PE[pos]</li>
 </ul>
-</section>
-<section id="rope-rotary-position-embedding" class="level1">
-<h1>RoPE [Rotary Position Embedding]</h1>
-<ul>
-<li><p>It captures how two tokens are positioned with respect to each other</p></li>
-<li><p>For Example:-</p>
-<ul>
-<li>my daughter called her brother last night</li>
-<li>0 1 (n) 2 (m) 3 4 5 6</li>
-<li>Absolute Position Embedding of token daughter depends on position of token i.e.&nbsp;1 (n)</li>
-<li>Relative Position Embedding of token ‘daughter’ with respect to token ‘called’ -1 (n-m)
-<ul>
-<li>Where -1 or in general it will tell whether token ‘daughter’ is before or after ‘called’ and at what distance.</li>
-</ul></li>
-</ul></li>
-<li><p>Query at position m attends Key at position n and to calculate attention score, it depends more on relative position than absolute position.</p></li>
-<li><p>last night my daughter called her brother</p></li>
-<li><p>0 1 2 3 4 5 6</p></li>
-<li><p>In above sentence even though the APE is different compared to previous sentence their RPE is still the same</p></li>
-<li><p>In case of APE, there is linear relationship between tokens at pos and pos + k, and we expect our model to learn this relationship</p>
-<ul>
-<li>PE_{pos + k} = T^k * PE_{pos}</li>
-</ul></li>
-<li><p>In case of RPE, we are explicitly telling our model that these two tkens are at k tokens apart</p></li>
-</ul>
-<p>in this quarto page i am getting two different links one with About Me and another with Ritesh Kumar Maurya and both of them are displaying same content</p>
-<p>how can i get only About Me and Blog/Notes only</p>
-<p>dont make any changes just suggest me what should i do</p>
 
 
 </section>

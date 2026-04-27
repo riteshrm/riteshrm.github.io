@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Ritesh Kumar Maurya">
+<meta name="dcterms.date" content="2026-04-07">
 
-<title>Blog/Notes – Ritesh Kumar Maurya</title>
+<title>Rotary Position Embedding – Ritesh Kumar Maurya</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,28 +25,26 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<link href="./posts/favicon.ico" rel="icon">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b758ccaa5987ceb1b75504551e579abf.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-e22af750838b8708ff2c979203820c49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<script src="site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<link href="../../posts/favicon.ico" rel="icon">
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b758ccaa5987ceb1b75504551e579abf.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-e22af750838b8708ff2c979203820c49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -60,35 +60,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
 <script type="text/javascript">
 
@@ -148,13 +119,13 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="styles.css">
-<link rel="alternate" type="application/rss+xml" title="Ritesh Kumar Maurya" href="blog.xml" data-external="1"><meta property="og:title" content="Blog/Notes – Ritesh Kumar Maurya">
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Rotary Position Embedding – Ritesh Kumar Maurya">
 <meta property="og:image" content="https://riteshrm.github.io/posts/Rotary Position Embedding/rotary_thumbnail_resized.png">
 <meta property="og:site_name" content="Ritesh Kumar Maurya">
 <meta property="og:image:height" content="1024">
 <meta property="og:image:width" content="1792">
-<meta name="twitter:title" content="Blog/Notes – Ritesh Kumar Maurya">
+<meta name="twitter:title" content="Rotary Position Embedding – Ritesh Kumar Maurya">
 <meta name="twitter:image" content="https://riteshrm.github.io/posts/Rotary Position Embedding/rotary_thumbnail_resized.png">
 <meta name="twitter:creator" content="@_riteshrm_">
 <meta name="twitter:card" content="summary">
@@ -331,7 +302,7 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">About Me</span>
     </a>
   </div>
@@ -341,7 +312,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./blog.html" aria-current="page"> 
+    <a class="nav-link" href="../../blog.html"> 
 <span class="menu-text">Blog/Notes</span></a>
   </li>  
 </ul>
@@ -382,8 +353,18 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#why-relative-position-embedding" id="toc-why-relative-position-embedding" class="nav-link active" data-scroll-target="#why-relative-position-embedding">Why Relative Position Embedding?</a></li>
+  <li><a href="#rope" id="toc-rope" class="nav-link" data-scroll-target="#rope">RoPE</a>
+  <ul class="collapse">
+  <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation">Implementation</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Rotary Position Embedding/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -391,14 +372,29 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Blog/Notes</h1>
-</div>
+<h1 class="title">Rotary Position Embedding</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Deep Learning</div>
+  </div>
+  </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ritesh Kumar Maurya </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 7, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -408,190 +404,130 @@ window.Quarto = {
 </header>
 
 
+<ul>
+<li>In this post we will try to understand RoPE.</li>
+</ul>
+<section id="why-relative-position-embedding" class="level2">
+<h2 class="anchored" data-anchor-id="why-relative-position-embedding">Why Relative Position Embedding?</h2>
+<ul>
+<li><p>It captures how two tokens are positioned with respect to each other</p></li>
+<li><p>For Example:-</p>
+<ul>
+<li><pre class="text"><code>  my daughter called her brother last night  [Sentence:-1]
+  0     1 (n)  2 (m)  3    4      5     6</code></pre></li>
+<li>Absolute Position Embedding of token daughter depends on position of token i.e.&nbsp;1 (n)</li>
+<li>Relative Position Embedding of token ‘daughter’ with respect to token ‘called’ -1 (n-m)
+<ul>
+<li>Where -1 or in general it will tell whether token ‘daughter’ is before or after ‘called’ and at what distance.</li>
+</ul></li>
+</ul></li>
+<li><p>Query at position m attends Key at position n and to calculate attention score, it depends more on relative position than absolute position.</p></li>
+<li><pre class="text"><code>  last night my daughter called her brother  [Sentence:-2]
+  0      1    2    3        4    5     6</code></pre></li>
+<li><p>In above sentence even though the APE is different compared to previous sentence their RPE is still the same</p></li>
+<li><p>In case of APE, there is linear relationship between tokens at pos and pos + k, and we expect our model to learn this relationship</p>
+<ul>
+<li><span class="math inline">PE_{pos + k}</span> = <span class="math inline">T^k</span> * <span class="math inline">PE_{pos}</span></li>
+</ul></li>
+<li><p>In case of RPE, we are explicitly telling our model that these two tkens are at k tokens apart</p></li>
+<li><p>Below table defines a summary of APE vs RPE</p></li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 31%">
+<col style="width: 59%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Sentence</th>
+<th style="text-align: center;">APE</th>
+<th style="text-align: center;">RPE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">tokens are at 1st and 2nd Position</td>
+<td style="text-align: center;">tokens are at (-1) tokens apart, where daughter comes before called</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">tokens are at 1st and 2nd Position</td>
+<td style="text-align: center;">tokens are at (-1) tokens apart, where daughter comes before called</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>As we can gneralise from above table that the two tokens which generally comes together or at k tokens apart, RPE will be same in suh cases whereas in case of APE, it will differe for each sentence which model have to learn to generalise better</li>
+<li>So instead of saying i am at this position or that position, it would be better to explicitly mention that we are at k tokens apart</li>
+</ul>
+</section>
+<section id="rope" class="level1">
+<h1>RoPE</h1>
+<ul>
+<li><p>Let’s say we have a 2D vector anw we want to rotate it by angle <span class="math inline">\theta</span>, where it was earlier at <span class="math inline">\alpha</span> with magnitude r</p></li>
+<li><p>We can write initial <span class="math inline">x</span> and <span class="math inline">y</span> as:</p>
+<ul>
+<li><span class="math inline">x</span> = <span class="math inline">r*\cos(\theta)</span></li>
+<li><span class="math inline">y</span> = <span class="math inline">r*\sin(\theta)</span></li>
+</ul></li>
+<li><p>If we rotate it by <span class="math inline">\alpha</span>, then:</p>
+<ul>
+<li><span class="math inline">x'</span> = <span class="math inline">r*\cos(\theta + \alpha)</span> = <span class="math inline">r(\cos(\theta)\cos(\alpha) - \sin(\theta)\sin(\alpha))</span></li>
+<li><span class="math inline">y'</span> = <span class="math inline">r*\sin(\theta + \alpha)</span> = <span class="math inline">r(\sin(\theta)\cos(\alpha) + \cos(\theta)\sin(\alpha))</span></li>
+</ul></li>
+<li><p>If we represent: <span class="math display">
+R(\theta) = \begin{bmatrix}
+\cos(\theta) &amp; -\sin(\theta) \\
+\sin(\theta) &amp; \cos(\theta) \\
+\end{bmatrix}
+</span></p>
+<p><span class="math display">
+z' = \begin{bmatrix}
+x' \\
+y' \\
+\end{bmatrix}
+</span></p>
+<p><span class="math display">
+z = \begin{bmatrix}
+x \\
+y \\
+\end{bmatrix}
+</span></p></li>
+<li><p>Then we can write <span class="math inline">z' = R(\theta)z</span></p></li>
+<li><p>Below two properties which will be used later:</p>
+<ul>
+<li><span class="math inline">R(-\theta)</span> = <span class="math inline">R(\theta)^T</span> which gives</li>
+<li><span class="math inline">R(\theta)^T</span> <span class="math inline">R(\theta)</span> = I [Identity Matrix]</li>
+<li><span class="math inline">R(\theta_{1})</span> <span class="math inline">R(\theta_{2})</span> = <span class="math inline">R(\theta_{1} + \theta_{2})</span></li>
+</ul></li>
+<li><p>RoPE rotates the embeddings</p></li>
+<li><p>Let’s say q(query) at m and k(key) at n</p></li>
+<li><p>Then dot product between q and k would be</p>
+<ul>
+<li><span class="math inline">(R(m\theta)q_{m})^TR(n\theta)k_{n}</span></li>
+<li>= <span class="math inline">q_{m}^TR(m\theta)R(n\theta)k_{n}</span></li>
+<li>Since <span class="math inline">R(-\theta)</span> = <span class="math inline">R(\theta)^T</span>, so <span class="math inline">R(-m\theta)</span> = <span class="math inline">R(m\theta)^T</span></li>
+<li>this gives <span class="math inline">q_{m}^TR(-m\theta)R(n\theta)k_{n}</span></li>
+<li>now since <span class="math inline">R(\theta_{1})</span> <span class="math inline">R(\theta_{2})</span> = <span class="math inline">R(\theta_{1} + \theta_{2})</span></li>
+<li>this gives <span class="math inline">q_{m}^TR((n-m)\theta)k_{n}</span></li>
+<li>In above eqn attention score now explicitly depends on relative distance between q and k</li>
+<li>So if relative distance changes then only this factor will change</li>
+</ul></li>
+</ul>
+<section id="implementation" class="level3">
+<h3 class="anchored" data-anchor-id="implementation">Implementation</h3>
+<ul>
+<li>Treat a pair as single 2D vector space and rotate it independently</li>
+<li>For example lets say we have d_model of 256 then we will have 128 2D vectors and we can rotate those pairs independently</li>
+</ul>
 
 
+</section>
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1775520000000" data-listing-file-modified-sort="1777304642802" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="805">
-<div class="thumbnail"><a href="./posts/Rotary Position Embedding/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/Rotary Position Embedding/rotary_thumbnail_resized.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Rotary Position Embedding/index.html" class="no-external">Rotary Position Embedding</a>
-</h3>
-<div class="delink listing-description"><a href="./posts/Rotary Position Embedding/index.html" class="no-external">
-It captures how two tokens are positioned with respect to each other
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/Rotary Position Embedding/index.html" class="no-external">
-<div class="listing-date">
-Apr 7, 2026
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1775433600000" data-listing-file-modified-sort="1777303838227" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1370">
-<div class="thumbnail"><a href="./posts/Position Encoding/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/Position Encoding/thumbnail.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Position Encoding/index.html" class="no-external">Position Embedding</a>
-</h3>
-<div class="delink listing-description"><a href="./posts/Position Encoding/index.html" class="no-external">
-Use the index of tokens directly as positon information for a given sequnce. However, when we add token embedding with this position indexs, positional information will over…
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/Position Encoding/index.html" class="no-external">
-<div class="listing-date">
-Apr 6, 2026
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="QXBwbGllZCUyME1M" data-listing-date-sort="1768262400000" data-listing-file-modified-sort="1775737806425" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="19" data-listing-word-count-sort="3698">
-<div class="thumbnail"><a href="./posts/AI Engineering By Chip Huyen/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/AI Engineering By Chip Huyen/resized_thumbnail.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/AI Engineering By Chip Huyen/index.html" class="no-external">AI Engineering By Chip Huyen</a>
-</h3>
-<div class="delink listing-description"><a href="./posts/AI Engineering By Chip Huyen/index.html" class="no-external">
-Achieving <strong>0–60% performance is relatively easy</strong>, but moving from <strong>60–100% is extremely challenging</strong>.
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/AI Engineering By Chip Huyen/index.html" class="no-external">
-<div class="listing-date">
-Jan 13, 2026
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1768176000000" data-listing-file-modified-sort="1775909937583" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2315">
-<div class="thumbnail"><a href="./posts/Attention Mechanism/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/Attention Mechanism/attn_resized_thumbnail.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Attention Mechanism/index.html" class="no-external">Attention</a>
-</h3>
-<div class="delink listing-description"><a href="./posts/Attention Mechanism/index.html" class="no-external">
-Instead of using softmax, it tries to make it more general where this softmax function can be replaced by any other function
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/Attention Mechanism/index.html" class="no-external">
-<div class="listing-date">
-Jan 12, 2026
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1720224000000" data-listing-file-modified-sort="1775910449541" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1774">
-<div class="thumbnail"><a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning_resized_thumbnail.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">Meta Learning Book Chapter Wise Summary Points</a>
-</h3>
-<div class="delink listing-description"><a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">
-The main condition for a healthy machine learning project is a good train-val-test split.
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">
-<div class="listing-date">
-Jul 6, 2024
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="T3B0aW1pemF0aW9u" data-listing-date-sort="1716508800000" data-listing-file-modified-sort="1768307840280" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="30" data-listing-word-count-sort="5990">
-<div class="thumbnail"><a href="./posts/Quantization in Depth/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/Quantization in Depth/qat-training-precision.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Quantization in Depth/index.html" class="no-external">Quantization in Depth</a>
-</h3>
-<div class="delink listing-description"><a href="./posts/Quantization in Depth/index.html" class="no-external">
-This is completely based on Quantization in Depth
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/Quantization in Depth/index.html" class="no-external">
-<div class="listing-date">
-May 24, 2024
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-categories="T3B0aW1pemF0aW9u" data-listing-date-sort="1715558400000" data-listing-file-modified-sort="1735612717416" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1234">
-<div class="thumbnail"><a href="./posts/Quantization Fundamentals/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/Quantization Fundamentals/qat-training-precision.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Quantization Fundamentals/index.html" class="no-external">Quantization Fundamentals</a>
-</h3>
-<div class="delink listing-description"><a href="./posts/Quantization Fundamentals/index.html" class="no-external">
-This is completely based on Quantization Fundamentals
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/Quantization Fundamentals/index.html" class="no-external">
-<div class="listing-date">
-May 13, 2024
-</div>
-<div class="listing-author">
-Ritesh Kumar Maurya
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -1010,4 +946,4 @@ Ritesh Kumar Maurya
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/blog.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Rotary Position Embedding/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
