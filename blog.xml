@@ -8,7 +8,7 @@
 <title>Ritesh Kumar Maurya</title>
 <link>https://riteshrm.github.io/blog.html</link>
 <atom:link href="https://riteshrm.github.io/blog.xml" rel="self" type="application/rss+xml"/>
-<description>Personal site of Ritesh Kumar Maurya.</description>
+<description>Notes on deep learning, applied machine learning, optimization, diffusion models and language models.</description>
 <generator>quarto-1.8.26</generator>
 <lastBuildDate>Tue, 07 Apr 2026 00:00:00 GMT</lastBuildDate>
 <item>
@@ -248,7 +248,7 @@
 </ul>
 <section id="below-is-python-code-for-getting-1d-sinusoidal-postion-embedding" class="level2">
 <h2 class="anchored" data-anchor-id="below-is-python-code-for-getting-1d-sinusoidal-postion-embedding">Below is python code for getting 1D Sinusoidal Postion Embedding</h2>
-<div id="79572f8a" class="cell" data-execution_count="1">
+<div id="72175611" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -3129,7 +3129,7 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
   <category>Applied ML</category>
   <guid>https://riteshrm.github.io/posts/Hands on LLMs/</guid>
   <pubDate>Mon, 27 Jan 2025 00:00:00 GMT</pubDate>
-  <media:content url="https://riteshrm.github.io/posts/Hands on LLMs/resized_thumbnail.png" medium="image" type="image/png"/>
+  <media:content url="https://riteshrm.github.io/posts/Hands on LLMs/traing_work_flow_of_llm.png" medium="image" type="image/png" height="75" width="144"/>
 </item>
 <item>
   <title>Meta Learning Book Chapter Wise Summary Points</title>

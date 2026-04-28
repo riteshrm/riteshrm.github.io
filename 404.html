@@ -6,11 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Ritesh Kumar Maurya">
-<meta name="dcterms.date" content="2026-04-07">
-<meta name="description" content="A visual and mathematical walkthrough of RoPE, relative position intuition, rotation matrices, and attention score behavior.">
+<meta name="description" content="The requested page could not be found.">
 
-<title>Rotary Position Embedding – Ritesh Kumar Maurya</title>
+<title>Page Not Found – Ritesh Kumar Maurya</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -26,30 +24,30 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../">
-<link href="../../posts/favicon.ico" rel="icon">
-<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b758ccaa5987ceb1b75504551e579abf.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-e22af750838b8708ff2c979203820c49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<script src="../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="/site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="/site_libs/quarto-nav/headroom.min.js"></script>
+<script src="/site_libs/clipboard/clipboard.min.js"></script>
+<script src="/site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="/site_libs/quarto-search/fuse.min.js"></script>
+<script src="/site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="/">
+<link href="/./posts/favicon.ico" rel="icon">
+<script src="/site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="/site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="/site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="/site_libs/quarto-html/popper.min.js"></script>
+<script src="/site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="/site_libs/quarto-html/anchor.min.js"></script>
+<link href="/site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="/site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="/site_libs/quarto-html/quarto-syntax-highlighting-dark-b758ccaa5987ceb1b75504551e579abf.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="/site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="/site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="/site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="/site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="/site_libs/bootstrap/bootstrap-dark-e22af750838b8708ff2c979203820c49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="/site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="/site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -77,64 +75,15 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
-  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
-  <script>document.addEventListener("DOMContentLoaded", function () {
- var mathElements = document.getElementsByClassName("math");
- var macros = [];
- for (var i = 0; i < mathElements.length; i++) {
-  var texText = mathElements[i].firstChild;
-  if (mathElements[i].tagName == "SPAN") {
-   katex.render(texText.data, mathElements[i], {
-    displayMode: mathElements[i].classList.contains('display'),
-    throwOnError: false,
-    macros: macros,
-    fleqn: false
-   });
-}}});
-  </script>
-  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="Rotary Position Embedding – Ritesh Kumar Maurya">
-<meta property="og:description" content="A visual and mathematical walkthrough of RoPE, relative position intuition, rotation matrices, and attention score behavior.">
-<meta property="og:image" content="https://riteshrm.github.io/posts/Rotary Position Embedding/rotary_thumbnail_resized.png">
+<link rel="stylesheet" href="/styles.css">
+<meta property="og:title" content="Page Not Found – Ritesh Kumar Maurya">
+<meta property="og:description" content="The requested page could not be found.">
 <meta property="og:site_name" content="Ritesh Kumar Maurya">
-<meta property="og:image:height" content="1024">
-<meta property="og:image:width" content="1792">
-<meta name="twitter:title" content="Rotary Position Embedding – Ritesh Kumar Maurya">
-<meta name="twitter:description" content="A visual and mathematical walkthrough of RoPE, relative position intuition, rotation matrices, and attention score behavior.">
-<meta name="twitter:image" content="https://riteshrm.github.io/posts/Rotary Position Embedding/rotary_thumbnail_resized.png">
+<meta name="twitter:title" content="Page Not Found – Ritesh Kumar Maurya">
+<meta name="twitter:description" content="The requested page could not be found.">
 <meta name="twitter:creator" content="@_riteshrm_">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image-height" content="1024">
-<meta name="twitter:image-width" content="1792">
 </head>
 
 <body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -306,7 +255,7 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../../index.html">
+    <a class="navbar-brand" href="/index.html">
     <span class="navbar-title">About Me</span>
     </a>
   </div>
@@ -317,7 +266,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../blog.html"> 
+    <a class="nav-link" href="/blog.html"> 
 <span class="menu-text">Notes</span></a>
   </li>  
 </ul>
@@ -358,18 +307,8 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#why-relative-position-embedding" id="toc-why-relative-position-embedding" class="nav-link active" data-scroll-target="#why-relative-position-embedding">Why Relative Position Embedding?</a></li>
-  <li><a href="#rope" id="toc-rope" class="nav-link" data-scroll-target="#rope">RoPE</a>
-  <ul class="collapse">
-  <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation">Implementation</a></li>
-  </ul></li>
-  </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Rotary Position Embedding/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -377,34 +316,19 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Rotary Position Embedding</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">Deep Learning</div>
-  </div>
-  </div>
+<h1 class="title">Page Not Found</h1>
+</div>
 
 <div>
   <div class="description">
-    A visual and mathematical walkthrough of RoPE, relative position intuition, rotation matrices, and attention score behavior.
+    The requested page could not be found.
   </div>
 </div>
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Ritesh Kumar Maurya </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">April 7, 2026</p>
-    </div>
-  </div>
   
     
   </div>
@@ -414,171 +338,10 @@ window.Quarto = {
 </header>
 
 
-<ul>
-<li>In this post we will try to understand RoPE.</li>
-<li>This is mostly based on <a href="https://www.youtube.com/watch?v=qKUobBR5R1A">Why Rotating Vectors Solves Positional Encoding in Transformers</a></li>
-</ul>
-<section id="why-relative-position-embedding" class="level2">
-<h2 class="anchored" data-anchor-id="why-relative-position-embedding">Why Relative Position Embedding?</h2>
-<ul>
-<li><p>It captures how two tokens are positioned with respect to each other</p></li>
-<li><p>For Example:-</p>
-<ul>
-<li><pre class="text"><code>  my daughter called her brother last night  [Sentence:-1]
-  0     1 (n)  2 (m)  3    4      5     6</code></pre></li>
-<li>Absolute Position Embedding of token daughter depends on position of token i.e.&nbsp;1 (n)</li>
-<li>Relative Position Embedding of token ‘daughter’ with respect to token ‘called’ -1 (n-m)
-<ul>
-<li>Where -1 or in general it will tell whether token ‘daughter’ is before or after ‘called’ and at what distance.</li>
-</ul></li>
-</ul></li>
-<li><p>Query at position m attends Key at position n and to calculate attention score, it depends more on relative position than absolute position.</p></li>
-<li><pre class="text"><code>  last night my daughter called her brother  [Sentence:-2]
-  0      1    2    3        4    5     6</code></pre></li>
-<li><p>In above sentence even though the APE is different compared to previous sentence their RPE is still the same</p></li>
-<li><p>In case of APE, there is linear relationship between tokens at pos and pos + k, and we expect our model to learn this relationship</p>
-<ul>
-<li><span class="math inline">PE_{pos + k}</span> = <span class="math inline">T^k</span> * <span class="math inline">PE_{pos}</span></li>
-</ul></li>
-<li><p>In case of RPE, we are explicitly telling our model that these two tkens are at k tokens apart</p></li>
-<li><p>Below table defines a summary of APE vs RPE</p></li>
-</ul>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 9%">
-<col style="width: 31%">
-<col style="width: 59%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;">Sentence</th>
-<th style="text-align: center;">APE</th>
-<th style="text-align: center;">RPE</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">tokens are at 1st and 2nd Position</td>
-<td style="text-align: center;">tokens are at (-1) tokens apart, where daughter comes before called</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">tokens are at 1st and 2nd Position</td>
-<td style="text-align: center;">tokens are at (-1) tokens apart, where daughter comes before called</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>As we can gneralise from above table that the two tokens which generally comes together or at k tokens apart, RPE will be same in suh cases whereas in case of APE, it will differe for each sentence which model have to learn to generalise better</li>
-<li>So instead of saying i am at this position or that position, it would be better to explicitly mention that we are at k tokens apart</li>
-</ul>
-</section>
-<section id="rope" class="level1">
-<h1>RoPE</h1>
-<ul>
-<li><p>Let’s say we have a 2D vector anw we want to rotate it by angle <span class="math inline">\theta</span>, where it was earlier at <span class="math inline">\alpha</span> with magnitude r</p></li>
-<li><p>We can write initial <span class="math inline">x</span> and <span class="math inline">y</span> as:</p>
-<ul>
-<li><span class="math inline">x</span> = <span class="math inline">r*\cos(\theta)</span></li>
-<li><span class="math inline">y</span> = <span class="math inline">r*\sin(\theta)</span></li>
-</ul></li>
-<li><p>If we rotate it by <span class="math inline">\alpha</span>, then:</p>
-<ul>
-<li><span class="math inline">x'</span> = <span class="math inline">r*\cos(\theta + \alpha)</span> = <span class="math inline">r(\cos(\theta)\cos(\alpha) - \sin(\theta)\sin(\alpha))</span></li>
-<li><span class="math inline">y'</span> = <span class="math inline">r*\sin(\theta + \alpha)</span> = <span class="math inline">r(\sin(\theta)\cos(\alpha) + \cos(\theta)\sin(\alpha))</span></li>
-</ul></li>
-<li><p>If we represent: <span class="math display">
-R(\theta) = \begin{bmatrix}
-\cos(\theta) &amp; -\sin(\theta) \\
-\sin(\theta) &amp; \cos(\theta) \\
-\end{bmatrix}
-</span></p>
-<p><span class="math display">
-z' = \begin{bmatrix}
-x' \\
-y' \\
-\end{bmatrix}
-</span></p>
-<p><span class="math display">
-z = \begin{bmatrix}
-x \\
-y \\
-\end{bmatrix}
-</span></p></li>
-<li><p>Then we can write <span class="math inline">z' = R(\theta)z</span></p></li>
-<li><p>Below two properties which will be used later:</p>
-<ul>
-<li><span class="math inline">R(-\theta)</span> = <span class="math inline">R(\theta)^T</span> which gives</li>
-<li><span class="math inline">R(\theta)^T</span> <span class="math inline">R(\theta)</span> = I [Identity Matrix]</li>
-<li><span class="math inline">R(\theta_{1})</span> <span class="math inline">R(\theta_{2})</span> = <span class="math inline">R(\theta_{1} + \theta_{2})</span></li>
-</ul></li>
-<li><p>RoPE rotates the embeddings</p></li>
-<li><p>Let’s say q(query) at m and k(key) at n</p></li>
-<li><p>Then dot product between q and k would be</p>
-<ul>
-<li><span class="math inline">(R(m\theta)q_{m})^TR(n\theta)k_{n}</span></li>
-<li>= <span class="math inline">q_{m}^TR(m\theta)R(n\theta)k_{n}</span></li>
-<li>Since <span class="math inline">R(-\theta)</span> = <span class="math inline">R(\theta)^T</span>, so <span class="math inline">R(-m\theta)</span> = <span class="math inline">R(m\theta)^T</span></li>
-<li>this gives <span class="math inline">q_{m}^TR(-m\theta)R(n\theta)k_{n}</span></li>
-<li>now since <span class="math inline">R(\theta_{1})</span> <span class="math inline">R(\theta_{2})</span> = <span class="math inline">R(\theta_{1} + \theta_{2})</span></li>
-<li>this gives <span class="math inline">q_{m}^TR((n-m)\theta)k_{n}</span></li>
-<li>In above eqn attention score now explicitly depends on relative distance between q and k</li>
-<li>So if relative distance changes then only this factor will change</li>
-</ul></li>
-</ul>
-<section id="implementation" class="level3">
-<h3 class="anchored" data-anchor-id="implementation">Implementation</h3>
-<ul>
-<li>Treat a pair as single 2D vector space and rotate it independently</li>
-<li>For example lets say we have d_model of 256 then we will have 128 2D vectors and we can rotate those pairs independently as shown in below table</li>
-</ul>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 23%">
-<col style="width: 76%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;">Pairs</th>
-<th style="text-align: center;">Rotation Matrix</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;"><span class="math inline">(e_{1}, e_{2})</span></td>
-<td style="text-align: center;"><span class="math inline">R(m\theta_{1})</span></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"><span class="math inline">(e_{3}, e_{4})</span></td>
-<td style="text-align: center;"><span class="math inline">R(m\theta_{2})</span></td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">……………..</td>
-<td style="text-align: center;">…………</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">……………..</td>
-<td style="text-align: center;">…………</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"><span class="math inline">(e_{d_{model}/2-1}, e_{d_{model}/2})</span></td>
-<td style="text-align: center;"><span class="math inline">R(m\theta_{d_{model}/2})</span></td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>where
-<ul>
-<li><span class="math inline">e_{k}</span> is embedding value at index k</li>
-<li><span class="math inline">\theta_{i}</span> is rotation angle given as <span class="math inline">\theta_{i}</span> = <span class="math inline">10000^{-2(i-1)/d_{model}}</span>, where i runs from 1 to <span class="math inline">d_{model}/2</span></li>
-<li><span class="math inline">\theta_{i}</span> decreases as i increases, so initial embedding values are rotated by large angles as compared to later embedding values</li>
-</ul></li>
-</ul>
+<p>The page you are looking for is not available.</p>
+<p><a href="/./blog.html" class="btn btn-primary">Go to notes</a> <a href="/./index.html" class="btn btn-outline-secondary">Go home</a></p>
 
 
-</section>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1003,7 +766,7 @@ y \\
     <div class="nav-footer-center">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="../../blog.xml">
+    <a class="nav-link" href="/blog.xml">
 <p>RSS</p>
 </a>
   </li>  
@@ -1018,7 +781,7 @@ y \\
 </a>
   </li>  
 </ul>
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Rotary Position Embedding/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/404.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>© Ritesh Kumar Maurya</p>
 </div>

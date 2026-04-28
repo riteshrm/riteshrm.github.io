@@ -8,6 +8,7 @@
 
 <meta name="author" content="Ritesh Kumar Maurya">
 <meta name="dcterms.date" content="2026-01-13">
+<meta name="description" content="Chapter-wise notes on building AI applications with foundation models, evaluation, data, retrieval, agents, and production systems.">
 
 <title>AI Engineering By Chip Huyen – Ritesh Kumar Maurya</title>
 <style>
@@ -27,8 +28,12 @@ ul.task-list li input[type="checkbox"] {
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
-<link href="../../posts/favicon.ico" rel="icon">
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../posts/favicon.ico" rel="icon">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -46,6 +51,17 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -60,20 +76,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-
-<script type="text/javascript">
-
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-ga('create', 'UA-163448909-1', 'auto');
-
-ga('send', {
-  hitType: 'pageview',
-  'anonymizeIp': true,
-});
-</script>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
@@ -121,14 +123,16 @@ window.Quarto = {
 
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="AI Engineering By Chip Huyen – Ritesh Kumar Maurya">
+<meta property="og:description" content="Chapter-wise notes on building AI applications with foundation models, evaluation, data, retrieval, agents, and production systems.">
 <meta property="og:image" content="https://riteshrm.github.io/posts/AI Engineering By Chip Huyen/resized_thumbnail.png">
 <meta property="og:site_name" content="Ritesh Kumar Maurya">
 <meta property="og:image:height" content="1024">
 <meta property="og:image:width" content="1792">
 <meta name="twitter:title" content="AI Engineering By Chip Huyen – Ritesh Kumar Maurya">
+<meta name="twitter:description" content="Chapter-wise notes on building AI applications with foundation models, evaluation, data, retrieval, agents, and production systems.">
 <meta name="twitter:image" content="https://riteshrm.github.io/posts/AI Engineering By Chip Huyen/resized_thumbnail.png">
 <meta name="twitter:creator" content="@_riteshrm_">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image-height" content="1024">
 <meta name="twitter:image-width" content="1792">
 </head>
@@ -306,6 +310,7 @@ window.Quarto = {
     <span class="navbar-title">About Me</span>
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
@@ -313,27 +318,27 @@ window.Quarto = {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../blog.html"> 
-<span class="menu-text">Blog/Notes</span></a>
+<span class="menu-text">Notes</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="mailto:riteshkumarmaurya7379@gmail.com"> <i class="bi bi-bi bi-envelope" role="img">
+    <a class="nav-link" href="mailto:riteshkumarmaurya7379@gmail.com"> <i class="bi bi-envelope" role="img" aria-label="Email">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://x.com/%5Friteshrm%5F/"> <i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://x.com/%5Friteshrm%5F/"> <i class="bi bi-twitter" role="img" aria-label="X">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://www.linkedin.com/in/riteshrm/"> <i class="bi bi-linkedin" role="img">
+    <a class="nav-link" href="https://www.linkedin.com/in/riteshrm/"> <i class="bi bi-linkedin" role="img" aria-label="LinkedIn">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/riteshrm"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/riteshrm"> <i class="bi bi-github" role="img" aria-label="GitHub">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -476,6 +481,11 @@ window.Quarto = {
   </div>
   </div>
 
+<div>
+  <div class="description">
+    Chapter-wise notes on building AI applications with foundation models, evaluation, data, retrieval, agents, and production systems.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -1795,8 +1805,37 @@ P(token) = \text{softmax}\left(\frac{\text{logits}}{\text{temperature}}\right)
   });
   </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Built with Quarto</p>
+</div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="../../blog.xml">
+<p>RSS</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/riteshrm">
+<p>GitHub</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://www.linkedin.com/in/riteshrm/">
+<p>LinkedIn</p>
+</a>
+  </li>  
+</ul>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/AI Engineering By Chip Huyen/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>© Ritesh Kumar Maurya</p>
+</div>
+  </div>
+</footer>
 
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/AI Engineering By Chip Huyen/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+</body></html>
