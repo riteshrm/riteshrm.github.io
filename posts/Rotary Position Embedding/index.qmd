@@ -1,0 +1,115 @@
+---
+title: "Rotary Position Embedding"
+author: "Ritesh Kumar Maurya"
+date: "2026-04-07"
+categories: [Deep Learning]
+image: "rotary_thumbnail_resized.png"
+description: "A visual and mathematical walkthrough of RoPE, relative position intuition, rotation matrices, and attention score behavior."
+---
+
+- In this post we will try to understand RoPE.
+- This is mostly based on [Why Rotating Vectors Solves Positional Encoding in Transformers](https://www.youtube.com/watch?v=qKUobBR5R1A)
+
+
+
+## Why Relative Position Embedding?
+- It captures how two tokens are positioned with respect to each other
+- For Example:-
+  - ```text
+    my daughter called her brother last night  [Sentence:-1]
+    0     1 (n)  2 (m)  3    4      5     6
+    ```
+  - Absolute Position Embedding of token daughter depends on position of token i.e. 1 (n)
+  - Relative Position Embedding of token 'daughter' with respect to token 'called' -1 (n-m)
+    - Where -1 or in general it will tell whether token 'daughter' is before or after 'called' and at what distance.
+
+- Query at position m attends Key at position n and to calculate attention score, it depends more on relative position than absolute position.
+- ```text
+  last night my daughter called her brother  [Sentence:-2]
+  0      1    2    3        4    5     6
+  ```
+- In above sentence even though the APE is different compared to previous sentence their RPE is still the same
+
+- In case of APE, there is linear relationship between tokens at pos and pos + k, and we expect our model to learn this relationship
+  - $PE_{pos + k}$ = $T^k$ * $PE_{pos}$
+- In case of RPE, we are explicitly telling our model that these two tkens are at k tokens apart
+
+- Below table defines a summary of APE vs RPE
+
+| Sentence  | APE                                | RPE                                                                 |
+|:---------:|:----------------------------------:|:-------------------------------------------------------------------:|
+| 1         | tokens are at 1st and 2nd Position | tokens are at (-1) tokens apart, where daughter comes before called |
+| 2         | tokens are at 1st and 2nd Position | tokens are at (-1) tokens apart, where daughter comes before called |
+
+- As we can gneralise from above table that the two tokens which generally comes together or at k tokens apart, RPE will be same in suh cases whereas in case of APE, it will differe for each sentence which model have to learn to generalise better
+- So instead of saying i am at this position or that position, it would be better to explicitly mention that we are at k tokens apart
+
+# RoPE
+
+- Let's say we have a 2D vector anw we want to rotate it by angle $\theta$, where it was earlier at $\alpha$ with magnitude r
+- We can write initial $x$ and $y$ as:
+  - $x$ = $r*\cos(\theta)$
+  - $y$ = $r*\sin(\theta)$
+- If we rotate it by $\alpha$, then:
+  - $x'$ = $r*\cos(\theta + \alpha)$ = $r(\cos(\theta)\cos(\alpha) - \sin(\theta)\sin(\alpha))$
+  - $y'$ = $r*\sin(\theta + \alpha)$ = $r(\sin(\theta)\cos(\alpha) + \cos(\theta)\sin(\alpha))$
+
+- If we represent:
+  $$
+  R(\theta) = \begin{bmatrix}
+  \cos(\theta) & -\sin(\theta) \\
+  \sin(\theta) & \cos(\theta) \\
+  \end{bmatrix}
+  $$
+
+  $$
+  z' = \begin{bmatrix}
+  x' \\
+  y' \\
+  \end{bmatrix}
+  $$
+
+  $$
+  z = \begin{bmatrix}
+  x \\
+  y \\
+  \end{bmatrix}
+  $$
+
+- Then we can write
+  $z' = R(\theta)z$
+
+- Below two properties which will be used later:
+  - $R(-\theta)$ = $R(\theta)^T$ which gives
+  - $R(\theta)^T$ $R(\theta)$ = I [Identity Matrix] 
+  - $R(\theta_{1})$ $R(\theta_{2})$ = $R(\theta_{1} + \theta_{2})$
+
+- RoPE rotates the embeddings
+- Let's say q(query) at m and k(key) at n
+- Then dot product between q and k would be
+  - $(R(m\theta)q_{m})^TR(n\theta)k_{n}$
+  - = $q_{m}^TR(m\theta)R(n\theta)k_{n}$
+  - Since $R(-\theta)$ = $R(\theta)^T$, so $R(-m\theta)$ = $R(m\theta)^T$
+  - this gives $q_{m}^TR(-m\theta)R(n\theta)k_{n}$
+  - now since $R(\theta_{1})$ $R(\theta_{2})$ = $R(\theta_{1} + \theta_{2})$
+  - this gives $q_{m}^TR((n-m)\theta)k_{n}$
+  - In above eqn attention score now explicitly depends on relative distance between q and k
+  - So if relative distance changes then only this factor will change
+
+### Implementation
+- Treat a pair as single 2D vector space and rotate it independently
+- For example lets say we have d_model of 256 then we will have 128 2D vectors and we can rotate those pairs independently as shown in below table
+
+
+| Pairs  | Rotation Matrix                                | 
+|:---------:|:----------------------------------:|
+| $(e_{1}, e_{2})$         | $R(m\theta_{1})$|
+| $(e_{3}, e_{4})$         | $R(m\theta_{2})$|
+| .................        | ............|
+| .................       | ............|
+| $(e_{d_{model}/2-1}, e_{d_{model}/2})$         | $R(m\theta_{d_{model}/2})$|
+
+- where
+  - $e_{k}$ is embedding value at index k
+  - $\theta_{i}$ is rotation angle given as $\theta_{i}$  = $10000^{-2(i-1)/d_{model}}$, where i runs from 1 to $d_{model}/2$
+  - $\theta_{i}$ decreases as i increases, so initial embedding values are rotated by large angles as compared to later embedding values

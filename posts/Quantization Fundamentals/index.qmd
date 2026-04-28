@@ -4,6 +4,7 @@ author: "Ritesh Kumar Maurya"
 date: "2024-05-13"
 categories: [Optimization]
 image: "qat-training-precision.png"
+description: "Introductory notes on model quantization, lower-precision data types, scaling, zero points, and model compression basics."
 ---
 
 - This is completely based on [Quantization Fundamentals](https://learn.deeplearning.ai/courses/quantization-fundamentals/lesson/1/introduction)

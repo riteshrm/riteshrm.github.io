@@ -1,7 +1,12 @@
-.quarto
-_site
-_freeze
-tmp
+.quarto/
+_site/
+_freeze/
+tmp/
+.codex
+.vscode/
+.DS_Store
 random.ipynb
-/.quarto/
+pe.ipynb
 **/*.quarto_ipynb
+
+/.quarto/

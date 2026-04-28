@@ -4,6 +4,7 @@ author: "Ritesh Kumar Maurya"
 date: "2024-05-24"
 categories: [Optimization]
 image: "qat-training-precision.png"
+description: "Detailed notes on quantize/dequantize workflows, quantization error, calibration, packing, and practical model optimization."
 ---
 
 - This is completely based on [Quantization in Depth](https://learn.deeplearning.ai/courses/quantization-in-depth/lesson/1/introduction)

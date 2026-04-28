@@ -1,0 +1,136 @@
+---
+title: "Hands on LLMs"
+author: "Ritesh Kumar Maurya"
+date: "2025-01-27"
+categories: [Applied ML]
+image: "traing_work_flow_of_llm.png"
+description: "Learning notes from Hands-On Large Language Models covering tokenizers, embeddings, transformer blocks, and LLM components."
+---
+
+- This is completely based on [Hands on LLMs](https://www.oreilly.com/library/view/hands-on-large-language/9781098150952/)
+
+
+# Chapter-1[Introduction to LLMs]
+- Bag of Words:- We have a predefined vocabulary, which is used to creat a vector, where each vector index contains the count of that particular word index in vocab
+
+- word2vec:- It is trained by using a pair(whether dfferent or same semantic meaning) of words
+
+- Bag of words create embedding at documet level, whereas word2vec generates embedding for words only
+
+- Representation Models are encoder only models
+- Generative Models are decoder only models
+
+- BERT(Bidirectional Encoder Represenations from Transformers)
+	- It is trained by a tecique called masked language modeling, where this method masks a part of the input for the model to predict
+	- Pretrain on large dataset using masked language modng and then fine tune it for down stream tasks
+	
+- Creating an LLM consists of typically at least two steps:
+	- Language Modeling(Pretraining):- An LLM is trained on a vast corpus of internet text allowing the model to learn grammar, context and language patterns.
+	- Fine Tuning(Post Training):- Further training the previously trained model on narrower tasks.
+
+# Chapter-2[Tokens and Embeddings]
+- Partial tokens (like "izing", and "ic") have a special hidden character at their beginning that indicates that they are connected with the token that precedes them in the text.
+
+- Word Tokens
+- Subword Tokens
+- Character Tokens
+- Byte Tokens
+
+- Designing Large Language Model Applications. (For tokenizers)
+
+- BERT tokenizers are based on wordpiece, introduced in Japanese and Korean voice search [https://ieeexplore.ieee.org/document/6289079]
+
+- GPT-2 is based on Byte Pair Encoding (BPE), introduced in Neural machine translation of rare words with subword units [https://arxiv.org/abs/1508.07909]
+
+- Flan-T5 is based on SentencePiece, introduced in “SentencePiece:  simple and language independent subword tokenizer and detokenizer for neural text processing", which supports BPE and unigram language model
+
+- There are three major factors that dictate how a tokenizer breaks down an input prompt
+	- Tokenization method (BPE, WordPiece, etc.)
+		- Each of these methods outlines an algorithm for how to choose an appropriate set of tokens to represent a dataset
+	- Tokenizer Design choices (vocab size, special tokens)
+		- vocab size:- How many tokens to keep in tokenizers vocabulary
+		- special tokens:- What special tokens do we want the model to keep track of. We can add as many of these as we want
+	- Capitalization:- Whether to convert caps to lower or not
+	
+- More details on training tokenizer at:-
+	- Tokenizers section of the Hugging Face course [https://huggingface.co/learn/nlp-course/chapter6/1?fw=pt]
+	- Natural Language Processing with Transformers, Revised Edition [https://www.oreilly.com/library/view/natural-language-processing/9781098136789/]
+	
+
+# Chapter-3[Looking Inside Large Language Models]
+
+- Autoregressive Models: The models that consume their earlier predictions to make later predictions
+
+- Three Major components of LLMs are:
+	- Tokenizer
+	- Stack of Transformer Blocks
+	- A language modeling head
+
+- Context length (Number of streams):- Number of previous tokens which will be considered for the prediction of current token
+
+- KVCache:- Keeping the previously calculated key and value so that we dont have to recalculate the same again and again
+
+- Components of Transformer Blocks
+	- Attention Layer:- Incorporates contextual information to allow the model to better capture the nuance of language.
+	- FeedForward Layer:- It is able to store information and make predictions and interpolations from data it was trained on.
+- Two main steps are involved in the attention mechanism:
+	- Relevance scoring: How much previous tokens are relevant to the curren token being processed.
+	- Combining Information:- Using scores, combine the information from the various positions into a single output vector
+	
+- More efficient Attention
+	- Local/Sparse Attention:- Sparse Attention limits the context of previous tokens that the model can attend to.
+	- Multi-query:- Unique Queries but same key and value for all the head
+	- Grouped-query:- Dividing queries in groups and then key, value will be same for the queries within a group
+	- RoPE:- Added to queries and keys before calculating the score in Attention blocks
+
+# Chapter-4[Text Classification]
+- In case of no lableld data, we can define our desired labels and then encode both labels and given text and then use cosine_similarity
+
+- Directly using pretrained models for sentiment classification
+ 
+- Using a simple classifier on top of embedding generator
+- If we don't have labeled data then we can use cosine similarity to find out the label
+- We can use generative models also
+
+# Chapter-5[Text Clustering and Topic Modeling]
+- A common Pipeline for Text Clustering
+	- Convert the input documents to embeddings with an embedding model
+	- Reduce the dimensionality of embeddings with a dimensionality reduction model (UMAP as it tends to handle nonlinear relationships and structures a bit better than PCA)
+	- Find groups of semantically similar documents with a cluster model (using HDBSCAN)
+	
+- c-TF-IDF
+	- TF:- Frequency of word X in class C
+	- IDF:- log(average number of words per class/frequency of X across all classes)
+
+- BERTopic [https://maartengr.github.io/BERTopic/getting_started/best_practices/best_practices.html]
+
+- After getting the keywords using c-TF-IDF, we can use MMR(maximal marginal relevance) to keep only the diverse keywords, we can also use KeyBERTInspired to fine-tune the topic representations
+- Additonally, we can use LLMs to further improve interpretability of topics
+
+# Chapter-6[Prompt Engineering]
+- Temperature:- It controls the randomness or creativity of the text generated. It defines how likely it is to choose tokens that are less probable. A temperature of 0 generates the same response every time because it always choose the most likely word. A higher value allows less probable words to be generated
+- Divide all the logits before passing to softmax
+
+- top_p:- It is also known as nucleus sampling, is a sampling technique that controls which subset of tokens (the nucleus) the LLM can consider. It will consider tokens until it reaches their cumulative probability. If we set top_p to 0.1, it will consider tokens until it reache that value.
+
+- top_k:- same as top_p, LLM will only consider the top 100 most probable tokens if you set its value to 100.
+
+- Table 6.1 from page 172
+
+- Self-consistency:- Sampling from multiple paths for the same prompt and using the voting technique for the best one
+
+- CoT:- Solving the complex problems step by step
+- ToT:- Generates different solutions and then selects the best one and continues. This method requires so many calls to the model. But we can change it using a prompt, we can ask the model to mimic the behavior 
+
+# Chapter-7[Advanced Text Generation Techniques and Tools]
+
+- PromptTemplate from langchain
+- Can use LLMChain to create a chain
+- Can use ConversationBufferMemory to have access to chat history
+- Can use ConversationBufferWindowMemory to keep only last k chats--> Can use ConversationSummaryMemory alongside an LLM to store the summary fo conversation instead of storing raw chats
+- ReAct:- Reasoning and Acting
+	- Thought:- thought about the input prompt
+	- Action:- based on thought action is triggered, it is generally an external tool like calculator or search engine
+	- Observation:- finally the results of action are returned to the LLM it observes the output
+
+# Chapter-8[Semantic Search and Retrieval-Augmented Generation]

@@ -3,7 +3,8 @@ title: "Meta Learning Book Chapter Wise Summary Points"
 author: "Ritesh Kumar Maurya"
 date: "2024-07-06"
 categories: [Deep Learning]
-image: "metalearning.jpg"
+image: "metalearning_resized_thumbnail.png"
+description: "Chapter-wise summary notes from Meta Learning, focused on learning practice, programming habits, and deep learning growth."
 ---
 
 # From not being able to program to deep learning expert
@@ -209,4 +210,3 @@ image: "metalearning.jpg"
 + Yoga can help.
 + Time-restricted eating and its primary benefit is  restore hormonal balance. 
 	
-

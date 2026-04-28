@@ -1,9 +1,13 @@
 ---
-title: "Blog/Notes"
+title: "Notes"
+description: "Notes on deep learning, applied machine learning, optimization, diffusion models and language models."
 listing:
   sort: "date desc"
   contents: "posts"
-  categories: false
+  type: default
+  categories: true
+  sort-ui: false
+  fields: [image, title, description, date, reading-time, categories]
   feed: true
   #page-layout: full
 ---

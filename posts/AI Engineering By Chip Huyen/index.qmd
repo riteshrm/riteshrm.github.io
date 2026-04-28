@@ -3,12 +3,11 @@ title: "AI Engineering By Chip Huyen"
 author: "Ritesh Kumar Maurya"
 date: "2026-01-13"
 categories: [Applied ML]
-image: "cover.png"
+image: "resized_thumbnail.png"
+description: "Chapter-wise notes on building AI applications with foundation models, evaluation, data, retrieval, agents, and production systems."
 ---
 
 - This is completely based on [AI Engineering By Chip Huyen](https://www.oreilly.com/library/view/ai-engineering/9781098166298/)
-
-<!-- - For the code part, you can checkout this [link](https://github.com/riteshrm/Quantization-Fundamentals-deeplearning.ai-) -->
 
 # Chapter 1 Introduction to Building AI Applications with Foundation Models
 ## Language Models (LMs)

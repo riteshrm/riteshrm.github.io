@@ -5,12 +5,652 @@
       xmlns:dc="http://purl.org/dc/elements/1.1/" 
       version="2.0">
 <channel>
-<title>About Me</title>
+<title>Ritesh Kumar Maurya</title>
 <link>https://riteshrm.github.io/blog.html</link>
 <atom:link href="https://riteshrm.github.io/blog.xml" rel="self" type="application/rss+xml"/>
-<description>Personal site of Ritesh Kumar Maurya.</description>
+<description>Notes on deep learning, applied machine learning, optimization, diffusion models and language models.</description>
 <generator>quarto-1.8.26</generator>
-<lastBuildDate>Tue, 13 Jan 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 07 Apr 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Rotary Position Embedding</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/Rotary Position Embedding/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<ul>
+<li>In this post we will try to understand RoPE.</li>
+<li>This is mostly based on <a href="https://www.youtube.com/watch?v=qKUobBR5R1A">Why Rotating Vectors Solves Positional Encoding in Transformers</a></li>
+</ul>
+<section id="why-relative-position-embedding" class="level2">
+<h2 class="anchored" data-anchor-id="why-relative-position-embedding">Why Relative Position Embedding?</h2>
+<ul>
+<li><p>It captures how two tokens are positioned with respect to each other</p></li>
+<li><p>For Example:-</p>
+<ul>
+<li><pre class="text"><code>  my daughter called her brother last night  [Sentence:-1]
+  0     1 (n)  2 (m)  3    4      5     6</code></pre></li>
+<li>Absolute Position Embedding of token daughter depends on position of token i.e.&nbsp;1 (n)</li>
+<li>Relative Position Embedding of token ‘daughter’ with respect to token ‘called’ -1 (n-m)
+<ul>
+<li>Where -1 or in general it will tell whether token ‘daughter’ is before or after ‘called’ and at what distance.</li>
+</ul></li>
+</ul></li>
+<li><p>Query at position m attends Key at position n and to calculate attention score, it depends more on relative position than absolute position.</p></li>
+<li><pre class="text"><code>  last night my daughter called her brother  [Sentence:-2]
+  0      1    2    3        4    5     6</code></pre></li>
+<li><p>In above sentence even though the APE is different compared to previous sentence their RPE is still the same</p></li>
+<li><p>In case of APE, there is linear relationship between tokens at pos and pos + k, and we expect our model to learn this relationship</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?PE_%7Bpos%20+%20k%7D"> = <img src="https://latex.codecogs.com/png.latex?T%5Ek"> * <img src="https://latex.codecogs.com/png.latex?PE_%7Bpos%7D"></li>
+</ul></li>
+<li><p>In case of RPE, we are explicitly telling our model that these two tkens are at k tokens apart</p></li>
+<li><p>Below table defines a summary of APE vs RPE</p></li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 31%">
+<col style="width: 59%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Sentence</th>
+<th style="text-align: center;">APE</th>
+<th style="text-align: center;">RPE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">tokens are at 1st and 2nd Position</td>
+<td style="text-align: center;">tokens are at (-1) tokens apart, where daughter comes before called</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">tokens are at 1st and 2nd Position</td>
+<td style="text-align: center;">tokens are at (-1) tokens apart, where daughter comes before called</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>As we can gneralise from above table that the two tokens which generally comes together or at k tokens apart, RPE will be same in suh cases whereas in case of APE, it will differe for each sentence which model have to learn to generalise better</li>
+<li>So instead of saying i am at this position or that position, it would be better to explicitly mention that we are at k tokens apart</li>
+</ul>
+</section>
+<section id="rope" class="level1">
+<h1>RoPE</h1>
+<ul>
+<li><p>Let’s say we have a 2D vector anw we want to rotate it by angle <img src="https://latex.codecogs.com/png.latex?%5Ctheta">, where it was earlier at <img src="https://latex.codecogs.com/png.latex?%5Calpha"> with magnitude r</p></li>
+<li><p>We can write initial <img src="https://latex.codecogs.com/png.latex?x"> and <img src="https://latex.codecogs.com/png.latex?y"> as:</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?x"> = <img src="https://latex.codecogs.com/png.latex?r*%5Ccos(%5Ctheta)"></li>
+<li><img src="https://latex.codecogs.com/png.latex?y"> = <img src="https://latex.codecogs.com/png.latex?r*%5Csin(%5Ctheta)"></li>
+</ul></li>
+<li><p>If we rotate it by <img src="https://latex.codecogs.com/png.latex?%5Calpha">, then:</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?x'"> = <img src="https://latex.codecogs.com/png.latex?r*%5Ccos(%5Ctheta%20+%20%5Calpha)"> = <img src="https://latex.codecogs.com/png.latex?r(%5Ccos(%5Ctheta)%5Ccos(%5Calpha)%20-%20%5Csin(%5Ctheta)%5Csin(%5Calpha))"></li>
+<li><img src="https://latex.codecogs.com/png.latex?y'"> = <img src="https://latex.codecogs.com/png.latex?r*%5Csin(%5Ctheta%20+%20%5Calpha)"> = <img src="https://latex.codecogs.com/png.latex?r(%5Csin(%5Ctheta)%5Ccos(%5Calpha)%20+%20%5Ccos(%5Ctheta)%5Csin(%5Calpha))"></li>
+</ul></li>
+<li><p>If we represent: <img src="https://latex.codecogs.com/png.latex?%0AR(%5Ctheta)%20=%20%5Cbegin%7Bbmatrix%7D%0A%5Ccos(%5Ctheta)%20&amp;%20-%5Csin(%5Ctheta)%20%5C%5C%0A%5Csin(%5Ctheta)%20&amp;%20%5Ccos(%5Ctheta)%20%5C%5C%0A%5Cend%7Bbmatrix%7D%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Az'%20=%20%5Cbegin%7Bbmatrix%7D%0Ax'%20%5C%5C%0Ay'%20%5C%5C%0A%5Cend%7Bbmatrix%7D%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Az%20=%20%5Cbegin%7Bbmatrix%7D%0Ax%20%5C%5C%0Ay%20%5C%5C%0A%5Cend%7Bbmatrix%7D%0A"></p></li>
+<li><p>Then we can write <img src="https://latex.codecogs.com/png.latex?z'%20=%20R(%5Ctheta)z"></p></li>
+<li><p>Below two properties which will be used later:</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?R(-%5Ctheta)"> = <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta)%5ET"> which gives</li>
+<li><img src="https://latex.codecogs.com/png.latex?R(%5Ctheta)%5ET"> <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta)"> = I [Identity Matrix]</li>
+<li><img src="https://latex.codecogs.com/png.latex?R(%5Ctheta_%7B1%7D)"> <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta_%7B2%7D)"> = <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta_%7B1%7D%20+%20%5Ctheta_%7B2%7D)"></li>
+</ul></li>
+<li><p>RoPE rotates the embeddings</p></li>
+<li><p>Let’s say q(query) at m and k(key) at n</p></li>
+<li><p>Then dot product between q and k would be</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?(R(m%5Ctheta)q_%7Bm%7D)%5ETR(n%5Ctheta)k_%7Bn%7D"></li>
+<li>= <img src="https://latex.codecogs.com/png.latex?q_%7Bm%7D%5ETR(m%5Ctheta)R(n%5Ctheta)k_%7Bn%7D"></li>
+<li>Since <img src="https://latex.codecogs.com/png.latex?R(-%5Ctheta)"> = <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta)%5ET">, so <img src="https://latex.codecogs.com/png.latex?R(-m%5Ctheta)"> = <img src="https://latex.codecogs.com/png.latex?R(m%5Ctheta)%5ET"></li>
+<li>this gives <img src="https://latex.codecogs.com/png.latex?q_%7Bm%7D%5ETR(-m%5Ctheta)R(n%5Ctheta)k_%7Bn%7D"></li>
+<li>now since <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta_%7B1%7D)"> <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta_%7B2%7D)"> = <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta_%7B1%7D%20+%20%5Ctheta_%7B2%7D)"></li>
+<li>this gives <img src="https://latex.codecogs.com/png.latex?q_%7Bm%7D%5ETR((n-m)%5Ctheta)k_%7Bn%7D"></li>
+<li>In above eqn attention score now explicitly depends on relative distance between q and k</li>
+<li>So if relative distance changes then only this factor will change</li>
+</ul></li>
+</ul>
+<section id="implementation" class="level3">
+<h3 class="anchored" data-anchor-id="implementation">Implementation</h3>
+<ul>
+<li>Treat a pair as single 2D vector space and rotate it independently</li>
+<li>For example lets say we have d_model of 256 then we will have 128 2D vectors and we can rotate those pairs independently as shown in below table</li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 76%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Pairs</th>
+<th style="text-align: center;">Rotation Matrix</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?(e_%7B1%7D,%20e_%7B2%7D)"></td>
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?R(m%5Ctheta_%7B1%7D)"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?(e_%7B3%7D,%20e_%7B4%7D)"></td>
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?R(m%5Ctheta_%7B2%7D)"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">……………..</td>
+<td style="text-align: center;">…………</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">……………..</td>
+<td style="text-align: center;">…………</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?(e_%7Bd_%7Bmodel%7D/2-1%7D,%20e_%7Bd_%7Bmodel%7D/2%7D)"></td>
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?R(m%5Ctheta_%7Bd_%7Bmodel%7D/2%7D)"></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>where
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?e_%7Bk%7D"> is embedding value at index k</li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Ctheta_%7Bi%7D"> is rotation angle given as <img src="https://latex.codecogs.com/png.latex?%5Ctheta_%7Bi%7D"> = <img src="https://latex.codecogs.com/png.latex?10000%5E%7B-2(i-1)/d_%7Bmodel%7D%7D">, where i runs from 1 to <img src="https://latex.codecogs.com/png.latex?d_%7Bmodel%7D/2"></li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Ctheta_%7Bi%7D"> decreases as i increases, so initial embedding values are rotated by large angles as compared to later embedding values</li>
+</ul></li>
+</ul>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>Deep Learning</category>
+  <guid>https://riteshrm.github.io/posts/Rotary Position Embedding/</guid>
+  <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/Rotary Position Embedding/rotary_thumbnail_resized.png" medium="image" type="image/png" height="82" width="144"/>
+</item>
+<item>
+  <title>Position Encoding</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/Position Encoding/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<ul>
+<li>This is mostly based on <a href="https://www.youtube.com/watch?v=dWkm4nFikgM">Positional Encoding in Transformer</a></li>
+</ul>
+<section id="positional-encoding-pe" class="level1">
+<h1>Positional Encoding (PE)</h1>
+<ul>
+<li>RNNs process tokens sequentially so they have information about the position of tokens of a given sequence.</li>
+<li>Transformers process all the tokens simultaneously where each token attends to every other token.</li>
+<li><em>For Example:</em>:-
+<ul>
+<li>my daughter called her brother [where each word is a token]</li>
+<li>in above sentence <strong>my</strong> will attend to all other tokens and similarly others will also attend other tokens.</li>
+<li>now consider other permutation of above sequence her daughter called my brother</li>
+<li>even in above example, permutation is different but transformers will find out the same context for each word as above one</li>
+<li>a simple explanation would be consider <strong>my</strong> and <strong>her</strong>
+<ul>
+<li>the attention between these will be same for both of the sequnces, but both of them corresponds to different meaning.</li>
+<li>so to have different attentions for different sequences we need to inject some information about the positions of words also.</li>
+</ul></li>
+</ul></li>
+</ul>
+<hr>
+</section>
+<section id="attempted-solution" class="level1">
+<h1>Attempted Solution</h1>
+<ul>
+<li><p>Use the index of tokens directly as positon information for a given sequnce. However, when we add token embedding with this position indexs, positional information will over power the content signal and also, the rightmost tokens will dominate.</p></li>
+<li><p>Now, to solve this, we can normalize the positional information i.e.&nbsp;normalize with the length of sequence. But now we have another problem, all of the sequences will never be of same length, so each position information will keep varying. For example lets consider two sequences</p>
+<ol type="1">
+<li>I am going PE:=[0/3 1/3 2/3]</li>
+<li>All of us are going PE:=[0/5 1/5 2/5]</li>
+</ol></li>
+<li><p>As we can see in above example, in sequence we are normalizing by 3 and in 2nd one by 5, which is not good for a model to learn like one time we are saying that 2nd positions value is 0.33 and in the next sequence we are saying no no, its 0.2</p></li>
+</ul>
+<hr>
+</section>
+<section id="sinusoidal-positional-encoding" class="level1">
+<h1>Sinusoidal Positional Encoding</h1>
+<ul>
+<li><p>The authors of the Transformer paper introduced sinusoidal functions to address this issue.</p></li>
+<li><p>The positional encoding is defined as:</p>
+<ul>
+<li>For even indices:</li>
+</ul>
+<p><img src="https://latex.codecogs.com/png.latex?%0APE(pos,%202i)%20=%20%5Csin%5Cleft(%5Cfrac%7Bpos%7D%7B10000%5E%7B%5Cfrac%7B2i%7D%7Bd_%7Bmodel%7D%7D%7D%7D%5Cright)%0A"></p>
+<ul>
+<li>For odd indices:</li>
+</ul></li>
+</ul>
+<p><img src="https://latex.codecogs.com/png.latex?%0APE(pos,%202i%20+%201)%20=%20%5Ccos%5Cleft(%5Cfrac%7Bpos%7D%7B10000%5E%7B%5Cfrac%7B2i%7D%7Bd_%7Bmodel%7D%7D%7D%7D%5Cright)%0A"></p>
+<ul>
+<li><em>where</em>
+<ul>
+<li>pos is the position of token</li>
+<li><img src="https://latex.codecogs.com/png.latex?d_%7Bmodel%7D"> is dimensionality of position embedding</li>
+<li>i is index of embedding dimension where i runs from 0 to <img src="https://latex.codecogs.com/png.latex?d_%7Bmodel%7D">/2 -1 [each value of i corresponds to one frequency of sinusoid]</li>
+</ul></li>
+</ul>
+<section id="below-is-python-code-for-getting-1d-sinusoidal-postion-embedding" class="level2">
+<h2 class="anchored" data-anchor-id="below-is-python-code-for-getting-1d-sinusoidal-postion-embedding">Below is python code for getting 1D Sinusoidal Postion Embedding</h2>
+<div id="72175611" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Union</span>
+<span id="cb1-3"></span>
+<span id="cb1-4"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_1d_sin_cos_pe(d_model:<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>, pos:Union[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>]):</span>
+<span id="cb1-5">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">type</span>(pos)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>:</span>
+<span id="cb1-6">        pos <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [pos]</span>
+<span id="cb1-7">    n_tokens <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(pos)</span>
+<span id="cb1-8">    pos <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor(pos).reshape(n_tokens, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb1-9">    div_term <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10000</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>i<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>d_model) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(d_model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)])</span>
+<span id="cb1-10">    sinPE <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.sin(pos<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>div_term)</span>
+<span id="cb1-11">    cosPE <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.cos(pos<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>div_term)</span>
+<span id="cb1-12">    combinedPE <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.zeros(n_tokens, d_model)</span>
+<span id="cb1-13">    combinedPE[:, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>::<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> sinPE</span>
+<span id="cb1-14">    combinedPE[:, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>::<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> cosPE</span>
+<span id="cb1-15"></span>
+<span id="cb1-16">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> combinedPE</span>
+<span id="cb1-17"></span>
+<span id="cb1-18"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># For single position</span></span>
+<span id="cb1-19">d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">512</span></span>
+<span id="cb1-20">pos <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span>
+<span id="cb1-21">pe2 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_1d_sin_cos_pe(d_model, pos)</span>
+<span id="cb1-22"></span>
+<span id="cb1-23">d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">512</span></span>
+<span id="cb1-24">pos <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span></span>
+<span id="cb1-25">pe3 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_1d_sin_cos_pe(d_model, pos)</span>
+<span id="cb1-26"></span>
+<span id="cb1-27">combinedPE <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.cat([pe2, pe3], dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>)</span>
+<span id="cb1-28"></span>
+<span id="cb1-29"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># For multiple positions </span></span>
+<span id="cb1-30">d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">512</span></span>
+<span id="cb1-31">pos <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>]</span>
+<span id="cb1-32">pe <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_1d_sin_cos_pe(d_model, pos)</span>
+<span id="cb1-33"></span>
+<span id="cb1-34"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(torch.equal(combinedPE, pe))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True</code></pre>
+</div>
+</div>
+</section>
+<section id="lets-see-only-sine-for-intuition" class="level2">
+<h2 class="anchored" data-anchor-id="lets-see-only-sine-for-intuition">Lets see only sine for intuition</h2>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Position Encoding/scale_factor.png" style="width:80%" class="figure-img">
+<figcaption>
+As dimension index increases, scaling factor also increases
+</figcaption>
+</figure>
+<ul>
+<li><p>As the scaling factor increases, the period of sin wave increases frequency decreases i.e.&nbsp;the repeatation of values decreases.</p></li>
+<li><p>We can also say that as scale factor increases, the oscillation becomes slower.</p></li>
+<li><p>Dimension 0 i.e.&nbsp;lower dimension can incorporate fine grained local positional information.</p></li>
+<li><p>Value at k is far different than value at k + 5 as we can see from below figure.</p></li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Position Encoding/dim_0_sin.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<hr>
+<ul>
+<li>Dimension 255 i.e.&nbsp;higher dimensions incorporates global positional information</li>
+<li>Value at k and k+5 is nearly similar but at k and k+200 is quite different as we can see from the below figure.</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Position Encoding/dim_255_sin.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<hr>
+<ul>
+<li>Basically given a particular position pos, it gets mapped to various sine waves which incroporates local as well as global information as we can see from below figure.</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Position Encoding/sine_wave.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+</section>
+<section id="key-observations" class="level2">
+<h2 class="anchored" data-anchor-id="key-observations">Key Observations</h2>
+<ul>
+<li>Earlier indices (smaller ( i )):
+<ul>
+<li>Capture <strong>short-range information</strong></li>
+<li>High-frequency variations</li>
+</ul></li>
+<li>Later indices (larger ( i )):
+<ul>
+<li>Capture <strong>long-range information</strong></li>
+<li>Low-frequency variations</li>
+</ul></li>
+<li>This creates a mix of:
+<ul>
+<li>Short-range patterns (rapid oscillations)</li>
+<li>Long-range patterns (slow oscillations)</li>
+</ul></li>
+</ul>
+</section>
+<section id="connection-to-binary-encoding" class="level2">
+<h2 class="anchored" data-anchor-id="connection-to-binary-encoding">Connection to Binary Encoding</h2>
+<ul>
+<li>As frequency decreases, <strong>bit significance increases</strong></li>
+<li>Similar to binary representation:
+<ul>
+<li>Rightmost bits → change frequently (low significance)</li>
+<li>Leftmost bits → change slowly (high significance)</li>
+</ul></li>
+<li>Moving from right → left:
+<ul>
+<li>Repetition decreases</li>
+<li>Importance increases</li>
+</ul></li>
+<li>And this is what we want from a positonal encoding, where it can help in differentiate local as well as global tokens.</li>
+<li>But since Binary Encodings are discrete and does not change smoothly for example BE of 3 is 11 and BE of 4 is 100, which is not continuous whereas sinusoidal waves are continuos and change smoothly from pos to pos + 1.</li>
+</ul>
+<hr>
+<section id="locality-insight" class="level3">
+<h3 class="anchored" data-anchor-id="locality-insight">Locality Insight</h3>
+<p>For small values of i:</p>
+<ul>
+<li>PE(pos) and PE(pos + 1) are <strong>very different</strong></li>
+<li>PE(pos) and PE(pos + k) are <strong>more similar for larger k</strong></li>
+</ul>
+<p>Implication:</p>
+<ul>
+<li>Helps distinguish <strong>nearby tokens</strong></li>
+</ul>
+<hr>
+</section>
+<section id="global-insight" class="level3">
+<h3 class="anchored" data-anchor-id="global-insight">Global Insight</h3>
+<p>For large values of i:</p>
+<ul>
+<li>PE(pos) and PE(pos + 1) are <strong>more similar</strong></li>
+<li>PE(pos) and PE(pos + k) are <strong>very different for larger k</strong></li>
+</ul>
+<p>Implication:</p>
+<ul>
+<li>Helps distinguish <strong>Far-apart tokens</strong></li>
+</ul>
+<hr>
+</section>
+</section>
+</section>
+<section id="why-10000" class="level1">
+<h1>Why 10000?</h1>
+<section id="what-happens-if-we-chose-100" class="level2">
+<h2 class="anchored" data-anchor-id="what-happens-if-we-chose-100">What happens if we chose 100</h2>
+<ul>
+<li>From below graph we can see that even higher dimension starts repeating themselves i.e.&nbsp;their frequency increases and thus we cant distinguish between far-apart tokens</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Position Encoding/100_SF.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<ul>
+<li>For example lets calculate cosine similarity between PE[128:256] of 500th position to everyone other position.</li>
+<li>The cosine similarity will change drastically as we can see in the below figure, whereas we want higher dimensions to change smoothly.</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Position Encoding/cs2_100.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<ul>
+<li>The cosine similarity between PE[0:128] of 500th position to everyone other position.</li>
+<li>The cosine similarity decreases drastically to zero even with position difference of 10 only, whereas we want it to decrease smoothly but not in a agressive way.</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Position Encoding/cs1_100.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+</section>
+<section id="what-happens-if-we-chose-100000" class="level2">
+<h2 class="anchored" data-anchor-id="what-happens-if-we-chose-100000">What happens if we chose 100000</h2>
+<ul>
+<li>And if we chose 100K as scalin factor then from below figure we can see that even the earlier dimensions have reduced frequency and thus we can’t differentiate between two local positons</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Position Encoding/100k_SF.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<ul>
+<li>For example lets calculate cosine similarity between PE[128:256] of 500th position to everyone other position, in this case similarity barely changes as we can see from below figure.</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Position Encoding/cs2_100k.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<ul>
+<li>The cosine similarity between PE[0:128] of 500th position to everyone other position.</li>
+<li>The cosine similarity remains mostly same even with position difference of 50, whereas we want it to decrease smoothly.</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Position Encoding/cs1_100k.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+</section>
+<section id="how-does-10k-solves-above-problems" class="level2">
+<h2 class="anchored" data-anchor-id="how-does-10k-solves-above-problems">How does 10k solves above problems</h2>
+<ul>
+<li>And as suggested in paper, if we chose 10k. It is somehting like sweet spot where earlier dimensions have higher frequency thus helping in distinguishing between local positions and later dimensions have lower frequency thus helping in capturing long range positional differences.</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Position Encoding/10k_SF.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<ul>
+<li>As we can see from below graphs it solves the problem of cosine similarity between PE of 500th position and every other position</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Position Encoding/cs2_10k.png" style="width:80%" class="figure-img">
+<figcaption>
+Higher dimension similarity changes smoothly to capture global information
+</figcaption>
+</figure>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Position Encoding/cs1_10k.png" style="width:80%" class="figure-img">
+<figcaption>
+Lower dimension similarity changes somewhat aggressively to capture local information
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="why-include-cosine-also" class="level1">
+<h1>Why include cosine also</h1>
+<ul>
+<li>It allows, the PE across all postions to have simple linear relationship.</li>
+<li>Generally:
+<ul>
+<li>x = <img src="https://latex.codecogs.com/png.latex?%5Ccos(%5Ctheta)"></li>
+<li>y = <img src="https://latex.codecogs.com/png.latex?%5Csin(%5Ctheta)"></li>
+</ul></li>
+<li>But in paper:
+<ul>
+<li>x = <img src="https://latex.codecogs.com/png.latex?%5Csin(%5Ctheta)"></li>
+<li>y = <img src="https://latex.codecogs.com/png.latex?%5Ccos(%5Ctheta)"></li>
+</ul></li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Position Encoding/first_cos.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Position Encoding/first_cos2.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Position Encoding/first_cos3.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<ul>
+<li>As we can see from above equations, PE[pos+k] = <img src="https://latex.codecogs.com/png.latex?T_%7Bk%7D"> PE[pos]</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>Deep Learning</category>
+  <guid>https://riteshrm.github.io/posts/Position Encoding/</guid>
+  <pubDate>Mon, 06 Apr 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/Position Encoding/thumbnail.png" medium="image" type="image/png" height="96" width="144"/>
+</item>
 <item>
   <title>AI Engineering By Chip Huyen</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
@@ -24,7 +664,6 @@
 <ul>
 <li>This is completely based on <a href="https://www.oreilly.com/library/view/ai-engineering/9781098166298/">AI Engineering By Chip Huyen</a></li>
 </ul>
-<!-- - For the code part, you can checkout this [link](https://github.com/riteshrm/Quantization-Fundamentals-deeplearning.ai-) -->
 <section id="chapter-1-introduction-to-building-ai-applications-with-foundation-models" class="level1">
 <h1>Chapter 1 Introduction to Building AI Applications with Foundation Models</h1>
 <section id="language-models-lms" class="level2">
@@ -900,7 +1539,7 @@ Figure 2.2: Training workflow of a large language model.
   <category>Applied ML</category>
   <guid>https://riteshrm.github.io/posts/AI Engineering By Chip Huyen/</guid>
   <pubDate>Tue, 13 Jan 2026 00:00:00 GMT</pubDate>
-  <media:content url="https://riteshrm.github.io/posts/AI Engineering By Chip Huyen/cover.png" medium="image" type="image/png" height="187" width="144"/>
+  <media:content url="https://riteshrm.github.io/posts/AI Engineering By Chip Huyen/resized_thumbnail.png" medium="image" type="image/png" height="82" width="144"/>
 </item>
 <item>
   <title>Attention</title>
@@ -968,7 +1607,7 @@ Figure 2.2: Training workflow of a large language model.
 </section>
 <section id="single-head-vanilla-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="single-head-vanilla-attention-pytorch-code">Single Head Vanilla Attention PyTorch Code</h3>
-<div id="f5e2006c" class="cell" data-execution_count="1">
+<div id="c93a2261" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -1217,13 +1856,13 @@ font-style: inherit;">:.3f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 0.457</code></pre>
+<pre><code>Time taken: 0.550</code></pre>
 </div>
 </div>
 </section>
 <section id="multi-head-vanilla-attention-for-loop-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="multi-head-vanilla-attention-for-loop-pytorch-code">Multi Head Vanilla Attention For loop PyTorch Code</h3>
-<div id="1b1ce56c" class="cell" data-execution_count="2">
+<div id="cbe6a191" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -1630,13 +2269,13 @@ font-style: inherit;">:.3f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 0.769</code></pre>
+<pre><code>Time taken: 0.925</code></pre>
 </div>
 </div>
 </section>
 <section id="multi-head-vanilla-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="multi-head-vanilla-attention-pytorch-code">Multi Head Vanilla Attention PyTorch Code</h3>
-<div id="555e4a1d" class="cell" data-execution_count="3">
+<div id="e6717b4d" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -1996,7 +2635,7 @@ font-style: inherit;">:.3f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 2.617</code></pre>
+<pre><code>Time taken: 2.665</code></pre>
 </div>
 </div>
 </section>
@@ -2033,7 +2672,7 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
 </section>
 <section id="single-head-linear-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="single-head-linear-attention-pytorch-code">Single Head Linear Attention PyTorch Code</h3>
-<div id="a492edb0" class="cell" data-execution_count="4">
+<div id="5530f036" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -2314,7 +2953,7 @@ font-style: inherit;">:.3f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 0.038</code></pre>
+<pre><code>Time taken: 0.070</code></pre>
 </div>
 </div>
 
@@ -2325,7 +2964,172 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
   <category>Deep Learning</category>
   <guid>https://riteshrm.github.io/posts/Attention Mechanism/</guid>
   <pubDate>Mon, 12 Jan 2026 00:00:00 GMT</pubDate>
-  <media:content url="https://riteshrm.github.io/posts/Attention Mechanism/attn.png" medium="image" type="image/png" height="163" width="144"/>
+  <media:content url="https://riteshrm.github.io/posts/Attention Mechanism/attn_resized_thumbnail.png" medium="image" type="image/png" height="82" width="144"/>
+</item>
+<item>
+  <title>Hands on LLMs</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/Hands on LLMs/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<ul>
+<li>This is completely based on <a href="https://www.oreilly.com/library/view/hands-on-large-language/9781098150952/">Hands on LLMs</a></li>
+</ul>
+<section id="chapter-1introduction-to-llms" class="level1">
+<h1>Chapter-1[Introduction to LLMs]</h1>
+<ul>
+<li><p>Bag of Words:- We have a predefined vocabulary, which is used to creat a vector, where each vector index contains the count of that particular word index in vocab</p></li>
+<li><p>word2vec:- It is trained by using a pair(whether dfferent or same semantic meaning) of words</p></li>
+<li><p>Bag of words create embedding at documet level, whereas word2vec generates embedding for words only</p></li>
+<li><p>Representation Models are encoder only models</p></li>
+<li><p>Generative Models are decoder only models</p></li>
+<li><p>BERT(Bidirectional Encoder Represenations from Transformers)</p>
+<ul>
+<li>It is trained by a tecique called masked language modeling, where this method masks a part of the input for the model to predict</li>
+<li>Pretrain on large dataset using masked language modng and then fine tune it for down stream tasks</li>
+</ul></li>
+<li><p>Creating an LLM consists of typically at least two steps:</p>
+<ul>
+<li>Language Modeling(Pretraining):- An LLM is trained on a vast corpus of internet text allowing the model to learn grammar, context and language patterns.</li>
+<li>Fine Tuning(Post Training):- Further training the previously trained model on narrower tasks.</li>
+</ul></li>
+</ul>
+</section>
+<section id="chapter-2tokens-and-embeddings" class="level1">
+<h1>Chapter-2[Tokens and Embeddings]</h1>
+<ul>
+<li><p>Partial tokens (like “izing”, and “ic”) have a special hidden character at their beginning that indicates that they are connected with the token that precedes them in the text.</p></li>
+<li><p>Word Tokens</p></li>
+<li><p>Subword Tokens</p></li>
+<li><p>Character Tokens</p></li>
+<li><p>Byte Tokens</p></li>
+<li><p>Designing Large Language Model Applications. (For tokenizers)</p></li>
+<li><p>BERT tokenizers are based on wordpiece, introduced in Japanese and Korean voice search [https://ieeexplore.ieee.org/document/6289079]</p></li>
+<li><p>GPT-2 is based on Byte Pair Encoding (BPE), introduced in Neural machine translation of rare words with subword units [https://arxiv.org/abs/1508.07909]</p></li>
+<li><p>Flan-T5 is based on SentencePiece, introduced in “SentencePiece: simple and language independent subword tokenizer and detokenizer for neural text processing”, which supports BPE and unigram language model</p></li>
+<li><p>There are three major factors that dictate how a tokenizer breaks down an input prompt</p>
+<ul>
+<li>Tokenization method (BPE, WordPiece, etc.)
+<ul>
+<li>Each of these methods outlines an algorithm for how to choose an appropriate set of tokens to represent a dataset</li>
+</ul></li>
+<li>Tokenizer Design choices (vocab size, special tokens)
+<ul>
+<li>vocab size:- How many tokens to keep in tokenizers vocabulary</li>
+<li>special tokens:- What special tokens do we want the model to keep track of. We can add as many of these as we want</li>
+</ul></li>
+<li>Capitalization:- Whether to convert caps to lower or not</li>
+</ul></li>
+<li><p>More details on training tokenizer at:-</p>
+<ul>
+<li>Tokenizers section of the Hugging Face course [https://huggingface.co/learn/nlp-course/chapter6/1?fw=pt]</li>
+<li>Natural Language Processing with Transformers, Revised Edition [https://www.oreilly.com/library/view/natural-language-processing/9781098136789/]</li>
+</ul></li>
+</ul>
+</section>
+<section id="chapter-3looking-inside-large-language-models" class="level1">
+<h1>Chapter-3[Looking Inside Large Language Models]</h1>
+<ul>
+<li><p>Autoregressive Models: The models that consume their earlier predictions to make later predictions</p></li>
+<li><p>Three Major components of LLMs are:</p>
+<ul>
+<li>Tokenizer</li>
+<li>Stack of Transformer Blocks</li>
+<li>A language modeling head</li>
+</ul></li>
+<li><p>Context length (Number of streams):- Number of previous tokens which will be considered for the prediction of current token</p></li>
+<li><p>KVCache:- Keeping the previously calculated key and value so that we dont have to recalculate the same again and again</p></li>
+<li><p>Components of Transformer Blocks</p>
+<ul>
+<li>Attention Layer:- Incorporates contextual information to allow the model to better capture the nuance of language.</li>
+<li>FeedForward Layer:- It is able to store information and make predictions and interpolations from data it was trained on.</li>
+</ul></li>
+<li><p>Two main steps are involved in the attention mechanism:</p>
+<ul>
+<li>Relevance scoring: How much previous tokens are relevant to the curren token being processed.</li>
+<li>Combining Information:- Using scores, combine the information from the various positions into a single output vector</li>
+</ul></li>
+<li><p>More efficient Attention</p>
+<ul>
+<li>Local/Sparse Attention:- Sparse Attention limits the context of previous tokens that the model can attend to.</li>
+<li>Multi-query:- Unique Queries but same key and value for all the head</li>
+<li>Grouped-query:- Dividing queries in groups and then key, value will be same for the queries within a group</li>
+<li>RoPE:- Added to queries and keys before calculating the score in Attention blocks</li>
+</ul></li>
+</ul>
+</section>
+<section id="chapter-4text-classification" class="level1">
+<h1>Chapter-4[Text Classification]</h1>
+<ul>
+<li><p>In case of no lableld data, we can define our desired labels and then encode both labels and given text and then use cosine_similarity</p></li>
+<li><p>Directly using pretrained models for sentiment classification</p></li>
+<li><p>Using a simple classifier on top of embedding generator</p></li>
+<li><p>If we don’t have labeled data then we can use cosine similarity to find out the label</p></li>
+<li><p>We can use generative models also</p></li>
+</ul>
+</section>
+<section id="chapter-5text-clustering-and-topic-modeling" class="level1">
+<h1>Chapter-5[Text Clustering and Topic Modeling]</h1>
+<ul>
+<li><p>A common Pipeline for Text Clustering</p>
+<ul>
+<li>Convert the input documents to embeddings with an embedding model</li>
+<li>Reduce the dimensionality of embeddings with a dimensionality reduction model (UMAP as it tends to handle nonlinear relationships and structures a bit better than PCA)</li>
+<li>Find groups of semantically similar documents with a cluster model (using HDBSCAN)</li>
+</ul></li>
+<li><p>c-TF-IDF</p>
+<ul>
+<li>TF:- Frequency of word X in class C</li>
+<li>IDF:- log(average number of words per class/frequency of X across all classes)</li>
+</ul></li>
+<li><p>BERTopic [https://maartengr.github.io/BERTopic/getting_started/best_practices/best_practices.html]</p></li>
+<li><p>After getting the keywords using c-TF-IDF, we can use MMR(maximal marginal relevance) to keep only the diverse keywords, we can also use KeyBERTInspired to fine-tune the topic representations</p></li>
+<li><p>Additonally, we can use LLMs to further improve interpretability of topics</p></li>
+</ul>
+</section>
+<section id="chapter-6prompt-engineering" class="level1">
+<h1>Chapter-6[Prompt Engineering]</h1>
+<ul>
+<li><p>Temperature:- It controls the randomness or creativity of the text generated. It defines how likely it is to choose tokens that are less probable. A temperature of 0 generates the same response every time because it always choose the most likely word. A higher value allows less probable words to be generated</p></li>
+<li><p>Divide all the logits before passing to softmax</p></li>
+<li><p>top_p:- It is also known as nucleus sampling, is a sampling technique that controls which subset of tokens (the nucleus) the LLM can consider. It will consider tokens until it reaches their cumulative probability. If we set top_p to 0.1, it will consider tokens until it reache that value.</p></li>
+<li><p>top_k:- same as top_p, LLM will only consider the top 100 most probable tokens if you set its value to 100.</p></li>
+<li><p>Table 6.1 from page 172</p></li>
+<li><p>Self-consistency:- Sampling from multiple paths for the same prompt and using the voting technique for the best one</p></li>
+<li><p>CoT:- Solving the complex problems step by step</p></li>
+<li><p>ToT:- Generates different solutions and then selects the best one and continues. This method requires so many calls to the model. But we can change it using a prompt, we can ask the model to mimic the behavior</p></li>
+</ul>
+</section>
+<section id="chapter-7advanced-text-generation-techniques-and-tools" class="level1">
+<h1>Chapter-7[Advanced Text Generation Techniques and Tools]</h1>
+<ul>
+<li>PromptTemplate from langchain</li>
+<li>Can use LLMChain to create a chain</li>
+<li>Can use ConversationBufferMemory to have access to chat history</li>
+<li>Can use ConversationBufferWindowMemory to keep only last k chats–&gt; Can use ConversationSummaryMemory alongside an LLM to store the summary fo conversation instead of storing raw chats</li>
+<li>ReAct:- Reasoning and Acting
+<ul>
+<li>Thought:- thought about the input prompt</li>
+<li>Action:- based on thought action is triggered, it is generally an external tool like calculator or search engine</li>
+<li>Observation:- finally the results of action are returned to the LLM it observes the output</li>
+</ul></li>
+</ul>
+</section>
+<section id="chapter-8semantic-search-and-retrieval-augmented-generation" class="level1">
+<h1>Chapter-8[Semantic Search and Retrieval-Augmented Generation]</h1>
+
+
+</section>
+
+ ]]></description>
+  <category>Applied ML</category>
+  <guid>https://riteshrm.github.io/posts/Hands on LLMs/</guid>
+  <pubDate>Mon, 27 Jan 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/Hands on LLMs/traing_work_flow_of_llm.png" medium="image" type="image/png" height="75" width="144"/>
 </item>
 <item>
   <title>Meta Learning Book Chapter Wise Summary Points</title>
@@ -2623,7 +3427,7 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
   <category>Deep Learning</category>
   <guid>https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/</guid>
   <pubDate>Sat, 06 Jul 2024 00:00:00 GMT</pubDate>
-  <media:content url="https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning.jpg" medium="image" type="image/jpeg"/>
+  <media:content url="https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning_resized_thumbnail.png" medium="image" type="image/png" height="82" width="144"/>
 </item>
 <item>
   <title>Quantization in Depth</title>

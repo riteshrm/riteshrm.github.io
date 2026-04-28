@@ -3,7 +3,8 @@ title: "Attention"
 author: "Ritesh Kumar Maurya"
 date: "2026-01-12"
 categories: [Deep Learning]
-image: "attn.png"
+image: "attn_resized_thumbnail.png"
+description: "A step-by-step note on attention, scaled dot-product attention, softmax gradients, and transformer intuition."
 ---
 
 <!-- - In this blog, we will try to understand how different attention mechanisms work alongside vanilla attention from 2017 paper -->
@@ -294,7 +295,6 @@ torch.cuda.synchronize()
 print(f"Time taken: {(time.time()-start)/k:.3f}")
 
 ```
-
 
 
 

@@ -1,14 +1,32 @@
-I work at [Samsung R&D Institute India, Noida](https://research.samsung.com/sri-n). For more details on my work experience, check out my [LinkedIn profile](https://www.linkedin.com/in/riteshrm/).
 
+---
+title: ""
+pagetitle: "About Me"
+description: "Ritesh Kumar Maurya is a machine learning engineer writing notes on deep learning, optimization, and LLMs."
+page-layout: article
+title-block-style: none
+---
 
-<table>
-  <tr>
-    <td><a href="https://github.com/riteshrm"><img src="https://img.shields.io/github/followers/riteshrm.svg?label=GitHub&style=social" alt="GitHub"></a></td>
-    <td><a href="https://twitter.com/_riteshrm_"><img src="https://img.shields.io/twitter/follow/%5Friteshrm%5F?label=Twitter&style=social" alt="Twitter"></a></td>
-    <td><a href="https://www.linkedin.com/in/riteshrm"><img src="https://img.shields.io/badge/LinkedIn--_.svg?style=social&logo=linkedin" alt="LinkedIn"></a></td>
-    <td><a href="mailto:riteshkumarmaurya7379@gmail.com"><img src="https://img.shields.io/badge/Gmail--_.svg?style=social&logo=gmail" alt="Gmail"></a></td>
-  </tr>
-</table>
+::: {.profile-hero}
+::: {.profile-copy}
+Hi there 👋 I am Ritesh. I work at [Samsung R&D Institute India, Noida](https://research.samsung.com/sri-n). For more details on my work experience, check out my [LinkedIn profile](https://www.linkedin.com/in/riteshrm/).
+
+I use this site to collect practical notes on deep learning, optimization, diffusion models and language models.
+
+::: {.profile-actions}
+[Read Notes](blog.qmd){.btn .btn-primary}
+[GitHub](https://github.com/riteshrm){.btn .btn-outline-secondary}
+[LinkedIn](https://www.linkedin.com/in/riteshrm/){.btn .btn-outline-secondary}
+:::
+:::
+
+::: {.profile-links aria-label="Profile links"}
+[{{< iconify mdi github >}} GitHub](https://github.com/riteshrm)
+[{{< iconify mdi linkedin >}} LinkedIn](https://www.linkedin.com/in/riteshrm/)
+[{{< iconify mdi email-outline >}} Email](mailto:riteshkumarmaurya7379@gmail.com)
+[{{< iconify cib leetcode >}} LeetCode](https://leetcode.com/riteshrm)
+:::
+:::
 
 ### Timeline
 

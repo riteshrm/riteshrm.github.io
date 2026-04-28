@@ -1,5 +1,10 @@
 project:
   type: website
+  render:
+    - "*.qmd"
+    - "posts/**/*.qmd"
+    - "!random.ipynb"
+    - "!pe.ipynb"
     
 format:
   html:
@@ -9,37 +14,55 @@ format:
       dark: darkly
     css: styles.css
     toc: true
+    toc-depth: 3
 
 website:
-  title: "About Me"
+  title: "Ritesh Kumar Maurya"
   site-url: "https://riteshrm.github.io/"
-  description: "Personal site of Ritesh Kumar Maurya."
+  description: "Machine learning engineering notes by Ritesh Kumar Maurya."
   favicon: posts/favicon.ico
-  search: false
+  search:
+    location: navbar
+    type: overlay
   twitter-card:
     creator: "@_riteshrm_"
-    card-style: summary
+    card-style: summary_large_image
   open-graph: true
   repo-actions: [edit, issue]
   repo-branch: "master"
   repo-url: "https://github.com/riteshrm/riteshrm.github.io"
-  google-analytics: "UA-163448909-1"
   navbar:
-    background: primary
+    title: "About Me"
+    # background: primary
     left:
-      - text: "Blog/Notes"
+      - text: "Notes"
         href: blog.qmd
     right:
-      # - icon: "bi bi-envelope"
-      #   href: "mailto:riteshkumarmaurya7379@gmail.com"
+      - icon: envelope
+        href: "mailto:riteshkumarmaurya7379@gmail.com"
+        aria-label: "Email"
       - icon: twitter
-        href: https://twitter.com/_riteshrm_/
+        href: "https://x.com/%5Friteshrm%5F/"
+        aria-label: "X"
       - icon: linkedin
-        href: https://www.linkedin.com/in/riteshrm/
+        href: "https://www.linkedin.com/in/riteshrm/"
+        aria-label: "LinkedIn"
       - icon: github
-        href: https://github.com/riteshrm
+        href: "https://github.com/riteshrm"
+        aria-label: "GitHub"
       - text: "{{< iconify cib leetcode >}}"
-        href: https://leetcode.com/riteshrm
+        href: "https://leetcode.com/riteshrm"
+        aria-label: "LeetCode"
+  page-footer:
+    left: "Built with Quarto"
+    center:
+      - text: "RSS"
+        href: blog.xml
+      - text: "GitHub"
+        href: "https://github.com/riteshrm"
+      - text: "LinkedIn"
+        href: "https://www.linkedin.com/in/riteshrm/"
+    right: "© Ritesh Kumar Maurya"
 
 execute:
   freeze: true
