@@ -406,6 +406,7 @@ window.Quarto = {
 
 <ul>
 <li>In this post we will try to understand RoPE.</li>
+<li>This is mostly based on <a href="https://www.youtube.com/watch?v=qKUobBR5R1A">Why Rotating Vectors Solves Positional Encoding in Transformers</a></li>
 </ul>
 <section id="why-relative-position-embedding" class="level2">
 <h2 class="anchored" data-anchor-id="why-relative-position-embedding">Why Relative Position Embedding?</h2>
@@ -520,7 +521,49 @@ y \\
 <h3 class="anchored" data-anchor-id="implementation">Implementation</h3>
 <ul>
 <li>Treat a pair as single 2D vector space and rotate it independently</li>
-<li>For example lets say we have d_model of 256 then we will have 128 2D vectors and we can rotate those pairs independently</li>
+<li>For example lets say we have d_model of 256 then we will have 128 2D vectors and we can rotate those pairs independently as shown in below table</li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 76%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Pairs</th>
+<th style="text-align: center;">Rotation Matrix</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">(e_{1}, e_{2})</span></td>
+<td style="text-align: center;"><span class="math inline">R(m\theta_{1})</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">(e_{3}, e_{4})</span></td>
+<td style="text-align: center;"><span class="math inline">R(m\theta_{2})</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">……………..</td>
+<td style="text-align: center;">…………</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">……………..</td>
+<td style="text-align: center;">…………</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">(e_{d_{model}/2-1}, e_{d_{model}/2})</span></td>
+<td style="text-align: center;"><span class="math inline">R(m\theta_{d_{model}/2})</span></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>where
+<ul>
+<li><span class="math inline">e_{k}</span> is embedding value at index k</li>
+<li><span class="math inline">\theta_{i}</span> is rotation angle given as <span class="math inline">\theta_{i}</span> = <span class="math inline">10000^{-2(i-1)/d_{model}}</span>, where i runs from 1 to <span class="math inline">d_{model}/2</span></li>
+<li><span class="math inline">\theta_{i}</span> decreases as i increases, so initial embedding values are rotated by large angles as compared to later embedding values</li>
+</ul></li>
 </ul>
 
 

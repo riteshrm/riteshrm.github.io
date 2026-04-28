@@ -23,6 +23,7 @@
 
 <ul>
 <li>In this post we will try to understand RoPE.</li>
+<li>This is mostly based on <a href="https://www.youtube.com/watch?v=qKUobBR5R1A">Why Rotating Vectors Solves Positional Encoding in Transformers</a></li>
 </ul>
 <section id="why-relative-position-embedding" class="level2">
 <h2 class="anchored" data-anchor-id="why-relative-position-embedding">Why Relative Position Embedding?</h2>
@@ -122,7 +123,49 @@
 <h3 class="anchored" data-anchor-id="implementation">Implementation</h3>
 <ul>
 <li>Treat a pair as single 2D vector space and rotate it independently</li>
-<li>For example lets say we have d_model of 256 then we will have 128 2D vectors and we can rotate those pairs independently</li>
+<li>For example lets say we have d_model of 256 then we will have 128 2D vectors and we can rotate those pairs independently as shown in below table</li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 76%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Pairs</th>
+<th style="text-align: center;">Rotation Matrix</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?(e_%7B1%7D,%20e_%7B2%7D)"></td>
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?R(m%5Ctheta_%7B1%7D)"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?(e_%7B3%7D,%20e_%7B4%7D)"></td>
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?R(m%5Ctheta_%7B2%7D)"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">……………..</td>
+<td style="text-align: center;">…………</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">……………..</td>
+<td style="text-align: center;">…………</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?(e_%7Bd_%7Bmodel%7D/2-1%7D,%20e_%7Bd_%7Bmodel%7D/2%7D)"></td>
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?R(m%5Ctheta_%7Bd_%7Bmodel%7D/2%7D)"></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>where
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?e_%7Bk%7D"> is embedding value at index k</li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Ctheta_%7Bi%7D"> is rotation angle given as <img src="https://latex.codecogs.com/png.latex?%5Ctheta_%7Bi%7D"> = <img src="https://latex.codecogs.com/png.latex?10000%5E%7B-2(i-1)/d_%7Bmodel%7D%7D">, where i runs from 1 to <img src="https://latex.codecogs.com/png.latex?d_%7Bmodel%7D/2"></li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Ctheta_%7Bi%7D"> decreases as i increases, so initial embedding values are rotated by large angles as compared to later embedding values</li>
+</ul></li>
 </ul>
 
 
@@ -136,7 +179,7 @@
   <media:content url="https://riteshrm.github.io/posts/Rotary Position Embedding/rotary_thumbnail_resized.png" medium="image" type="image/png" height="82" width="144"/>
 </item>
 <item>
-  <title>Position Embedding</title>
+  <title>Position Encoding</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
   <link>https://riteshrm.github.io/posts/Position Encoding/</link>
   <description><![CDATA[ 
@@ -145,6 +188,9 @@
 
 
 
+<ul>
+<li>This is mostly based on <a href="https://www.youtube.com/watch?v=dWkm4nFikgM">Positional Encoding in Transformer</a></li>
+</ul>
 <section id="positional-encoding-pe" class="level1">
 <h1>Positional Encoding (PE)</h1>
 <ul>
@@ -202,7 +248,7 @@
 </ul>
 <section id="below-is-python-code-for-getting-1d-sinusoidal-postion-embedding" class="level2">
 <h2 class="anchored" data-anchor-id="below-is-python-code-for-getting-1d-sinusoidal-postion-embedding">Below is python code for getting 1D Sinusoidal Postion Embedding</h2>
-<div id="09d1eda9" class="cell" data-execution_count="1">
+<div id="79572f8a" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -618,7 +664,6 @@ Lower dimension similarity changes somewhat aggressively to capture local inform
 <ul>
 <li>This is completely based on <a href="https://www.oreilly.com/library/view/ai-engineering/9781098166298/">AI Engineering By Chip Huyen</a></li>
 </ul>
-<!-- - For the code part, you can checkout this [link](https://github.com/riteshrm/Quantization-Fundamentals-deeplearning.ai-) -->
 <section id="chapter-1-introduction-to-building-ai-applications-with-foundation-models" class="level1">
 <h1>Chapter 1 Introduction to Building AI Applications with Foundation Models</h1>
 <section id="language-models-lms" class="level2">
@@ -2920,6 +2965,171 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
   <guid>https://riteshrm.github.io/posts/Attention Mechanism/</guid>
   <pubDate>Mon, 12 Jan 2026 00:00:00 GMT</pubDate>
   <media:content url="https://riteshrm.github.io/posts/Attention Mechanism/attn_resized_thumbnail.png" medium="image" type="image/png" height="82" width="144"/>
+</item>
+<item>
+  <title>Hands on LLMs</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/Hands on LLMs/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<ul>
+<li>This is completely based on <a href="https://www.oreilly.com/library/view/hands-on-large-language/9781098150952/">Hands on LLMs</a></li>
+</ul>
+<section id="chapter-1introduction-to-llms" class="level1">
+<h1>Chapter-1[Introduction to LLMs]</h1>
+<ul>
+<li><p>Bag of Words:- We have a predefined vocabulary, which is used to creat a vector, where each vector index contains the count of that particular word index in vocab</p></li>
+<li><p>word2vec:- It is trained by using a pair(whether dfferent or same semantic meaning) of words</p></li>
+<li><p>Bag of words create embedding at documet level, whereas word2vec generates embedding for words only</p></li>
+<li><p>Representation Models are encoder only models</p></li>
+<li><p>Generative Models are decoder only models</p></li>
+<li><p>BERT(Bidirectional Encoder Represenations from Transformers)</p>
+<ul>
+<li>It is trained by a tecique called masked language modeling, where this method masks a part of the input for the model to predict</li>
+<li>Pretrain on large dataset using masked language modng and then fine tune it for down stream tasks</li>
+</ul></li>
+<li><p>Creating an LLM consists of typically at least two steps:</p>
+<ul>
+<li>Language Modeling(Pretraining):- An LLM is trained on a vast corpus of internet text allowing the model to learn grammar, context and language patterns.</li>
+<li>Fine Tuning(Post Training):- Further training the previously trained model on narrower tasks.</li>
+</ul></li>
+</ul>
+</section>
+<section id="chapter-2tokens-and-embeddings" class="level1">
+<h1>Chapter-2[Tokens and Embeddings]</h1>
+<ul>
+<li><p>Partial tokens (like “izing”, and “ic”) have a special hidden character at their beginning that indicates that they are connected with the token that precedes them in the text.</p></li>
+<li><p>Word Tokens</p></li>
+<li><p>Subword Tokens</p></li>
+<li><p>Character Tokens</p></li>
+<li><p>Byte Tokens</p></li>
+<li><p>Designing Large Language Model Applications. (For tokenizers)</p></li>
+<li><p>BERT tokenizers are based on wordpiece, introduced in Japanese and Korean voice search [https://ieeexplore.ieee.org/document/6289079]</p></li>
+<li><p>GPT-2 is based on Byte Pair Encoding (BPE), introduced in Neural machine translation of rare words with subword units [https://arxiv.org/abs/1508.07909]</p></li>
+<li><p>Flan-T5 is based on SentencePiece, introduced in “SentencePiece: simple and language independent subword tokenizer and detokenizer for neural text processing”, which supports BPE and unigram language model</p></li>
+<li><p>There are three major factors that dictate how a tokenizer breaks down an input prompt</p>
+<ul>
+<li>Tokenization method (BPE, WordPiece, etc.)
+<ul>
+<li>Each of these methods outlines an algorithm for how to choose an appropriate set of tokens to represent a dataset</li>
+</ul></li>
+<li>Tokenizer Design choices (vocab size, special tokens)
+<ul>
+<li>vocab size:- How many tokens to keep in tokenizers vocabulary</li>
+<li>special tokens:- What special tokens do we want the model to keep track of. We can add as many of these as we want</li>
+</ul></li>
+<li>Capitalization:- Whether to convert caps to lower or not</li>
+</ul></li>
+<li><p>More details on training tokenizer at:-</p>
+<ul>
+<li>Tokenizers section of the Hugging Face course [https://huggingface.co/learn/nlp-course/chapter6/1?fw=pt]</li>
+<li>Natural Language Processing with Transformers, Revised Edition [https://www.oreilly.com/library/view/natural-language-processing/9781098136789/]</li>
+</ul></li>
+</ul>
+</section>
+<section id="chapter-3looking-inside-large-language-models" class="level1">
+<h1>Chapter-3[Looking Inside Large Language Models]</h1>
+<ul>
+<li><p>Autoregressive Models: The models that consume their earlier predictions to make later predictions</p></li>
+<li><p>Three Major components of LLMs are:</p>
+<ul>
+<li>Tokenizer</li>
+<li>Stack of Transformer Blocks</li>
+<li>A language modeling head</li>
+</ul></li>
+<li><p>Context length (Number of streams):- Number of previous tokens which will be considered for the prediction of current token</p></li>
+<li><p>KVCache:- Keeping the previously calculated key and value so that we dont have to recalculate the same again and again</p></li>
+<li><p>Components of Transformer Blocks</p>
+<ul>
+<li>Attention Layer:- Incorporates contextual information to allow the model to better capture the nuance of language.</li>
+<li>FeedForward Layer:- It is able to store information and make predictions and interpolations from data it was trained on.</li>
+</ul></li>
+<li><p>Two main steps are involved in the attention mechanism:</p>
+<ul>
+<li>Relevance scoring: How much previous tokens are relevant to the curren token being processed.</li>
+<li>Combining Information:- Using scores, combine the information from the various positions into a single output vector</li>
+</ul></li>
+<li><p>More efficient Attention</p>
+<ul>
+<li>Local/Sparse Attention:- Sparse Attention limits the context of previous tokens that the model can attend to.</li>
+<li>Multi-query:- Unique Queries but same key and value for all the head</li>
+<li>Grouped-query:- Dividing queries in groups and then key, value will be same for the queries within a group</li>
+<li>RoPE:- Added to queries and keys before calculating the score in Attention blocks</li>
+</ul></li>
+</ul>
+</section>
+<section id="chapter-4text-classification" class="level1">
+<h1>Chapter-4[Text Classification]</h1>
+<ul>
+<li><p>In case of no lableld data, we can define our desired labels and then encode both labels and given text and then use cosine_similarity</p></li>
+<li><p>Directly using pretrained models for sentiment classification</p></li>
+<li><p>Using a simple classifier on top of embedding generator</p></li>
+<li><p>If we don’t have labeled data then we can use cosine similarity to find out the label</p></li>
+<li><p>We can use generative models also</p></li>
+</ul>
+</section>
+<section id="chapter-5text-clustering-and-topic-modeling" class="level1">
+<h1>Chapter-5[Text Clustering and Topic Modeling]</h1>
+<ul>
+<li><p>A common Pipeline for Text Clustering</p>
+<ul>
+<li>Convert the input documents to embeddings with an embedding model</li>
+<li>Reduce the dimensionality of embeddings with a dimensionality reduction model (UMAP as it tends to handle nonlinear relationships and structures a bit better than PCA)</li>
+<li>Find groups of semantically similar documents with a cluster model (using HDBSCAN)</li>
+</ul></li>
+<li><p>c-TF-IDF</p>
+<ul>
+<li>TF:- Frequency of word X in class C</li>
+<li>IDF:- log(average number of words per class/frequency of X across all classes)</li>
+</ul></li>
+<li><p>BERTopic [https://maartengr.github.io/BERTopic/getting_started/best_practices/best_practices.html]</p></li>
+<li><p>After getting the keywords using c-TF-IDF, we can use MMR(maximal marginal relevance) to keep only the diverse keywords, we can also use KeyBERTInspired to fine-tune the topic representations</p></li>
+<li><p>Additonally, we can use LLMs to further improve interpretability of topics</p></li>
+</ul>
+</section>
+<section id="chapter-6prompt-engineering" class="level1">
+<h1>Chapter-6[Prompt Engineering]</h1>
+<ul>
+<li><p>Temperature:- It controls the randomness or creativity of the text generated. It defines how likely it is to choose tokens that are less probable. A temperature of 0 generates the same response every time because it always choose the most likely word. A higher value allows less probable words to be generated</p></li>
+<li><p>Divide all the logits before passing to softmax</p></li>
+<li><p>top_p:- It is also known as nucleus sampling, is a sampling technique that controls which subset of tokens (the nucleus) the LLM can consider. It will consider tokens until it reaches their cumulative probability. If we set top_p to 0.1, it will consider tokens until it reache that value.</p></li>
+<li><p>top_k:- same as top_p, LLM will only consider the top 100 most probable tokens if you set its value to 100.</p></li>
+<li><p>Table 6.1 from page 172</p></li>
+<li><p>Self-consistency:- Sampling from multiple paths for the same prompt and using the voting technique for the best one</p></li>
+<li><p>CoT:- Solving the complex problems step by step</p></li>
+<li><p>ToT:- Generates different solutions and then selects the best one and continues. This method requires so many calls to the model. But we can change it using a prompt, we can ask the model to mimic the behavior</p></li>
+</ul>
+</section>
+<section id="chapter-7advanced-text-generation-techniques-and-tools" class="level1">
+<h1>Chapter-7[Advanced Text Generation Techniques and Tools]</h1>
+<ul>
+<li>PromptTemplate from langchain</li>
+<li>Can use LLMChain to create a chain</li>
+<li>Can use ConversationBufferMemory to have access to chat history</li>
+<li>Can use ConversationBufferWindowMemory to keep only last k chats–&gt; Can use ConversationSummaryMemory alongside an LLM to store the summary fo conversation instead of storing raw chats</li>
+<li>ReAct:- Reasoning and Acting
+<ul>
+<li>Thought:- thought about the input prompt</li>
+<li>Action:- based on thought action is triggered, it is generally an external tool like calculator or search engine</li>
+<li>Observation:- finally the results of action are returned to the LLM it observes the output</li>
+</ul></li>
+</ul>
+</section>
+<section id="chapter-8semantic-search-and-retrieval-augmented-generation" class="level1">
+<h1>Chapter-8[Semantic Search and Retrieval-Augmented Generation]</h1>
+
+
+</section>
+
+ ]]></description>
+  <category>Applied ML</category>
+  <guid>https://riteshrm.github.io/posts/Hands on LLMs/</guid>
+  <pubDate>Mon, 27 Jan 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/Hands on LLMs/resized_thumbnail.png" medium="image" type="image/png"/>
 </item>
 <item>
   <title>Meta Learning Book Chapter Wise Summary Points</title>
