@@ -166,7 +166,387 @@
 <li><img src="https://latex.codecogs.com/png.latex?%5Ctheta_%7Bi%7D"> is rotation angle given as <img src="https://latex.codecogs.com/png.latex?%5Ctheta_%7Bi%7D"> = <img src="https://latex.codecogs.com/png.latex?10000%5E%7B-2(i-1)/d_%7Bmodel%7D%7D">, where i runs from 1 to <img src="https://latex.codecogs.com/png.latex?d_%7Bmodel%7D/2"></li>
 <li><img src="https://latex.codecogs.com/png.latex?%5Ctheta_%7Bi%7D"> decreases as i increases, so initial embedding values are rotated by large angles as compared to later embedding values</li>
 </ul></li>
+<li>Below is the code to get <img src="https://latex.codecogs.com/png.latex?(R(%5Ctheta)"> and also validate if <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta)%5ET"> <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta)"> = I [Identity Matrix]</li>
+<li>For simplicity, i have just printed a single matrix</li>
 </ul>
+<div id="64545706" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb3-2"></span>
+<span id="cb3-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_RoPE(pos, d_model):</span>
+<span id="cb3-4">    theta <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10000</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span>(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>(i<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>d_model) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, d_model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)])</span>
+<span id="cb3-5">    bsz, seq_len<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pos.shape</span>
+<span id="cb3-6">    cos <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.cos(pos[:, :, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>]<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> theta[<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, :]).view(bsz, seq_len, d_model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb3-7">    sin <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.sin(pos[:, :, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>]<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> theta[<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, :]).view(bsz, seq_len, d_model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb3-8">    row1 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.stack([cos, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>sin], dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb3-9">    row2 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.stack([sin, cos], dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb3-10"></span>
+<span id="cb3-11">    RTheta <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.stack([row1, row2], dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb3-12">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> RTheta</span>
+<span id="cb3-13"></span>
+<span id="cb3-14">bsz <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span>
+<span id="cb3-15">tokens <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor([[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(bsz)])</span>
+<span id="cb3-16">d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">256</span></span>
+<span id="cb3-17"></span>
+<span id="cb3-18">RTheta <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_RoPE(tokens, d_model)</span>
+<span id="cb3-19"></span>
+<span id="cb3-20">matrix <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.matmul(RTheta, RTheta.transpose(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>))</span>
+<span id="cb3-21"></span>
+<span id="cb3-22">matrix[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]</span></code></pre></div></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>tensor([[1.0000, 0.0000],
+        [0.0000, 1.0000]])</code></pre>
+</div>
+</div>
+<ul>
+<li>Below Code shows how to integrate RoPE while calculating attention</li>
+</ul>
+<div id="f52d482d" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb5-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> nn</span>
+<span id="cb5-3"></span>
+<span id="cb5-4"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> SimpleAttention(nn.Module):</span>
+<span id="cb5-5">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, d_model, hidden_dim):</span>
+<span id="cb5-6">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">super</span>().<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>()</span>
+<span id="cb5-7">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.hidden_dim <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> hidden_dim</span>
+<span id="cb5-8">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.q <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Linear(in_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> d_model, out_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> hidden_dim)</span>
+<span id="cb5-9">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.k <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Linear(in_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> d_model, out_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> hidden_dim)</span>
+<span id="cb5-10">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.v <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Linear(in_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> d_model, out_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> hidden_dim)</span>
+<span id="cb5-11">    </span>
+<span id="cb5-12">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> forward(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, x, rotary_emb):</span>
+<span id="cb5-13">        bsz, seq_len, d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> x.shape</span>
+<span id="cb5-14">        query <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.q(x)</span>
+<span id="cb5-15">        key <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.k(x)</span>
+<span id="cb5-16">        value <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.v(x)</span>
+<span id="cb5-17"></span>
+<span id="cb5-18">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> rotary_emb <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">is</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>:</span>
+<span id="cb5-19">            bsz, seq_len, d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> x.shape</span>
+<span id="cb5-20">            query <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> query.view(bsz, seq_len, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.hidden_dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb5-21">            key <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> key.view(bsz, seq_len, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.hidden_dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb5-22">            query <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>  torch.matmul(rotary_emb, query).view(bsz, seq_len, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.hidden_dim)</span>
+<span id="cb5-23">            key <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>  torch.matmul(rotary_emb, key).view(bsz, seq_len, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.hidden_dim)</span>
+<span id="cb5-24">        </span>
+<span id="cb5-25">        scores <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.softmax(torch.matmul(query, key.transpose(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>))<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.hidden_dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>), dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb5-26">        final <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.matmul(scores, value)</span>
+<span id="cb5-27">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> final</span>
+<span id="cb5-28"></span>
+<span id="cb5-29">bsz <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span>
+<span id="cb5-30">tokens <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor([[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(bsz)])</span>
+<span id="cb5-31">d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">256</span></span>
+<span id="cb5-32">embedding <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.randn(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>tokens.shape, d_model)</span>
+<span id="cb5-33"></span>
+<span id="cb5-34">RTheta <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_RoPE(tokens, d_model)</span>
+<span id="cb5-35"></span>
+<span id="cb5-36">model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> SimpleAttention(d_model, d_model)</span>
+<span id="cb5-37"></span>
+<span id="cb5-38">out <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model(embedding, RTheta)</span>
+<span id="cb5-39"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(out.shape)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch.Size([2, 2, 256])</code></pre>
+</div>
+</div>
 
 
 </section>
