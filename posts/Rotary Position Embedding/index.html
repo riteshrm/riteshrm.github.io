@@ -402,6 +402,7 @@ window.Quarto = {
   <li><a href="#rope" id="toc-rope" class="nav-link" data-scroll-target="#rope">RoPE</a>
   <ul class="collapse">
   <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation">Implementation</a></li>
+  <li><a href="#the-10000" id="toc-the-10000" class="nav-link" data-scroll-target="#the-10000">The 10000</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Rotary Position Embedding/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -612,7 +613,7 @@ y \\
 <li>Below is the code to get <span class="math inline">(R(\theta)</span> and also validate if <span class="math inline">R(\theta)^T</span> <span class="math inline">R(\theta)</span> = I [Identity Matrix]</li>
 <li>For simplicity, i have just printed a single matrix</li>
 </ul>
-<div id="64545706" class="cell" data-execution_count="1">
+<div id="11312eaf" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_RoPE(pos, d_model):</span>
@@ -635,7 +636,7 @@ y \\
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>matrix <span class="op">=</span> torch.matmul(RTheta, RTheta.transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>))</span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>matrix[<span class="dv">0</span>][<span class="dv">0</span>][<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <pre><code>tensor([[1.0000, 0.0000],
         [0.0000, 1.0000]])</code></pre>
 </div>
@@ -643,7 +644,7 @@ y \\
 <ul>
 <li>Below Code shows how to integrate RoPE while calculating attention</li>
 </ul>
-<div id="f52d482d" class="cell" data-execution_count="2">
+<div id="31e26387" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -687,6 +688,65 @@ y \\
 <pre><code>torch.Size([2, 2, 256])</code></pre>
 </div>
 </div>
+</section>
+<section id="the-10000" class="level3">
+<h3 class="anchored" data-anchor-id="the-10000">The 10000</h3>
+<ul>
+<li><p>As relative distance increases, the contribution of later dimension of embedding also increases in attention calculation.</p>
+<ul>
+<li>For example, for smaller relative distance, the earlier dimensions only change but not the later ones as we can see in below figure, thus only earlier dimensions contribute to attention
+<figure style="text-align: center;" class="figure">
+<img src="smaller_rd.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+<li>for larger relative distance, later dimensions also get under significant modification as we can see in below figure, thus earlier as well as later dimensions contribute to attention
+<figure style="text-align: center;" class="figure">
+<img src="larger_rd.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+</ul></li>
+<li><p>Why 10000?</p>
+<ul>
+<li>If we chose some smaller value, then even later dimensions gets modified aggressively for smaller relative distances and thus changing the attention score agrressively</li>
+<li>If we chose some larger value then even earlier dimensions didnt get modified for larger relative distances and thus attention does not change much at all, the relative distance must need to be much larger for significant contribution to attention.</li>
+<li>Basically this calculates how quickly attention gets sensitive to relative positional difference</li>
+<li>As relative distance increases, the cosine similarity deacreses [Attention Decay], and this is what we want, closer tokens attend to each other more than tokens far apart from each other as we can see from below figure.
+<figure style="text-align: center;" class="figure">
+<img src="attention_decay.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+</ul></li>
+<li><p>Llama 3 used 500,000 as base frequency stating that it will lower the attention decay and thus model will be able to attend far apart tokens more meaningfully</p></li>
+<li><p>As we can see in below figure, cosine similarity decreases very smoothly, thus will help in case of longer contexts</p>
+<figure style="text-align: center;" class="figure">
+<p><img src="attention_decay500k.png" style="width:80%" class="figure-img"></p>
+<figcaption>
+</figcaption>
+</figure></li>
+<li><p>It was believed that due to this attention decay, RoPE works very well</p></li>
+<li><p>But <a href="https://arxiv.org/abs/2410.06205">Round and Round We Go! What makes Rotary Positional Encodings useful?</a> finds out something else is working under the hood which makes rope good at positional encoding.</p>
+<ul>
+<li>They found out that this decay happens only in specific scenarios</li>
+<li>If two embeddings had negative cosine similarity then instead of decreasing they might increase.</li>
+<li>So what makes rope good
+<ul>
+<li>Lower Dimension Embeddings : High Frequency</li>
+<li>Later Dimension Embeddings : Low Frequency</li>
+<li>Low frequency dimensions dominate the attention dot product, whereas high frequency dimensions rotates heavily thus heavily dominated by positional information.</li>
+<li>Semantic heads rely heavily on low frequency dimensions as a result even if distance increases, it has minimal impact on semantic dot product in case of long context if we chose 500k</li>
+<li>If we have long context and base fequency is 10k then it is possible that for large postion difference even the low frequency dimensions might have gone under aggressive transformation, thus heavily impacting the semantic attention</li>
+<li>And if we chose 500k then the low frequency dimensions will not go under heavy rotation thus preserving the semantic meaning and helping to cover long range context</li>
+</ul></li>
+<li>So we can say that:
+<ul>
+<li>High Frequency means positional information encoding.</li>
+<li>Low Frequency means semantic information encoding.</li>
+</ul></li>
+</ul></li>
+</ul>
 
 
 </section>
