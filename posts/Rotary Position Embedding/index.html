@@ -613,7 +613,7 @@ y \\
 <li>Below is the code to get <span class="math inline">(R(\theta)</span> and also validate if <span class="math inline">R(\theta)^T</span> <span class="math inline">R(\theta)</span> = I [Identity Matrix]</li>
 <li>For simplicity, i have just printed a single matrix</li>
 </ul>
-<div id="11312eaf" class="cell" data-execution_count="1">
+<div id="88448477" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_RoPE(pos, d_model):</span>
@@ -636,7 +636,7 @@ y \\
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>matrix <span class="op">=</span> torch.matmul(RTheta, RTheta.transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>))</span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>matrix[<span class="dv">0</span>][<span class="dv">0</span>][<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>tensor([[1.0000, 0.0000],
         [0.0000, 1.0000]])</code></pre>
 </div>
@@ -644,7 +644,7 @@ y \\
 <ul>
 <li>Below Code shows how to integrate RoPE while calculating attention</li>
 </ul>
-<div id="31e26387" class="cell" data-execution_count="2">
+<div id="b71e0b22" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>

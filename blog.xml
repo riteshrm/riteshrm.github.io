@@ -10,7 +10,145 @@
 <atom:link href="https://riteshrm.github.io/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Notes on deep learning, applied machine learning, optimization, diffusion models and language models.</description>
 <generator>quarto-1.8.26</generator>
-<lastBuildDate>Tue, 07 Apr 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 06 May 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Variational AutoEncoder</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/Variational AutoEncoder/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<ul>
+<li>This is mostly based on <a href="https://www.youtube.com/watch?v=1RPdu_5FCfk">Understanding Variational Autoencoder</a> and <a href="https://www.youtube.com/watch?v=iwEzwTTalbg">Variational Autoencoder - Model, ELBO, loss function and maths explained easily</a></li>
+</ul>
+<section id="autoencders" class="level1">
+<h1>AutoEncders</h1>
+<ul>
+<li>They are used for:-
+<ul>
+<li>converting higher dimension to lower dimension</li>
+<li>Representation Learning</li>
+</ul></li>
+</ul>
+<section id="cons-of-autoencoders" class="level2">
+<h2 class="anchored" data-anchor-id="cons-of-autoencoders">Cons of AutoEncoders</h2>
+<ul>
+<li>The encoded values can be used as representation but deep down they don’t have any meaningful information.</li>
+<li>There is no semantic relationship between encoded data points like zebra or cat or tomato. They will be encoded but there will not be any similarity.</li>
+<li>Since everything is being encoded to the points, not distribution, we can not sample any new data point</li>
+</ul>
+</section>
+</section>
+<section id="what-we-actually-want" class="level1">
+<h1>What we actually want?</h1>
+<ul>
+<li>Instead of encoding to data points, encode in to some distribution so that we can generate new data points.</li>
+<li>But even if we try to encode to a distribution, the model will again ty to memorise things as it just have to minimze the recinstruction loss.</li>
+<li>Get variations in reconstructed images.</li>
+<li>So we want is that:
+<ul>
+<li>There should be some sort of latent distribution which is just not encoded to points, it should be wide enough to capture entire latent space so that we can have higher variance and thus variation in reconstructed images.</li>
+<li>And also distributions should not be far apart from each other so that if we sample any latent then it should give us something meaningful not random images.</li>
+</ul></li>
+</ul>
+</section>
+<section id="how-do-we-achieve-above-requirements" class="level1">
+<h1>How do we achieve above requirements?</h1>
+<ul>
+<li>Gaussian distribution would help in achieving above objectives
+<ul>
+<li>It will try to have mean as close to zero as possible thus keep distributions closer to each other.</li>
+<li>It will try to have unit variance thus ensuring that distributions have higher variance and hence disable the network to collapse distributions to a point.</li>
+</ul></li>
+<li>So basically what we want is that our encoded distribution should look like a gaussian distribution.</li>
+<li>We can use some sort of metric that will help in keeping the encoded distribution and gaussian distribution as similar as possible.</li>
+<li>And that metric is KL-Divergence, which we can use to do so.</li>
+</ul>
+</section>
+<section id="before-moving-forward-some-pre-requisites" class="level1">
+<h1>Before moving forward some pre-requisites</h1>
+<section id="probability-vs-likelihood" class="level2">
+<h2 class="anchored" data-anchor-id="probability-vs-likelihood">Probability vs Likelihood</h2>
+<ul>
+<li>You can checkout <a href="https://www.youtube.com/watch?v=pYxNSUDSFH4">In Statistics, Probability is not Likelihood</a> for the same.</li>
+<li>Consider the weighs of mice</li>
+</ul>
+<section id="probability" class="level3">
+<h3 class="anchored" data-anchor-id="probability">Probability</h3>
+<ul>
+<li>Lets say we have plotted all the weights which gives use mean 32 and std 2.5, now what is the probability of having a mouse which has weight between 32-34 is given by area under the curve</li>
+<li><img src="https://latex.codecogs.com/png.latex?P(weight%20b/w%2032-34%20%7C%20mean=32,%20std=2.5)"></li>
+</ul>
+</section>
+<section id="likelihood" class="level3">
+<h3 class="anchored" data-anchor-id="likelihood">Likelihood</h3>
+<ul>
+<li><p>Considering we have fixed data/samples what is the likelihood of the current mean and std, which is given by the value corresponding to given weight on Y-axis.</p></li>
+<li><p>Basically in this case we will have a continuous distribution with mean as 32 and std as 2.5 and then we will found out what is the likelihood of having 34 as weight.</p></li>
+<li><p><img src="https://latex.codecogs.com/png.latex?L(mean=32,%20std=2.5%20%7C%20weight=34)"></p></li>
+<li><p>While training we try to maximize the lileihood for out data points so that our model can represnt the data samples as closely as possible</p></li>
+<li><p>During inference, we check the probability of given sample based on the params(mean and std) we have learned while maximizing the likelihood.</p></li>
+</ul>
+</section>
+</section>
+<section id="some-maths" class="level2">
+<h2 class="anchored" data-anchor-id="some-maths">Some maths</h2>
+<ul>
+<li><p>The expectation <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BE%7D%5BX%5D%20=%20%5Cint_%7B-%5Cinfty%7D%5E%7B%5Cinfty%7D%20x%20%5C,%20f(x)%20%5C,%20dx"> gives the mean. where <img src="https://latex.codecogs.com/png.latex?x"> is value and <img src="https://latex.codecogs.com/png.latex?f(x)%20%5C,%20dx"> is probability.</p></li>
+<li><p>Simply we can say that it is long run average for continuous random variable x.</p></li>
+<li><p>Similalry for discrete one is:</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BE%7D%5BX%5D%20=%20%5Csum_%7Bx%7D%20x%20%5C,%20p(x)">, where <img src="https://latex.codecogs.com/png.latex?x"> is value and <img src="https://latex.codecogs.com/png.latex?p(x)"> is probability.</li>
+</ul></li>
+<li><p>Chain rule of probability <img src="https://latex.codecogs.com/png.latex?p(x,%20y)%20=%20p(x%7Cy)p(y)%20=%20p(y%7Cx)p(x)"></p></li>
+<li><p>Bayes’ Theorem</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?P(x%20%5Cmid%20y)%20=%20%5Cfrac%7BP(y%20%5Cmid%20x)%20%5C,%20P(x)%7D%7BP(y)%7D"></li>
+</ul></li>
+<li><p>Kullback Leibler Diveregence</p>
+<ul>
+<li>It allows to measure the distance between two probability distributions.</li>
+<li><img src="https://latex.codecogs.com/png.latex?D_%7B%5Ctext%7BKL%7D%7D(P%20%5C%7C%20Q)%20=%20%5Cint_%7B-%5Cinfty%7D%5E%7B%5Cinfty%7D%20p(x)%20%5Clog%20%5Cfrac%7Bp(x)%7D%7Bq(x)%7D%20%5C,%20dx"></li>
+<li>Properties:-
+<ul>
+<li>Not symettric i.e.&nbsp;$D_{}(P | Q) D_{}(Q | P) $</li>
+<li><img src="https://latex.codecogs.com/png.latex?D_%7B%5Ctext%7BKL%7D%7D(P%20%5C%7C%20Q)%20%5Cgeq%200"></li>
+<li><img src="https://latex.codecogs.com/png.latex?D_%7B%5Ctext%7BKL%7D%7D(P%20%5C%7C%20Q)%20=%200"> if <img src="https://latex.codecogs.com/png.latex?P=Q"></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="lets-define-our-model" class="level1">
+<h1>Lets define our model</h1>
+<ul>
+<li><p>We can define the likelihood of our data as the marginalization over the joint probability with respect to the latent variable</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?p(x)%20=%20%5Cint%20p(x,%20z)%20dz"></li>
+</ul></li>
+<li><p>But it is intractable becuase we would need to evaluate this integral over all latent variables <img src="https://latex.codecogs.com/png.latex?z"> or we can use the chain rule of probability</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?p(x)%20=%20%5Cfrac%7Bp(x,%20z)%7D%7Bp(z%7Cx)%7D"></li>
+</ul></li>
+<li><p>We dont have ground truth <img src="https://latex.codecogs.com/png.latex?p(z%7Cx)"> which is also what we are trying to find.</p></li>
+<li><p>Intractable Problem:- A problem that can be solved in theory (e.g.&nbsp;given large but finite resources, especially time), but for which in practice any solution takes too many resources to be useful is known as intractable problem.</p>
+<ul>
+<li>Like guessing the wi-fi password of your neighbour. In theory you can generate all the possible combinations but it will take years.</li>
+</ul></li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>Deep Learning</category>
+  <guid>https://riteshrm.github.io/posts/Variational AutoEncoder/</guid>
+  <pubDate>Wed, 06 May 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/Variational AutoEncoder/vae_thumbnail_resized.png" medium="image" type="image/png" height="82" width="144"/>
+</item>
 <item>
   <title>Rotary Position Embedding</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
@@ -169,7 +307,7 @@
 <li>Below is the code to get <img src="https://latex.codecogs.com/png.latex?(R(%5Ctheta)"> and also validate if <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta)%5ET"> <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta)"> = I [Identity Matrix]</li>
 <li>For simplicity, i have just printed a single matrix</li>
 </ul>
-<div id="11312eaf" class="cell" data-execution_count="1">
+<div id="88448477" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -322,7 +460,7 @@ background-color: null;
 font-style: inherit;">0</span>][<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>]</span></code></pre></div></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>tensor([[1.0000, 0.0000],
         [0.0000, 1.0000]])</code></pre>
 </div>
@@ -330,7 +468,7 @@ font-style: inherit;">0</span>]</span></code></pre></div></div>
 <ul>
 <li>Below Code shows how to integrate RoPE while calculating attention</li>
 </ul>
-<div id="31e26387" class="cell" data-execution_count="2">
+<div id="b71e0b22" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>

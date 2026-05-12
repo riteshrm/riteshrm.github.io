@@ -6,9 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Notes on deep learning, applied machine learning, optimization, diffusion models and language models.">
+<meta name="author" content="Ritesh Kumar Maurya">
+<meta name="dcterms.date" content="2026-05-06">
+<meta name="description" content="Notes on VAEs:- Theoretical and Coding">
 
-<title>Notes – Ritesh Kumar Maurya</title>
+<title>Variational AutoEncoder – Ritesh Kumar Maurya</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,32 +26,30 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./posts/favicon.ico" rel="icon">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b758ccaa5987ceb1b75504551e579abf.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-e22af750838b8708ff2c979203820c49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<script src="site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../posts/favicon.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b758ccaa5987ceb1b75504551e579abf.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-e22af750838b8708ff2c979203820c49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -76,35 +76,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-image','listing-title','listing-description','listing-date','listing-reading-time','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
@@ -150,15 +121,15 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="styles.css">
-<link rel="alternate" type="application/rss+xml" title="Ritesh Kumar Maurya" href="blog.xml" data-external="1"><meta property="og:title" content="Notes – Ritesh Kumar Maurya">
-<meta property="og:description" content="Notes on deep learning, applied machine learning, optimization, diffusion models and language models.">
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Variational AutoEncoder – Ritesh Kumar Maurya">
+<meta property="og:description" content="Notes on VAEs:- Theoretical and Coding">
 <meta property="og:image" content="https://riteshrm.github.io/posts/Variational AutoEncoder/vae_thumbnail_resized.png">
 <meta property="og:site_name" content="Ritesh Kumar Maurya">
 <meta property="og:image:height" content="1024">
 <meta property="og:image:width" content="1792">
-<meta name="twitter:title" content="Notes – Ritesh Kumar Maurya">
-<meta name="twitter:description" content="Notes on deep learning, applied machine learning, optimization, diffusion models and language models.">
+<meta name="twitter:title" content="Variational AutoEncoder – Ritesh Kumar Maurya">
+<meta name="twitter:description" content="Notes on VAEs:- Theoretical and Coding">
 <meta name="twitter:image" content="https://riteshrm.github.io/posts/Variational AutoEncoder/vae_thumbnail_resized.png">
 <meta name="twitter:creator" content="@_riteshrm_">
 <meta name="twitter:card" content="summary_large_image">
@@ -335,7 +306,7 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">About Me</span>
     </a>
   </div>
@@ -346,7 +317,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./blog.html" aria-current="page"> 
+    <a class="nav-link" href="../../blog.html"> 
 <span class="menu-text">Notes</span></a>
   </li>  
 </ul>
@@ -388,27 +359,63 @@ window.Quarto = {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(9)</span></div><div class="category" data-category="QXBwbGllZCUyME1M">Applied ML <span class="quarto-category-count">(2)</span></div><div class="category" data-category="RGVlcCUyMExlYXJuaW5n">Deep Learning <span class="quarto-category-count">(5)</span></div><div class="category" data-category="T3B0aW1pemF0aW9u">Optimization <span class="quarto-category-count">(2)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#autoencders" id="toc-autoencders" class="nav-link active" data-scroll-target="#autoencders">AutoEncders</a>
+  <ul class="collapse">
+  <li><a href="#cons-of-autoencoders" id="toc-cons-of-autoencoders" class="nav-link" data-scroll-target="#cons-of-autoencoders">Cons of AutoEncoders</a></li>
+  </ul></li>
+  <li><a href="#what-we-actually-want" id="toc-what-we-actually-want" class="nav-link" data-scroll-target="#what-we-actually-want">What we actually want?</a></li>
+  <li><a href="#how-do-we-achieve-above-requirements" id="toc-how-do-we-achieve-above-requirements" class="nav-link" data-scroll-target="#how-do-we-achieve-above-requirements">How do we achieve above requirements?</a></li>
+  <li><a href="#before-moving-forward-some-pre-requisites" id="toc-before-moving-forward-some-pre-requisites" class="nav-link" data-scroll-target="#before-moving-forward-some-pre-requisites">Before moving forward some pre-requisites</a>
+  <ul class="collapse">
+  <li><a href="#probability-vs-likelihood" id="toc-probability-vs-likelihood" class="nav-link" data-scroll-target="#probability-vs-likelihood">Probability vs Likelihood</a>
+  <ul class="collapse">
+  <li><a href="#probability" id="toc-probability" class="nav-link" data-scroll-target="#probability">Probability</a></li>
+  <li><a href="#likelihood" id="toc-likelihood" class="nav-link" data-scroll-target="#likelihood">Likelihood</a></li>
+  </ul></li>
+  <li><a href="#some-maths" id="toc-some-maths" class="nav-link" data-scroll-target="#some-maths">Some maths</a></li>
+  </ul></li>
+  <li><a href="#lets-define-our-model" id="toc-lets-define-our-model" class="nav-link" data-scroll-target="#lets-define-our-model">Lets define our model</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Variational AutoEncoder/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Notes</h1>
-</div>
+<h1 class="title">Variational AutoEncoder</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Deep Learning</div>
+  </div>
+  </div>
 
 <div>
   <div class="description">
-    Notes on deep learning, applied machine learning, optimization, diffusion models and language models.
+    Notes on VAEs:- Theoretical and Coding
   </div>
 </div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ritesh Kumar Maurya </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 6, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -418,267 +425,129 @@ window.Quarto = {
 </header>
 
 
+<ul>
+<li>This is mostly based on <a href="https://www.youtube.com/watch?v=1RPdu_5FCfk">Understanding Variational Autoencoder</a> and <a href="https://www.youtube.com/watch?v=iwEzwTTalbg">Variational Autoencoder - Model, ELBO, loss function and maths explained easily</a></li>
+</ul>
+<section id="autoencders" class="level1">
+<h1>AutoEncders</h1>
+<ul>
+<li>They are used for:-
+<ul>
+<li>converting higher dimension to lower dimension</li>
+<li>Representation Learning</li>
+</ul></li>
+</ul>
+<section id="cons-of-autoencoders" class="level2">
+<h2 class="anchored" data-anchor-id="cons-of-autoencoders">Cons of AutoEncoders</h2>
+<ul>
+<li>The encoded values can be used as representation but deep down they don’t have any meaningful information.</li>
+<li>There is no semantic relationship between encoded data points like zebra or cat or tomato. They will be encoded but there will not be any similarity.</li>
+<li>Since everything is being encoded to the points, not distribution, we can not sample any new data point</li>
+</ul>
+</section>
+</section>
+<section id="what-we-actually-want" class="level1">
+<h1>What we actually want?</h1>
+<ul>
+<li>Instead of encoding to data points, encode in to some distribution so that we can generate new data points.</li>
+<li>But even if we try to encode to a distribution, the model will again ty to memorise things as it just have to minimze the recinstruction loss.</li>
+<li>Get variations in reconstructed images.</li>
+<li>So we want is that:
+<ul>
+<li>There should be some sort of latent distribution which is just not encoded to points, it should be wide enough to capture entire latent space so that we can have higher variance and thus variation in reconstructed images.</li>
+<li>And also distributions should not be far apart from each other so that if we sample any latent then it should give us something meaningful not random images.</li>
+</ul></li>
+</ul>
+</section>
+<section id="how-do-we-achieve-above-requirements" class="level1">
+<h1>How do we achieve above requirements?</h1>
+<ul>
+<li>Gaussian distribution would help in achieving above objectives
+<ul>
+<li>It will try to have mean as close to zero as possible thus keep distributions closer to each other.</li>
+<li>It will try to have unit variance thus ensuring that distributions have higher variance and hence disable the network to collapse distributions to a point.</li>
+</ul></li>
+<li>So basically what we want is that our encoded distribution should look like a gaussian distribution.</li>
+<li>We can use some sort of metric that will help in keeping the encoded distribution and gaussian distribution as similar as possible.</li>
+<li>And that metric is KL-Divergence, which we can use to do so.</li>
+</ul>
+</section>
+<section id="before-moving-forward-some-pre-requisites" class="level1">
+<h1>Before moving forward some pre-requisites</h1>
+<section id="probability-vs-likelihood" class="level2">
+<h2 class="anchored" data-anchor-id="probability-vs-likelihood">Probability vs Likelihood</h2>
+<ul>
+<li>You can checkout <a href="https://www.youtube.com/watch?v=pYxNSUDSFH4">In Statistics, Probability is not Likelihood</a> for the same.</li>
+<li>Consider the weighs of mice</li>
+</ul>
+<section id="probability" class="level3">
+<h3 class="anchored" data-anchor-id="probability">Probability</h3>
+<ul>
+<li>Lets say we have plotted all the weights which gives use mean 32 and std 2.5, now what is the probability of having a mouse which has weight between 32-34 is given by area under the curve</li>
+<li><span class="math inline">P(weight b/w 32-34 | mean=32, std=2.5)</span></li>
+</ul>
+</section>
+<section id="likelihood" class="level3">
+<h3 class="anchored" data-anchor-id="likelihood">Likelihood</h3>
+<ul>
+<li><p>Considering we have fixed data/samples what is the likelihood of the current mean and std, which is given by the value corresponding to given weight on Y-axis.</p></li>
+<li><p>Basically in this case we will have a continuous distribution with mean as 32 and std as 2.5 and then we will found out what is the likelihood of having 34 as weight.</p></li>
+<li><p><span class="math inline">L(mean=32, std=2.5 | weight=34)</span></p></li>
+<li><p>While training we try to maximize the lileihood for out data points so that our model can represnt the data samples as closely as possible</p></li>
+<li><p>During inference, we check the probability of given sample based on the params(mean and std) we have learned while maximizing the likelihood.</p></li>
+</ul>
+</section>
+</section>
+<section id="some-maths" class="level2">
+<h2 class="anchored" data-anchor-id="some-maths">Some maths</h2>
+<ul>
+<li><p>The expectation <span class="math inline">\mathbb{E}[X] = \int_{-\infty}^{\infty} x \, f(x) \, dx</span> gives the mean. where <span class="math inline">x</span> is value and <span class="math inline">f(x) \, dx</span> is probability.</p></li>
+<li><p>Simply we can say that it is long run average for continuous random variable x.</p></li>
+<li><p>Similalry for discrete one is:</p>
+<ul>
+<li><span class="math inline">\mathbb{E}[X] = \sum_{x} x \, p(x)</span>, where <span class="math inline">x</span> is value and <span class="math inline">p(x)</span> is probability.</li>
+</ul></li>
+<li><p>Chain rule of probability <span class="math inline">p(x, y) = p(x|y)p(y) = p(y|x)p(x)</span></p></li>
+<li><p>Bayes’ Theorem</p>
+<ul>
+<li><span class="math inline">P(x \mid y) = \frac{P(y \mid x) \, P(x)}{P(y)}</span></li>
+</ul></li>
+<li><p>Kullback Leibler Diveregence</p>
+<ul>
+<li>It allows to measure the distance between two probability distributions.</li>
+<li><span class="math inline">D_{\text{KL}}(P \| Q) = \int_{-\infty}^{\infty} p(x) \log \frac{p(x)}{q(x)} \, dx</span></li>
+<li>Properties:-
+<ul>
+<li>Not symettric i.e.&nbsp;$D_{}(P | Q) D_{}(Q | P) $</li>
+<li><span class="math inline">D_{\text{KL}}(P \| Q) \geq 0</span></li>
+<li><span class="math inline">D_{\text{KL}}(P \| Q) = 0</span> if <span class="math inline">P=Q</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="lets-define-our-model" class="level1">
+<h1>Lets define our model</h1>
+<ul>
+<li><p>We can define the likelihood of our data as the marginalization over the joint probability with respect to the latent variable</p>
+<ul>
+<li><span class="math inline">p(x) = \int p(x, z) dz</span></li>
+</ul></li>
+<li><p>But it is intractable becuase we would need to evaluate this integral over all latent variables <span class="math inline">z</span> or we can use the chain rule of probability</p>
+<ul>
+<li><span class="math inline">p(x) = \frac{p(x, z)}{p(z|x)}</span></li>
+</ul></li>
+<li><p>We dont have ground truth <span class="math inline">p(z|x)</span> which is also what we are trying to find.</p></li>
+<li><p>Intractable Problem:- A problem that can be solved in theory (e.g.&nbsp;given large but finite resources, especially time), but for which in practice any solution takes too many resources to be useful is known as intractable problem.</p>
+<ul>
+<li>Like guessing the wi-fi password of your neighbour. In theory you can generate all the possible combinations but it will take years.</li>
+</ul></li>
+</ul>
 
 
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1778025600000" data-listing-file-modified-sort="1778548818758" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="817">
-<div class="thumbnail"><a href="./posts/Variational AutoEncoder/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/Variational AutoEncoder/vae_thumbnail_resized.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Variational AutoEncoder/index.html" class="no-external">Variational AutoEncoder</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('RGVlcCUyMExlYXJuaW5n'); return false;">Deep Learning</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/Variational AutoEncoder/index.html" class="no-external">
-<p>Notes on VAEs:- Theoretical and Coding</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/Variational AutoEncoder/index.html" class="no-external">
-<div class="listing-date">
-May 6, 2026
-</div>
-<div class="listing-reading-time">5 min</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1775520000000" data-listing-file-modified-sort="1778503548836" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1943">
-<div class="thumbnail"><a href="./posts/Rotary Position Embedding/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/Rotary Position Embedding/rotary_thumbnail_resized.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Rotary Position Embedding/index.html" class="no-external">Rotary Position Embedding</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('RGVlcCUyMExlYXJuaW5n'); return false;">Deep Learning</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/Rotary Position Embedding/index.html" class="no-external">
-<p>A visual and mathematical walkthrough of RoPE, relative position intuition, rotation matrices, and attention score behavior.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/Rotary Position Embedding/index.html" class="no-external">
-<div class="listing-date">
-Apr 7, 2026
-</div>
-<div class="listing-reading-time">10 min</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1775433600000" data-listing-file-modified-sort="1778503586966" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1378">
-<div class="thumbnail"><a href="./posts/Position Encoding/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/Position Encoding/thumbnail.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Position Encoding/index.html" class="no-external">Position Encoding</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('RGVlcCUyMExlYXJuaW5n'); return false;">Deep Learning</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/Position Encoding/index.html" class="no-external">
-<p>Notes on sinusoidal positional encoding, why transformers need position information, and how different frequencies encode token positions.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/Position Encoding/index.html" class="no-external">
-<div class="listing-date">
-Apr 6, 2026
-</div>
-<div class="listing-reading-time">7 min</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="QXBwbGllZCUyME1M" data-listing-date-sort="1768262400000" data-listing-file-modified-sort="1778504298832" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="19" data-listing-word-count-sort="3687">
-<div class="thumbnail"><a href="./posts/AI Engineering By Chip Huyen/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/AI Engineering By Chip Huyen/resized_thumbnail.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/AI Engineering By Chip Huyen/index.html" class="no-external">AI Engineering By Chip Huyen</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('QXBwbGllZCUyME1M'); return false;">Applied ML</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/AI Engineering By Chip Huyen/index.html" class="no-external">
-<p>Work-in-progress notes from AI Engineering by Chip Huyen on building and evaluating production AI applications.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/AI Engineering By Chip Huyen/index.html" class="no-external">
-<div class="listing-date">
-Jan 13, 2026
-</div>
-<div class="listing-reading-time">19 min</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1768176000000" data-listing-file-modified-sort="1778503982733" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2317">
-<div class="thumbnail"><a href="./posts/Attention Mechanism/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/Attention Mechanism/attn_resized_thumbnail.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Attention Mechanism/index.html" class="no-external">Attention</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('RGVlcCUyMExlYXJuaW5n'); return false;">Deep Learning</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/Attention Mechanism/index.html" class="no-external">
-<p>A step-by-step note on attention, scaled dot-product attention, softmax gradients, and transformer intuition.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/Attention Mechanism/index.html" class="no-external">
-<div class="listing-date">
-Jan 12, 2026
-</div>
-<div class="listing-reading-time">12 min</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="QXBwbGllZCUyME1M" data-listing-date-sort="1737936000000" data-listing-file-modified-sort="1778504243855" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1091">
-<div class="thumbnail"><a href="./posts/Hands on LLMs/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/Hands on LLMs/traing_work_flow_of_llm.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Hands on LLMs/index.html" class="no-external">Hands on LLMs</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('QXBwbGllZCUyME1M'); return false;">Applied ML</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/Hands on LLMs/index.html" class="no-external">
-<p>Work-in-progress notes while reading Hands-On Large Language Models.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/Hands on LLMs/index.html" class="no-external">
-<div class="listing-date">
-Jan 27, 2025
-</div>
-<div class="listing-reading-time">6 min</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1720224000000" data-listing-file-modified-sort="1777392453855" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1774">
-<div class="thumbnail"><a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning_resized_thumbnail.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">Meta Learning Book Chapter Wise Summary Points</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('RGVlcCUyMExlYXJuaW5n'); return false;">Deep Learning</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">
-<p>Chapter-wise summary notes from Meta Learning, focused on learning practice, programming habits, and deep learning growth.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/index.html" class="no-external">
-<div class="listing-date">
-Jul 6, 2024
-</div>
-<div class="listing-reading-time">9 min</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="7" data-categories="T3B0aW1pemF0aW9u" data-listing-date-sort="1716508800000" data-listing-file-modified-sort="1777392455131" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="30" data-listing-word-count-sort="5990">
-<div class="thumbnail"><a href="./posts/Quantization in Depth/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/Quantization in Depth/qat-training-precision.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Quantization in Depth/index.html" class="no-external">Quantization in Depth</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('T3B0aW1pemF0aW9u'); return false;">Optimization</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/Quantization in Depth/index.html" class="no-external">
-<p>Detailed notes on quantize/dequantize workflows, quantization error, calibration, packing, and practical model optimization.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/Quantization in Depth/index.html" class="no-external">
-<div class="listing-date">
-May 24, 2024
-</div>
-<div class="listing-reading-time">30 min</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="8" data-categories="T3B0aW1pemF0aW9u" data-listing-date-sort="1715558400000" data-listing-file-modified-sort="1777392454695" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1234">
-<div class="thumbnail"><a href="./posts/Quantization Fundamentals/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/Quantization Fundamentals/qat-training-precision.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Quantization Fundamentals/index.html" class="no-external">Quantization Fundamentals</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('T3B0aW1pemF0aW9u'); return false;">Optimization</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/Quantization Fundamentals/index.html" class="no-external">
-<p>Introductory notes on model quantization, lower-precision data types, scaling, zero points, and model compression basics.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/Quantization Fundamentals/index.html" class="no-external">
-<div class="listing-date">
-May 13, 2024
-</div>
-<div class="listing-reading-time">7 min</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -1101,7 +970,7 @@ May 13, 2024
     <div class="nav-footer-center">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="./blog.xml">
+    <a class="nav-link" href="../../blog.xml">
 <p>RSS</p>
 </a>
   </li>  
@@ -1116,7 +985,7 @@ May 13, 2024
 </a>
   </li>  
 </ul>
-    <div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/blog.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Variational AutoEncoder/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>

@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/Variational AutoEncoder/index.html",
       "/posts/Rotary Position Embedding/index.html",
       "/posts/Position Encoding/index.html",
       "/posts/AI Engineering By Chip Huyen/index.html",
