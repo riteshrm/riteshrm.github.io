@@ -8,9 +8,9 @@
 
 <meta name="author" content="Ritesh Kumar Maurya">
 <meta name="dcterms.date" content="2026-05-06">
-<meta name="description" content="Notes on VAEs:- Theoretical and Coding">
+<meta name="description" content="Notes on Variational Autoencoders, ELBO, and reparameterization">
 
-<title>Variational AutoEncoder – Ritesh Kumar Maurya</title>
+<title>Variational Autoencoder – Ritesh Kumar Maurya</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,6 +22,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -122,14 +157,14 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="Variational AutoEncoder – Ritesh Kumar Maurya">
-<meta property="og:description" content="Notes on VAEs:- Theoretical and Coding">
+<meta property="og:title" content="Variational Autoencoder – Ritesh Kumar Maurya">
+<meta property="og:description" content="Notes on Variational Autoencoders, ELBO, and reparameterization">
 <meta property="og:image" content="https://riteshrm.github.io/posts/Variational AutoEncoder/vae_thumbnail_resized.png">
 <meta property="og:site_name" content="Ritesh Kumar Maurya">
 <meta property="og:image:height" content="1024">
 <meta property="og:image:width" content="1792">
-<meta name="twitter:title" content="Variational AutoEncoder – Ritesh Kumar Maurya">
-<meta name="twitter:description" content="Notes on VAEs:- Theoretical and Coding">
+<meta name="twitter:title" content="Variational Autoencoder – Ritesh Kumar Maurya">
+<meta name="twitter:description" content="Notes on Variational Autoencoders, ELBO, and reparameterization">
 <meta name="twitter:image" content="https://riteshrm.github.io/posts/Variational AutoEncoder/vae_thumbnail_resized.png">
 <meta name="twitter:creator" content="@_riteshrm_">
 <meta name="twitter:card" content="summary_large_image">
@@ -363,22 +398,48 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#autoencders" id="toc-autoencders" class="nav-link active" data-scroll-target="#autoencders">AutoEncders</a>
+  <li><a href="#autoencoders" id="toc-autoencoders" class="nav-link active" data-scroll-target="#autoencoders">Autoencoders</a>
   <ul class="collapse">
-  <li><a href="#cons-of-autoencoders" id="toc-cons-of-autoencoders" class="nav-link" data-scroll-target="#cons-of-autoencoders">Cons of AutoEncoders</a></li>
+  <li><a href="#cons-of-autoencoders" id="toc-cons-of-autoencoders" class="nav-link" data-scroll-target="#cons-of-autoencoders">Cons of Autoencoders</a></li>
   </ul></li>
-  <li><a href="#what-we-actually-want" id="toc-what-we-actually-want" class="nav-link" data-scroll-target="#what-we-actually-want">What we actually want?</a></li>
-  <li><a href="#how-do-we-achieve-above-requirements" id="toc-how-do-we-achieve-above-requirements" class="nav-link" data-scroll-target="#how-do-we-achieve-above-requirements">How do we achieve above requirements?</a></li>
-  <li><a href="#before-moving-forward-some-pre-requisites" id="toc-before-moving-forward-some-pre-requisites" class="nav-link" data-scroll-target="#before-moving-forward-some-pre-requisites">Before moving forward some pre-requisites</a>
+  <li><a href="#what-we-actually-want" id="toc-what-we-actually-want" class="nav-link" data-scroll-target="#what-we-actually-want">What We Actually Want?</a></li>
+  <li><a href="#how-do-we-achieve-above-requirements" id="toc-how-do-we-achieve-above-requirements" class="nav-link" data-scroll-target="#how-do-we-achieve-above-requirements">How Do We Achieve Above Requirements?</a></li>
+  <li><a href="#before-moving-forward-some-prerequisites" id="toc-before-moving-forward-some-prerequisites" class="nav-link" data-scroll-target="#before-moving-forward-some-prerequisites">Before Moving Forward Some Prerequisites</a>
   <ul class="collapse">
   <li><a href="#probability-vs-likelihood" id="toc-probability-vs-likelihood" class="nav-link" data-scroll-target="#probability-vs-likelihood">Probability vs Likelihood</a>
   <ul class="collapse">
   <li><a href="#probability" id="toc-probability" class="nav-link" data-scroll-target="#probability">Probability</a></li>
   <li><a href="#likelihood" id="toc-likelihood" class="nav-link" data-scroll-target="#likelihood">Likelihood</a></li>
   </ul></li>
-  <li><a href="#some-maths" id="toc-some-maths" class="nav-link" data-scroll-target="#some-maths">Some maths</a></li>
+  <li><a href="#some-maths" id="toc-some-maths" class="nav-link" data-scroll-target="#some-maths">Some Maths</a></li>
+  <li><a href="#monte-carlo-estimation" id="toc-monte-carlo-estimation" class="nav-link" data-scroll-target="#monte-carlo-estimation">Monte Carlo Estimation</a></li>
+  <li><a href="#monte-carlo-gradient-estimation" id="toc-monte-carlo-gradient-estimation" class="nav-link" data-scroll-target="#monte-carlo-gradient-estimation">Monte Carlo Gradient Estimation</a></li>
   </ul></li>
-  <li><a href="#lets-define-our-model" id="toc-lets-define-our-model" class="nav-link" data-scroll-target="#lets-define-our-model">Lets define our model</a></li>
+  <li><a href="#lets-define-our-model" id="toc-lets-define-our-model" class="nav-link" data-scroll-target="#lets-define-our-model">Let’s Define Our Model</a>
+  <ul class="collapse">
+  <li><a href="#likelihood-as-marginalization" id="toc-likelihood-as-marginalization" class="nav-link" data-scroll-target="#likelihood-as-marginalization">Likelihood as Marginalization</a></li>
+  <li><a href="#why-it-is-intractable" id="toc-why-it-is-intractable" class="nav-link" data-scroll-target="#why-it-is-intractable">Why It Is Intractable</a></li>
+  <li><a href="#approximate-posterior" id="toc-approximate-posterior" class="nav-link" data-scroll-target="#approximate-posterior">Approximate Posterior</a></li>
+  <li><a href="#lets-do-some-maths" id="toc-lets-do-some-maths" class="nav-link" data-scroll-target="#lets-do-some-maths">Let’s Do Some Maths</a>
+  <ul class="collapse">
+  <li><a href="#introducing-q_phizx" id="toc-introducing-q_phizx" class="nav-link" data-scroll-target="#introducing-q_phizx">Introducing <span class="math inline">q_{\phi}(z|x)</span></a></li>
+  <li><a href="#rewriting-elbo" id="toc-rewriting-elbo" class="nav-link" data-scroll-target="#rewriting-elbo">Rewriting ELBO</a></li>
+  <li><a href="#what-maximizing-elbo-means" id="toc-what-maximizing-elbo-means" class="nav-link" data-scroll-target="#what-maximizing-elbo-means">What Maximizing ELBO Means</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#need-of-reparameterization" id="toc-need-of-reparameterization" class="nav-link" data-scroll-target="#need-of-reparameterization">Need of Reparameterization</a>
+  <ul class="collapse">
+  <li><a href="#why-we-need-it" id="toc-why-we-need-it" class="nav-link" data-scroll-target="#why-we-need-it">Why We Need It</a></li>
+  <li><a href="#reparameterization-trick" id="toc-reparameterization-trick" class="nav-link" data-scroll-target="#reparameterization-trick">Reparameterization Trick</a></li>
+  <li><a href="#final-estimator" id="toc-final-estimator" class="nav-link" data-scroll-target="#final-estimator">Final Estimator</a></li>
+  </ul></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code">Code</a>
+  <ul class="collapse">
+  <li><a href="#vae-model" id="toc-vae-model" class="nav-link" data-scroll-target="#vae-model">VAE Model</a></li>
+  <li><a href="#losses" id="toc-losses" class="nav-link" data-scroll-target="#losses">Losses</a></li>
+  </ul></li>
+  <li><a href="#why-vaes-produce-blurry-samples" id="toc-why-vaes-produce-blurry-samples" class="nav-link" data-scroll-target="#why-vaes-produce-blurry-samples">Why VAEs Produce Blurry Samples</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Variational AutoEncoder/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -388,7 +449,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Variational AutoEncoder</h1>
+<h1 class="title">Variational Autoencoder</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Deep Learning</div>
   </div>
@@ -396,7 +457,7 @@ window.Quarto = {
 
 <div>
   <div class="description">
-    Notes on VAEs:- Theoretical and Coding
+    Notes on Variational Autoencoders, ELBO, and reparameterization
   </div>
 </div>
 
@@ -428,8 +489,9 @@ window.Quarto = {
 <ul>
 <li>This is mostly based on <a href="https://www.youtube.com/watch?v=1RPdu_5FCfk">Understanding Variational Autoencoder</a> and <a href="https://www.youtube.com/watch?v=iwEzwTTalbg">Variational Autoencoder - Model, ELBO, loss function and maths explained easily</a></li>
 </ul>
-<section id="autoencders" class="level1">
-<h1>AutoEncders</h1>
+<hr>
+<section id="autoencoders" class="level1">
+<h1>Autoencoders</h1>
 <ul>
 <li>They are used for:-
 <ul>
@@ -438,19 +500,20 @@ window.Quarto = {
 </ul></li>
 </ul>
 <section id="cons-of-autoencoders" class="level2">
-<h2 class="anchored" data-anchor-id="cons-of-autoencoders">Cons of AutoEncoders</h2>
+<h2 class="anchored" data-anchor-id="cons-of-autoencoders">Cons of Autoencoders</h2>
 <ul>
 <li>The encoded values can be used as representation but deep down they don’t have any meaningful information.</li>
 <li>There is no semantic relationship between encoded data points like zebra or cat or tomato. They will be encoded but there will not be any similarity.</li>
 <li>Since everything is being encoded to the points, not distribution, we can not sample any new data point</li>
 </ul>
+<hr>
 </section>
 </section>
 <section id="what-we-actually-want" class="level1">
-<h1>What we actually want?</h1>
+<h1>What We Actually Want?</h1>
 <ul>
-<li>Instead of encoding to data points, encode in to some distribution so that we can generate new data points.</li>
-<li>But even if we try to encode to a distribution, the model will again ty to memorise things as it just have to minimze the recinstruction loss.</li>
+<li>Instead of encoding to data points, encode into some distribution so that we can generate new data points.</li>
+<li>But even if we try to encode to a distribution, the model will again try to memorise things as it just have to minimize the reconstruction loss.</li>
 <li>Get variations in reconstructed images.</li>
 <li>So we want is that:
 <ul>
@@ -458,32 +521,34 @@ window.Quarto = {
 <li>And also distributions should not be far apart from each other so that if we sample any latent then it should give us something meaningful not random images.</li>
 </ul></li>
 </ul>
+<hr>
 </section>
 <section id="how-do-we-achieve-above-requirements" class="level1">
-<h1>How do we achieve above requirements?</h1>
+<h1>How Do We Achieve Above Requirements?</h1>
 <ul>
 <li>Gaussian distribution would help in achieving above objectives
 <ul>
-<li>It will try to have mean as close to zero as possible thus keep distributions closer to each other.</li>
-<li>It will try to have unit variance thus ensuring that distributions have higher variance and hence disable the network to collapse distributions to a point.</li>
+<li>It will try to have <strong>mean as close to zero</strong> as possible thus keep distributions closer to each other.</li>
+<li>It will try to have <strong>unit variance</strong> thus ensuring that distributions have higher variance and hence disable the network to collapse distributions to a point.</li>
 </ul></li>
-<li>So basically what we want is that our encoded distribution should look like a gaussian distribution.</li>
-<li>We can use some sort of metric that will help in keeping the encoded distribution and gaussian distribution as similar as possible.</li>
-<li>And that metric is KL-Divergence, which we can use to do so.</li>
+<li>So basically what we want is that our <strong>encoded distribution</strong> should look like a <strong>Gaussian distribution</strong>.</li>
+<li>We can use some sort of metric that will help in keeping the <strong>encoded distribution</strong> and <strong>Gaussian distribution</strong> as similar as possible.</li>
+<li>And that metric is <strong>KL-Divergence</strong>, which we can use to do so.</li>
 </ul>
+<hr>
 </section>
-<section id="before-moving-forward-some-pre-requisites" class="level1">
-<h1>Before moving forward some pre-requisites</h1>
+<section id="before-moving-forward-some-prerequisites" class="level1">
+<h1>Before Moving Forward Some Prerequisites</h1>
 <section id="probability-vs-likelihood" class="level2">
 <h2 class="anchored" data-anchor-id="probability-vs-likelihood">Probability vs Likelihood</h2>
 <ul>
-<li>You can checkout <a href="https://www.youtube.com/watch?v=pYxNSUDSFH4">In Statistics, Probability is not Likelihood</a> for the same.</li>
-<li>Consider the weighs of mice</li>
+<li>You can check out <a href="https://www.youtube.com/watch?v=pYxNSUDSFH4">In Statistics, Probability is not Likelihood</a> for the same.</li>
+<li>Consider the weights of mice</li>
 </ul>
 <section id="probability" class="level3">
 <h3 class="anchored" data-anchor-id="probability">Probability</h3>
 <ul>
-<li>Lets say we have plotted all the weights which gives use mean 32 and std 2.5, now what is the probability of having a mouse which has weight between 32-34 is given by area under the curve</li>
+<li>Let’s say we have plotted all the weights which gives us mean 32 and std 2.5, now what is the probability of having a mouse which has weight between 32-34 is given by area under the curve</li>
 <li><span class="math inline">P(weight b/w 32-34 | mean=32, std=2.5)</span></li>
 </ul>
 </section>
@@ -493,17 +558,21 @@ window.Quarto = {
 <li><p>Considering we have fixed data/samples what is the likelihood of the current mean and std, which is given by the value corresponding to given weight on Y-axis.</p></li>
 <li><p>Basically in this case we will have a continuous distribution with mean as 32 and std as 2.5 and then we will found out what is the likelihood of having 34 as weight.</p></li>
 <li><p><span class="math inline">L(mean=32, std=2.5 | weight=34)</span></p></li>
-<li><p>While training we try to maximize the lileihood for out data points so that our model can represnt the data samples as closely as possible</p></li>
+<li><p>While training we try to maximize the likelihood for our data points so that our model can represent the data samples as closely as possible</p></li>
 <li><p>During inference, we check the probability of given sample based on the params(mean and std) we have learned while maximizing the likelihood.</p></li>
 </ul>
 </section>
 </section>
 <section id="some-maths" class="level2">
-<h2 class="anchored" data-anchor-id="some-maths">Some maths</h2>
+<h2 class="anchored" data-anchor-id="some-maths">Some Maths</h2>
 <ul>
-<li><p>The expectation <span class="math inline">\mathbb{E}[X] = \int_{-\infty}^{\infty} x \, f(x) \, dx</span> gives the mean. where <span class="math inline">x</span> is value and <span class="math inline">f(x) \, dx</span> is probability.</p></li>
-<li><p>Simply we can say that it is long run average for continuous random variable x.</p></li>
-<li><p>Similalry for discrete one is:</p>
+<li><p>The expectation <span class="math inline">\mathbb{E}[x] = \int x \, p(x) \, dx</span> gives the mean. where <span class="math inline">x</span> is value and <span class="math inline">p(x)</span> is probability density and <span class="math inline">dx</span> is tiny interval.</p></li>
+<li><p>Simply we can say that it is long run average for continuous random variable x where x∼p(x).</p></li>
+<li><p>Similarly <span class="math inline">\mathbb{E}[f(x)] = \int f(x) \, p(x) \, dx</span></p>
+<ul>
+<li><span class="math inline">f(x) = x^2</span> then <span class="math inline">\mathbb{E}[x^2] = \int x^2 \, p(x) \, dx</span></li>
+</ul></li>
+<li><p>Similarly for discrete one is:</p>
 <ul>
 <li><span class="math inline">\mathbb{E}[X] = \sum_{x} x \, p(x)</span>, where <span class="math inline">x</span> is value and <span class="math inline">p(x)</span> is probability.</li>
 </ul></li>
@@ -512,36 +581,331 @@ window.Quarto = {
 <ul>
 <li><span class="math inline">P(x \mid y) = \frac{P(y \mid x) \, P(x)}{P(y)}</span></li>
 </ul></li>
-<li><p>Kullback Leibler Diveregence</p>
+<li><p>Kullback Leibler Divergence</p>
 <ul>
 <li>It allows to measure the distance between two probability distributions.</li>
 <li><span class="math inline">D_{\text{KL}}(P \| Q) = \int_{-\infty}^{\infty} p(x) \log \frac{p(x)}{q(x)} \, dx</span></li>
 <li>Properties:-
 <ul>
-<li>Not symettric i.e.&nbsp;$D_{}(P | Q) D_{}(Q | P) $</li>
+<li>Not symmetric i.e.&nbsp;$D_{}(P | Q) D_{}(Q | P) $</li>
 <li><span class="math inline">D_{\text{KL}}(P \| Q) \geq 0</span></li>
 <li><span class="math inline">D_{\text{KL}}(P \| Q) = 0</span> if <span class="math inline">P=Q</span></li>
 </ul></li>
 </ul></li>
 </ul>
 </section>
+<section id="monte-carlo-estimation" class="level2">
+<h2 class="anchored" data-anchor-id="monte-carlo-estimation">Monte Carlo Estimation</h2>
+<ul>
+<li>It is a way to approximately compute expected value.</li>
+<li><span class="math inline">\mathbb{E}_{x \sim p}[g(x)] = \sum_{x} g(x) \, p(x)</span></li>
+<li>To get approximate expected value
+<ul>
+<li>Sample T IID(Independent and Identically Distributed) samples from P</li>
+<li>estimate expected value as:
+<ul>
+<li><span class="math inline">\hat{g}(x_{1}....x_{T}) \triangleq \frac{1}{T}\sum_{t=1}^{T} g(x_{t})</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="monte-carlo-gradient-estimation" class="level2">
+<h2 class="anchored" data-anchor-id="monte-carlo-gradient-estimation">Monte Carlo Gradient Estimation</h2>
+<ul>
+<li>Similarly it is a way to estimate gradients when the objective contains an expectation over random variables.</li>
+</ul>
+<hr>
+</section>
 </section>
 <section id="lets-define-our-model" class="level1">
-<h1>Lets define our model</h1>
+<h1>Let’s Define Our Model</h1>
+<section id="likelihood-as-marginalization" class="level2">
+<h2 class="anchored" data-anchor-id="likelihood-as-marginalization">Likelihood as Marginalization</h2>
 <ul>
-<li><p>We can define the likelihood of our data as the marginalization over the joint probability with respect to the latent variable</p>
+<li>We can define the likelihood of our data as the marginalization over the joint probability with respect to the latent variable
 <ul>
-<li><span class="math inline">p(x) = \int p(x, z) dz</span></li>
+<li><span class="math inline">p(x) = \int p(x, z) dz = \int p(x|z)p(z)dz</span></li>
+<li>Now what does above line means
+<ul>
+<li>Consider we have only a single image and there are 3 latent codes which might have produced x then</li>
+<li><span class="math inline">p(x) = p(x|z_1)p(z_1) + p(x|z_2)p(z_2) + p(x|z_3)p(z_3)</span></li>
+<li>Using chain rule we can write above equation as</li>
+<li><span class="math inline">p(x) = p(x, z_1) + p(x, z_2) + p(x, z_3)</span></li>
+<li>So what if we have infinitely many z, so above formula to incorporate all z</li>
 </ul></li>
-<li><p>But it is intractable becuase we would need to evaluate this integral over all latent variables <span class="math inline">z</span> or we can use the chain rule of probability</p>
-<ul>
-<li><span class="math inline">p(x) = \frac{p(x, z)}{p(z|x)}</span></li>
 </ul></li>
-<li><p>We dont have ground truth <span class="math inline">p(z|x)</span> which is also what we are trying to find.</p></li>
+</ul>
+</section>
+<section id="why-it-is-intractable" class="level2">
+<h2 class="anchored" data-anchor-id="why-it-is-intractable">Why It Is Intractable</h2>
+<ul>
+<li><p>But it is intractable because we would need to evaluate this integral over all latent variables <span class="math inline">z</span> because it is of very high dimension.</p></li>
 <li><p>Intractable Problem:- A problem that can be solved in theory (e.g.&nbsp;given large but finite resources, especially time), but for which in practice any solution takes too many resources to be useful is known as intractable problem.</p>
 <ul>
 <li>Like guessing the wi-fi password of your neighbour. In theory you can generate all the possible combinations but it will take years.</li>
 </ul></li>
+<li><p>In theory it is possible but practically it is not or we can use the chain rule of probability</p>
+<ul>
+<li><span class="math inline">p(x) = \frac{p(x, z)}{p(z|x)}</span></li>
+</ul></li>
+<li><p>We don’t have ground truth <span class="math inline">p(z|x)</span> which is also what we are trying to find.</p></li>
+<li><p>Now it seems like chicken and egg problem like which came first</p></li>
+<li><p>We want to calculate <span class="math inline">p(x)</span> which depends on <span class="math inline">p(z|x)</span> and <span class="math inline">p(z|x)</span> depends on <span class="math inline">p(x)</span></p></li>
+</ul>
+</section>
+<section id="approximate-posterior" class="level2">
+<h2 class="anchored" data-anchor-id="approximate-posterior">Approximate Posterior</h2>
+<ul>
+<li>Usually, when we can’t find something we try to approximate it
+<ul>
+<li><span class="math inline">p_{\theta}(z|x) \approx q_{\phi}(z|x)</span></li>
+<li>Where <span class="math inline">p_{\theta}(z|x)</span> is our true posterior(because we already assumed that <span class="math inline">z</span> is from Normal distribution so <span class="math inline">p(z)</span> is prior, and now given image x our assumption about z has changed for example if image was of face then now z might have some dimensions activated for face) parameterized by <span class="math inline">\theta</span> that we can’t evaluate due to its intractability and <span class="math inline">q_{\phi}(z|x)</span> is an approximate posterior parameterized by <span class="math inline">\phi</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="lets-do-some-maths" class="level2">
+<h2 class="anchored" data-anchor-id="lets-do-some-maths">Let’s Do Some Maths</h2>
+<section id="introducing-q_phizx" class="level3">
+<h3 class="anchored" data-anchor-id="introducing-q_phizx">Introducing <span class="math inline">q_{\phi}(z|x)</span></h3>
+<ul>
+<li><span class="math inline">{\log}p_{\theta}(x) = {\log}p_{\theta}(x)</span></li>
+<li><span class="math inline">= {\log}p_{\theta}(x)</span> x 1 Multiply by 1</li>
+<li><span class="math inline">= {\log}p_{\theta}(x) \int q_{\phi}(z|x) dz</span>. Since <span class="math inline">\int q_{\phi}(z|x) dz = 1</span>. because summation of all the z that could have produced x is 1, which is what we are trying to calculate. You can take analogy of discrete example also <span class="math inline">p(z_1|x) + p(z_2|x) = 1</span> if we consider only z which could have produced x.</li>
+<li><span class="math inline">= {\int\log}p_{\theta}(x)  q_{\phi}(z|x) dz</span> bring <span class="math inline">{\log}p_{\theta}(x)</span> inside integral since it does not depend on z and can be treated as constant.</li>
+<li><span class="math inline">= \mathbb{E}_{z \sim q_{\phi}(z|x)}[{\log}p_{\theta}(x)]</span>
+<ul>
+<li>basically above term is equal to <span class="math inline">{\log}p_{\theta}(x)</span> but we want to somehow introduce z because <span class="math inline">{\log}p_{\theta}(x)</span> is independent of z and using <span class="math inline">\mathbb{E}[x] = \int constant \, p(x) \, dx</span> is constant because we can take constant outside and the remaining integral will give 1.</li>
+</ul></li>
+<li><span class="math inline">= \mathbb{E}_{z \sim q_{\phi}(z|x)}[{\log}\frac{p_{\theta}(x, z)}{p_{\theta}(z|x)}]</span> Apply the equation <span class="math inline">p_{\theta}(x) = \frac{p_{\theta}(x, z)}{p_{\theta}(z|x)}</span></li>
+<li><span class="math inline">= \mathbb{E}_{z \sim q_{\phi}(z|x)}[{\log}\frac{p_{\theta}(x, z)q_{\phi}(z|x)}{p_{\theta}(z|x)q_{\phi}(z|x)}]</span> Multiply by 1</li>
+<li><span class="math inline">= \mathbb{E}_{z \sim q_{\phi}(z|x)}[{\log}\frac{p_{\theta}(x, z)}{q_{\phi}(z|x)}] + \mathbb{E}_{z \sim q_{\phi}(z|x)}[{\log}\frac{q_{\phi}(z|x)}{p_{\theta}(z|x)}]</span> Split the expectation</li>
+<li><span class="math inline">= \mathbb{E}_{z \sim q_{\phi}(z|x)}[{\log}\frac{p_{\theta}(x, z)}{q_{\phi}(z|x)}] + D_{\text{KL}}(q_{\phi}(z|x) \| p_{\theta}(z|x))</span> By definition of KL Divergence</li>
+<li><span class="math inline">{\log}p_{\theta}(x) = ELBO + D_{\text{KL}}(q_{\phi}(z|x) \| p_{\theta}(z|x))</span> where <strong>ELBO</strong> is evidence lower bound and second term is KL divergence since it will always be greater than 0</li>
+<li>Since we are trying to maximize the likelihood then even if we maximize the first term i.e.&nbsp;<strong>ELBO</strong> that will work for us since second term will always be greater than 0</li>
+<li>For example
+<ul>
+<li>Total Compensation = Base Salary + Bonus(<span class="math inline">\geq 0</span>)</li>
+<li>Total Compensation <span class="math inline">\geq</span> Base Salary</li>
+</ul></li>
+<li>Following the above analogy, we can also say that
+<ul>
+<li><span class="math inline">{\log}p_{\theta}(x) \geq \mathbb{E}_{z \sim q_{\phi}(z|x)}[{\log}\frac{p_{\theta}(x, z)}{q_{\phi}(z|x)}]</span></li>
+<li>So if we maximize the right side then left side will also be maximised</li>
+</ul></li>
+</ul>
+</section>
+<section id="rewriting-elbo" class="level3">
+<h3 class="anchored" data-anchor-id="rewriting-elbo">Rewriting ELBO</h3>
+<ul>
+<li><span class="math inline">\mathbb{E}_{z \sim q_{\phi}(z|x)}[{\log}\frac{p_{\theta}(x, z)}{q_{\phi}(z|x)}] = \mathbb{E}_{z \sim q_{\phi}(z|x)}[{\log}\frac{p_{\theta}(x|z)p_{\theta}(z)}{q_{\phi}(z|x)}]</span> following chain rule of probability</li>
+<li><span class="math inline">\mathbb{E}_{z \sim q_{\phi}(z|x)}[\log{p_{\theta}(x | z)}] + \mathbb{E}_{z \sim q_{\phi}(z|x)}[{\log}\frac{p_{\theta}(z)}{q_{\phi}(z|x)}]</span> Split the expectation</li>
+<li><span class="math inline">\mathbb{E}_{z \sim q_{\phi}(z|x)}[\log{p_{\theta}(x | z)}] -  D_{\text{KL}}(q_{\phi}(z|x) \| p_{\theta}(z))</span> Using KL Divergence</li>
+<li>So to maximize the whole term we need to maximize the first one and minimize the second term</li>
+<li>Profit = Revenue - Costs</li>
+<li>To get maximum profit, we need to maximize revenue at the same time minimize the cost</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="spaces.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+</section>
+<section id="what-maximizing-elbo-means" class="level3">
+<h3 class="anchored" data-anchor-id="what-maximizing-elbo-means">What Maximizing ELBO Means</h3>
+<ul>
+<li><p>Maximizing <strong>ELBO</strong> means:</p>
+<ul>
+<li><strong>Maximizing the first term</strong>: maximizing the reconstruction likelihood of the decoder</li>
+<li><strong>Minimizing the second term</strong>: minimizing the distance between learned distribution and the prior belief we have over the latent variable</li>
+</ul></li>
+<li><p>When we want to maximize a function then we move in the direction of gradient</p></li>
+<li><p>When we want to minimize a function then we move against the direction of gradient</p></li>
+<li><p><span class="math inline">L(\theta, \phi, x) = \mathbb{E}_{z \sim q_{\phi}(z|x)}[{\log}\frac{p_{\theta}(x, z)}{q_{\phi}(z|x)}]</span> expectation over <span class="math inline">{q_{\phi}(z|x)}</span></p></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In theory we maximize ELBO. In code, we usually minimize the negative ELBO, which becomes reconstruction loss plus KL loss.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+</section>
+<section id="need-of-reparameterization" class="level1">
+<h1>Need of Reparameterization</h1>
+<section id="why-we-need-it" class="level2">
+<h2 class="anchored" data-anchor-id="why-we-need-it">Why We Need It</h2>
+<ul>
+<li>In case of VAEs, Monte Carlo gradient estimator exhibits high variance thus giving random gradient directions.</li>
+<li>The estimator is unbiased, meaning that even if at every step it may not be equal to the true expectation, on average it will converge to it, but as it is stochastic, it also has a variance and it happens to be high for practical use</li>
+<li>And also a sampling process can’t be differentiated as in our case we are sampling from <span class="math inline">z</span> space to calculate loss</li>
+</ul>
+</section>
+<section id="reparameterization-trick" class="level2">
+<h2 class="anchored" data-anchor-id="reparameterization-trick">Reparameterization Trick</h2>
+<ul>
+<li>So we need a new estimator:- Let’s just move the source of randomness outside the model</li>
+<li>Instead of directly sampling from <span class="math inline">q_{\phi}(z|x)</span>, we rewrite sampling as
+<ul>
+<li>z = <span class="math inline">\mu_{\phi}(x) + \sigma_{\phi}(x)\epsilon</span> where <span class="math inline">\epsilon \sim \mathcal{N}(0, 1)</span></li>
+</ul></li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="reparam.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<ul>
+<li><span class="math inline">L(\theta, \phi, x) = \mathbb{E}_{p(\epsilon)}[{\log}\frac{p_{\theta}(x, z)}{q_{\phi}(z|x)}]</span> expectation over <span class="math inline">{p(\epsilon)}</span></li>
+<li><span class="math inline">\epsilon \approx p(\epsilon)</span></li>
+<li><span class="math inline">z = g(\phi, x, \epsilon)</span></li>
+<li><span class="math inline">\tilde{L}(\theta, \phi, x) \overset{\sim}{=} \mathbb{E}_{p(\epsilon)}[{\log}\frac{p_{\theta}(x, z)}{q_{\phi}(z|x)}]</span></li>
+<li><span class="math inline">\tilde{L}(\theta, \phi, x) = {\log}\frac{p_{\theta}(x, z)}{q_{\phi}(z|x)}</span></li>
+</ul>
+</section>
+<section id="final-estimator" class="level2">
+<h2 class="anchored" data-anchor-id="final-estimator">Final Estimator</h2>
+<ul>
+<li><p>Finally the resulting estimator for this model considering data point <span class="math inline">x^{(i)}</span> is:</p></li>
+<li><p><span class="math inline">\mathcal{L}(\theta, \phi; \mathbf{x}^{(i)}) \simeq \frac{1}{2} \sum_{j=1}^{J} \left(1 + \log((\sigma_j^{(i)})^2) - (\mu_j^{(i)})^2 - (\sigma_j^{(i)})^2\right) + \frac{1}{L} \sum_{l=1}^{L} \log p_{\theta}(\mathbf{x}^{(i)} | \mathbf{z}^{(i,l)})</span></p></li>
+<li><p>In above equation first term is KL-divergence and second term is Reconstruction loss(MSE)</p></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>MSE reconstruction loss comes from assuming a Gaussian decoder likelihood. If we assume a different decoder likelihood, the reconstruction loss can also change.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="code" class="level1">
+<h1>Code</h1>
+<ul>
+<li>Below code is the simple implementation of how a VAE looks like in code</li>
+<li>Notice in case of encoder, we predict log of variance because neural network might give negative numbers also.</li>
+</ul>
+<section id="vae-model" class="level2">
+<h2 class="anchored" data-anchor-id="vae-model">VAE Model</h2>
+<div id="10c04dc8" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> VAE(nn.Module):</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.encoder <span class="op">=</span> nn.Sequential(</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">28</span><span class="op">*</span><span class="dv">28</span>, <span class="dv">196</span>),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>            nn.Tanh(),</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">196</span>, <span class="dv">48</span>),</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>            nn.Tanh()</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.mu_fc <span class="op">=</span> nn.Sequential(</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">48</span>, <span class="dv">16</span>),</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>            nn.Tanh(),</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">16</span>, <span class="dv">2</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.logvar_fc <span class="op">=</span> nn.Sequential(</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">48</span>, <span class="dv">16</span>),</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>            nn.Tanh(),</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">16</span>, <span class="dv">2</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.decoder <span class="op">=</span> nn.Sequential(</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">2</span>, <span class="dv">16</span>),</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>            nn.Tanh(),</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">16</span>, <span class="dv">48</span>),</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>            nn.Tanh(),</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">48</span>, <span class="dv">196</span>),</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>            nn.Tanh(),</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">196</span>, <span class="dv">28</span><span class="op">*</span><span class="dv">28</span>),</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>            nn.Tanh()</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        <span class="co">##Encoding</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>        mu, logvar <span class="op">=</span> <span class="va">self</span>.encode(x)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>        <span class="co">##Sampling</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>        z <span class="op">=</span> <span class="va">self</span>.sample(mu, logvar)</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>        <span class="co">## Decoding</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.decode(z)</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> mu, logvar, x</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> encode(<span class="va">self</span>, x):</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> x.reshape(x.shape[<span class="dv">0</span>], <span class="dv">28</span><span class="op">*</span><span class="dv">28</span>)</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.encoder(x)</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>        mu, logvar <span class="op">=</span> <span class="va">self</span>.mu_fc(x), <span class="va">self</span>.logvar_fc(x)</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> mu, logvar</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> decode(<span class="va">self</span>, x):</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.decoder(x)</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> x.reshape(x.shape[<span class="dv">0</span>], <span class="dv">1</span>, <span class="dv">28</span>, <span class="dv">28</span>)</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> sample(<span class="va">self</span>, mu, log_var):</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>        rand <span class="op">=</span> torch.randn_like(mu)</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>        std <span class="op">=</span> torch.sqrt(torch.exp(log_var))</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> rand <span class="op">*</span> std <span class="op">+</span> mu</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="losses" class="level2">
+<h2 class="anchored" data-anchor-id="losses">Losses</h2>
+<ul>
+<li>Below is the code on how to get KL loss and reconstruction loss</li>
+</ul>
+<div id="aeeecc61" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kl_loss(mu, log_var):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> torch.mean(<span class="fl">0.5</span> <span class="op">*</span> torch.<span class="bu">sum</span>(torch.exp(log_var) <span class="op">+</span> mu<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> <span class="dv">1</span> <span class="op">-</span> log_var, dim<span class="op">=-</span><span class="dv">1</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recon_loss(pred, target):</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> F.mse_loss(pred, target)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="why-vaes-produce-blurry-samples" class="level1">
+<h1>Why VAEs Produce Blurry Samples</h1>
+<ul>
+<li>Multiple possible images can correspond to similar latent representations. When many plausible images map to nearby latent regions, the decoder tends to generate an averaged reconstruction.</li>
+<li>This overlap occurs partly because of KL regularization, where the encoder is forced to keep latent representations close to a simple prior distribution (usually a Gaussian). As a result, different images may occupy overlapping regions in latent space.</li>
+<li>Additionally, VAEs typically assume the decoder output follows a Gaussian distribution:
+<ul>
+<li><span class="math inline">p(x|z) = \mathcal{N}(\mu_{\theta}(z), \sigma^2\mathbf{I})</span></li>
+</ul></li>
+<li>Due to this assumption, maximizing likelihood becomes equivalent to minimizing Mean Squared Error (MSE) between the real and predicted image.</li>
+<li>Now suppose two possible pixel values for a region are 0 and 1 for similar latent vectors. Under MSE, the optimal prediction becomes their average:
+<ul>
+<li><span class="math inline">\frac{0+1}{2} = 0.5</span></li>
+</ul></li>
+<li>Therefore, instead of producing one sharp possibility, the decoder learns to predict averaged pixel values across multiple plausible outputs, leading to blurry images.</li>
+</ul>
+<hr>
+</section>
+<section id="summary" class="level1">
+<h1>Summary</h1>
+<ul>
+<li>Encoder learns <span class="math inline">q_{\phi}(z|x)</span></li>
+<li>Decoder learns <span class="math inline">p_{\theta}(x|z)</span></li>
+<li>KL-divergence keeps latent distribution close to prior distribution</li>
+<li>Reconstruction loss helps preserve input information</li>
+<li>Reparameterization helps backpropagate through sampling</li>
 </ul>
 
 

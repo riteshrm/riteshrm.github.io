@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2026-01-12">
 <meta name="description" content="A step-by-step note on attention, scaled dot-product attention, softmax gradients, and transformer intuition.">
 
-<title>Attention – Ritesh Kumar Maurya</title>
+<title>Attention Mechanism – Ritesh Kumar Maurya</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -157,13 +157,13 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="Attention – Ritesh Kumar Maurya">
+<meta property="og:title" content="Attention Mechanism – Ritesh Kumar Maurya">
 <meta property="og:description" content="A step-by-step note on attention, scaled dot-product attention, softmax gradients, and transformer intuition.">
 <meta property="og:image" content="https://riteshrm.github.io/posts/Attention Mechanism/attn_resized_thumbnail.png">
 <meta property="og:site_name" content="Ritesh Kumar Maurya">
 <meta property="og:image:height" content="1024">
 <meta property="og:image:width" content="1792">
-<meta name="twitter:title" content="Attention – Ritesh Kumar Maurya">
+<meta name="twitter:title" content="Attention Mechanism – Ritesh Kumar Maurya">
 <meta name="twitter:description" content="A step-by-step note on attention, scaled dot-product attention, softmax gradients, and transformer intuition.">
 <meta name="twitter:image" content="https://riteshrm.github.io/posts/Attention Mechanism/attn_resized_thumbnail.png">
 <meta name="twitter:creator" content="@_riteshrm_">
@@ -398,14 +398,25 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#issue-with-rnns" id="toc-issue-with-rnns" class="nav-link active" data-scroll-target="#issue-with-rnns">Issue with RNNs</a></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link active" data-scroll-target="#motivation">Motivation</a>
+  <ul class="collapse">
+  <li><a href="#issue-with-rnns" id="toc-issue-with-rnns" class="nav-link" data-scroll-target="#issue-with-rnns">Issue with RNNs</a></li>
   <li><a href="#quotient-rule" id="toc-quotient-rule" class="nav-link" data-scroll-target="#quotient-rule">Quotient rule</a></li>
+  </ul></li>
+  <li><a href="#scaled-dot-product-attention" id="toc-scaled-dot-product-attention" class="nav-link" data-scroll-target="#scaled-dot-product-attention">Scaled Dot-Product Attention</a>
+  <ul class="collapse">
   <li><a href="#transformers" id="toc-transformers" class="nav-link" data-scroll-target="#transformers">Transformers</a></li>
+  </ul></li>
+  <li><a href="#pytorch-implementations" id="toc-pytorch-implementations" class="nav-link" data-scroll-target="#pytorch-implementations">PyTorch Implementations</a>
+  <ul class="collapse">
   <li><a href="#single-head-vanilla-attention-pytorch-code" id="toc-single-head-vanilla-attention-pytorch-code" class="nav-link" data-scroll-target="#single-head-vanilla-attention-pytorch-code">Single Head Vanilla Attention PyTorch Code</a></li>
   <li><a href="#multi-head-vanilla-attention-for-loop-pytorch-code" id="toc-multi-head-vanilla-attention-for-loop-pytorch-code" class="nav-link" data-scroll-target="#multi-head-vanilla-attention-for-loop-pytorch-code">Multi Head Vanilla Attention For loop PyTorch Code</a></li>
   <li><a href="#multi-head-vanilla-attention-pytorch-code" id="toc-multi-head-vanilla-attention-pytorch-code" class="nav-link" data-scroll-target="#multi-head-vanilla-attention-pytorch-code">Multi Head Vanilla Attention PyTorch Code</a></li>
-  <li><a href="#linear-attention" id="toc-linear-attention" class="nav-link" data-scroll-target="#linear-attention">Linear Attention</a></li>
+  </ul></li>
+  <li><a href="#linear-attention" id="toc-linear-attention" class="nav-link" data-scroll-target="#linear-attention">Linear Attention</a>
+  <ul class="collapse">
   <li><a href="#single-head-linear-attention-pytorch-code" id="toc-single-head-linear-attention-pytorch-code" class="nav-link" data-scroll-target="#single-head-linear-attention-pytorch-code">Single Head Linear Attention PyTorch Code</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Attention Mechanism/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -415,7 +426,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Attention</h1>
+<h1 class="title">Attention Mechanism</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Deep Learning</div>
   </div>
@@ -453,11 +464,12 @@ window.Quarto = {
 
 
 <!-- - In this blog, we will try to understand how different attention mechanisms work alongside vanilla attention from 2017 paper -->
-<!-- - For the code part, you can checkout this [link](https://github.com/riteshrm/Quantization-in-Depth-deeplearning.ai-) -->
+<section id="motivation" class="level2">
+<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
 <section id="issue-with-rnns" class="level3">
 <h3 class="anchored" data-anchor-id="issue-with-rnns">Issue with RNNs</h3>
 <ul>
-<li>Informaton Bottleneck:- If sentence is too much long, they needed to compress all the previous token information in just a single vector h</li>
+<li>Information Bottleneck:- If sentence is too much long, they needed to compress all the previous token information in just a single vector h</li>
 <li>Sequential Nature:- All the tokens being processed one by one</li>
 </ul>
 </section>
@@ -468,47 +480,66 @@ window.Quarto = {
 <li><span class="math inline">\left(\frac{u}{v}\right)' = \frac{u'v - uv'}{v^2}</span>.</li>
 </ul>
 </section>
+</section>
+<section id="scaled-dot-product-attention" class="level2">
+<h2 class="anchored" data-anchor-id="scaled-dot-product-attention">Scaled Dot-Product Attention</h2>
 <section id="transformers" class="level3">
 <h3 class="anchored" data-anchor-id="transformers">Transformers</h3>
 <ul>
 <li>Given a sequence of length N, where each token is represented by d_model numbers, we compute three matrices
 <ul>
-<li>Query = XWq (what I’m looking for)</li>
-<li>Key = XWk (what I have)</li>
-<li>Value = XWv (the information I’ll give if I’m relevant)</li>
-<li>Wq and Wk are of same shape and to maintain the symmetry Wv is also kept to be of same shape, Wq,Wk [d_model, d_k] and Wv [d_model, Dv]</li>
+<li><span class="math inline">Query = XW_q</span> (what I’m looking for)</li>
+<li><span class="math inline">Key = XW_k</span> (what I have)</li>
+<li><span class="math inline">Value = XW_v</span> (the information I’ll give if I’m relevant)</li>
+<li><span class="math inline">W_q</span> and <span class="math inline">W_k</span> are of same shape and to maintain the symmetry <span class="math inline">W_v</span> is also kept to be of same shape, <span class="math inline">W_q</span>, <span class="math inline">W_k</span> [<span class="math inline">d_{model}</span>, <span class="math inline">d_k</span>] and <span class="math inline">W_v</span> [<span class="math inline">d_{model}</span>, <span class="math inline">d_k</span>]</li>
 </ul></li>
 <li>Now to find out which key is more relevant to given queries we do matrix multiplication and the finally apply softmax to get probability
 <ul>
-<li>score = QueryKey^T</li>
-<li>attn = softmax(score/sqrt(d_k))</li>
+<li>score = <span class="math inline">QueryKey^T</span></li>
+<li>attn = <span class="math inline">softmax(\frac{score}{\sqrt{d_k}})</span></li>
 <li>Why scaling factor
 <ul>
 <li>this score dot product has variance of d_k, which causes instability in backpropagation
 <ul>
-<li>lets say we have two vectors q and k of dimension d_k</li>
-<li>E[qi]=E[ki] = 0</li>
-<li>var[qi]=var[ki] = 1</li>
-<li>then E[q.k] = 0 but var[q.k] = d_k <a href="https://funnywii.com/upload/proof.pdf">link</a></li>
+<li>let’s say we have two vectors q and k of dimension d_k</li>
+<li><span class="math inline">\mathbb{E}[q_i]  = \mathbb{E}[k_i] = 0</span></li>
+<li><span class="math inline">var[q_i]=var[k_i] = 1</span></li>
+<li>then <span class="math inline">\mathbb{E}[q.k] = 0</span> but <span class="math inline">var[q.k] = d_k</span> <a href="https://funnywii.com/upload/proof.pdf">link</a></li>
 </ul></li>
-<li>the derivative of softmax contains some terms which if not normalizaied lead to gradient nearly 0 becuase of this larger variance</li>
+<li>the derivative of softmax contains some terms which if not normalized lead to gradient nearly 0 because of this larger variance</li>
 <li><span class="math display">\text{Softmax}(z_i) = \frac{e^{z_i}}{\sum_j e^{z_j}}</span></li>
 <li><span class="math display">\frac{\partial \text{Softmax}(z)_i}{\partial z_j} = \text{Softmax}(z)_i (\delta_{ij} - \text{Softmax}(z)_j)</span></li>
 <li>If <span class="math inline">z_i</span> is much larger than other elements, <span class="math inline">\text{Softmax}(z)_i \approx 1</span>.</li>
 <li>If <span class="math inline">z_i</span> is much smaller, <span class="math inline">\text{Softmax}(z)_i \approx 0</span>.</li>
-<li>So incase of jacobian matrix, considering a simple case where query 0 attends all the keys
+<li>So in case of jacobian matrix, considering a simple case where query 0 attends all the keys
 <ul>
 <li>Diagonal: <span class="math inline">s_1(1-s_1) \approx 1(0) = 0</span>.</li>
 <li>Off-Diagonal: <span class="math inline">-s_1 s_2 \approx -1(0) = 0</span>.</li>
 </ul></li>
-<li>to enforce unit variance, we apply normalization by dividng the score by standard deviation i.e.&nbsp;sqrt(d_k)</li>
+<li>to enforce unit variance, we apply normalization by dividing the score by standard deviation i.e.&nbsp;<span class="math inline">\sqrt{d_k}</span></li>
 </ul></li>
 </ul></li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The scaling factor keeps the variance of the dot-product scores controlled as <span class="math inline">d_k</span> grows, which helps avoid softmax saturation and near-zero gradients.</p>
+</div>
+</div>
 </section>
+</section>
+<section id="pytorch-implementations" class="level2">
+<h2 class="anchored" data-anchor-id="pytorch-implementations">PyTorch Implementations</h2>
 <section id="single-head-vanilla-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="single-head-vanilla-attention-pytorch-code">Single Head Vanilla Attention PyTorch Code</h3>
-<div id="c93a2261" class="cell" data-execution_count="1">
+<div id="a2f84f83" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
@@ -554,13 +585,13 @@ window.Quarto = {
 <span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
 <span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time taken: </span><span class="sc">{</span>(time.time()<span class="op">-</span>start)<span class="op">/</span>k<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 0.550</code></pre>
+<pre><code>Time taken: 0.531</code></pre>
 </div>
 </div>
 </section>
 <section id="multi-head-vanilla-attention-for-loop-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="multi-head-vanilla-attention-for-loop-pytorch-code">Multi Head Vanilla Attention For loop PyTorch Code</h3>
-<div id="cbe6a191" class="cell" data-execution_count="2">
+<div id="30acb913" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
@@ -615,13 +646,13 @@ window.Quarto = {
 <span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
 <span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time taken: </span><span class="sc">{</span>(time.time()<span class="op">-</span>start)<span class="op">/</span>k<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 0.925</code></pre>
+<pre><code>Time taken: 1.052</code></pre>
 </div>
 </div>
 </section>
 <section id="multi-head-vanilla-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="multi-head-vanilla-attention-pytorch-code">Multi Head Vanilla Attention PyTorch Code</h3>
-<div id="e6717b4d" class="cell" data-execution_count="3">
+<div id="47fad175" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
@@ -678,44 +709,57 @@ window.Quarto = {
 <span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
 <span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time taken: </span><span class="sc">{</span>(time.time()<span class="op">-</span>start)<span class="op">/</span>k<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 2.665</code></pre>
+<pre><code>Time taken: 3.395</code></pre>
 </div>
 </div>
 </section>
-<section id="linear-attention" class="level3">
-<h3 class="anchored" data-anchor-id="linear-attention">Linear Attention</h3>
+</section>
+<section id="linear-attention" class="level2">
+<h2 class="anchored" data-anchor-id="linear-attention">Linear Attention</h2>
 <ul>
 <li><p>Instead of using softmax, it tries to make it more general where this softmax function can be replaced by any other function</p></li>
 <li><p>Kernel is some function which takes in two input vectors (query and key) and gives a single scalar output i.e.&nbsp;similarity score.</p></li>
 <li><p>This softmax can also be replaced by some kernel which is some kind of similarity function (i.e.&nbsp;to have property of a similarity function).</p></li>
 <li><p>Kernel can be decomposed into linear functions (feature functions)</p>
 <ul>
-<li>K(a, b) = phi(a)Tphi(b)</li>
+<li><span class="math inline">K(a, b) = \phi(a)^T\phi(b)</span></li>
 </ul></li>
 <li><p>Feature function takes a vector as input and projects it into new feature space</p></li>
-<li><p>The basic idea is instead of doing complicated non-linear function like softmax, cant we just project a and b into highr dimensional space and just do the linear inner product</p></li>
+<li><p>The basic idea is instead of doing complicated non-linear function like softmax, can’t we just project a and b into higher dimensional space and just do the linear inner product</p></li>
 <li><p>The attention mechanism is defined as <span class="math inline">A_l(x) = V' = \text{softmax} \left( \frac{QK^T}{\sqrt{D}} \right) V</span>.</p></li>
-<li><p>We can make the above equation more generalised by using a simlarity function</p></li>
+<li><p>We can make the above equation more generalized by using a similarity function</p></li>
 <li><p><span class="math inline">V'_i = \frac{\sum_{j=1}^N \text{sim}(Q_i, K_j) V_j}{\sum_{j=1}^N \text{sim}(Q_i, K_j)}</span></p></li>
 <li><p>where we can think of <span class="math inline">\text{sim}(q, k) = \exp \left( \frac{q^T k}{\sqrt{D}} \right)</span></p></li>
 <li><p>only constraint on sim is to give non-negative outputs</p></li>
 <li><p>given a kernel with feature representation <span class="math inline">\varphi(x)</span>, we can rewrite the above equation</p></li>
 <li><p><span class="math inline">V'_i = \frac{\sum_{j=1}^N \phi(Q_i)^T \phi(K_j) V_j}{\sum_{j=1}^N \phi(Q_i)^T \phi(K_j)}</span></p></li>
-<li><p>By making the use of associative property of matrix multiplication, we can take out Q from summation, because it is independet of j</p></li>
+<li><p>By making the use of associative property of matrix multiplication, we can take out Q from summation, because it is independent of j</p></li>
 <li><p><span class="math inline">V'_i = \frac{\phi(Q_i)^T \sum_{j=1}^N \phi(K_j) V_j^T}{\phi(Q_i)^T \sum_{j=1}^N \phi(K_j)}</span> (4)</p></li>
 <li><p>And finally we can convert it into vectorized format</p></li>
 <li><p><span class="math inline">\left( \phi(Q) \phi(K)^T \right) V = \phi(Q) \left( \phi(K)^T V \right)</span></p></li>
 <li><p>It is linear because we can compute numerator and denominator and use it for all the queries [The eqn before vectorized one]</p></li>
 <li><p>For softmax attention, complexity is O(N^2 * max(D, M)), where D is dimensionality for query and key, M is for value</p></li>
 <li><p>For linear attention, complexity is O(NCM), where C is feature map projection dim and M is for value</p></li>
-<li><p>Linearization of exact spftmax attention is not feasible because of the exponential kernel, which is of infinte dimension and cant be stored on a computer (expansion of e^x is infinitely many terms)</p></li>
-<li><p>Thats why it is better to use some kind of polynomial feature representation</p></li>
+<li><p>Linearization of exact softmax attention is not feasible because of the exponential kernel, which is of infinite dimension and can’t be stored on a computer (expansion of e^x is infinitely many terms)</p></li>
+<li><p>That’s why it is better to use some kind of polynomial feature representation</p></li>
 <li><p>The author chose elu instead of relu to avoid setting gradients to 0 when input was negative</p></li>
 </ul>
-</section>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The key trick in linear attention is to avoid explicitly creating <span class="math inline">\phi(Q)\phi(K)^T</span> first. By computing <span class="math inline">\phi(K)^T V</span> before multiplying with <span class="math inline">\phi(Q)</span>, the attention can be computed more efficiently for long sequences.</p>
+</div>
+</div>
 <section id="single-head-linear-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="single-head-linear-attention-pytorch-code">Single Head Linear Attention PyTorch Code</h3>
-<div id="5530f036" class="cell" data-execution_count="4">
+<div id="9d759725" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
@@ -723,7 +767,7 @@ window.Quarto = {
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> torch.device(<span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>)</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SingleHeadLinearaAttention(nn.Module):</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SingleHeadLinearAttention(nn.Module):</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, in_features, out_features):</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.in_features <span class="op">=</span> in_features</span>
@@ -746,14 +790,14 @@ window.Quarto = {
 <span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        k_sum <span class="op">=</span> torch.<span class="bu">sum</span>(key, dim<span class="op">=-</span><span class="dv">2</span>).unsqueeze(<span class="op">-</span><span class="dv">1</span>)</span>
 <span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        normalizer <span class="op">=</span> torch.matmul(query, k_sum) <span class="co"># [B, N , d_k] * [B, d_k, 1] -&gt; [B, N, 1] TC=O(B*N*d_k)</span></span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>        eps <span class="op">=</span> <span class="fl">1e-6</span> <span class="co"># To use in case we dont divide by 0</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>        eps <span class="op">=</span> <span class="fl">1e-6</span> <span class="co"># To use in case we don't divide by 0</span></span>
 <span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> final<span class="op">/</span>(normalizer <span class="op">+</span> eps) <span class="co"># [B, N, d_k]</span></span>
 <span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">512</span></span>
 <span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>d_k <span class="op">=</span> <span class="dv">512</span></span>
 <span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SingleHeadLinearaAttention(in_features <span class="op">=</span> d_model, out_features <span class="op">=</span> d_k).requires_grad_(<span class="va">False</span>).<span class="bu">eval</span>().to(device)</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SingleHeadLinearAttention(in_features <span class="op">=</span> d_model, out_features <span class="op">=</span> d_k).requires_grad_(<span class="va">False</span>).<span class="bu">eval</span>().to(device)</span>
 <span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>n_tokens <span class="op">=</span> <span class="dv">16384</span></span>
 <span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>inp <span class="op">=</span> torch.randn(<span class="dv">1</span>, n_tokens, d_model, device<span class="op">=</span>device)</span>
@@ -767,11 +811,48 @@ window.Quarto = {
 <span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
 <span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time taken: </span><span class="sc">{</span>(time.time()<span class="op">-</span>start)<span class="op">/</span>k<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 0.070</code></pre>
+<pre><code>Time taken: 0.130</code></pre>
 </div>
 </div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Main idea</th>
+<th>Complexity bottleneck</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Single Head Vanilla Attention</td>
+<td>One set of query, key, and value projections</td>
+<td>Forms an <span class="math inline">N \times N</span> attention matrix</td>
+</tr>
+<tr class="even">
+<td>Multi Head Vanilla Attention For loop</td>
+<td>Computes each head separately and concatenates outputs</td>
+<td>Still forms one <span class="math inline">N \times N</span> matrix per head</td>
+</tr>
+<tr class="odd">
+<td>Multi Head Vanilla Attention</td>
+<td>Vectorizes the heads into one batched operation</td>
+<td>Same quadratic attention cost, but better parallelism</td>
+</tr>
+<tr class="even">
+<td>Single Head Linear Attention</td>
+<td>Uses a feature map and associativity to avoid explicit softmax attention</td>
+<td>Depends on feature dimension instead of storing full <span class="math inline">N \times N</span> attention</td>
+</tr>
+</tbody>
+</table>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
