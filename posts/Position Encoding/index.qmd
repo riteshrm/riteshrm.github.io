@@ -18,14 +18,14 @@ description: "Notes on sinusoidal positional encoding, why transformers need pos
   + now consider other permutation of above sequence her daughter called my brother
   + even in above example, permutation is different but transformers will find out the same context for each word as above one
   + a simple explanation would be consider **my** and **her**
-    - the attention between these will be same for both of the sequnces, but both of them corresponds to different meaning.
+    - the attention between these will be same for both of the sequences, but both of them corresponds to different meaning.
     - so to have different attentions for different sequences we need to inject some information about the positions of words also.
 
 ---
 
 # Attempted Solution
 
-- Use the index of tokens directly as positon information for a given sequnce. However, when we add token embedding with this position indexs, positional information will over power the content signal and also, the rightmost tokens will dominate.
+- Use the index of tokens directly as position information for a given sequence. However, when we add token embedding with this position indices, positional information will overpower the content signal and also, the rightmost tokens will dominate.
 
 - Now, to solve this, we can normalize the positional information i.e. normalize with the length of sequence. But now we have another problem, all of the sequences will never be of same length, so each position information will keep varying. For example lets consider two sequences 
   1. I am going  PE:=[0/3 1/3 2/3]
@@ -58,7 +58,7 @@ $$
   - $d_{model}$ is dimensionality of position embedding
   - i is index of embedding dimension where i runs from 0 to $d_{model}$/2 -1 [each value of i corresponds to one frequency of sinusoid]
 
-## Below is python code for getting 1D Sinusoidal Postion Embedding
+## Below is python code for getting 1D Sinusoidal Position Embedding
 
 ```{python}
 import torch
@@ -105,7 +105,7 @@ print(torch.equal(combinedPE, pe))
   <figcaption>As dimension index increases, scaling factor also increases</figcaption>
 </figure>
 
-- As the scaling factor increases, the period of sin wave increases frequency decreases i.e. the repeatation of values decreases.
+- As the scaling factor increases, the period of sin wave increases frequency decreases i.e. the repetition of values decreases.
 - We can also say that as scale factor increases, the oscillation becomes slower.
 
 - Dimension 0 i.e. lower dimension can incorporate fine grained local positional information.
@@ -128,7 +128,7 @@ print(torch.equal(combinedPE, pe))
 
 ---
 
-+ Basically given a particular position pos, it gets mapped to various sine waves which incroporates local as well as global information as we can see from below figure.
++ Basically given a particular position pos, it gets mapped to various sine waves which incorporates local as well as global information as we can see from below figure.
 
 <figure style="text-align: center;">
   <img src="sine_wave.png" style="width:80%">
@@ -160,8 +160,8 @@ print(torch.equal(combinedPE, pe))
   - Repetition decreases
   - Importance increases
 
-- And this is what we want from a positonal encoding, where it can help in differentiate local as well as global tokens.
-- But since Binary Encodings are discrete and does not change smoothly for example BE of 3 is 11 and BE of 4 is 100, which is not continuous whereas sinusoidal waves are continuos and change smoothly from pos to pos + 1.
+- And this is what we want from a positional encoding, where it can help in differentiate local as well as global tokens.
+- But since Binary Encodings are discrete and does not change smoothly for example BE of 3 is 11 and BE of 4 is 100, which is not continuous whereas sinusoidal waves are continuous and change smoothly from pos to pos + 1.
 
 ---
 
@@ -209,7 +209,7 @@ Implication:
 </figure>
 
 - The cosine similarity between PE[0:128] of 500th position to everyone other position.
-- The cosine similarity decreases drastically to zero even with position difference of 10 only, whereas we want it to decrease smoothly but not in a agressive way.
+- The cosine similarity decreases drastically to zero even with position difference of 10 only, whereas we want it to decrease smoothly but not in an aggressive way.
 
 <figure style="text-align: center;">
   <img src="cs1_100.png" style="width:80%">
@@ -217,7 +217,7 @@ Implication:
 </figure>
 
 ## What happens if we chose 100000
-- And if we chose 100K as scalin factor then from below figure we can see that even the earlier dimensions have reduced frequency and thus we can't differentiate between two local positons
+- And if we chose 100K as scaling factor then from below figure we can see that even the earlier dimensions have reduced frequency and thus we can't differentiate between two local positions
 
 <figure style="text-align: center;">
   <img src="100k_SF.png" style="width:80%">
@@ -240,7 +240,7 @@ Implication:
 </figure>
 
 ## How does 10k solves above problems
-- And as suggested in paper, if we chose 10k. It is somehting like sweet spot where earlier dimensions have higher frequency thus helping in distinguishing between local positions and later dimensions have lower frequency thus helping in capturing long range positional differences.
+- And as suggested in paper, if we chose 10k. It is something like sweet spot where earlier dimensions have higher frequency thus helping in distinguishing between local positions and later dimensions have lower frequency thus helping in capturing long range positional differences.
 
 <figure style="text-align: center;">
   <img src="10k_SF.png" style="width:80%">
@@ -260,7 +260,7 @@ Implication:
 </figure>
 
 # Why include cosine also
-- It allows, the PE across all postions to have simple linear relationship.
+- It allows, the PE across all positions to have simple linear relationship.
 - Generally:
   -  x = $\cos(\theta)$
   - y = $\sin(\theta)$

@@ -62,7 +62,6 @@ website:
         href: "https://github.com/riteshrm"
       - text: "LinkedIn"
         href: "https://www.linkedin.com/in/riteshrm/"
-    right: "© Ritesh Kumar Maurya"
 
 execute:
   freeze: true

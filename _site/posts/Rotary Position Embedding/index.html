@@ -23,6 +23,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -367,6 +402,7 @@ window.Quarto = {
   <li><a href="#rope" id="toc-rope" class="nav-link" data-scroll-target="#rope">RoPE</a>
   <ul class="collapse">
   <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation">Implementation</a></li>
+  <li><a href="#the-10000" id="toc-the-10000" class="nav-link" data-scroll-target="#the-10000">The 10000</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Rotary Position Embedding/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -573,6 +609,142 @@ y \\
 <li><span class="math inline">e_{k}</span> is embedding value at index k</li>
 <li><span class="math inline">\theta_{i}</span> is rotation angle given as <span class="math inline">\theta_{i}</span> = <span class="math inline">10000^{-2(i-1)/d_{model}}</span>, where i runs from 1 to <span class="math inline">d_{model}/2</span></li>
 <li><span class="math inline">\theta_{i}</span> decreases as i increases, so initial embedding values are rotated by large angles as compared to later embedding values</li>
+</ul></li>
+<li>Below is the code to get <span class="math inline">(R(\theta)</span> and also validate if <span class="math inline">R(\theta)^T</span> <span class="math inline">R(\theta)</span> = I [Identity Matrix]</li>
+<li>For simplicity, i have just printed a single matrix</li>
+</ul>
+<div id="88448477" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_RoPE(pos, d_model):</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    theta <span class="op">=</span> torch.tensor([<span class="dv">10000</span><span class="op">**</span>(<span class="op">-</span><span class="dv">2</span><span class="op">*</span>(i<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span>d_model) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, d_model<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>)])</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    bsz, seq_len<span class="op">=</span> pos.shape</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    cos <span class="op">=</span> torch.cos(pos[:, :, <span class="va">None</span>]<span class="op">*</span> theta[<span class="va">None</span>, :]).view(bsz, seq_len, d_model<span class="op">//</span><span class="dv">2</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    sin <span class="op">=</span> torch.sin(pos[:, :, <span class="va">None</span>]<span class="op">*</span> theta[<span class="va">None</span>, :]).view(bsz, seq_len, d_model<span class="op">//</span><span class="dv">2</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    row1 <span class="op">=</span> torch.stack([cos, <span class="op">-</span>sin], dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    row2 <span class="op">=</span> torch.stack([sin, cos], dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    RTheta <span class="op">=</span> torch.stack([row1, row2], dim<span class="op">=-</span><span class="dv">2</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> RTheta</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>bsz <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>tokens <span class="op">=</span> torch.tensor([[<span class="dv">2</span>, <span class="dv">3</span>] <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(bsz)])</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">256</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>RTheta <span class="op">=</span> get_RoPE(tokens, d_model)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>matrix <span class="op">=</span> torch.matmul(RTheta, RTheta.transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>))</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>matrix[<span class="dv">0</span>][<span class="dv">0</span>][<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>tensor([[1.0000, 0.0000],
+        [0.0000, 1.0000]])</code></pre>
+</div>
+</div>
+<ul>
+<li>Below Code shows how to integrate RoPE while calculating attention</li>
+</ul>
+<div id="b71e0b22" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimpleAttention(nn.Module):</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, d_model, hidden_dim):</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.hidden_dim <span class="op">=</span> hidden_dim</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.q <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> d_model, out_features <span class="op">=</span> hidden_dim)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.k <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> d_model, out_features <span class="op">=</span> hidden_dim)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.v <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> d_model, out_features <span class="op">=</span> hidden_dim)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x, rotary_emb):</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        bsz, seq_len, d_model <span class="op">=</span> x.shape</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> <span class="va">self</span>.q(x)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> <span class="va">self</span>.k(x)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        value <span class="op">=</span> <span class="va">self</span>.v(x)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> rotary_emb <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>            bsz, seq_len, d_model <span class="op">=</span> x.shape</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>            query <span class="op">=</span> query.view(bsz, seq_len, <span class="va">self</span>.hidden_dim<span class="op">//</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>            key <span class="op">=</span> key.view(bsz, seq_len, <span class="va">self</span>.hidden_dim<span class="op">//</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>            query <span class="op">=</span>  torch.matmul(rotary_emb, query).view(bsz, seq_len, <span class="va">self</span>.hidden_dim)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>            key <span class="op">=</span>  torch.matmul(rotary_emb, key).view(bsz, seq_len, <span class="va">self</span>.hidden_dim)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">=</span> torch.softmax(torch.matmul(query, key.transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>))<span class="op">/</span>(<span class="va">self</span>.hidden_dim<span class="op">**</span><span class="dv">2</span>), dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>        final <span class="op">=</span> torch.matmul(scores, value)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> final</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>bsz <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>tokens <span class="op">=</span> torch.tensor([[<span class="dv">2</span>, <span class="dv">3</span>] <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(bsz)])</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">256</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>embedding <span class="op">=</span> torch.randn(<span class="op">*</span>tokens.shape, d_model)</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>RTheta <span class="op">=</span> get_RoPE(tokens, d_model)</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SimpleAttention(d_model, d_model)</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> model(embedding, RTheta)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(out.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch.Size([2, 2, 256])</code></pre>
+</div>
+</div>
+</section>
+<section id="the-10000" class="level3">
+<h3 class="anchored" data-anchor-id="the-10000">The 10000</h3>
+<ul>
+<li><p>As relative distance increases, the contribution of later dimension of embedding also increases in attention calculation.</p>
+<ul>
+<li>For example, for smaller relative distance, the earlier dimensions only change but not the later ones as we can see in below figure, thus only earlier dimensions contribute to attention
+<figure style="text-align: center;" class="figure">
+<img src="smaller_rd.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+<li>for larger relative distance, later dimensions also get under significant modification as we can see in below figure, thus earlier as well as later dimensions contribute to attention
+<figure style="text-align: center;" class="figure">
+<img src="larger_rd.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+</ul></li>
+<li><p>Why 10000?</p>
+<ul>
+<li>If we chose some smaller value, then even later dimensions gets modified aggressively for smaller relative distances and thus changing the attention score agrressively</li>
+<li>If we chose some larger value then even earlier dimensions didnt get modified for larger relative distances and thus attention does not change much at all, the relative distance must need to be much larger for significant contribution to attention.</li>
+<li>Basically this calculates how quickly attention gets sensitive to relative positional difference</li>
+<li>As relative distance increases, the cosine similarity deacreses [Attention Decay], and this is what we want, closer tokens attend to each other more than tokens far apart from each other as we can see from below figure.
+<figure style="text-align: center;" class="figure">
+<img src="attention_decay.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+</ul></li>
+<li><p>Llama 3 used 500,000 as base frequency stating that it will lower the attention decay and thus model will be able to attend far apart tokens more meaningfully</p></li>
+<li><p>As we can see in below figure, cosine similarity decreases very smoothly, thus will help in case of longer contexts</p>
+<figure style="text-align: center;" class="figure">
+<p><img src="attention_decay500k.png" style="width:80%" class="figure-img"></p>
+<figcaption>
+</figcaption>
+</figure></li>
+<li><p>It was believed that due to this attention decay, RoPE works very well</p></li>
+<li><p>But <a href="https://arxiv.org/abs/2410.06205">Round and Round We Go! What makes Rotary Positional Encodings useful?</a> finds out something else is working under the hood which makes rope good at positional encoding.</p>
+<ul>
+<li>They found out that this decay happens only in specific scenarios</li>
+<li>If two embeddings had negative cosine similarity then instead of decreasing they might increase.</li>
+<li>So what makes rope good
+<ul>
+<li>Lower Dimension Embeddings : High Frequency</li>
+<li>Later Dimension Embeddings : Low Frequency</li>
+<li>Low frequency dimensions dominate the attention dot product, whereas high frequency dimensions rotates heavily thus heavily dominated by positional information.</li>
+<li>Semantic heads rely heavily on low frequency dimensions as a result even if distance increases, it has minimal impact on semantic dot product in case of long context if we chose 500k</li>
+<li>If we have long context and base fequency is 10k then it is possible that for large postion difference even the low frequency dimensions might have gone under aggressive transformation, thus heavily impacting the semantic attention</li>
+<li>And if we chose 500k then the low frequency dimensions will not go under heavy rotation thus preserving the semantic meaning and helping to cover long range context</li>
+</ul></li>
+<li>So we can say that:
+<ul>
+<li>High Frequency means positional information encoding.</li>
+<li>Low Frequency means semantic information encoding.</li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -1020,8 +1192,8 @@ y \\
 </ul>
     <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Rotary Position Embedding/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
-<p>© Ritesh Kumar Maurya</p>
-</div>
+      &nbsp;
+    </div>
   </div>
 </footer>
 

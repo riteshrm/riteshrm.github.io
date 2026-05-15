@@ -1,5 +1,5 @@
 ---
-title: "Meta Learning Book Chapter Wise Summary Points"
+title: "Meta Learning: Chapter-Wise Summary"
 author: "Ritesh Kumar Maurya"
 date: "2024-07-06"
 categories: [Deep Learning]
@@ -114,7 +114,7 @@ description: "Chapter-wise summary notes from Meta Learning, focused on learning
 + [Follow this blog to know more about GPUs](https://timdettmers.com/2023/01/30/which-gpu-for-deep-learning/#more-6)
 
 # Debugging with ease is a superpower:-
-+ [Radek Osmulski's Favorite recent jupyter notebook discovery - the %debug magic:](https://x.com/radekosmulski/status/945739571735748609)
++ [Radek Osmulski's Favorite recent Jupyter notebook discovery - the %debug magic:](https://x.com/radekosmulski/status/945739571735748609)
 
 # Time yourself:-
 + Always keep track of the time which you devote to various activities.
@@ -184,8 +184,8 @@ description: "Chapter-wise summary notes from Meta Learning, focused on learning
 + Learn in public.
 	- Write blogs and tutorials and cheatsheets.
 	- Speak at meetups and conferences.
-	- Ask and answer things on Stackoverflow or Reddit. Avoid the walled gardens like Slack and Discord, they’re not public.
-	- Make Youtube videos or Twitch streams.
+	- Ask and answer things on Stack Overflow or Reddit. Avoid the walled gardens like Slack and Discord, they’re not public.
+	- Make YouTube videos or Twitch streams.
 	- Start a newsletter.
 	- Draw cartoons
 + Make the thing you wish you had found when you were learning.

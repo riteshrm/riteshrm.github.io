@@ -1,10 +1,10 @@
 ---
-title: "AI Engineering By Chip Huyen"
+title: "AI Engineering: Chapter-Wise Summary"
 author: "Ritesh Kumar Maurya"
 date: "2026-01-13"
 categories: [Applied ML]
 image: "resized_thumbnail.png"
-description: "Chapter-wise notes on building AI applications with foundation models, evaluation, data, retrieval, agents, and production systems."
+description: "Work-in-progress chapter notes from AI Engineering."
 ---
 
 - This is completely based on [AI Engineering By Chip Huyen](https://www.oreilly.com/library/view/ai-engineering/9781098166298/)

@@ -10,7 +10,662 @@
 <atom:link href="https://riteshrm.github.io/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Notes on deep learning, applied machine learning, optimization, diffusion models and language models.</description>
 <generator>quarto-1.8.26</generator>
-<lastBuildDate>Tue, 07 Apr 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 06 May 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Variational Autoencoder</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/Variational AutoEncoder/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<ul>
+<li>This is mostly based on <a href="https://www.youtube.com/watch?v=1RPdu_5FCfk">Understanding Variational Autoencoder</a> and <a href="https://www.youtube.com/watch?v=iwEzwTTalbg">Variational Autoencoder - Model, ELBO, loss function and maths explained easily</a></li>
+</ul>
+<hr>
+<section id="autoencoders" class="level1">
+<h1>Autoencoders</h1>
+<ul>
+<li>They are used for:-
+<ul>
+<li>converting higher dimension to lower dimension</li>
+<li>Representation Learning</li>
+</ul></li>
+</ul>
+<section id="cons-of-autoencoders" class="level2">
+<h2 class="anchored" data-anchor-id="cons-of-autoencoders">Cons of Autoencoders</h2>
+<ul>
+<li>The encoded values can be used as representation but deep down they don’t have any meaningful information.</li>
+<li>There is no semantic relationship between encoded data points like zebra or cat or tomato. They will be encoded but there will not be any similarity.</li>
+<li>Since everything is being encoded to the points, not distribution, we can not sample any new data point</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="what-we-actually-want" class="level1">
+<h1>What We Actually Want?</h1>
+<ul>
+<li>Instead of encoding to data points, encode into some distribution so that we can generate new data points.</li>
+<li>But even if we try to encode to a distribution, the model will again try to memorise things as it just have to minimize the reconstruction loss.</li>
+<li>Get variations in reconstructed images.</li>
+<li>So we want is that:
+<ul>
+<li>There should be some sort of latent distribution which is just not encoded to points, it should be wide enough to capture entire latent space so that we can have higher variance and thus variation in reconstructed images.</li>
+<li>And also distributions should not be far apart from each other so that if we sample any latent then it should give us something meaningful not random images.</li>
+</ul></li>
+</ul>
+<hr>
+</section>
+<section id="how-do-we-achieve-above-requirements" class="level1">
+<h1>How Do We Achieve Above Requirements?</h1>
+<ul>
+<li>Gaussian distribution would help in achieving above objectives
+<ul>
+<li>It will try to have <strong>mean as close to zero</strong> as possible thus keep distributions closer to each other.</li>
+<li>It will try to have <strong>unit variance</strong> thus ensuring that distributions have higher variance and hence disable the network to collapse distributions to a point.</li>
+</ul></li>
+<li>So basically what we want is that our <strong>encoded distribution</strong> should look like a <strong>Gaussian distribution</strong>.</li>
+<li>We can use some sort of metric that will help in keeping the <strong>encoded distribution</strong> and <strong>Gaussian distribution</strong> as similar as possible.</li>
+<li>And that metric is <strong>KL-Divergence</strong>, which we can use to do so.</li>
+</ul>
+<hr>
+</section>
+<section id="before-moving-forward-some-prerequisites" class="level1">
+<h1>Before Moving Forward Some Prerequisites</h1>
+<section id="probability-vs-likelihood" class="level2">
+<h2 class="anchored" data-anchor-id="probability-vs-likelihood">Probability vs Likelihood</h2>
+<ul>
+<li>You can check out <a href="https://www.youtube.com/watch?v=pYxNSUDSFH4">In Statistics, Probability is not Likelihood</a> for the same.</li>
+<li>Consider the weights of mice</li>
+</ul>
+<section id="probability" class="level3">
+<h3 class="anchored" data-anchor-id="probability">Probability</h3>
+<ul>
+<li>Let’s say we have plotted all the weights which gives us mean 32 and std 2.5, now what is the probability of having a mouse which has weight between 32-34 is given by area under the curve</li>
+<li><img src="https://latex.codecogs.com/png.latex?P(weight%20b/w%2032-34%20%7C%20mean=32,%20std=2.5)"></li>
+</ul>
+</section>
+<section id="likelihood" class="level3">
+<h3 class="anchored" data-anchor-id="likelihood">Likelihood</h3>
+<ul>
+<li><p>Considering we have fixed data/samples what is the likelihood of the current mean and std, which is given by the value corresponding to given weight on Y-axis.</p></li>
+<li><p>Basically in this case we will have a continuous distribution with mean as 32 and std as 2.5 and then we will found out what is the likelihood of having 34 as weight.</p></li>
+<li><p><img src="https://latex.codecogs.com/png.latex?L(mean=32,%20std=2.5%20%7C%20weight=34)"></p></li>
+<li><p>While training we try to maximize the likelihood for our data points so that our model can represent the data samples as closely as possible</p></li>
+<li><p>During inference, we check the probability of given sample based on the params(mean and std) we have learned while maximizing the likelihood.</p></li>
+</ul>
+</section>
+</section>
+<section id="some-maths" class="level2">
+<h2 class="anchored" data-anchor-id="some-maths">Some Maths</h2>
+<ul>
+<li><p>The expectation <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BE%7D%5Bx%5D%20=%20%5Cint%20x%20%5C,%20p(x)%20%5C,%20dx"> gives the mean. where <img src="https://latex.codecogs.com/png.latex?x"> is value and <img src="https://latex.codecogs.com/png.latex?p(x)"> is probability density and <img src="https://latex.codecogs.com/png.latex?dx"> is tiny interval.</p></li>
+<li><p>Simply we can say that it is long run average for continuous random variable x where x∼p(x).</p></li>
+<li><p>Similarly <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BE%7D%5Bf(x)%5D%20=%20%5Cint%20f(x)%20%5C,%20p(x)%20%5C,%20dx"></p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?f(x)%20=%20x%5E2"> then <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BE%7D%5Bx%5E2%5D%20=%20%5Cint%20x%5E2%20%5C,%20p(x)%20%5C,%20dx"></li>
+</ul></li>
+<li><p>Similarly for discrete one is:</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BE%7D%5BX%5D%20=%20%5Csum_%7Bx%7D%20x%20%5C,%20p(x)">, where <img src="https://latex.codecogs.com/png.latex?x"> is value and <img src="https://latex.codecogs.com/png.latex?p(x)"> is probability.</li>
+</ul></li>
+<li><p>Chain rule of probability <img src="https://latex.codecogs.com/png.latex?p(x,%20y)%20=%20p(x%7Cy)p(y)%20=%20p(y%7Cx)p(x)"></p></li>
+<li><p>Bayes’ Theorem</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?P(x%20%5Cmid%20y)%20=%20%5Cfrac%7BP(y%20%5Cmid%20x)%20%5C,%20P(x)%7D%7BP(y)%7D"></li>
+</ul></li>
+<li><p>Kullback Leibler Divergence</p>
+<ul>
+<li>It allows to measure the distance between two probability distributions.</li>
+<li><img src="https://latex.codecogs.com/png.latex?D_%7B%5Ctext%7BKL%7D%7D(P%20%5C%7C%20Q)%20=%20%5Cint_%7B-%5Cinfty%7D%5E%7B%5Cinfty%7D%20p(x)%20%5Clog%20%5Cfrac%7Bp(x)%7D%7Bq(x)%7D%20%5C,%20dx"></li>
+<li>Properties:-
+<ul>
+<li>Not symmetric i.e.&nbsp;$D_{}(P | Q) D_{}(Q | P) $</li>
+<li><img src="https://latex.codecogs.com/png.latex?D_%7B%5Ctext%7BKL%7D%7D(P%20%5C%7C%20Q)%20%5Cgeq%200"></li>
+<li><img src="https://latex.codecogs.com/png.latex?D_%7B%5Ctext%7BKL%7D%7D(P%20%5C%7C%20Q)%20=%200"> if <img src="https://latex.codecogs.com/png.latex?P=Q"></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="monte-carlo-estimation" class="level2">
+<h2 class="anchored" data-anchor-id="monte-carlo-estimation">Monte Carlo Estimation</h2>
+<ul>
+<li>It is a way to approximately compute expected value.</li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BE%7D_%7Bx%20%5Csim%20p%7D%5Bg(x)%5D%20=%20%5Csum_%7Bx%7D%20g(x)%20%5C,%20p(x)"></li>
+<li>To get approximate expected value
+<ul>
+<li>Sample T IID(Independent and Identically Distributed) samples from P</li>
+<li>estimate expected value as:
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%5Chat%7Bg%7D(x_%7B1%7D....x_%7BT%7D)%20%5Ctriangleq%20%5Cfrac%7B1%7D%7BT%7D%5Csum_%7Bt=1%7D%5E%7BT%7D%20g(x_%7Bt%7D)"></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="monte-carlo-gradient-estimation" class="level2">
+<h2 class="anchored" data-anchor-id="monte-carlo-gradient-estimation">Monte Carlo Gradient Estimation</h2>
+<ul>
+<li>Similarly it is a way to estimate gradients when the objective contains an expectation over random variables.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="lets-define-our-model" class="level1">
+<h1>Let’s Define Our Model</h1>
+<section id="likelihood-as-marginalization" class="level2">
+<h2 class="anchored" data-anchor-id="likelihood-as-marginalization">Likelihood as Marginalization</h2>
+<ul>
+<li>We can define the likelihood of our data as the marginalization over the joint probability with respect to the latent variable
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?p(x)%20=%20%5Cint%20p(x,%20z)%20dz%20=%20%5Cint%20p(x%7Cz)p(z)dz"></li>
+<li>Now what does above line means
+<ul>
+<li>Consider we have only a single image and there are 3 latent codes which might have produced x then</li>
+<li><img src="https://latex.codecogs.com/png.latex?p(x)%20=%20p(x%7Cz_1)p(z_1)%20+%20p(x%7Cz_2)p(z_2)%20+%20p(x%7Cz_3)p(z_3)"></li>
+<li>Using chain rule we can write above equation as</li>
+<li><img src="https://latex.codecogs.com/png.latex?p(x)%20=%20p(x,%20z_1)%20+%20p(x,%20z_2)%20+%20p(x,%20z_3)"></li>
+<li>So what if we have infinitely many z, so above formula to incorporate all z</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="why-it-is-intractable" class="level2">
+<h2 class="anchored" data-anchor-id="why-it-is-intractable">Why It Is Intractable</h2>
+<ul>
+<li><p>But it is intractable because we would need to evaluate this integral over all latent variables <img src="https://latex.codecogs.com/png.latex?z"> because it is of very high dimension.</p></li>
+<li><p>Intractable Problem:- A problem that can be solved in theory (e.g.&nbsp;given large but finite resources, especially time), but for which in practice any solution takes too many resources to be useful is known as intractable problem.</p>
+<ul>
+<li>Like guessing the wi-fi password of your neighbour. In theory you can generate all the possible combinations but it will take years.</li>
+</ul></li>
+<li><p>In theory it is possible but practically it is not or we can use the chain rule of probability</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?p(x)%20=%20%5Cfrac%7Bp(x,%20z)%7D%7Bp(z%7Cx)%7D"></li>
+</ul></li>
+<li><p>We don’t have ground truth <img src="https://latex.codecogs.com/png.latex?p(z%7Cx)"> which is also what we are trying to find.</p></li>
+<li><p>Now it seems like chicken and egg problem like which came first</p></li>
+<li><p>We want to calculate <img src="https://latex.codecogs.com/png.latex?p(x)"> which depends on <img src="https://latex.codecogs.com/png.latex?p(z%7Cx)"> and <img src="https://latex.codecogs.com/png.latex?p(z%7Cx)"> depends on <img src="https://latex.codecogs.com/png.latex?p(x)"></p></li>
+</ul>
+</section>
+<section id="approximate-posterior" class="level2">
+<h2 class="anchored" data-anchor-id="approximate-posterior">Approximate Posterior</h2>
+<ul>
+<li>Usually, when we can’t find something we try to approximate it
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?p_%7B%5Ctheta%7D(z%7Cx)%20%5Capprox%20q_%7B%5Cphi%7D(z%7Cx)"></li>
+<li>Where <img src="https://latex.codecogs.com/png.latex?p_%7B%5Ctheta%7D(z%7Cx)"> is our true posterior(because we already assumed that <img src="https://latex.codecogs.com/png.latex?z"> is from Normal distribution so <img src="https://latex.codecogs.com/png.latex?p(z)"> is prior, and now given image x our assumption about z has changed for example if image was of face then now z might have some dimensions activated for face) parameterized by <img src="https://latex.codecogs.com/png.latex?%5Ctheta"> that we can’t evaluate due to its intractability and <img src="https://latex.codecogs.com/png.latex?q_%7B%5Cphi%7D(z%7Cx)"> is an approximate posterior parameterized by <img src="https://latex.codecogs.com/png.latex?%5Cphi"></li>
+</ul></li>
+</ul>
+</section>
+<section id="lets-do-some-maths" class="level2">
+<h2 class="anchored" data-anchor-id="lets-do-some-maths">Let’s Do Some Maths</h2>
+<section id="introducing-q_phizx" class="level3">
+<h3 class="anchored" data-anchor-id="introducing-q_phizx">Introducing <img src="https://latex.codecogs.com/png.latex?q_%7B%5Cphi%7D(z%7Cx)"></h3>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%7B%5Clog%7Dp_%7B%5Ctheta%7D(x)%20=%20%7B%5Clog%7Dp_%7B%5Ctheta%7D(x)"></li>
+<li><img src="https://latex.codecogs.com/png.latex?=%20%7B%5Clog%7Dp_%7B%5Ctheta%7D(x)"> x 1 Multiply by 1</li>
+<li><img src="https://latex.codecogs.com/png.latex?=%20%7B%5Clog%7Dp_%7B%5Ctheta%7D(x)%20%5Cint%20q_%7B%5Cphi%7D(z%7Cx)%20dz">. Since <img src="https://latex.codecogs.com/png.latex?%5Cint%20q_%7B%5Cphi%7D(z%7Cx)%20dz%20=%201">. because summation of all the z that could have produced x is 1, which is what we are trying to calculate. You can take analogy of discrete example also <img src="https://latex.codecogs.com/png.latex?p(z_1%7Cx)%20+%20p(z_2%7Cx)%20=%201"> if we consider only z which could have produced x.</li>
+<li><img src="https://latex.codecogs.com/png.latex?=%20%7B%5Cint%5Clog%7Dp_%7B%5Ctheta%7D(x)%20%20q_%7B%5Cphi%7D(z%7Cx)%20dz"> bring <img src="https://latex.codecogs.com/png.latex?%7B%5Clog%7Dp_%7B%5Ctheta%7D(x)"> inside integral since it does not depend on z and can be treated as constant.</li>
+<li><img src="https://latex.codecogs.com/png.latex?=%20%5Cmathbb%7BE%7D_%7Bz%20%5Csim%20q_%7B%5Cphi%7D(z%7Cx)%7D%5B%7B%5Clog%7Dp_%7B%5Ctheta%7D(x)%5D">
+<ul>
+<li>basically above term is equal to <img src="https://latex.codecogs.com/png.latex?%7B%5Clog%7Dp_%7B%5Ctheta%7D(x)"> but we want to somehow introduce z because <img src="https://latex.codecogs.com/png.latex?%7B%5Clog%7Dp_%7B%5Ctheta%7D(x)"> is independent of z and using <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BE%7D%5Bx%5D%20=%20%5Cint%20constant%20%5C,%20p(x)%20%5C,%20dx"> is constant because we can take constant outside and the remaining integral will give 1.</li>
+</ul></li>
+<li><img src="https://latex.codecogs.com/png.latex?=%20%5Cmathbb%7BE%7D_%7Bz%20%5Csim%20q_%7B%5Cphi%7D(z%7Cx)%7D%5B%7B%5Clog%7D%5Cfrac%7Bp_%7B%5Ctheta%7D(x,%20z)%7D%7Bp_%7B%5Ctheta%7D(z%7Cx)%7D%5D"> Apply the equation <img src="https://latex.codecogs.com/png.latex?p_%7B%5Ctheta%7D(x)%20=%20%5Cfrac%7Bp_%7B%5Ctheta%7D(x,%20z)%7D%7Bp_%7B%5Ctheta%7D(z%7Cx)%7D"></li>
+<li><img src="https://latex.codecogs.com/png.latex?=%20%5Cmathbb%7BE%7D_%7Bz%20%5Csim%20q_%7B%5Cphi%7D(z%7Cx)%7D%5B%7B%5Clog%7D%5Cfrac%7Bp_%7B%5Ctheta%7D(x,%20z)q_%7B%5Cphi%7D(z%7Cx)%7D%7Bp_%7B%5Ctheta%7D(z%7Cx)q_%7B%5Cphi%7D(z%7Cx)%7D%5D"> Multiply by 1</li>
+<li><img src="https://latex.codecogs.com/png.latex?=%20%5Cmathbb%7BE%7D_%7Bz%20%5Csim%20q_%7B%5Cphi%7D(z%7Cx)%7D%5B%7B%5Clog%7D%5Cfrac%7Bp_%7B%5Ctheta%7D(x,%20z)%7D%7Bq_%7B%5Cphi%7D(z%7Cx)%7D%5D%20+%20%5Cmathbb%7BE%7D_%7Bz%20%5Csim%20q_%7B%5Cphi%7D(z%7Cx)%7D%5B%7B%5Clog%7D%5Cfrac%7Bq_%7B%5Cphi%7D(z%7Cx)%7D%7Bp_%7B%5Ctheta%7D(z%7Cx)%7D%5D"> Split the expectation</li>
+<li><img src="https://latex.codecogs.com/png.latex?=%20%5Cmathbb%7BE%7D_%7Bz%20%5Csim%20q_%7B%5Cphi%7D(z%7Cx)%7D%5B%7B%5Clog%7D%5Cfrac%7Bp_%7B%5Ctheta%7D(x,%20z)%7D%7Bq_%7B%5Cphi%7D(z%7Cx)%7D%5D%20+%20D_%7B%5Ctext%7BKL%7D%7D(q_%7B%5Cphi%7D(z%7Cx)%20%5C%7C%20p_%7B%5Ctheta%7D(z%7Cx))"> By definition of KL Divergence</li>
+<li><img src="https://latex.codecogs.com/png.latex?%7B%5Clog%7Dp_%7B%5Ctheta%7D(x)%20=%20ELBO%20+%20D_%7B%5Ctext%7BKL%7D%7D(q_%7B%5Cphi%7D(z%7Cx)%20%5C%7C%20p_%7B%5Ctheta%7D(z%7Cx))"> where <strong>ELBO</strong> is evidence lower bound and second term is KL divergence since it will always be greater than 0</li>
+<li>Since we are trying to maximize the likelihood then even if we maximize the first term i.e.&nbsp;<strong>ELBO</strong> that will work for us since second term will always be greater than 0</li>
+<li>For example
+<ul>
+<li>Total Compensation = Base Salary + Bonus(<img src="https://latex.codecogs.com/png.latex?%5Cgeq%200">)</li>
+<li>Total Compensation <img src="https://latex.codecogs.com/png.latex?%5Cgeq"> Base Salary</li>
+</ul></li>
+<li>Following the above analogy, we can also say that
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%7B%5Clog%7Dp_%7B%5Ctheta%7D(x)%20%5Cgeq%20%5Cmathbb%7BE%7D_%7Bz%20%5Csim%20q_%7B%5Cphi%7D(z%7Cx)%7D%5B%7B%5Clog%7D%5Cfrac%7Bp_%7B%5Ctheta%7D(x,%20z)%7D%7Bq_%7B%5Cphi%7D(z%7Cx)%7D%5D"></li>
+<li>So if we maximize the right side then left side will also be maximised</li>
+</ul></li>
+</ul>
+</section>
+<section id="rewriting-elbo" class="level3">
+<h3 class="anchored" data-anchor-id="rewriting-elbo">Rewriting ELBO</h3>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BE%7D_%7Bz%20%5Csim%20q_%7B%5Cphi%7D(z%7Cx)%7D%5B%7B%5Clog%7D%5Cfrac%7Bp_%7B%5Ctheta%7D(x,%20z)%7D%7Bq_%7B%5Cphi%7D(z%7Cx)%7D%5D%20=%20%5Cmathbb%7BE%7D_%7Bz%20%5Csim%20q_%7B%5Cphi%7D(z%7Cx)%7D%5B%7B%5Clog%7D%5Cfrac%7Bp_%7B%5Ctheta%7D(x%7Cz)p_%7B%5Ctheta%7D(z)%7D%7Bq_%7B%5Cphi%7D(z%7Cx)%7D%5D"> following chain rule of probability</li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BE%7D_%7Bz%20%5Csim%20q_%7B%5Cphi%7D(z%7Cx)%7D%5B%5Clog%7Bp_%7B%5Ctheta%7D(x%20%7C%20z)%7D%5D%20+%20%5Cmathbb%7BE%7D_%7Bz%20%5Csim%20q_%7B%5Cphi%7D(z%7Cx)%7D%5B%7B%5Clog%7D%5Cfrac%7Bp_%7B%5Ctheta%7D(z)%7D%7Bq_%7B%5Cphi%7D(z%7Cx)%7D%5D"> Split the expectation</li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BE%7D_%7Bz%20%5Csim%20q_%7B%5Cphi%7D(z%7Cx)%7D%5B%5Clog%7Bp_%7B%5Ctheta%7D(x%20%7C%20z)%7D%5D%20-%20%20D_%7B%5Ctext%7BKL%7D%7D(q_%7B%5Cphi%7D(z%7Cx)%20%5C%7C%20p_%7B%5Ctheta%7D(z))"> Using KL Divergence</li>
+<li>So to maximize the whole term we need to maximize the first one and minimize the second term</li>
+<li>Profit = Revenue - Costs</li>
+<li>To get maximum profit, we need to maximize revenue at the same time minimize the cost</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Variational AutoEncoder/spaces.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+</section>
+<section id="what-maximizing-elbo-means" class="level3">
+<h3 class="anchored" data-anchor-id="what-maximizing-elbo-means">What Maximizing ELBO Means</h3>
+<ul>
+<li><p>Maximizing <strong>ELBO</strong> means:</p>
+<ul>
+<li><strong>Maximizing the first term</strong>: maximizing the reconstruction likelihood of the decoder</li>
+<li><strong>Minimizing the second term</strong>: minimizing the distance between learned distribution and the prior belief we have over the latent variable</li>
+</ul></li>
+<li><p>When we want to maximize a function then we move in the direction of gradient</p></li>
+<li><p>When we want to minimize a function then we move against the direction of gradient</p></li>
+<li><p><img src="https://latex.codecogs.com/png.latex?L(%5Ctheta,%20%5Cphi,%20x)%20=%20%5Cmathbb%7BE%7D_%7Bz%20%5Csim%20q_%7B%5Cphi%7D(z%7Cx)%7D%5B%7B%5Clog%7D%5Cfrac%7Bp_%7B%5Ctheta%7D(x,%20z)%7D%7Bq_%7B%5Cphi%7D(z%7Cx)%7D%5D"> expectation over <img src="https://latex.codecogs.com/png.latex?%7Bq_%7B%5Cphi%7D(z%7Cx)%7D"></p></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In theory we maximize ELBO. In code, we usually minimize the negative ELBO, which becomes reconstruction loss plus KL loss.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+</section>
+<section id="need-of-reparameterization" class="level1">
+<h1>Need of Reparameterization</h1>
+<section id="why-we-need-it" class="level2">
+<h2 class="anchored" data-anchor-id="why-we-need-it">Why We Need It</h2>
+<ul>
+<li>In case of VAEs, Monte Carlo gradient estimator exhibits high variance thus giving random gradient directions.</li>
+<li>The estimator is unbiased, meaning that even if at every step it may not be equal to the true expectation, on average it will converge to it, but as it is stochastic, it also has a variance and it happens to be high for practical use</li>
+<li>And also a sampling process can’t be differentiated as in our case we are sampling from <img src="https://latex.codecogs.com/png.latex?z"> space to calculate loss</li>
+</ul>
+</section>
+<section id="reparameterization-trick" class="level2">
+<h2 class="anchored" data-anchor-id="reparameterization-trick">Reparameterization Trick</h2>
+<ul>
+<li>So we need a new estimator:- Let’s just move the source of randomness outside the model</li>
+<li>Instead of directly sampling from <img src="https://latex.codecogs.com/png.latex?q_%7B%5Cphi%7D(z%7Cx)">, we rewrite sampling as
+<ul>
+<li>z = <img src="https://latex.codecogs.com/png.latex?%5Cmu_%7B%5Cphi%7D(x)%20+%20%5Csigma_%7B%5Cphi%7D(x)%5Cepsilon"> where <img src="https://latex.codecogs.com/png.latex?%5Cepsilon%20%5Csim%20%5Cmathcal%7BN%7D(0,%201)"></li>
+</ul></li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Variational AutoEncoder/reparam.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?L(%5Ctheta,%20%5Cphi,%20x)%20=%20%5Cmathbb%7BE%7D_%7Bp(%5Cepsilon)%7D%5B%7B%5Clog%7D%5Cfrac%7Bp_%7B%5Ctheta%7D(x,%20z)%7D%7Bq_%7B%5Cphi%7D(z%7Cx)%7D%5D"> expectation over <img src="https://latex.codecogs.com/png.latex?%7Bp(%5Cepsilon)%7D"></li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cepsilon%20%5Capprox%20p(%5Cepsilon)"></li>
+<li><img src="https://latex.codecogs.com/png.latex?z%20=%20g(%5Cphi,%20x,%20%5Cepsilon)"></li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Ctilde%7BL%7D(%5Ctheta,%20%5Cphi,%20x)%20%5Coverset%7B%5Csim%7D%7B=%7D%20%5Cmathbb%7BE%7D_%7Bp(%5Cepsilon)%7D%5B%7B%5Clog%7D%5Cfrac%7Bp_%7B%5Ctheta%7D(x,%20z)%7D%7Bq_%7B%5Cphi%7D(z%7Cx)%7D%5D"></li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Ctilde%7BL%7D(%5Ctheta,%20%5Cphi,%20x)%20=%20%7B%5Clog%7D%5Cfrac%7Bp_%7B%5Ctheta%7D(x,%20z)%7D%7Bq_%7B%5Cphi%7D(z%7Cx)%7D"></li>
+</ul>
+</section>
+<section id="final-estimator" class="level2">
+<h2 class="anchored" data-anchor-id="final-estimator">Final Estimator</h2>
+<ul>
+<li><p>Finally the resulting estimator for this model considering data point <img src="https://latex.codecogs.com/png.latex?x%5E%7B(i)%7D"> is:</p></li>
+<li><p><img src="https://latex.codecogs.com/png.latex?%5Cmathcal%7BL%7D(%5Ctheta,%20%5Cphi;%20%5Cmathbf%7Bx%7D%5E%7B(i)%7D)%20%5Csimeq%20%5Cfrac%7B1%7D%7B2%7D%20%5Csum_%7Bj=1%7D%5E%7BJ%7D%20%5Cleft(1%20+%20%5Clog((%5Csigma_j%5E%7B(i)%7D)%5E2)%20-%20(%5Cmu_j%5E%7B(i)%7D)%5E2%20-%20(%5Csigma_j%5E%7B(i)%7D)%5E2%5Cright)%20+%20%5Cfrac%7B1%7D%7BL%7D%20%5Csum_%7Bl=1%7D%5E%7BL%7D%20%5Clog%20p_%7B%5Ctheta%7D(%5Cmathbf%7Bx%7D%5E%7B(i)%7D%20%7C%20%5Cmathbf%7Bz%7D%5E%7B(i,l)%7D)"></p></li>
+<li><p>In above equation first term is KL-divergence and second term is Reconstruction loss(MSE)</p></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>MSE reconstruction loss comes from assuming a Gaussian decoder likelihood. If we assume a different decoder likelihood, the reconstruction loss can also change.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="code" class="level1">
+<h1>Code</h1>
+<ul>
+<li>Below code is the simple implementation of how a VAE looks like in code</li>
+<li>Notice in case of encoder, we predict log of variance because neural network might give negative numbers also.</li>
+</ul>
+<section id="vae-model" class="level2">
+<h2 class="anchored" data-anchor-id="vae-model">VAE Model</h2>
+<div id="10c04dc8" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> nn</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn.functional <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> F</span>
+<span id="cb1-4"></span>
+<span id="cb1-5"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> VAE(nn.Module):</span>
+<span id="cb1-6">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>):</span>
+<span id="cb1-7">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">super</span>().<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>()</span>
+<span id="cb1-8">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.encoder <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Sequential(</span>
+<span id="cb1-9">            nn.Linear(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">28</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">28</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">196</span>),</span>
+<span id="cb1-10">            nn.Tanh(),</span>
+<span id="cb1-11">            nn.Linear(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">196</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">48</span>),</span>
+<span id="cb1-12">            nn.Tanh()</span>
+<span id="cb1-13">        )</span>
+<span id="cb1-14"></span>
+<span id="cb1-15">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.mu_fc <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Sequential(</span>
+<span id="cb1-16">            nn.Linear(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">48</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>),</span>
+<span id="cb1-17">            nn.Tanh(),</span>
+<span id="cb1-18">            nn.Linear(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb1-19">        )</span>
+<span id="cb1-20">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.logvar_fc <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Sequential(</span>
+<span id="cb1-21">            nn.Linear(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">48</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>),</span>
+<span id="cb1-22">            nn.Tanh(),</span>
+<span id="cb1-23">            nn.Linear(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb1-24">        )</span>
+<span id="cb1-25">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.decoder <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Sequential(</span>
+<span id="cb1-26">            nn.Linear(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>),</span>
+<span id="cb1-27">            nn.Tanh(),</span>
+<span id="cb1-28">            nn.Linear(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">48</span>),</span>
+<span id="cb1-29">            nn.Tanh(),</span>
+<span id="cb1-30">            nn.Linear(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">48</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">196</span>),</span>
+<span id="cb1-31">            nn.Tanh(),</span>
+<span id="cb1-32">            nn.Linear(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">196</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">28</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">28</span>),</span>
+<span id="cb1-33">            nn.Tanh()</span>
+<span id="cb1-34">        )</span>
+<span id="cb1-35">    </span>
+<span id="cb1-36">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> forward(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, x):</span>
+<span id="cb1-37">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##Encoding</span></span>
+<span id="cb1-38">        mu, logvar <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.encode(x)</span>
+<span id="cb1-39"></span>
+<span id="cb1-40">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">##Sampling</span></span>
+<span id="cb1-41"></span>
+<span id="cb1-42">        z <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.sample(mu, logvar)</span>
+<span id="cb1-43"></span>
+<span id="cb1-44">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">## Decoding</span></span>
+<span id="cb1-45">        x <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.decode(z)</span>
+<span id="cb1-46">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> mu, logvar, x</span>
+<span id="cb1-47">    </span>
+<span id="cb1-48">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> encode(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, x):</span>
+<span id="cb1-49">        x <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> x.reshape(x.shape[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>], <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">28</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">28</span>)</span>
+<span id="cb1-50">        x <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.encoder(x)</span>
+<span id="cb1-51">        mu, logvar <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.mu_fc(x), <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.logvar_fc(x)</span>
+<span id="cb1-52">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> mu, logvar</span>
+<span id="cb1-53">    </span>
+<span id="cb1-54">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> decode(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, x):</span>
+<span id="cb1-55">        x <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.decoder(x)</span>
+<span id="cb1-56">        x <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> x.reshape(x.shape[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>], <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">28</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">28</span>)</span>
+<span id="cb1-57">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> x</span>
+<span id="cb1-58">    </span>
+<span id="cb1-59">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> sample(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, mu, log_var):</span>
+<span id="cb1-60">        rand <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.randn_like(mu)</span>
+<span id="cb1-61">        std <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.sqrt(torch.exp(log_var))</span>
+<span id="cb1-62">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> rand <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> std <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> mu</span></code></pre></div></div>
+</div>
+</section>
+<section id="losses" class="level2">
+<h2 class="anchored" data-anchor-id="losses">Losses</h2>
+<ul>
+<li>Below is the code on how to get KL loss and reconstruction loss</li>
+</ul>
+<div id="aeeecc61" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> kl_loss(mu, log_var):</span>
+<span id="cb2-2">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> torch.mean(<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.5</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> torch.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>(torch.exp(log_var) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> mu<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> log_var, dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>))</span>
+<span id="cb2-3"></span>
+<span id="cb2-4"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> recon_loss(pred, target):</span>
+<span id="cb2-5">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> F.mse_loss(pred, target)</span></code></pre></div></div>
+</div>
+</section>
+</section>
+<section id="why-vaes-produce-blurry-samples" class="level1">
+<h1>Why VAEs Produce Blurry Samples</h1>
+<ul>
+<li>Multiple possible images can correspond to similar latent representations. When many plausible images map to nearby latent regions, the decoder tends to generate an averaged reconstruction.</li>
+<li>This overlap occurs partly because of KL regularization, where the encoder is forced to keep latent representations close to a simple prior distribution (usually a Gaussian). As a result, different images may occupy overlapping regions in latent space.</li>
+<li>Additionally, VAEs typically assume the decoder output follows a Gaussian distribution:
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?p(x%7Cz)%20=%20%5Cmathcal%7BN%7D(%5Cmu_%7B%5Ctheta%7D(z),%20%5Csigma%5E2%5Cmathbf%7BI%7D)"></li>
+</ul></li>
+<li>Due to this assumption, maximizing likelihood becomes equivalent to minimizing Mean Squared Error (MSE) between the real and predicted image.</li>
+<li>Now suppose two possible pixel values for a region are 0 and 1 for similar latent vectors. Under MSE, the optimal prediction becomes their average:
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cfrac%7B0+1%7D%7B2%7D%20=%200.5"></li>
+</ul></li>
+<li>Therefore, instead of producing one sharp possibility, the decoder learns to predict averaged pixel values across multiple plausible outputs, leading to blurry images.</li>
+</ul>
+<hr>
+</section>
+<section id="summary" class="level1">
+<h1>Summary</h1>
+<ul>
+<li>Encoder learns <img src="https://latex.codecogs.com/png.latex?q_%7B%5Cphi%7D(z%7Cx)"></li>
+<li>Decoder learns <img src="https://latex.codecogs.com/png.latex?p_%7B%5Ctheta%7D(x%7Cz)"></li>
+<li>KL-divergence keeps latent distribution close to prior distribution</li>
+<li>Reconstruction loss helps preserve input information</li>
+<li>Reparameterization helps backpropagate through sampling</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>Deep Learning</category>
+  <guid>https://riteshrm.github.io/posts/Variational AutoEncoder/</guid>
+  <pubDate>Wed, 06 May 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/Variational AutoEncoder/vae_thumbnail_resized.png" medium="image" type="image/png" height="82" width="144"/>
+</item>
 <item>
   <title>Rotary Position Embedding</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
@@ -165,6 +820,445 @@
 <li><img src="https://latex.codecogs.com/png.latex?e_%7Bk%7D"> is embedding value at index k</li>
 <li><img src="https://latex.codecogs.com/png.latex?%5Ctheta_%7Bi%7D"> is rotation angle given as <img src="https://latex.codecogs.com/png.latex?%5Ctheta_%7Bi%7D"> = <img src="https://latex.codecogs.com/png.latex?10000%5E%7B-2(i-1)/d_%7Bmodel%7D%7D">, where i runs from 1 to <img src="https://latex.codecogs.com/png.latex?d_%7Bmodel%7D/2"></li>
 <li><img src="https://latex.codecogs.com/png.latex?%5Ctheta_%7Bi%7D"> decreases as i increases, so initial embedding values are rotated by large angles as compared to later embedding values</li>
+</ul></li>
+<li>Below is the code to get <img src="https://latex.codecogs.com/png.latex?(R(%5Ctheta)"> and also validate if <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta)%5ET"> <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta)"> = I [Identity Matrix]</li>
+<li>For simplicity, i have just printed a single matrix</li>
+</ul>
+<div id="88448477" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb3-2"></span>
+<span id="cb3-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_RoPE(pos, d_model):</span>
+<span id="cb3-4">    theta <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10000</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span>(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>(i<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>d_model) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, d_model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)])</span>
+<span id="cb3-5">    bsz, seq_len<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pos.shape</span>
+<span id="cb3-6">    cos <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.cos(pos[:, :, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>]<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> theta[<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, :]).view(bsz, seq_len, d_model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb3-7">    sin <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.sin(pos[:, :, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>]<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> theta[<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, :]).view(bsz, seq_len, d_model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb3-8">    row1 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.stack([cos, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>sin], dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb3-9">    row2 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.stack([sin, cos], dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb3-10"></span>
+<span id="cb3-11">    RTheta <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.stack([row1, row2], dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb3-12">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> RTheta</span>
+<span id="cb3-13"></span>
+<span id="cb3-14">bsz <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span>
+<span id="cb3-15">tokens <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor([[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(bsz)])</span>
+<span id="cb3-16">d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">256</span></span>
+<span id="cb3-17"></span>
+<span id="cb3-18">RTheta <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_RoPE(tokens, d_model)</span>
+<span id="cb3-19"></span>
+<span id="cb3-20">matrix <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.matmul(RTheta, RTheta.transpose(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>))</span>
+<span id="cb3-21"></span>
+<span id="cb3-22">matrix[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]</span></code></pre></div></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>tensor([[1.0000, 0.0000],
+        [0.0000, 1.0000]])</code></pre>
+</div>
+</div>
+<ul>
+<li>Below Code shows how to integrate RoPE while calculating attention</li>
+</ul>
+<div id="b71e0b22" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb5-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> nn</span>
+<span id="cb5-3"></span>
+<span id="cb5-4"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> SimpleAttention(nn.Module):</span>
+<span id="cb5-5">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, d_model, hidden_dim):</span>
+<span id="cb5-6">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">super</span>().<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>()</span>
+<span id="cb5-7">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.hidden_dim <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> hidden_dim</span>
+<span id="cb5-8">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.q <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Linear(in_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> d_model, out_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> hidden_dim)</span>
+<span id="cb5-9">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.k <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Linear(in_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> d_model, out_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> hidden_dim)</span>
+<span id="cb5-10">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.v <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> nn.Linear(in_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> d_model, out_features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> hidden_dim)</span>
+<span id="cb5-11">    </span>
+<span id="cb5-12">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> forward(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, x, rotary_emb):</span>
+<span id="cb5-13">        bsz, seq_len, d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> x.shape</span>
+<span id="cb5-14">        query <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.q(x)</span>
+<span id="cb5-15">        key <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.k(x)</span>
+<span id="cb5-16">        value <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.v(x)</span>
+<span id="cb5-17"></span>
+<span id="cb5-18">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> rotary_emb <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">is</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>:</span>
+<span id="cb5-19">            bsz, seq_len, d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> x.shape</span>
+<span id="cb5-20">            query <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> query.view(bsz, seq_len, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.hidden_dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb5-21">            key <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> key.view(bsz, seq_len, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.hidden_dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb5-22">            query <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>  torch.matmul(rotary_emb, query).view(bsz, seq_len, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.hidden_dim)</span>
+<span id="cb5-23">            key <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>  torch.matmul(rotary_emb, key).view(bsz, seq_len, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.hidden_dim)</span>
+<span id="cb5-24">        </span>
+<span id="cb5-25">        scores <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.softmax(torch.matmul(query, key.transpose(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>))<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.hidden_dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>), dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb5-26">        final <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.matmul(scores, value)</span>
+<span id="cb5-27">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> final</span>
+<span id="cb5-28"></span>
+<span id="cb5-29">bsz <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span>
+<span id="cb5-30">tokens <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor([[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(bsz)])</span>
+<span id="cb5-31">d_model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">256</span></span>
+<span id="cb5-32">embedding <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.randn(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>tokens.shape, d_model)</span>
+<span id="cb5-33"></span>
+<span id="cb5-34">RTheta <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_RoPE(tokens, d_model)</span>
+<span id="cb5-35"></span>
+<span id="cb5-36">model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> SimpleAttention(d_model, d_model)</span>
+<span id="cb5-37"></span>
+<span id="cb5-38">out <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model(embedding, RTheta)</span>
+<span id="cb5-39"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(out.shape)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch.Size([2, 2, 256])</code></pre>
+</div>
+</div>
+</section>
+<section id="the-10000" class="level3">
+<h3 class="anchored" data-anchor-id="the-10000">The 10000</h3>
+<ul>
+<li><p>As relative distance increases, the contribution of later dimension of embedding also increases in attention calculation.</p>
+<ul>
+<li>For example, for smaller relative distance, the earlier dimensions only change but not the later ones as we can see in below figure, thus only earlier dimensions contribute to attention
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Rotary Position Embedding/smaller_rd.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+<li>for larger relative distance, later dimensions also get under significant modification as we can see in below figure, thus earlier as well as later dimensions contribute to attention
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Rotary Position Embedding/larger_rd.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+</ul></li>
+<li><p>Why 10000?</p>
+<ul>
+<li>If we chose some smaller value, then even later dimensions gets modified aggressively for smaller relative distances and thus changing the attention score agrressively</li>
+<li>If we chose some larger value then even earlier dimensions didnt get modified for larger relative distances and thus attention does not change much at all, the relative distance must need to be much larger for significant contribution to attention.</li>
+<li>Basically this calculates how quickly attention gets sensitive to relative positional difference</li>
+<li>As relative distance increases, the cosine similarity deacreses [Attention Decay], and this is what we want, closer tokens attend to each other more than tokens far apart from each other as we can see from below figure.
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/Rotary Position Embedding/attention_decay.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+</ul></li>
+<li><p>Llama 3 used 500,000 as base frequency stating that it will lower the attention decay and thus model will be able to attend far apart tokens more meaningfully</p></li>
+<li><p>As we can see in below figure, cosine similarity decreases very smoothly, thus will help in case of longer contexts</p>
+<figure style="text-align: center;" class="figure">
+<p><img src="https://riteshrm.github.io/posts/Rotary Position Embedding/attention_decay500k.png" style="width:80%" class="figure-img"></p>
+<figcaption>
+</figcaption>
+</figure></li>
+<li><p>It was believed that due to this attention decay, RoPE works very well</p></li>
+<li><p>But <a href="https://arxiv.org/abs/2410.06205">Round and Round We Go! What makes Rotary Positional Encodings useful?</a> finds out something else is working under the hood which makes rope good at positional encoding.</p>
+<ul>
+<li>They found out that this decay happens only in specific scenarios</li>
+<li>If two embeddings had negative cosine similarity then instead of decreasing they might increase.</li>
+<li>So what makes rope good
+<ul>
+<li>Lower Dimension Embeddings : High Frequency</li>
+<li>Later Dimension Embeddings : Low Frequency</li>
+<li>Low frequency dimensions dominate the attention dot product, whereas high frequency dimensions rotates heavily thus heavily dominated by positional information.</li>
+<li>Semantic heads rely heavily on low frequency dimensions as a result even if distance increases, it has minimal impact on semantic dot product in case of long context if we chose 500k</li>
+<li>If we have long context and base fequency is 10k then it is possible that for large postion difference even the low frequency dimensions might have gone under aggressive transformation, thus heavily impacting the semantic attention</li>
+<li>And if we chose 500k then the low frequency dimensions will not go under heavy rotation thus preserving the semantic meaning and helping to cover long range context</li>
+</ul></li>
+<li>So we can say that:
+<ul>
+<li>High Frequency means positional information encoding.</li>
+<li>Low Frequency means semantic information encoding.</li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -652,9 +1746,9 @@ Lower dimension similarity changes somewhat aggressively to capture local inform
   <media:content url="https://riteshrm.github.io/posts/Position Encoding/thumbnail.png" medium="image" type="image/png" height="96" width="144"/>
 </item>
 <item>
-  <title>AI Engineering By Chip Huyen</title>
+  <title>AI Engineering: Chapter-Wise Summary</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
-  <link>https://riteshrm.github.io/posts/AI Engineering By Chip Huyen/</link>
+  <link>https://riteshrm.github.io/posts/AI Engineering/</link>
   <description><![CDATA[ 
 
 
@@ -936,7 +2030,7 @@ Fine-tune released models for specific downstream tasks</li>
 </ul></li>
 </ul>
 <figure style="text-align: center;" class="figure">
-<img src="https://riteshrm.github.io/posts/AI Engineering By Chip Huyen/weight_visualization.png" style="width:80%" class="figure-img">
+<img src="https://riteshrm.github.io/posts/AI Engineering/weight_visualization.png" style="width:80%" class="figure-img">
 <figcaption>
 Figure 2.1: Visualization of the weight composition of a transformer model.
 </figcaption>
@@ -997,7 +2091,7 @@ Figure 2.1: Visualization of the weight composition of a transformer model.
 </ul></li>
 </ul>
 <figure style="text-align: center;" class="figure">
-<img src="https://riteshrm.github.io/posts/AI Engineering By Chip Huyen/traing_work_flow_of_llm.png" style="width:80%" class="figure-img">
+<img src="https://riteshrm.github.io/posts/AI Engineering/traing_work_flow_of_llm.png" style="width:80%" class="figure-img">
 <figcaption>
 Figure 2.2: Training workflow of a large language model.
 </figcaption>
@@ -1537,12 +2631,12 @@ Figure 2.2: Training workflow of a large language model.
 
  ]]></description>
   <category>Applied ML</category>
-  <guid>https://riteshrm.github.io/posts/AI Engineering By Chip Huyen/</guid>
+  <guid>https://riteshrm.github.io/posts/AI Engineering/</guid>
   <pubDate>Tue, 13 Jan 2026 00:00:00 GMT</pubDate>
-  <media:content url="https://riteshrm.github.io/posts/AI Engineering By Chip Huyen/resized_thumbnail.png" medium="image" type="image/png" height="82" width="144"/>
+  <media:content url="https://riteshrm.github.io/posts/AI Engineering/resized_thumbnail.png" medium="image" type="image/png" height="82" width="144"/>
 </item>
 <item>
-  <title>Attention</title>
+  <title>Attention Mechanism</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
   <link>https://riteshrm.github.io/posts/Attention Mechanism/</link>
   <description><![CDATA[ 
@@ -1552,11 +2646,12 @@ Figure 2.2: Training workflow of a large language model.
 
 
 <!-- - In this blog, we will try to understand how different attention mechanisms work alongside vanilla attention from 2017 paper -->
-<!-- - For the code part, you can checkout this [link](https://github.com/riteshrm/Quantization-in-Depth-deeplearning.ai-) -->
+<section id="motivation" class="level2">
+<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
 <section id="issue-with-rnns" class="level3">
 <h3 class="anchored" data-anchor-id="issue-with-rnns">Issue with RNNs</h3>
 <ul>
-<li>Informaton Bottleneck:- If sentence is too much long, they needed to compress all the previous token information in just a single vector h</li>
+<li>Information Bottleneck:- If sentence is too much long, they needed to compress all the previous token information in just a single vector h</li>
 <li>Sequential Nature:- All the tokens being processed one by one</li>
 </ul>
 </section>
@@ -1567,47 +2662,66 @@ Figure 2.2: Training workflow of a large language model.
 <li><img src="https://latex.codecogs.com/png.latex?%5Cleft(%5Cfrac%7Bu%7D%7Bv%7D%5Cright)'%20=%20%5Cfrac%7Bu'v%20-%20uv'%7D%7Bv%5E2%7D">.</li>
 </ul>
 </section>
+</section>
+<section id="scaled-dot-product-attention" class="level2">
+<h2 class="anchored" data-anchor-id="scaled-dot-product-attention">Scaled Dot-Product Attention</h2>
 <section id="transformers" class="level3">
 <h3 class="anchored" data-anchor-id="transformers">Transformers</h3>
 <ul>
 <li>Given a sequence of length N, where each token is represented by d_model numbers, we compute three matrices
 <ul>
-<li>Query = XWq (what I’m looking for)</li>
-<li>Key = XWk (what I have)</li>
-<li>Value = XWv (the information I’ll give if I’m relevant)</li>
-<li>Wq and Wk are of same shape and to maintain the symmetry Wv is also kept to be of same shape, Wq,Wk [d_model, d_k] and Wv [d_model, Dv]</li>
+<li><img src="https://latex.codecogs.com/png.latex?Query%20=%20XW_q"> (what I’m looking for)</li>
+<li><img src="https://latex.codecogs.com/png.latex?Key%20=%20XW_k"> (what I have)</li>
+<li><img src="https://latex.codecogs.com/png.latex?Value%20=%20XW_v"> (the information I’ll give if I’m relevant)</li>
+<li><img src="https://latex.codecogs.com/png.latex?W_q"> and <img src="https://latex.codecogs.com/png.latex?W_k"> are of same shape and to maintain the symmetry <img src="https://latex.codecogs.com/png.latex?W_v"> is also kept to be of same shape, <img src="https://latex.codecogs.com/png.latex?W_q">, <img src="https://latex.codecogs.com/png.latex?W_k"> [<img src="https://latex.codecogs.com/png.latex?d_%7Bmodel%7D">, <img src="https://latex.codecogs.com/png.latex?d_k">] and <img src="https://latex.codecogs.com/png.latex?W_v"> [<img src="https://latex.codecogs.com/png.latex?d_%7Bmodel%7D">, <img src="https://latex.codecogs.com/png.latex?d_k">]</li>
 </ul></li>
 <li>Now to find out which key is more relevant to given queries we do matrix multiplication and the finally apply softmax to get probability
 <ul>
-<li>score = QueryKey^T</li>
-<li>attn = softmax(score/sqrt(d_k))</li>
+<li>score = <img src="https://latex.codecogs.com/png.latex?QueryKey%5ET"></li>
+<li>attn = <img src="https://latex.codecogs.com/png.latex?softmax(%5Cfrac%7Bscore%7D%7B%5Csqrt%7Bd_k%7D%7D)"></li>
 <li>Why scaling factor
 <ul>
 <li>this score dot product has variance of d_k, which causes instability in backpropagation
 <ul>
-<li>lets say we have two vectors q and k of dimension d_k</li>
-<li>E[qi]=E[ki] = 0</li>
-<li>var[qi]=var[ki] = 1</li>
-<li>then E[q.k] = 0 but var[q.k] = d_k <a href="https://funnywii.com/upload/proof.pdf">link</a></li>
+<li>let’s say we have two vectors q and k of dimension d_k</li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BE%7D%5Bq_i%5D%20%20=%20%5Cmathbb%7BE%7D%5Bk_i%5D%20=%200"></li>
+<li><img src="https://latex.codecogs.com/png.latex?var%5Bq_i%5D=var%5Bk_i%5D%20=%201"></li>
+<li>then <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BE%7D%5Bq.k%5D%20=%200"> but <img src="https://latex.codecogs.com/png.latex?var%5Bq.k%5D%20=%20d_k"> <a href="https://funnywii.com/upload/proof.pdf">link</a></li>
 </ul></li>
-<li>the derivative of softmax contains some terms which if not normalizaied lead to gradient nearly 0 becuase of this larger variance</li>
+<li>the derivative of softmax contains some terms which if not normalized lead to gradient nearly 0 because of this larger variance</li>
 <li><img src="https://latex.codecogs.com/png.latex?%5Ctext%7BSoftmax%7D(z_i)%20=%20%5Cfrac%7Be%5E%7Bz_i%7D%7D%7B%5Csum_j%20e%5E%7Bz_j%7D%7D"></li>
 <li><img src="https://latex.codecogs.com/png.latex?%5Cfrac%7B%5Cpartial%20%5Ctext%7BSoftmax%7D(z)_i%7D%7B%5Cpartial%20z_j%7D%20=%20%5Ctext%7BSoftmax%7D(z)_i%20(%5Cdelta_%7Bij%7D%20-%20%5Ctext%7BSoftmax%7D(z)_j)"></li>
 <li>If <img src="https://latex.codecogs.com/png.latex?z_i"> is much larger than other elements, <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BSoftmax%7D(z)_i%20%5Capprox%201">.</li>
 <li>If <img src="https://latex.codecogs.com/png.latex?z_i"> is much smaller, <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BSoftmax%7D(z)_i%20%5Capprox%200">.</li>
-<li>So incase of jacobian matrix, considering a simple case where query 0 attends all the keys
+<li>So in case of jacobian matrix, considering a simple case where query 0 attends all the keys
 <ul>
 <li>Diagonal: <img src="https://latex.codecogs.com/png.latex?s_1(1-s_1)%20%5Capprox%201(0)%20=%200">.</li>
 <li>Off-Diagonal: <img src="https://latex.codecogs.com/png.latex?-s_1%20s_2%20%5Capprox%20-1(0)%20=%200">.</li>
 </ul></li>
-<li>to enforce unit variance, we apply normalization by dividng the score by standard deviation i.e.&nbsp;sqrt(d_k)</li>
+<li>to enforce unit variance, we apply normalization by dividing the score by standard deviation i.e.&nbsp;<img src="https://latex.codecogs.com/png.latex?%5Csqrt%7Bd_k%7D"></li>
 </ul></li>
 </ul></li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The scaling factor keeps the variance of the dot-product scores controlled as <img src="https://latex.codecogs.com/png.latex?d_k"> grows, which helps avoid softmax saturation and near-zero gradients.</p>
+</div>
+</div>
 </section>
+</section>
+<section id="pytorch-implementations" class="level2">
+<h2 class="anchored" data-anchor-id="pytorch-implementations">PyTorch Implementations</h2>
 <section id="single-head-vanilla-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="single-head-vanilla-attention-pytorch-code">Single Head Vanilla Attention PyTorch Code</h3>
-<div id="c93a2261" class="cell" data-execution_count="1">
+<div id="a2f84f83" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -1856,13 +2970,13 @@ font-style: inherit;">:.3f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 0.550</code></pre>
+<pre><code>Time taken: 0.531</code></pre>
 </div>
 </div>
 </section>
 <section id="multi-head-vanilla-attention-for-loop-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="multi-head-vanilla-attention-for-loop-pytorch-code">Multi Head Vanilla Attention For loop PyTorch Code</h3>
-<div id="cbe6a191" class="cell" data-execution_count="2">
+<div id="30acb913" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -2269,13 +3383,13 @@ font-style: inherit;">:.3f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 0.925</code></pre>
+<pre><code>Time taken: 1.052</code></pre>
 </div>
 </div>
 </section>
 <section id="multi-head-vanilla-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="multi-head-vanilla-attention-pytorch-code">Multi Head Vanilla Attention PyTorch Code</h3>
-<div id="e6717b4d" class="cell" data-execution_count="3">
+<div id="47fad175" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -2635,44 +3749,57 @@ font-style: inherit;">:.3f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 2.665</code></pre>
+<pre><code>Time taken: 3.395</code></pre>
 </div>
 </div>
 </section>
-<section id="linear-attention" class="level3">
-<h3 class="anchored" data-anchor-id="linear-attention">Linear Attention</h3>
+</section>
+<section id="linear-attention" class="level2">
+<h2 class="anchored" data-anchor-id="linear-attention">Linear Attention</h2>
 <ul>
 <li><p>Instead of using softmax, it tries to make it more general where this softmax function can be replaced by any other function</p></li>
 <li><p>Kernel is some function which takes in two input vectors (query and key) and gives a single scalar output i.e.&nbsp;similarity score.</p></li>
 <li><p>This softmax can also be replaced by some kernel which is some kind of similarity function (i.e.&nbsp;to have property of a similarity function).</p></li>
 <li><p>Kernel can be decomposed into linear functions (feature functions)</p>
 <ul>
-<li>K(a, b) = phi(a)Tphi(b)</li>
+<li><img src="https://latex.codecogs.com/png.latex?K(a,%20b)%20=%20%5Cphi(a)%5ET%5Cphi(b)"></li>
 </ul></li>
 <li><p>Feature function takes a vector as input and projects it into new feature space</p></li>
-<li><p>The basic idea is instead of doing complicated non-linear function like softmax, cant we just project a and b into highr dimensional space and just do the linear inner product</p></li>
+<li><p>The basic idea is instead of doing complicated non-linear function like softmax, can’t we just project a and b into higher dimensional space and just do the linear inner product</p></li>
 <li><p>The attention mechanism is defined as <img src="https://latex.codecogs.com/png.latex?A_l(x)%20=%20V'%20=%20%5Ctext%7Bsoftmax%7D%20%5Cleft(%20%5Cfrac%7BQK%5ET%7D%7B%5Csqrt%7BD%7D%7D%20%5Cright)%20V">.</p></li>
-<li><p>We can make the above equation more generalised by using a simlarity function</p></li>
+<li><p>We can make the above equation more generalized by using a similarity function</p></li>
 <li><p><img src="https://latex.codecogs.com/png.latex?V'_i%20=%20%5Cfrac%7B%5Csum_%7Bj=1%7D%5EN%20%5Ctext%7Bsim%7D(Q_i,%20K_j)%20V_j%7D%7B%5Csum_%7Bj=1%7D%5EN%20%5Ctext%7Bsim%7D(Q_i,%20K_j)%7D"></p></li>
 <li><p>where we can think of <img src="https://latex.codecogs.com/png.latex?%5Ctext%7Bsim%7D(q,%20k)%20=%20%5Cexp%20%5Cleft(%20%5Cfrac%7Bq%5ET%20k%7D%7B%5Csqrt%7BD%7D%7D%20%5Cright)"></p></li>
 <li><p>only constraint on sim is to give non-negative outputs</p></li>
 <li><p>given a kernel with feature representation <img src="https://latex.codecogs.com/png.latex?%5Cvarphi(x)">, we can rewrite the above equation</p></li>
 <li><p><img src="https://latex.codecogs.com/png.latex?V'_i%20=%20%5Cfrac%7B%5Csum_%7Bj=1%7D%5EN%20%5Cphi(Q_i)%5ET%20%5Cphi(K_j)%20V_j%7D%7B%5Csum_%7Bj=1%7D%5EN%20%5Cphi(Q_i)%5ET%20%5Cphi(K_j)%7D"></p></li>
-<li><p>By making the use of associative property of matrix multiplication, we can take out Q from summation, because it is independet of j</p></li>
+<li><p>By making the use of associative property of matrix multiplication, we can take out Q from summation, because it is independent of j</p></li>
 <li><p><img src="https://latex.codecogs.com/png.latex?V'_i%20=%20%5Cfrac%7B%5Cphi(Q_i)%5ET%20%5Csum_%7Bj=1%7D%5EN%20%5Cphi(K_j)%20V_j%5ET%7D%7B%5Cphi(Q_i)%5ET%20%5Csum_%7Bj=1%7D%5EN%20%5Cphi(K_j)%7D"> (4)</p></li>
 <li><p>And finally we can convert it into vectorized format</p></li>
 <li><p><img src="https://latex.codecogs.com/png.latex?%5Cleft(%20%5Cphi(Q)%20%5Cphi(K)%5ET%20%5Cright)%20V%20=%20%5Cphi(Q)%20%5Cleft(%20%5Cphi(K)%5ET%20V%20%5Cright)"></p></li>
 <li><p>It is linear because we can compute numerator and denominator and use it for all the queries [The eqn before vectorized one]</p></li>
 <li><p>For softmax attention, complexity is O(N^2 * max(D, M)), where D is dimensionality for query and key, M is for value</p></li>
 <li><p>For linear attention, complexity is O(NCM), where C is feature map projection dim and M is for value</p></li>
-<li><p>Linearization of exact spftmax attention is not feasible because of the exponential kernel, which is of infinte dimension and cant be stored on a computer (expansion of e^x is infinitely many terms)</p></li>
-<li><p>Thats why it is better to use some kind of polynomial feature representation</p></li>
+<li><p>Linearization of exact softmax attention is not feasible because of the exponential kernel, which is of infinite dimension and can’t be stored on a computer (expansion of e^x is infinitely many terms)</p></li>
+<li><p>That’s why it is better to use some kind of polynomial feature representation</p></li>
 <li><p>The author chose elu instead of relu to avoid setting gradients to 0 when input was negative</p></li>
 </ul>
-</section>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The key trick in linear attention is to avoid explicitly creating <img src="https://latex.codecogs.com/png.latex?%5Cphi(Q)%5Cphi(K)%5ET"> first. By computing <img src="https://latex.codecogs.com/png.latex?%5Cphi(K)%5ET%20V"> before multiplying with <img src="https://latex.codecogs.com/png.latex?%5Cphi(Q)">, the attention can be computed more efficiently for long sequences.</p>
+</div>
+</div>
 <section id="single-head-linear-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="single-head-linear-attention-pytorch-code">Single Head Linear Attention PyTorch Code</h3>
-<div id="5530f036" class="cell" data-execution_count="4">
+<div id="9d759725" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -2707,7 +3834,7 @@ font-style: inherit;">"cpu"</span>)</span>
 <span id="cb7-8"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
-font-style: inherit;">class</span> SingleHeadLinearaAttention(nn.Module):</span>
+font-style: inherit;">class</span> SingleHeadLinearAttention(nn.Module):</span>
 <span id="cb7-9">    <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -2862,7 +3989,7 @@ font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1e-6</span> <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># To use in case we dont divide by 0</span></span>
+font-style: inherit;"># To use in case we don't divide by 0</span></span>
 <span id="cb7-32"></span>
 <span id="cb7-33">        <span class="cf" style="color: #003B4F;
 background-color: null;
@@ -2888,7 +4015,7 @@ font-style: inherit;">512</span></span>
 <span id="cb7-37"></span>
 <span id="cb7-38">model <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">=</span> SingleHeadLinearaAttention(in_features <span class="op" style="color: #5E5E5E;
+font-style: inherit;">=</span> SingleHeadLinearAttention(in_features <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> d_model, out_features <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -2953,11 +4080,48 @@ font-style: inherit;">:.3f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 0.070</code></pre>
+<pre><code>Time taken: 0.130</code></pre>
 </div>
 </div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Main idea</th>
+<th>Complexity bottleneck</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Single Head Vanilla Attention</td>
+<td>One set of query, key, and value projections</td>
+<td>Forms an <img src="https://latex.codecogs.com/png.latex?N%20%5Ctimes%20N"> attention matrix</td>
+</tr>
+<tr class="even">
+<td>Multi Head Vanilla Attention For loop</td>
+<td>Computes each head separately and concatenates outputs</td>
+<td>Still forms one <img src="https://latex.codecogs.com/png.latex?N%20%5Ctimes%20N"> matrix per head</td>
+</tr>
+<tr class="odd">
+<td>Multi Head Vanilla Attention</td>
+<td>Vectorizes the heads into one batched operation</td>
+<td>Same quadratic attention cost, but better parallelism</td>
+</tr>
+<tr class="even">
+<td>Single Head Linear Attention</td>
+<td>Uses a feature map and associativity to avoid explicit softmax attention</td>
+<td>Depends on feature dimension instead of storing full <img src="https://latex.codecogs.com/png.latex?N%20%5Ctimes%20N"> attention</td>
+</tr>
+</tbody>
+</table>
 
 
+</section>
 </section>
 
  ]]></description>
@@ -2967,7 +4131,7 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
   <media:content url="https://riteshrm.github.io/posts/Attention Mechanism/attn_resized_thumbnail.png" medium="image" type="image/png" height="82" width="144"/>
 </item>
 <item>
-  <title>Hands on LLMs</title>
+  <title>Hands on LLMs: Chapter-Wise Summary</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
   <link>https://riteshrm.github.io/posts/Hands on LLMs/</link>
   <description><![CDATA[ 
@@ -3132,9 +4296,9 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
   <media:content url="https://riteshrm.github.io/posts/Hands on LLMs/traing_work_flow_of_llm.png" medium="image" type="image/png" height="75" width="144"/>
 </item>
 <item>
-  <title>Meta Learning Book Chapter Wise Summary Points</title>
+  <title>Meta Learning: Chapter-Wise Summary</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
-  <link>https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/</link>
+  <link>https://riteshrm.github.io/posts/Meta Learning/</link>
   <description><![CDATA[ 
 
 
@@ -3266,7 +4430,7 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
 <section id="debugging-with-ease-is-a-superpower-" class="level1">
 <h1>Debugging with ease is a superpower:-</h1>
 <ul>
-<li><a href="https://x.com/radekosmulski/status/945739571735748609">Radek Osmulski’s Favorite recent jupyter notebook discovery - the %debug magic:</a></li>
+<li><a href="https://x.com/radekosmulski/status/945739571735748609">Radek Osmulski’s Favorite recent Jupyter notebook discovery - the %debug magic:</a></li>
 </ul>
 </section>
 <section id="time-yourself-" class="level1">
@@ -3384,8 +4548,8 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
 <ul>
 <li>Write blogs and tutorials and cheatsheets.</li>
 <li>Speak at meetups and conferences.</li>
-<li>Ask and answer things on Stackoverflow or Reddit. Avoid the walled gardens like Slack and Discord, they’re not public.</li>
-<li>Make Youtube videos or Twitch streams.</li>
+<li>Ask and answer things on Stack Overflow or Reddit. Avoid the walled gardens like Slack and Discord, they’re not public.</li>
+<li>Make YouTube videos or Twitch streams.</li>
 <li>Start a newsletter.</li>
 <li>Draw cartoons</li>
 </ul></li>
@@ -3425,9 +4589,9 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
 
  ]]></description>
   <category>Deep Learning</category>
-  <guid>https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/</guid>
+  <guid>https://riteshrm.github.io/posts/Meta Learning/</guid>
   <pubDate>Sat, 06 Jul 2024 00:00:00 GMT</pubDate>
-  <media:content url="https://riteshrm.github.io/posts/Meta Learning By Radek Osmulski Chapter Wise Summary Points/metalearning_resized_thumbnail.png" medium="image" type="image/png" height="82" width="144"/>
+  <media:content url="https://riteshrm.github.io/posts/Meta Learning/metalearning_resized_thumbnail.png" medium="image" type="image/png" height="82" width="144"/>
 </item>
 <item>
   <title>Quantization in Depth</title>

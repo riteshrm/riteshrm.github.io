@@ -11,7 +11,7 @@ description: "Introductory notes on model quantization, lower-precision data typ
 
 - For the code part, you can checkout this [link](https://github.com/riteshrm/Quantization-Fundamentals-deeplearning.ai-)
 
-- **Quantizatio** helps to reduce the size of the model with little or no degradation. 
+- **Quantization** helps to reduce the size of the model with little or no degradation. 
 
 ### Handling Big Models
 
@@ -19,7 +19,7 @@ Current model compression technique:-
 
 1. Pruning:-remove connections that do not improve the model.
 
-2. Knowledge Distillation:- Train a smaller model(Student) using the original model(Teacher). Cons:-You need to have enough hardware to fit both teacher as weel student both.
+2. Knowledge Distillation:- Train a smaller model(Student) using the original model(Teacher). Cons:-You need to have enough hardware to fit both teacher as well student both.
 
 ### Options to quantize:-
 
@@ -33,7 +33,7 @@ Current model compression technique:-
 2. You can quantize activations that propagate through the layers of neural network
 
 
-Idea:Store the parameters of the model in ower precision
+Idea:Store the parameters of the model in lower precision
 
 ### Data Types and Sizes
 
@@ -124,7 +124,7 @@ print(torch.finfo(torch.bfloat16))
 
 + when a higher data type converted to a lower data type, it results in loss of data
 
-* Adavantages:
+* Advantages:
   + Reduced memory footprint
   + Increased compute and speed (Depends on the hardware)
 
@@ -134,7 +134,7 @@ print(torch.finfo(torch.bfloat16))
 * Use case:
   + Mixed precision training
     - Do computation in smaller precision (FP16/BF16/FP8)
-    - Store and update the wights in higher precision (FP32)
+    - Store and update the weights in higher precision (FP32)
 
 
 ### Loading Models by data type
@@ -153,7 +153,7 @@ print(torch.finfo(torch.bfloat16))
 + model.get_memory_footprint()/1e+6
 
 + torch.set_default_dtype(desired_dtype) # By doing so we can directly load the model in desired dtype without loading in full precision and then quantizing it
-+ set it back to float32 to avoid unnecesary behaviors
++ set it back to float32 to avoid unnecessary behaviors
 
 ### Quantization Theory
 
@@ -188,13 +188,13 @@ print(torch.finfo(torch.bfloat16))
     + How to get min and max range of activations?
       - Gather sample input data.
       - Run inference.
-      - Calculate min/mac of activations
+      - Calculate min/max of activations
   - Result: better quantized activations
 + Quantization Aware Training
   - Training in a way that controls how the model performs once it is quantized.
   - Intermediate state holds both(quantized as well as unquantized weights).
   - Use quantized version of model in forward pass (e.g. BF16)
-  - Update original, unquantized version of model weights during back propogation (e.g. FP32)
+  - Update original, unquantized version of model weights during back propagation (e.g. FP32)
 
 + In L4 there is a function in helper.py to calculate the model size
 
@@ -219,7 +219,7 @@ Even if it looks very simple, it is used in many SOTA quantization methods:
   - q:- quantized value(e.g. in INT8)
   - z:- zero point(e.g. INT8)
 
-+ How do we get scale and zero pint??
++ How do we get scale and zero point??
   - s = (r_max-r_min)/(q_max-q_min)
   - z = int(round(q_min-r_min/s))
 

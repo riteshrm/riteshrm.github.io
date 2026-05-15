@@ -1,10 +1,10 @@
 ---
-title: "Hands on LLMs"
+title: "Hands on LLMs: Chapter-Wise Summary"
 author: "Ritesh Kumar Maurya"
 date: "2025-01-27"
 categories: [Applied ML]
 image: "traing_work_flow_of_llm.png"
-description: "Learning notes from Hands-On Large Language Models covering tokenizers, embeddings, transformer blocks, and LLM components."
+description: "Work-in-progress chapter notes from Hands-On Large Language Models."
 ---
 
 - This is completely based on [Hands on LLMs](https://www.oreilly.com/library/view/hands-on-large-language/9781098150952/)

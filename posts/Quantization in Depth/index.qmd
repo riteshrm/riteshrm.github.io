@@ -146,10 +146,10 @@ def get_q_scale_and_zero_point(tensor, dtype=torch.int8):
 ```
     
 
-### Symmetric vs Asymmetrci Mode
-+ Assymetric Mode:-
+### Symmetric vs Asymmetric Mode
++ Asymmetric Mode:-
   - map [r_max, r_min] to [q_max, q_min]
-  - This is what we have implemnted above
+  - This is what we have implemented above
 + Symmetric Mode:-
   - map [-r_max, r_max] to [-q_max, q_max]
     + where r_max = max(|tensor|)
@@ -195,7 +195,7 @@ def linear_q_symmetric(tensor, dtype=torch.int8):
   - Symmetric mode is much simpler compared to asymmetric mode.
 + Memory: We don't have to store zero-point for symmetric quantization
 
-+ **We use symmetric quantization for 8-bit, but as we go for lower bits such as 2 or 4 bits, we use asyyemtric quantization**
++ **We use symmetric quantization for 8-bit, but as we go for lower bits such as 2 or 4 bits, we use asymmetric quantization**
 
 ### Finer Granularity for more Precision
 
@@ -348,7 +348,7 @@ class W8A16LinearLayer(nn.Module):
         )
         
         self.register_buffer("scales", 
-                             torch.randn((out_features), dtype=dtype)) # We are intereseted in inference only
+                             torch.randn((out_features), dtype=dtype)) # We are interested in inference only
         
         if bias:
             self.register_buffer("bias", 
@@ -414,7 +414,7 @@ print("Weights before:\n" , module.int8_weights)
 random_matrix = torch.randn((4, 8), dtype=torch.bfloat16)
 module.quantize(random_matrix)
 print("Weights After:\n" , module.int8_weights)
-print("Average quantiation error:-",(random_matrix - module.int8_weights 
+print("Average quantization error:-",(random_matrix - module.int8_weights 
  * module.scales.unsqueeze(1)).abs().mean())
 ```
 
@@ -615,7 +615,7 @@ pipe("Hello today I am giving a course about", max_new_tokens=10)
 + Weights packing is important for storing quantized weights, because torch.int4 is not available as of today, so we need to store and load the weights in int8
 + This is not ideal because:
   - tensor will occupy 8-bit per datapoint and might add a considerable overhead for large models
-  - There would be no point of quantizing to 2/4 bits becuase we are still using 8-bit
+  - There would be no point of quantizing to 2/4 bits because we are still using 8-bit
 
 + So, we need to pack values
 + Consider a tensor with 4 values each with 2-bit(0,1,2,3) precision but stored in 8-bit
@@ -628,7 +628,7 @@ pipe("Hello today I am giving a course about", max_new_tokens=10)
 + We can pack all these values into a single 8-bit value as 177
   - 177:- 10110001
 
-+ Adavantages:-
++ Advantages:-
   - It reflects the true memory footprint of the quantized weights
 Disadvantages:-
   - The unpacked tensors need to be a shape with a multiple of 8//nbits
@@ -691,7 +691,7 @@ import torch
 
 def pack_weights(uint8tensor, bits):
     if uint8tensor.shape[0] * bits % 8 != 0:
-        raise ValueError(f"The input shape needs to be a mutiple \
+        raise ValueError(f"The input shape needs to be a multiple \
         of {8 / bits} - got {uint8tensor.shape[0]}")
 
     num_values = uint8tensor.shape[0] * bits // 8
@@ -831,7 +831,7 @@ unpacked_tensor = torch.tensor([177, 255],
 unpack_weights(unpacked_tensor, 2)
 ```
 
-### Beyond Linear Qauntization
+### Beyond Linear Quantization
 
 + Emergent features at scale:- Simply some characteristics or features which appear at scale, when model is large.
 + Features predicted by the model meaning the magnitude of the hidden states started to get large thus making the classic quantization schemes quite obsolete, which led to classic linear quantization algorithms just failing on these models.
