@@ -1,105 +1,105 @@
 [
   {
-    "objectID": "posts/Variational AutoEncoder/index.html",
-    "href": "posts/Variational AutoEncoder/index.html",
+    "objectID": "posts/Variational Autoencoder/index.html",
+    "href": "posts/Variational Autoencoder/index.html",
     "title": "Variational Autoencoder",
     "section": "",
     "text": "This is mostly based on Understanding Variational Autoencoder and Variational Autoencoder - Model, ELBO, loss function and maths explained easily"
   },
   {
-    "objectID": "posts/Variational AutoEncoder/index.html#cons-of-autoencoders",
-    "href": "posts/Variational AutoEncoder/index.html#cons-of-autoencoders",
+    "objectID": "posts/Variational Autoencoder/index.html#cons-of-autoencoders",
+    "href": "posts/Variational Autoencoder/index.html#cons-of-autoencoders",
     "title": "Variational Autoencoder",
     "section": "Cons of Autoencoders",
     "text": "Cons of Autoencoders\n\nThe encoded values can be used as representation but deep down they don’t have any meaningful information.\nThere is no semantic relationship between encoded data points like zebra or cat or tomato. They will be encoded but there will not be any similarity.\nSince everything is being encoded to the points, not distribution, we can not sample any new data point"
   },
   {
-    "objectID": "posts/Variational AutoEncoder/index.html#probability-vs-likelihood",
-    "href": "posts/Variational AutoEncoder/index.html#probability-vs-likelihood",
+    "objectID": "posts/Variational Autoencoder/index.html#probability-vs-likelihood",
+    "href": "posts/Variational Autoencoder/index.html#probability-vs-likelihood",
     "title": "Variational Autoencoder",
     "section": "Probability vs Likelihood",
     "text": "Probability vs Likelihood\n\nYou can check out In Statistics, Probability is not Likelihood for the same.\nConsider the weights of mice\n\n\nProbability\n\nLet’s say we have plotted all the weights which gives us mean 32 and std 2.5, now what is the probability of having a mouse which has weight between 32-34 is given by area under the curve\nP(weight b/w 32-34 | mean=32, std=2.5)\n\n\n\nLikelihood\n\nConsidering we have fixed data/samples what is the likelihood of the current mean and std, which is given by the value corresponding to given weight on Y-axis.\nBasically in this case we will have a continuous distribution with mean as 32 and std as 2.5 and then we will found out what is the likelihood of having 34 as weight.\nL(mean=32, std=2.5 | weight=34)\nWhile training we try to maximize the likelihood for our data points so that our model can represent the data samples as closely as possible\nDuring inference, we check the probability of given sample based on the params(mean and std) we have learned while maximizing the likelihood."
   },
   {
-    "objectID": "posts/Variational AutoEncoder/index.html#some-maths",
-    "href": "posts/Variational AutoEncoder/index.html#some-maths",
+    "objectID": "posts/Variational Autoencoder/index.html#some-maths",
+    "href": "posts/Variational Autoencoder/index.html#some-maths",
     "title": "Variational Autoencoder",
     "section": "Some Maths",
     "text": "Some Maths\n\nThe expectation \\mathbb{E}[x] = \\int x \\, p(x) \\, dx gives the mean. where x is value and p(x) is probability density and dx is tiny interval.\nSimply we can say that it is long run average for continuous random variable x where x∼p(x).\nSimilarly \\mathbb{E}[f(x)] = \\int f(x) \\, p(x) \\, dx\n\nf(x) = x^2 then \\mathbb{E}[x^2] = \\int x^2 \\, p(x) \\, dx\n\nSimilarly for discrete one is:\n\n\\mathbb{E}[X] = \\sum_{x} x \\, p(x), where x is value and p(x) is probability.\n\nChain rule of probability p(x, y) = p(x|y)p(y) = p(y|x)p(x)\nBayes’ Theorem\n\nP(x \\mid y) = \\frac{P(y \\mid x) \\, P(x)}{P(y)}\n\nKullback Leibler Divergence\n\nIt allows to measure the distance between two probability distributions.\nD_{\\text{KL}}(P \\| Q) = \\int_{-\\infty}^{\\infty} p(x) \\log \\frac{p(x)}{q(x)} \\, dx\nProperties:-\n\nNot symmetric i.e. $D_{}(P | Q) D_{}(Q | P) $\nD_{\\text{KL}}(P \\| Q) \\geq 0\nD_{\\text{KL}}(P \\| Q) = 0 if P=Q"
   },
   {
-    "objectID": "posts/Variational AutoEncoder/index.html#monte-carlo-estimation",
-    "href": "posts/Variational AutoEncoder/index.html#monte-carlo-estimation",
+    "objectID": "posts/Variational Autoencoder/index.html#monte-carlo-estimation",
+    "href": "posts/Variational Autoencoder/index.html#monte-carlo-estimation",
     "title": "Variational Autoencoder",
     "section": "Monte Carlo Estimation",
     "text": "Monte Carlo Estimation\n\nIt is a way to approximately compute expected value.\n\\mathbb{E}_{x \\sim p}[g(x)] = \\sum_{x} g(x) \\, p(x)\nTo get approximate expected value\n\nSample T IID(Independent and Identically Distributed) samples from P\nestimate expected value as:\n\n\\hat{g}(x_{1}....x_{T}) \\triangleq \\frac{1}{T}\\sum_{t=1}^{T} g(x_{t})"
   },
   {
-    "objectID": "posts/Variational AutoEncoder/index.html#monte-carlo-gradient-estimation",
-    "href": "posts/Variational AutoEncoder/index.html#monte-carlo-gradient-estimation",
+    "objectID": "posts/Variational Autoencoder/index.html#monte-carlo-gradient-estimation",
+    "href": "posts/Variational Autoencoder/index.html#monte-carlo-gradient-estimation",
     "title": "Variational Autoencoder",
     "section": "Monte Carlo Gradient Estimation",
     "text": "Monte Carlo Gradient Estimation\n\nSimilarly it is a way to estimate gradients when the objective contains an expectation over random variables."
   },
   {
-    "objectID": "posts/Variational AutoEncoder/index.html#likelihood-as-marginalization",
-    "href": "posts/Variational AutoEncoder/index.html#likelihood-as-marginalization",
+    "objectID": "posts/Variational Autoencoder/index.html#likelihood-as-marginalization",
+    "href": "posts/Variational Autoencoder/index.html#likelihood-as-marginalization",
     "title": "Variational Autoencoder",
     "section": "Likelihood as Marginalization",
     "text": "Likelihood as Marginalization\n\nWe can define the likelihood of our data as the marginalization over the joint probability with respect to the latent variable\n\np(x) = \\int p(x, z) dz = \\int p(x|z)p(z)dz\nNow what does above line means\n\nConsider we have only a single image and there are 3 latent codes which might have produced x then\np(x) = p(x|z_1)p(z_1) + p(x|z_2)p(z_2) + p(x|z_3)p(z_3)\nUsing chain rule we can write above equation as\np(x) = p(x, z_1) + p(x, z_2) + p(x, z_3)\nSo what if we have infinitely many z, so above formula to incorporate all z"
   },
   {
-    "objectID": "posts/Variational AutoEncoder/index.html#why-it-is-intractable",
-    "href": "posts/Variational AutoEncoder/index.html#why-it-is-intractable",
+    "objectID": "posts/Variational Autoencoder/index.html#why-it-is-intractable",
+    "href": "posts/Variational Autoencoder/index.html#why-it-is-intractable",
     "title": "Variational Autoencoder",
     "section": "Why It Is Intractable",
     "text": "Why It Is Intractable\n\nBut it is intractable because we would need to evaluate this integral over all latent variables z because it is of very high dimension.\nIntractable Problem:- A problem that can be solved in theory (e.g. given large but finite resources, especially time), but for which in practice any solution takes too many resources to be useful is known as intractable problem.\n\nLike guessing the wi-fi password of your neighbour. In theory you can generate all the possible combinations but it will take years.\n\nIn theory it is possible but practically it is not or we can use the chain rule of probability\n\np(x) = \\frac{p(x, z)}{p(z|x)}\n\nWe don’t have ground truth p(z|x) which is also what we are trying to find.\nNow it seems like chicken and egg problem like which came first\nWe want to calculate p(x) which depends on p(z|x) and p(z|x) depends on p(x)"
   },
   {
-    "objectID": "posts/Variational AutoEncoder/index.html#approximate-posterior",
-    "href": "posts/Variational AutoEncoder/index.html#approximate-posterior",
+    "objectID": "posts/Variational Autoencoder/index.html#approximate-posterior",
+    "href": "posts/Variational Autoencoder/index.html#approximate-posterior",
     "title": "Variational Autoencoder",
     "section": "Approximate Posterior",
     "text": "Approximate Posterior\n\nUsually, when we can’t find something we try to approximate it\n\np_{\\theta}(z|x) \\approx q_{\\phi}(z|x)\nWhere p_{\\theta}(z|x) is our true posterior(because we already assumed that z is from Normal distribution so p(z) is prior, and now given image x our assumption about z has changed for example if image was of face then now z might have some dimensions activated for face) parameterized by \\theta that we can’t evaluate due to its intractability and q_{\\phi}(z|x) is an approximate posterior parameterized by \\phi"
   },
   {
-    "objectID": "posts/Variational AutoEncoder/index.html#lets-do-some-maths",
-    "href": "posts/Variational AutoEncoder/index.html#lets-do-some-maths",
+    "objectID": "posts/Variational Autoencoder/index.html#lets-do-some-maths",
+    "href": "posts/Variational Autoencoder/index.html#lets-do-some-maths",
     "title": "Variational Autoencoder",
     "section": "Let’s Do Some Maths",
     "text": "Let’s Do Some Maths\n\nIntroducing q_{\\phi}(z|x)\n\n{\\log}p_{\\theta}(x) = {\\log}p_{\\theta}(x)\n= {\\log}p_{\\theta}(x) x 1 Multiply by 1\n= {\\log}p_{\\theta}(x) \\int q_{\\phi}(z|x) dz. Since \\int q_{\\phi}(z|x) dz = 1. because summation of all the z that could have produced x is 1, which is what we are trying to calculate. You can take analogy of discrete example also p(z_1|x) + p(z_2|x) = 1 if we consider only z which could have produced x.\n= {\\int\\log}p_{\\theta}(x)  q_{\\phi}(z|x) dz bring {\\log}p_{\\theta}(x) inside integral since it does not depend on z and can be treated as constant.\n= \\mathbb{E}_{z \\sim q_{\\phi}(z|x)}[{\\log}p_{\\theta}(x)]\n\nbasically above term is equal to {\\log}p_{\\theta}(x) but we want to somehow introduce z because {\\log}p_{\\theta}(x) is independent of z and using \\mathbb{E}[x] = \\int constant \\, p(x) \\, dx is constant because we can take constant outside and the remaining integral will give 1.\n\n= \\mathbb{E}_{z \\sim q_{\\phi}(z|x)}[{\\log}\\frac{p_{\\theta}(x, z)}{p_{\\theta}(z|x)}] Apply the equation p_{\\theta}(x) = \\frac{p_{\\theta}(x, z)}{p_{\\theta}(z|x)}\n= \\mathbb{E}_{z \\sim q_{\\phi}(z|x)}[{\\log}\\frac{p_{\\theta}(x, z)q_{\\phi}(z|x)}{p_{\\theta}(z|x)q_{\\phi}(z|x)}] Multiply by 1\n= \\mathbb{E}_{z \\sim q_{\\phi}(z|x)}[{\\log}\\frac{p_{\\theta}(x, z)}{q_{\\phi}(z|x)}] + \\mathbb{E}_{z \\sim q_{\\phi}(z|x)}[{\\log}\\frac{q_{\\phi}(z|x)}{p_{\\theta}(z|x)}] Split the expectation\n= \\mathbb{E}_{z \\sim q_{\\phi}(z|x)}[{\\log}\\frac{p_{\\theta}(x, z)}{q_{\\phi}(z|x)}] + D_{\\text{KL}}(q_{\\phi}(z|x) \\| p_{\\theta}(z|x)) By definition of KL Divergence\n{\\log}p_{\\theta}(x) = ELBO + D_{\\text{KL}}(q_{\\phi}(z|x) \\| p_{\\theta}(z|x)) where ELBO is evidence lower bound and second term is KL divergence since it will always be greater than 0\nSince we are trying to maximize the likelihood then even if we maximize the first term i.e. ELBO that will work for us since second term will always be greater than 0\nFor example\n\nTotal Compensation = Base Salary + Bonus(\\geq 0)\nTotal Compensation \\geq Base Salary\n\nFollowing the above analogy, we can also say that\n\n{\\log}p_{\\theta}(x) \\geq \\mathbb{E}_{z \\sim q_{\\phi}(z|x)}[{\\log}\\frac{p_{\\theta}(x, z)}{q_{\\phi}(z|x)}]\nSo if we maximize the right side then left side will also be maximised\n\n\n\n\nRewriting ELBO\n\n\\mathbb{E}_{z \\sim q_{\\phi}(z|x)}[{\\log}\\frac{p_{\\theta}(x, z)}{q_{\\phi}(z|x)}] = \\mathbb{E}_{z \\sim q_{\\phi}(z|x)}[{\\log}\\frac{p_{\\theta}(x|z)p_{\\theta}(z)}{q_{\\phi}(z|x)}] following chain rule of probability\n\\mathbb{E}_{z \\sim q_{\\phi}(z|x)}[\\log{p_{\\theta}(x | z)}] + \\mathbb{E}_{z \\sim q_{\\phi}(z|x)}[{\\log}\\frac{p_{\\theta}(z)}{q_{\\phi}(z|x)}] Split the expectation\n\\mathbb{E}_{z \\sim q_{\\phi}(z|x)}[\\log{p_{\\theta}(x | z)}] -  D_{\\text{KL}}(q_{\\phi}(z|x) \\| p_{\\theta}(z)) Using KL Divergence\nSo to maximize the whole term we need to maximize the first one and minimize the second term\nProfit = Revenue - Costs\nTo get maximum profit, we need to maximize revenue at the same time minimize the cost\n\n\n\n\n\n\n\n\nWhat Maximizing ELBO Means\n\nMaximizing ELBO means:\n\nMaximizing the first term: maximizing the reconstruction likelihood of the decoder\nMinimizing the second term: minimizing the distance between learned distribution and the prior belief we have over the latent variable\n\nWhen we want to maximize a function then we move in the direction of gradient\nWhen we want to minimize a function then we move against the direction of gradient\nL(\\theta, \\phi, x) = \\mathbb{E}_{z \\sim q_{\\phi}(z|x)}[{\\log}\\frac{p_{\\theta}(x, z)}{q_{\\phi}(z|x)}] expectation over {q_{\\phi}(z|x)}\n\n\n\n\n\n\n\nNote\n\n\n\nIn theory we maximize ELBO. In code, we usually minimize the negative ELBO, which becomes reconstruction loss plus KL loss."
   },
   {
-    "objectID": "posts/Variational AutoEncoder/index.html#why-we-need-it",
-    "href": "posts/Variational AutoEncoder/index.html#why-we-need-it",
+    "objectID": "posts/Variational Autoencoder/index.html#why-we-need-it",
+    "href": "posts/Variational Autoencoder/index.html#why-we-need-it",
     "title": "Variational Autoencoder",
     "section": "Why We Need It",
     "text": "Why We Need It\n\nIn case of VAEs, Monte Carlo gradient estimator exhibits high variance thus giving random gradient directions.\nThe estimator is unbiased, meaning that even if at every step it may not be equal to the true expectation, on average it will converge to it, but as it is stochastic, it also has a variance and it happens to be high for practical use\nAnd also a sampling process can’t be differentiated as in our case we are sampling from z space to calculate loss"
   },
   {
-    "objectID": "posts/Variational AutoEncoder/index.html#reparameterization-trick",
-    "href": "posts/Variational AutoEncoder/index.html#reparameterization-trick",
+    "objectID": "posts/Variational Autoencoder/index.html#reparameterization-trick",
+    "href": "posts/Variational Autoencoder/index.html#reparameterization-trick",
     "title": "Variational Autoencoder",
     "section": "Reparameterization Trick",
     "text": "Reparameterization Trick\n\nSo we need a new estimator:- Let’s just move the source of randomness outside the model\nInstead of directly sampling from q_{\\phi}(z|x), we rewrite sampling as\n\nz = \\mu_{\\phi}(x) + \\sigma_{\\phi}(x)\\epsilon where \\epsilon \\sim \\mathcal{N}(0, 1)\n\n\n\n\n\n\n\n\nL(\\theta, \\phi, x) = \\mathbb{E}_{p(\\epsilon)}[{\\log}\\frac{p_{\\theta}(x, z)}{q_{\\phi}(z|x)}] expectation over {p(\\epsilon)}\n\\epsilon \\approx p(\\epsilon)\nz = g(\\phi, x, \\epsilon)\n\\tilde{L}(\\theta, \\phi, x) \\overset{\\sim}{=} \\mathbb{E}_{p(\\epsilon)}[{\\log}\\frac{p_{\\theta}(x, z)}{q_{\\phi}(z|x)}]\n\\tilde{L}(\\theta, \\phi, x) = {\\log}\\frac{p_{\\theta}(x, z)}{q_{\\phi}(z|x)}"
   },
   {
-    "objectID": "posts/Variational AutoEncoder/index.html#final-estimator",
-    "href": "posts/Variational AutoEncoder/index.html#final-estimator",
+    "objectID": "posts/Variational Autoencoder/index.html#final-estimator",
+    "href": "posts/Variational Autoencoder/index.html#final-estimator",
     "title": "Variational Autoencoder",
     "section": "Final Estimator",
     "text": "Final Estimator\n\nFinally the resulting estimator for this model considering data point x^{(i)} is:\n\\mathcal{L}(\\theta, \\phi; \\mathbf{x}^{(i)}) \\simeq \\frac{1}{2} \\sum_{j=1}^{J} \\left(1 + \\log((\\sigma_j^{(i)})^2) - (\\mu_j^{(i)})^2 - (\\sigma_j^{(i)})^2\\right) + \\frac{1}{L} \\sum_{l=1}^{L} \\log p_{\\theta}(\\mathbf{x}^{(i)} | \\mathbf{z}^{(i,l)})\nIn above equation first term is KL-divergence and second term is Reconstruction loss(MSE)\n\n\n\n\n\n\n\nNote\n\n\n\nMSE reconstruction loss comes from assuming a Gaussian decoder likelihood. If we assume a different decoder likelihood, the reconstruction loss can also change."
   },
   {
-    "objectID": "posts/Variational AutoEncoder/index.html#vae-model",
-    "href": "posts/Variational AutoEncoder/index.html#vae-model",
+    "objectID": "posts/Variational Autoencoder/index.html#vae-model",
+    "href": "posts/Variational Autoencoder/index.html#vae-model",
     "title": "Variational Autoencoder",
     "section": "VAE Model",
     "text": "VAE Model\n\nimport torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass VAE(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.encoder = nn.Sequential(\n            nn.Linear(28*28, 196),\n            nn.Tanh(),\n            nn.Linear(196, 48),\n            nn.Tanh()\n        )\n\n        self.mu_fc = nn.Sequential(\n            nn.Linear(48, 16),\n            nn.Tanh(),\n            nn.Linear(16, 2)\n        )\n        self.logvar_fc = nn.Sequential(\n            nn.Linear(48, 16),\n            nn.Tanh(),\n            nn.Linear(16, 2)\n        )\n        self.decoder = nn.Sequential(\n            nn.Linear(2, 16),\n            nn.Tanh(),\n            nn.Linear(16, 48),\n            nn.Tanh(),\n            nn.Linear(48, 196),\n            nn.Tanh(),\n            nn.Linear(196, 28*28),\n            nn.Tanh()\n        )\n    \n    def forward(self, x):\n        ##Encoding\n        mu, logvar = self.encode(x)\n\n        ##Sampling\n\n        z = self.sample(mu, logvar)\n\n        ## Decoding\n        x = self.decode(z)\n        return mu, logvar, x\n    \n    def encode(self, x):\n        x = x.reshape(x.shape[0], 28*28)\n        x = self.encoder(x)\n        mu, logvar = self.mu_fc(x), self.logvar_fc(x)\n        return mu, logvar\n    \n    def decode(self, x):\n        x = self.decoder(x)\n        x = x.reshape(x.shape[0], 1, 28, 28)\n        return x\n    \n    def sample(self, mu, log_var):\n        rand = torch.randn_like(mu)\n        std = torch.sqrt(torch.exp(log_var))\n        return rand * std + mu"
   },
   {
-    "objectID": "posts/Variational AutoEncoder/index.html#losses",
-    "href": "posts/Variational AutoEncoder/index.html#losses",
+    "objectID": "posts/Variational Autoencoder/index.html#losses",
+    "href": "posts/Variational Autoencoder/index.html#losses",
     "title": "Variational Autoencoder",
     "section": "Losses",
     "text": "Losses\n\nBelow is the code on how to get KL loss and reconstruction loss\n\n\ndef kl_loss(mu, log_var):\n    return torch.mean(0.5 * torch.sum(torch.exp(log_var) + mu**2 - 1 - log_var, dim=-1))\n\ndef recon_loss(pred, target):\n    return F.mse_loss(pred, target)"
