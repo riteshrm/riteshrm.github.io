@@ -528,7 +528,7 @@ PE(pos, 2i + 1) = \cos\left(\frac{pos}{10000^{\frac{2i}{d_{model}}}}\right)
 </ul>
 <section id="below-is-python-code-for-getting-1d-sinusoidal-position-embedding" class="level2">
 <h2 class="anchored" data-anchor-id="below-is-python-code-for-getting-1d-sinusoidal-position-embedding">Below is python code for getting 1D Sinusoidal Position Embedding</h2>
-<div id="a695617a" class="cell">
+<div id="98558041" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Union</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -563,6 +563,9 @@ PE(pos, 2i + 1) = \cos\left(\frac{pos}{10000^{\frac{2i}{d_{model}}}}\right)
 <span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>pe <span class="op">=</span> get_1d_sin_cos_pe(d_model, pos)</span>
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(torch.equal(combinedPE, pe))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True</code></pre>
+</div>
 </div>
 </section>
 <section id="lets-see-only-sine-for-intuition" class="level2">

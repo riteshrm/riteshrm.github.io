@@ -613,7 +613,7 @@ y \\
 <li>Below is the code to get <span class="math inline">(R(\theta)</span> and also validate if <span class="math inline">R(\theta)^T</span> <span class="math inline">R(\theta)</span> = I [Identity Matrix]</li>
 <li>For simplicity, i have just printed a single matrix</li>
 </ul>
-<div id="0d3365f9" class="cell">
+<div id="0b5b0c4c" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_RoPE(pos, d_model):</span>
@@ -636,50 +636,57 @@ y \\
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>matrix <span class="op">=</span> torch.matmul(RTheta, RTheta.transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>))</span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>matrix[<span class="dv">0</span>][<span class="dv">0</span>][<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>tensor([[1.0000, 0.0000],
+        [0.0000, 1.0000]])</code></pre>
+</div>
 </div>
 <ul>
 <li>Below Code shows how to integrate RoPE while calculating attention</li>
 </ul>
-<div id="4d14d296" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimpleAttention(nn.Module):</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, d_model, hidden_dim):</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.hidden_dim <span class="op">=</span> hidden_dim</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.q <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> d_model, out_features <span class="op">=</span> hidden_dim)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.k <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> d_model, out_features <span class="op">=</span> hidden_dim)</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.v <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> d_model, out_features <span class="op">=</span> hidden_dim)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x, rotary_emb):</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        bsz, seq_len, d_model <span class="op">=</span> x.shape</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> <span class="va">self</span>.q(x)</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> <span class="va">self</span>.k(x)</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        value <span class="op">=</span> <span class="va">self</span>.v(x)</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> rotary_emb <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>            bsz, seq_len, d_model <span class="op">=</span> x.shape</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>            query <span class="op">=</span> query.view(bsz, seq_len, <span class="va">self</span>.hidden_dim<span class="op">//</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>            key <span class="op">=</span> key.view(bsz, seq_len, <span class="va">self</span>.hidden_dim<span class="op">//</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>            query <span class="op">=</span>  torch.matmul(rotary_emb, query).view(bsz, seq_len, <span class="va">self</span>.hidden_dim)</span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>            key <span class="op">=</span>  torch.matmul(rotary_emb, key).view(bsz, seq_len, <span class="va">self</span>.hidden_dim)</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">=</span> torch.softmax(torch.matmul(query, key.transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>))<span class="op">/</span>(<span class="va">self</span>.hidden_dim<span class="op">**</span><span class="dv">2</span>), dim<span class="op">=-</span><span class="dv">1</span>)</span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        final <span class="op">=</span> torch.matmul(scores, value)</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> final</span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>bsz <span class="op">=</span> <span class="dv">2</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>tokens <span class="op">=</span> torch.tensor([[<span class="dv">2</span>, <span class="dv">3</span>] <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(bsz)])</span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">256</span></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>embedding <span class="op">=</span> torch.randn(<span class="op">*</span>tokens.shape, d_model)</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>RTheta <span class="op">=</span> get_RoPE(tokens, d_model)</span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SimpleAttention(d_model, d_model)</span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> model(embedding, RTheta)</span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(out.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="daa758ad" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimpleAttention(nn.Module):</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, d_model, hidden_dim):</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.hidden_dim <span class="op">=</span> hidden_dim</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.q <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> d_model, out_features <span class="op">=</span> hidden_dim)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.k <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> d_model, out_features <span class="op">=</span> hidden_dim)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.v <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> d_model, out_features <span class="op">=</span> hidden_dim)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x, rotary_emb):</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        bsz, seq_len, d_model <span class="op">=</span> x.shape</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> <span class="va">self</span>.q(x)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> <span class="va">self</span>.k(x)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        value <span class="op">=</span> <span class="va">self</span>.v(x)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> rotary_emb <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>            bsz, seq_len, d_model <span class="op">=</span> x.shape</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>            query <span class="op">=</span> query.view(bsz, seq_len, <span class="va">self</span>.hidden_dim<span class="op">//</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>            key <span class="op">=</span> key.view(bsz, seq_len, <span class="va">self</span>.hidden_dim<span class="op">//</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>            query <span class="op">=</span>  torch.matmul(rotary_emb, query).view(bsz, seq_len, <span class="va">self</span>.hidden_dim)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>            key <span class="op">=</span>  torch.matmul(rotary_emb, key).view(bsz, seq_len, <span class="va">self</span>.hidden_dim)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">=</span> torch.softmax(torch.matmul(query, key.transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>))<span class="op">/</span>(<span class="va">self</span>.hidden_dim<span class="op">**</span><span class="dv">2</span>), dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>        final <span class="op">=</span> torch.matmul(scores, value)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> final</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>bsz <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>tokens <span class="op">=</span> torch.tensor([[<span class="dv">2</span>, <span class="dv">3</span>] <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(bsz)])</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">256</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>embedding <span class="op">=</span> torch.randn(<span class="op">*</span>tokens.shape, d_model)</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>RTheta <span class="op">=</span> get_RoPE(tokens, d_model)</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SimpleAttention(d_model, d_model)</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> model(embedding, RTheta)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(out.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch.Size([2, 2, 256])</code></pre>
+</div>
 </div>
 </section>
 <section id="the-10000" class="level3">
