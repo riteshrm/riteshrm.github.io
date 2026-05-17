@@ -14,7 +14,7 @@
 <item>
   <title>Variational Autoencoder</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
-  <link>https://riteshrm.github.io/posts/Variational AutoEncoder/</link>
+  <link>https://riteshrm.github.io/posts/Variational Autoencoder/</link>
   <description><![CDATA[ 
 
 
@@ -240,7 +240,7 @@
 <li>To get maximum profit, we need to maximize revenue at the same time minimize the cost</li>
 </ul>
 <figure style="text-align: center;" class="figure">
-<img src="https://riteshrm.github.io/posts/Variational AutoEncoder/spaces.png" style="width:80%" class="figure-img">
+<img src="https://riteshrm.github.io/posts/Variational Autoencoder/spaces.png" style="width:80%" class="figure-img">
 <figcaption>
 </figcaption>
 </figure>
@@ -294,7 +294,7 @@ Note
 </ul></li>
 </ul>
 <figure style="text-align: center;" class="figure">
-<img src="https://riteshrm.github.io/posts/Variational AutoEncoder/reparam.png" style="width:80%" class="figure-img">
+<img src="https://riteshrm.github.io/posts/Variational Autoencoder/reparam.png" style="width:80%" class="figure-img">
 <figcaption>
 </figcaption>
 </figure>
@@ -336,7 +336,7 @@ Note
 </ul>
 <section id="vae-model" class="level2">
 <h2 class="anchored" data-anchor-id="vae-model">VAE Model</h2>
-<div id="10c04dc8" class="cell" data-execution_count="1">
+<div id="fbb8bcf4" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -586,7 +586,7 @@ font-style: inherit;">+</span> mu</span></code></pre></div></div>
 <ul>
 <li>Below is the code on how to get KL loss and reconstruction loss</li>
 </ul>
-<div id="aeeecc61" class="cell" data-execution_count="2">
+<div id="16b31b4d" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -662,9 +662,9 @@ font-style: inherit;">return</span> F.mse_loss(pred, target)</span></code></pre>
 
  ]]></description>
   <category>Deep Learning</category>
-  <guid>https://riteshrm.github.io/posts/Variational AutoEncoder/</guid>
+  <guid>https://riteshrm.github.io/posts/Variational Autoencoder/</guid>
   <pubDate>Wed, 06 May 2026 00:00:00 GMT</pubDate>
-  <media:content url="https://riteshrm.github.io/posts/Variational AutoEncoder/vae_thumbnail_resized.png" medium="image" type="image/png" height="82" width="144"/>
+  <media:content url="https://riteshrm.github.io/posts/Variational Autoencoder/vae_thumbnail_resized.png" medium="image" type="image/png" height="82" width="144"/>
 </item>
 <item>
   <title>Rotary Position Embedding</title>
