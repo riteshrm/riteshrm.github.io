@@ -449,7 +449,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>r = s(q-z) q = int(round(r/s+z))</li>
 </ul></li>
 </ul>
-<div id="55b0e2a9" class="cell">
+<div id="9229ad40" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -545,7 +545,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul></li>
 </ul></li>
 </ul>
-<div id="df44950f" class="cell">
+<div id="56cf3560" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_q_scale_and_zero_point(tensor, dtype<span class="op">=</span>torch.int8):</span>
@@ -596,7 +596,7 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 <li>q = int(round(r/s))</li>
 <li>s = r_max/q_max</li>
 </ul>
-<div id="44495143" class="cell">
+<div id="8fe0b74d" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_q_scale_symmetric(tensor, dtype<span class="op">=</span>torch.int8):</span>
@@ -649,7 +649,7 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 <ul>
 <li>we usually use per channel quantization in int8</li>
 </ul>
-<div id="128590dd" class="cell">
+<div id="8cd7bc46" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> linear_q_symmetric_per_channel(r_tensor, dim, dtype<span class="op">=</span>torch.int8):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    output_dim <span class="op">=</span> r_tensor.shape[dim]</span>
@@ -684,7 +684,7 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 </ul></li>
 </ul></li>
 </ul>
-<div id="c18f1559" class="cell">
+<div id="abe77ee8" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> linear_q_symmetric_per_group(tensor, group_size,</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                                 dtype<span class="op">=</span>torch.int8):</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    </span>
@@ -733,7 +733,7 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 </section>
 <section id="custom-build-an-8-bit-quantizer" class="level3">
 <h3 class="anchored" data-anchor-id="custom-build-an-8-bit-quantizer">Custom Build an 8-Bit Quantizer</h3>
-<div id="ccf90877" class="cell">
+<div id="c95c729a" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#W8A16LinearLayer</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> w8_a16_forward(weight, <span class="bu">input</span>, scales, bias<span class="op">=</span><span class="va">None</span>):</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    </span>
@@ -745,7 +745,7 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>      </span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> output</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="f3972c39" class="cell">
+<div id="33c3a40b" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
@@ -773,7 +773,7 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 <li><p>This way instead of storing a parameter, we just store a buffer, meaning we don’t need to compute gradients on the tensor.</p></li>
 <li><p>You can initialize it with whatever dtype you want.</p></li>
 </ul>
-<div id="95b8ff7a" class="cell">
+<div id="28cd4d23" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
@@ -806,7 +806,7 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 <span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>                              <span class="bu">input</span>, <span class="va">self</span>.scales, <span class="va">self</span>.bias)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>Quantize a Base Model</strong></p>
-<div id="5fc5e326" class="cell">
+<div id="3b4a2b24" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
@@ -865,7 +865,7 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 <ul>
 <li>For language models, it better to not quantize the last layer.</li>
 </ul>
-<div id="ae602696" class="cell">
+<div id="18b020a7" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
@@ -935,7 +935,7 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 </section>
 <section id="quantize-any-open-source-pytorch-model" class="level3">
 <h3 class="anchored" data-anchor-id="quantize-any-open-source-pytorch-model">Quantize any Open Source PyTorch Model</h3>
-<div id="55e0207d" class="cell">
+<div id="c80ebdc2" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> AutoModelForCausalLM, AutoTokenizer, pipeline</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>model_id <span class="op">=</span> <span class="st">"Salesforce/codegen-350M-mono"</span></span>
@@ -969,7 +969,7 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 <li>Replace the original layers with the quantized layers</li>
 <li>Load the quantized weights from huggingfacehub</li>
 </ul>
-<div id="91cc6dc9" class="cell">
+<div id="c5b672e2" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> AutoModelForCausalLM, AutoTokenizer</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -994,7 +994,7 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 <p>api = HfApi()</p>
 <p>create_repo(your_repo_id)</p>
 <p>api.upload_file( path_or_fileobj=“quantized_state_dict.pth”, path_in_repo=“quantized_state_dict.pth”, repo_id=your_repo_id )</p>
-<div id="0cc45fc5" class="cell">
+<div id="2f83ddc6" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> OPTForCausalLM, AutoTokenizer, AutoConfig</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1010,21 +1010,21 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 <span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(param)</span>
 <span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">break</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="5cbf1c72" class="cell">
+<div id="2da8d608" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>model</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="37a2603a" class="cell">
+<div id="05dade8a" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>replace_linear_with_target(model, W8A16LinearLayer, [<span class="st">"lm_head"</span>])</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>model</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>If loading from HF</strong></p>
 <p>from huggingface_hub import hf_hub_download</p>
 <p>state_dict_cache_path = hf_hub_download( “ybelkada/opt-125m-quantized-dlai”, “quantized_state_dict.pth” )</p>
-<div id="ddaa3860" class="cell">
+<div id="810e4a2b" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>state_dict <span class="op">=</span> torch.load(<span class="vs">r"/home/ritesh/github_repos/riteshrm</span><span class="dv">.</span><span class="vs">github</span><span class="dv">.</span><span class="vs">io/tmp/quantized_state_dict</span><span class="dv">.</span><span class="vs">pth"</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>model.load_state_dict(state_dict, strict<span class="op">=</span><span class="va">True</span>, assign<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="28e96318" class="cell">
+<div id="ba15fbf0" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> pipeline(<span class="st">"text-generation"</span>, model<span class="op">=</span>model, tokenizer<span class="op">=</span>tokenizer)</span>
@@ -1066,7 +1066,7 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 </section>
 <section id="packing-2-bit-weights" class="level3">
 <h3 class="anchored" data-anchor-id="packing-2-bit-weights">Packing 2-bit Weights</h3>
-<div id="bf4fbef6" class="cell">
+<div id="11b870b7" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Example Tensor: [1, 0, 3, 2]</span></span>
@@ -1159,7 +1159,7 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 </section>
 <section id="unpacking-2-bit-weights" class="level3">
 <h3 class="anchored" data-anchor-id="unpacking-2-bit-weights">Unpacking 2-Bit Weights</h3>
-<div id="417212c5" class="cell">
+<div id="64b2bc90" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Example Tensor: [10110001]</span></span>

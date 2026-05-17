@@ -336,7 +336,7 @@ Note
 </ul>
 <section id="vae-model" class="level2">
 <h2 class="anchored" data-anchor-id="vae-model">VAE Model</h2>
-<div id="26c8afa5" class="cell">
+<div id="1228c9b5" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -586,7 +586,7 @@ font-style: inherit;">+</span> mu</span></code></pre></div></div>
 <ul>
 <li>Below is the code on how to get KL loss and reconstruction loss</li>
 </ul>
-<div id="b64e9c6f" class="cell">
+<div id="96ddb332" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -824,7 +824,7 @@ font-style: inherit;">return</span> F.mse_loss(pred, target)</span></code></pre>
 <li>Below is the code to get <img src="https://latex.codecogs.com/png.latex?(R(%5Ctheta)"> and also validate if <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta)%5ET"> <img src="https://latex.codecogs.com/png.latex?R(%5Ctheta)"> = I [Identity Matrix]</li>
 <li>For simplicity, i have just printed a single matrix</li>
 </ul>
-<div id="2fa50df1" class="cell">
+<div id="0d3365f9" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -981,7 +981,7 @@ font-style: inherit;">0</span>]</span></code></pre></div></div>
 <ul>
 <li>Below Code shows how to integrate RoPE while calculating attention</li>
 </ul>
-<div id="33e3a380" class="cell">
+<div id="4d14d296" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -1335,7 +1335,7 @@ font-style: inherit;">print</span>(out.shape)</span></code></pre></div></div>
 </ul>
 <section id="below-is-python-code-for-getting-1d-sinusoidal-position-embedding" class="level2">
 <h2 class="anchored" data-anchor-id="below-is-python-code-for-getting-1d-sinusoidal-position-embedding">Below is python code for getting 1D Sinusoidal Position Embedding</h2>
-<div id="b18694fc" class="cell">
+<div id="a695617a" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -2711,7 +2711,7 @@ Note
 <h2 class="anchored" data-anchor-id="pytorch-implementations">PyTorch Implementations</h2>
 <section id="single-head-vanilla-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="single-head-vanilla-attention-pytorch-code">Single Head Vanilla Attention PyTorch Code</h3>
-<div id="4cfde2e9" class="cell">
+<div id="6c43c9de" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -2963,7 +2963,7 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
 </section>
 <section id="multi-head-vanilla-attention-for-loop-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="multi-head-vanilla-attention-for-loop-pytorch-code">Multi Head Vanilla Attention For loop PyTorch Code</h3>
-<div id="fdf78b5d" class="cell">
+<div id="13fd42ad" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -3373,7 +3373,7 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
 </section>
 <section id="multi-head-vanilla-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="multi-head-vanilla-attention-pytorch-code">Multi Head Vanilla Attention PyTorch Code</h3>
-<div id="c54ff7ea" class="cell">
+<div id="b6edbdc7" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -3780,7 +3780,7 @@ Tip
 </div>
 <section id="single-head-linear-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="single-head-linear-attention-pytorch-code">Single Head Linear Attention PyTorch Code</h3>
-<div id="dae9537e" class="cell">
+<div id="a59fe432" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -4614,7 +4614,7 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
 <li>r = s(q-z) q = int(round(r/s+z))</li>
 </ul></li>
 </ul>
-<div id="55b0e2a9" class="cell">
+<div id="9229ad40" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -4938,7 +4938,7 @@ font-style: inherit;">=</span> linear_dequantization(</span>
 </ul></li>
 </ul></li>
 </ul>
-<div id="df44950f" class="cell">
+<div id="56cf3560" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -5052,7 +5052,7 @@ We don’t need to use zero point(z=0). this happens because the floating point 
 <li>q = int(round(r/s))</li>
 <li>s = r_max/q_max</li>
 </ul>
-<div id="44495143" class="cell">
+<div id="8fe0b74d" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -5151,7 +5151,7 @@ font-style: inherit;">return</span> quantized_tensor, scale</span></code></pre><
 <ul>
 <li>we usually use per channel quantization in int8</li>
 </ul>
-<div id="128590dd" class="cell">
+<div id="8cd7bc46" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -5240,7 +5240,7 @@ font-style: inherit;">return</span> quantized_tensor, scale</span></code></pre><
 </ul></li>
 </ul></li>
 </ul>
-<div id="c18f1559" class="cell">
+<div id="abe77ee8" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -5353,7 +5353,7 @@ font-style: inherit;">return</span> dequantized_tensor</span></code></pre></div>
 </section>
 <section id="custom-build-an-8-bit-quantizer" class="level3">
 <h3 class="anchored" data-anchor-id="custom-build-an-8-bit-quantizer">Custom Build an 8-Bit Quantizer</h3>
-<div id="ccf90877" class="cell">
+<div id="c95c729a" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#W8A16LinearLayer</span></span>
@@ -5404,7 +5404,7 @@ background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> output</span></code></pre></div></div>
 </div>
-<div id="f3972c39" class="cell">
+<div id="33c3a40b" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -5506,7 +5506,7 @@ font-style: inherit;">[0m"</span>)</span></code></pre></div></div>
 <li><p>This way instead of storing a parameter, we just store a buffer, meaning we don’t need to compute gradients on the tensor.</p></li>
 <li><p>You can initialize it with whatever dtype you want.</p></li>
 </ul>
-<div id="95b8ff7a" class="cell">
+<div id="28cd4d23" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -5627,7 +5627,7 @@ background-color: null;
 font-style: inherit;">self</span>.bias)</span></code></pre></div></div>
 </div>
 <p><strong>Quantize a Base Model</strong></p>
-<div id="5fc5e326" class="cell">
+<div id="3b4a2b24" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -5853,7 +5853,7 @@ font-style: inherit;">abs</span>().mean())</span></code></pre></div></div>
 <ul>
 <li>For language models, it better to not quantize the last layer.</li>
 </ul>
-<div id="ae602696" class="cell">
+<div id="18b020a7" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -6145,7 +6145,7 @@ font-style: inherit;">"model_2"</span>,model_2)</span></code></pre></div></div>
 </section>
 <section id="quantize-any-open-source-pytorch-model" class="level3">
 <h3 class="anchored" data-anchor-id="quantize-any-open-source-pytorch-model">Quantize any Open Source PyTorch Model</h3>
-<div id="55e0207d" class="cell">
+<div id="c80ebdc2" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> transformers <span class="im" style="color: #00769E;
@@ -6255,7 +6255,7 @@ font-style: inherit;">"generated_text"</span>])</span></code></pre></div></div>
 <li>Replace the original layers with the quantized layers</li>
 <li>Load the quantized weights from huggingfacehub</li>
 </ul>
-<div id="91cc6dc9" class="cell">
+<div id="c5b672e2" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -6318,7 +6318,7 @@ font-style: inherit;">pth"</span>)</span></code></pre></div></div>
 <p>api = HfApi()</p>
 <p>create_repo(your_repo_id)</p>
 <p>api.upload_file( path_or_fileobj=“quantized_state_dict.pth”, path_in_repo=“quantized_state_dict.pth”, repo_id=your_repo_id )</p>
-<div id="0cc45fc5" class="cell">
+<div id="2f83ddc6" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -6366,10 +6366,10 @@ background-color: null;
 font-weight: bold;
 font-style: inherit;">break</span></span></code></pre></div></div>
 </div>
-<div id="5cbf1c72" class="cell">
+<div id="2da8d608" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1">model</span></code></pre></div></div>
 </div>
-<div id="37a2603a" class="cell">
+<div id="05dade8a" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1">replace_linear_with_target(model, W8A16LinearLayer, [<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"lm_head"</span>])</span>
@@ -6378,7 +6378,7 @@ font-style: inherit;">"lm_head"</span>])</span>
 <p><strong>If loading from HF</strong></p>
 <p>from huggingface_hub import hf_hub_download</p>
 <p>state_dict_cache_path = hf_hub_download( “ybelkada/opt-125m-quantized-dlai”, “quantized_state_dict.pth” )</p>
-<div id="ddaa3860" class="cell">
+<div id="810e4a2b" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1">state_dict <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> torch.load(<span class="vs" style="color: #20794D;
@@ -6406,7 +6406,7 @@ font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">True</span>)</span></code></pre></div></div>
 </div>
-<div id="28e96318" class="cell">
+<div id="ba15fbf0" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> transformers <span class="im" style="color: #00769E;
@@ -6480,7 +6480,7 @@ font-style: inherit;">10</span>)</span></code></pre></div></div>
 </section>
 <section id="packing-2-bit-weights" class="level3">
 <h3 class="anchored" data-anchor-id="packing-2-bit-weights">Packing 2-bit Weights</h3>
-<div id="bf4fbef6" class="cell">
+<div id="11b870b7" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -6811,7 +6811,7 @@ font-style: inherit;">2</span>)</span></code></pre></div></div>
 </section>
 <section id="unpacking-2-bit-weights" class="level3">
 <h3 class="anchored" data-anchor-id="unpacking-2-bit-weights">Unpacking 2-Bit Weights</h3>
-<div id="417212c5" class="cell">
+<div id="64b2bc90" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -7272,7 +7272,7 @@ Fig.1 - A layer of Neural Network.
 <ul>
 <li>You can use below mentioned code to find out the more info</li>
 </ul>
-<div id="7ef33458" class="cell">
+<div id="715a8210" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -7371,7 +7371,7 @@ font-style: inherit;">print</span>(torch.iinfo(torch.int8))</span></code></pre><
 </tr>
 </tbody>
 </table>
-<div id="4cbab0c2" class="cell">
+<div id="3660945c" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>

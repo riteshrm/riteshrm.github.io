@@ -801,7 +801,7 @@ Note
 </ul>
 <section id="vae-model" class="level2">
 <h2 class="anchored" data-anchor-id="vae-model">VAE Model</h2>
-<div id="26c8afa5" class="cell">
+<div id="1228c9b5" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
@@ -871,7 +871,7 @@ Note
 <ul>
 <li>Below is the code on how to get KL loss and reconstruction loss</li>
 </ul>
-<div id="b64e9c6f" class="cell">
+<div id="96ddb332" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kl_loss(mu, log_var):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> torch.mean(<span class="fl">0.5</span> <span class="op">*</span> torch.<span class="bu">sum</span>(torch.exp(log_var) <span class="op">+</span> mu<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> <span class="dv">1</span> <span class="op">-</span> log_var, dim<span class="op">=-</span><span class="dv">1</span>))</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
