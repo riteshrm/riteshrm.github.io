@@ -2,15 +2,15 @@
   {
     "listing": "/blog.html",
     "items": [
-      "/posts/Variational Autoencoder/index.html",
-      "/posts/Rotary Position Embedding/index.html",
-      "/posts/Position Encoding/index.html",
-      "/posts/AI Engineering/index.html",
-      "/posts/Attention Mechanism/index.html",
-      "/posts/Hands on LLMs/index.html",
-      "/posts/Meta Learning/index.html",
-      "/posts/Quantization in Depth/index.html",
-      "/posts/Quantization Fundamentals/index.html"
+      "/posts/variational-autoencoder/index.html",
+      "/posts/rotary-position-embedding/index.html",
+      "/posts/position-encoding/index.html",
+      "/posts/ai-engineering/index.html",
+      "/posts/attention-mechanism/index.html",
+      "/posts/hands-on-llms/index.html",
+      "/posts/meta-learning/index.html",
+      "/posts/quantization-in-depth/index.html",
+      "/posts/quantization-fundamentals/index.html"
     ]
   }
 ]

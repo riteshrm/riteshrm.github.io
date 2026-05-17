@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ritesh Kumar Maurya">
-<meta name="dcterms.date" content="2025-01-27">
-<meta name="description" content="Work-in-progress chapter notes from Hands-On Large Language Models.">
+<meta name="dcterms.date" content="2026-04-07">
+<meta name="description" content="A visual and mathematical walkthrough of RoPE, relative position intuition, rotation matrices, and attention score behavior.">
 
-<title>Hands on LLMs: Chapter-Wise Summary – Ritesh Kumar Maurya</title>
+<title>Rotary Position Embedding – Ritesh Kumar Maurya</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,6 +22,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -77,21 +112,64 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="Hands on LLMs: Chapter-Wise Summary – Ritesh Kumar Maurya">
-<meta property="og:description" content="Work-in-progress chapter notes from Hands-On Large Language Models.">
-<meta property="og:image" content="https://riteshrm.github.io/posts/Hands on LLMs/traing_work_flow_of_llm.png">
+<meta property="og:title" content="Rotary Position Embedding – Ritesh Kumar Maurya">
+<meta property="og:description" content="A visual and mathematical walkthrough of RoPE, relative position intuition, rotation matrices, and attention score behavior.">
+<meta property="og:image" content="https://riteshrm.github.io/posts/rotary-position-embedding/rotary_thumbnail_resized.png">
 <meta property="og:site_name" content="Ritesh Kumar Maurya">
-<meta property="og:image:height" content="637">
-<meta property="og:image:width" content="1225">
-<meta name="twitter:title" content="Hands on LLMs: Chapter-Wise Summary – Ritesh Kumar Maurya">
-<meta name="twitter:description" content="Work-in-progress chapter notes from Hands-On Large Language Models.">
-<meta name="twitter:image" content="https://riteshrm.github.io/posts/Hands on LLMs/traing_work_flow_of_llm.png">
+<meta property="og:image:height" content="1024">
+<meta property="og:image:width" content="1792">
+<meta name="twitter:title" content="Rotary Position Embedding – Ritesh Kumar Maurya">
+<meta name="twitter:description" content="A visual and mathematical walkthrough of RoPE, relative position intuition, rotation matrices, and attention score behavior.">
+<meta name="twitter:image" content="https://riteshrm.github.io/posts/rotary-position-embedding/rotary_thumbnail_resized.png">
 <meta name="twitter:creator" content="@_riteshrm_">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image-height" content="637">
-<meta name="twitter:image-width" content="1225">
+<meta name="twitter:image-height" content="1024">
+<meta name="twitter:image-width" content="1792">
 </head>
 
 <body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -320,16 +398,14 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#chapter-1introduction-to-llms" id="toc-chapter-1introduction-to-llms" class="nav-link active" data-scroll-target="#chapter-1introduction-to-llms">Chapter-1[Introduction to LLMs]</a></li>
-  <li><a href="#chapter-2tokens-and-embeddings" id="toc-chapter-2tokens-and-embeddings" class="nav-link" data-scroll-target="#chapter-2tokens-and-embeddings">Chapter-2[Tokens and Embeddings]</a></li>
-  <li><a href="#chapter-3looking-inside-large-language-models" id="toc-chapter-3looking-inside-large-language-models" class="nav-link" data-scroll-target="#chapter-3looking-inside-large-language-models">Chapter-3[Looking Inside Large Language Models]</a></li>
-  <li><a href="#chapter-4text-classification" id="toc-chapter-4text-classification" class="nav-link" data-scroll-target="#chapter-4text-classification">Chapter-4[Text Classification]</a></li>
-  <li><a href="#chapter-5text-clustering-and-topic-modeling" id="toc-chapter-5text-clustering-and-topic-modeling" class="nav-link" data-scroll-target="#chapter-5text-clustering-and-topic-modeling">Chapter-5[Text Clustering and Topic Modeling]</a></li>
-  <li><a href="#chapter-6prompt-engineering" id="toc-chapter-6prompt-engineering" class="nav-link" data-scroll-target="#chapter-6prompt-engineering">Chapter-6[Prompt Engineering]</a></li>
-  <li><a href="#chapter-7advanced-text-generation-techniques-and-tools" id="toc-chapter-7advanced-text-generation-techniques-and-tools" class="nav-link" data-scroll-target="#chapter-7advanced-text-generation-techniques-and-tools">Chapter-7[Advanced Text Generation Techniques and Tools]</a></li>
-  <li><a href="#chapter-8semantic-search-and-retrieval-augmented-generation" id="toc-chapter-8semantic-search-and-retrieval-augmented-generation" class="nav-link" data-scroll-target="#chapter-8semantic-search-and-retrieval-augmented-generation">Chapter-8[Semantic Search and Retrieval-Augmented Generation]</a></li>
+  <li><a href="#why-relative-position-embedding" id="toc-why-relative-position-embedding" class="nav-link active" data-scroll-target="#why-relative-position-embedding">Why Relative Position Embedding?</a></li>
+  <li><a href="#rope" id="toc-rope" class="nav-link" data-scroll-target="#rope">RoPE</a>
+  <ul class="collapse">
+  <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation">Implementation</a></li>
+  <li><a href="#the-10000" id="toc-the-10000" class="nav-link" data-scroll-target="#the-10000">The 10000</a></li>
+  </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Hands on LLMs/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/rotary-position-embedding/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -337,15 +413,15 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Hands on LLMs: Chapter-Wise Summary</h1>
+<h1 class="title">Rotary Position Embedding</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Applied ML</div>
+    <div class="quarto-category">Deep Learning</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    Work-in-progress chapter notes from Hands-On Large Language Models.
+    A visual and mathematical walkthrough of RoPE, relative position intuition, rotation matrices, and attention score behavior.
   </div>
 </div>
 
@@ -362,7 +438,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 27, 2025</p>
+      <p class="date">April 7, 2026</p>
     </div>
   </div>
   
@@ -375,152 +451,298 @@ ul.task-list li input[type="checkbox"] {
 
 
 <ul>
-<li>This is completely based on <a href="https://www.oreilly.com/library/view/hands-on-large-language/9781098150952/">Hands on LLMs</a></li>
+<li>In this post we will try to understand RoPE.</li>
+<li>This is mostly based on <a href="https://www.youtube.com/watch?v=qKUobBR5R1A">Why Rotating Vectors Solves Positional Encoding in Transformers</a></li>
 </ul>
-<section id="chapter-1introduction-to-llms" class="level1">
-<h1>Chapter-1[Introduction to LLMs]</h1>
+<section id="why-relative-position-embedding" class="level2">
+<h2 class="anchored" data-anchor-id="why-relative-position-embedding">Why Relative Position Embedding?</h2>
 <ul>
-<li><p>Bag of Words:- We have a predefined vocabulary, which is used to creat a vector, where each vector index contains the count of that particular word index in vocab</p></li>
-<li><p>word2vec:- It is trained by using a pair(whether dfferent or same semantic meaning) of words</p></li>
-<li><p>Bag of words create embedding at documet level, whereas word2vec generates embedding for words only</p></li>
-<li><p>Representation Models are encoder only models</p></li>
-<li><p>Generative Models are decoder only models</p></li>
-<li><p>BERT(Bidirectional Encoder Represenations from Transformers)</p>
+<li><p>It captures how two tokens are positioned with respect to each other</p></li>
+<li><p>For Example:-</p>
 <ul>
-<li>It is trained by a tecique called masked language modeling, where this method masks a part of the input for the model to predict</li>
-<li>Pretrain on large dataset using masked language modng and then fine tune it for down stream tasks</li>
+<li><pre class="text"><code>  my daughter called her brother last night  [Sentence:-1]
+  0     1 (n)  2 (m)  3    4      5     6</code></pre></li>
+<li>Absolute Position Embedding of token daughter depends on position of token i.e.&nbsp;1 (n)</li>
+<li>Relative Position Embedding of token ‘daughter’ with respect to token ‘called’ -1 (n-m)
+<ul>
+<li>Where -1 or in general it will tell whether token ‘daughter’ is before or after ‘called’ and at what distance.</li>
 </ul></li>
-<li><p>Creating an LLM consists of typically at least two steps:</p>
-<ul>
-<li>Language Modeling(Pretraining):- An LLM is trained on a vast corpus of internet text allowing the model to learn grammar, context and language patterns.</li>
-<li>Fine Tuning(Post Training):- Further training the previously trained model on narrower tasks.</li>
 </ul></li>
+<li><p>Query at position m attends Key at position n and to calculate attention score, it depends more on relative position than absolute position.</p></li>
+<li><pre class="text"><code>  last night my daughter called her brother  [Sentence:-2]
+  0      1    2    3        4    5     6</code></pre></li>
+<li><p>In above sentence even though the APE is different compared to previous sentence their RPE is still the same</p></li>
+<li><p>In case of APE, there is linear relationship between tokens at pos and pos + k, and we expect our model to learn this relationship</p>
+<ul>
+<li><span class="math inline">PE_{pos + k}</span> = <span class="math inline">T^k</span> * <span class="math inline">PE_{pos}</span></li>
+</ul></li>
+<li><p>In case of RPE, we are explicitly telling our model that these two tokens are at k tokens apart</p></li>
+<li><p>Below table defines a summary of APE vs RPE</p></li>
 </ul>
-</section>
-<section id="chapter-2tokens-and-embeddings" class="level1">
-<h1>Chapter-2[Tokens and Embeddings]</h1>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 31%">
+<col style="width: 59%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Sentence</th>
+<th style="text-align: center;">APE</th>
+<th style="text-align: center;">RPE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">tokens are at 1st and 2nd Position</td>
+<td style="text-align: center;">tokens are at (-1) tokens apart, where daughter comes before called</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">tokens are at 1st and 2nd Position</td>
+<td style="text-align: center;">tokens are at (-1) tokens apart, where daughter comes before called</td>
+</tr>
+</tbody>
+</table>
 <ul>
-<li><p>Partial tokens (like “izing”, and “ic”) have a special hidden character at their beginning that indicates that they are connected with the token that precedes them in the text.</p></li>
-<li><p>Word Tokens</p></li>
-<li><p>Subword Tokens</p></li>
-<li><p>Character Tokens</p></li>
-<li><p>Byte Tokens</p></li>
-<li><p>Designing Large Language Model Applications. (For tokenizers)</p></li>
-<li><p>BERT tokenizers are based on wordpiece, introduced in Japanese and Korean voice search [https://ieeexplore.ieee.org/document/6289079]</p></li>
-<li><p>GPT-2 is based on Byte Pair Encoding (BPE), introduced in Neural machine translation of rare words with subword units [https://arxiv.org/abs/1508.07909]</p></li>
-<li><p>Flan-T5 is based on SentencePiece, introduced in “SentencePiece: simple and language independent subword tokenizer and detokenizer for neural text processing”, which supports BPE and unigram language model</p></li>
-<li><p>There are three major factors that dictate how a tokenizer breaks down an input prompt</p>
-<ul>
-<li>Tokenization method (BPE, WordPiece, etc.)
-<ul>
-<li>Each of these methods outlines an algorithm for how to choose an appropriate set of tokens to represent a dataset</li>
-</ul></li>
-<li>Tokenizer Design choices (vocab size, special tokens)
-<ul>
-<li>vocab size:- How many tokens to keep in tokenizers vocabulary</li>
-<li>special tokens:- What special tokens do we want the model to keep track of. We can add as many of these as we want</li>
-</ul></li>
-<li>Capitalization:- Whether to convert caps to lower or not</li>
-</ul></li>
-<li><p>More details on training tokenizer at:-</p>
-<ul>
-<li>Tokenizers section of the Hugging Face course [https://huggingface.co/learn/nlp-course/chapter6/1?fw=pt]</li>
-<li>Natural Language Processing with Transformers, Revised Edition [https://www.oreilly.com/library/view/natural-language-processing/9781098136789/]</li>
-</ul></li>
-</ul>
-</section>
-<section id="chapter-3looking-inside-large-language-models" class="level1">
-<h1>Chapter-3[Looking Inside Large Language Models]</h1>
-<ul>
-<li><p>Autoregressive Models: The models that consume their earlier predictions to make later predictions</p></li>
-<li><p>Three Major components of LLMs are:</p>
-<ul>
-<li>Tokenizer</li>
-<li>Stack of Transformer Blocks</li>
-<li>A language modeling head</li>
-</ul></li>
-<li><p>Context length (Number of streams):- Number of previous tokens which will be considered for the prediction of current token</p></li>
-<li><p>KVCache:- Keeping the previously calculated key and value so that we dont have to recalculate the same again and again</p></li>
-<li><p>Components of Transformer Blocks</p>
-<ul>
-<li>Attention Layer:- Incorporates contextual information to allow the model to better capture the nuance of language.</li>
-<li>FeedForward Layer:- It is able to store information and make predictions and interpolations from data it was trained on.</li>
-</ul></li>
-<li><p>Two main steps are involved in the attention mechanism:</p>
-<ul>
-<li>Relevance scoring: How much previous tokens are relevant to the curren token being processed.</li>
-<li>Combining Information:- Using scores, combine the information from the various positions into a single output vector</li>
-</ul></li>
-<li><p>More efficient Attention</p>
-<ul>
-<li>Local/Sparse Attention:- Sparse Attention limits the context of previous tokens that the model can attend to.</li>
-<li>Multi-query:- Unique Queries but same key and value for all the head</li>
-<li>Grouped-query:- Dividing queries in groups and then key, value will be same for the queries within a group</li>
-<li>RoPE:- Added to queries and keys before calculating the score in Attention blocks</li>
-</ul></li>
+<li>As we can generalise from above table that the two tokens which generally comes together or at k tokens apart, RPE will be same in such cases whereas in case of APE, it will differ for each sentence which model have to learn to generalise better</li>
+<li>So instead of saying i am at this position or that position, it would be better to explicitly mention that we are at k tokens apart</li>
 </ul>
 </section>
-<section id="chapter-4text-classification" class="level1">
-<h1>Chapter-4[Text Classification]</h1>
+<section id="rope" class="level1">
+<h1>RoPE</h1>
 <ul>
-<li><p>In case of no lableld data, we can define our desired labels and then encode both labels and given text and then use cosine_similarity</p></li>
-<li><p>Directly using pretrained models for sentiment classification</p></li>
-<li><p>Using a simple classifier on top of embedding generator</p></li>
-<li><p>If we don’t have labeled data then we can use cosine similarity to find out the label</p></li>
-<li><p>We can use generative models also</p></li>
-</ul>
-</section>
-<section id="chapter-5text-clustering-and-topic-modeling" class="level1">
-<h1>Chapter-5[Text Clustering and Topic Modeling]</h1>
+<li><p>Let’s say we have a 2D vector and we want to rotate it by angle <span class="math inline">\theta</span>, where it was earlier at <span class="math inline">\alpha</span> with magnitude r</p></li>
+<li><p>We can write initial <span class="math inline">x</span> and <span class="math inline">y</span> as:</p>
 <ul>
-<li><p>A common Pipeline for Text Clustering</p>
-<ul>
-<li>Convert the input documents to embeddings with an embedding model</li>
-<li>Reduce the dimensionality of embeddings with a dimensionality reduction model (UMAP as it tends to handle nonlinear relationships and structures a bit better than PCA)</li>
-<li>Find groups of semantically similar documents with a cluster model (using HDBSCAN)</li>
+<li><span class="math inline">x</span> = <span class="math inline">r*\cos(\theta)</span></li>
+<li><span class="math inline">y</span> = <span class="math inline">r*\sin(\theta)</span></li>
 </ul></li>
-<li><p>c-TF-IDF</p>
+<li><p>If we rotate it by <span class="math inline">\alpha</span>, then:</p>
 <ul>
-<li>TF:- Frequency of word X in class C</li>
-<li>IDF:- log(average number of words per class/frequency of X across all classes)</li>
+<li><span class="math inline">x'</span> = <span class="math inline">r*\cos(\theta + \alpha)</span> = <span class="math inline">r(\cos(\theta)\cos(\alpha) - \sin(\theta)\sin(\alpha))</span></li>
+<li><span class="math inline">y'</span> = <span class="math inline">r*\sin(\theta + \alpha)</span> = <span class="math inline">r(\sin(\theta)\cos(\alpha) + \cos(\theta)\sin(\alpha))</span></li>
 </ul></li>
-<li><p>BERTopic [https://maartengr.github.io/BERTopic/getting_started/best_practices/best_practices.html]</p></li>
-<li><p>After getting the keywords using c-TF-IDF, we can use MMR(maximal marginal relevance) to keep only the diverse keywords, we can also use KeyBERTInspired to fine-tune the topic representations</p></li>
-<li><p>Additonally, we can use LLMs to further improve interpretability of topics</p></li>
-</ul>
-</section>
-<section id="chapter-6prompt-engineering" class="level1">
-<h1>Chapter-6[Prompt Engineering]</h1>
+<li><p>If we represent: <span class="math display">
+R(\theta) = \begin{bmatrix}
+\cos(\theta) &amp; -\sin(\theta) \\
+\sin(\theta) &amp; \cos(\theta) \\
+\end{bmatrix}
+</span></p>
+<p><span class="math display">
+z' = \begin{bmatrix}
+x' \\
+y' \\
+\end{bmatrix}
+</span></p>
+<p><span class="math display">
+z = \begin{bmatrix}
+x \\
+y \\
+\end{bmatrix}
+</span></p></li>
+<li><p>Then we can write <span class="math inline">z' = R(\theta)z</span></p></li>
+<li><p>Below two properties which will be used later:</p>
 <ul>
-<li><p>Temperature:- It controls the randomness or creativity of the text generated. It defines how likely it is to choose tokens that are less probable. A temperature of 0 generates the same response every time because it always choose the most likely word. A higher value allows less probable words to be generated</p></li>
-<li><p>Divide all the logits before passing to softmax</p></li>
-<li><p>top_p:- It is also known as nucleus sampling, is a sampling technique that controls which subset of tokens (the nucleus) the LLM can consider. It will consider tokens until it reaches their cumulative probability. If we set top_p to 0.1, it will consider tokens until it reache that value.</p></li>
-<li><p>top_k:- same as top_p, LLM will only consider the top 100 most probable tokens if you set its value to 100.</p></li>
-<li><p>Table 6.1 from page 172</p></li>
-<li><p>Self-consistency:- Sampling from multiple paths for the same prompt and using the voting technique for the best one</p></li>
-<li><p>CoT:- Solving the complex problems step by step</p></li>
-<li><p>ToT:- Generates different solutions and then selects the best one and continues. This method requires so many calls to the model. But we can change it using a prompt, we can ask the model to mimic the behavior</p></li>
-</ul>
-</section>
-<section id="chapter-7advanced-text-generation-techniques-and-tools" class="level1">
-<h1>Chapter-7[Advanced Text Generation Techniques and Tools]</h1>
+<li><span class="math inline">R(-\theta)</span> = <span class="math inline">R(\theta)^T</span> which gives</li>
+<li><span class="math inline">R(\theta)^T</span> <span class="math inline">R(\theta)</span> = I [Identity Matrix]</li>
+<li><span class="math inline">R(\theta_{1})</span> <span class="math inline">R(\theta_{2})</span> = <span class="math inline">R(\theta_{1} + \theta_{2})</span></li>
+</ul></li>
+<li><p>RoPE rotates the embeddings</p></li>
+<li><p>Let’s say q(query) at m and k(key) at n</p></li>
+<li><p>Then dot product between q and k would be</p>
 <ul>
-<li>PromptTemplate from langchain</li>
-<li>Can use LLMChain to create a chain</li>
-<li>Can use ConversationBufferMemory to have access to chat history</li>
-<li>Can use ConversationBufferWindowMemory to keep only last k chats–&gt; Can use ConversationSummaryMemory alongside an LLM to store the summary fo conversation instead of storing raw chats</li>
-<li>ReAct:- Reasoning and Acting
-<ul>
-<li>Thought:- thought about the input prompt</li>
-<li>Action:- based on thought action is triggered, it is generally an external tool like calculator or search engine</li>
-<li>Observation:- finally the results of action are returned to the LLM it observes the output</li>
+<li><span class="math inline">(R(m\theta)q_{m})^TR(n\theta)k_{n}</span></li>
+<li>= <span class="math inline">q_{m}^TR(m\theta)R(n\theta)k_{n}</span></li>
+<li>Since <span class="math inline">R(-\theta)</span> = <span class="math inline">R(\theta)^T</span>, so <span class="math inline">R(-m\theta)</span> = <span class="math inline">R(m\theta)^T</span></li>
+<li>this gives <span class="math inline">q_{m}^TR(-m\theta)R(n\theta)k_{n}</span></li>
+<li>now since <span class="math inline">R(\theta_{1})</span> <span class="math inline">R(\theta_{2})</span> = <span class="math inline">R(\theta_{1} + \theta_{2})</span></li>
+<li>this gives <span class="math inline">q_{m}^TR((n-m)\theta)k_{n}</span></li>
+<li>In above eqn attention score now explicitly depends on relative distance between q and k</li>
+<li>So if relative distance changes then only this factor will change</li>
 </ul></li>
 </ul>
+<section id="implementation" class="level3">
+<h3 class="anchored" data-anchor-id="implementation">Implementation</h3>
+<ul>
+<li>Treat a pair as single 2D vector space and rotate it independently</li>
+<li>For example lets say we have d_model of 256 then we will have 128 2D vectors and we can rotate those pairs independently as shown in below table</li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 76%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Pairs</th>
+<th style="text-align: center;">Rotation Matrix</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">(e_{1}, e_{2})</span></td>
+<td style="text-align: center;"><span class="math inline">R(m\theta_{1})</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">(e_{3}, e_{4})</span></td>
+<td style="text-align: center;"><span class="math inline">R(m\theta_{2})</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">……………..</td>
+<td style="text-align: center;">…………</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">……………..</td>
+<td style="text-align: center;">…………</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">(e_{d_{model}/2-1}, e_{d_{model}/2})</span></td>
+<td style="text-align: center;"><span class="math inline">R(m\theta_{d_{model}/2})</span></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>where
+<ul>
+<li><span class="math inline">e_{k}</span> is embedding value at index k</li>
+<li><span class="math inline">\theta_{i}</span> is rotation angle given as <span class="math inline">\theta_{i}</span> = <span class="math inline">10000^{-2(i-1)/d_{model}}</span>, where i runs from 1 to <span class="math inline">d_{model}/2</span></li>
+<li><span class="math inline">\theta_{i}</span> decreases as i increases, so initial embedding values are rotated by large angles as compared to later embedding values</li>
+</ul></li>
+<li>Below is the code to get <span class="math inline">(R(\theta)</span> and also validate if <span class="math inline">R(\theta)^T</span> <span class="math inline">R(\theta)</span> = I [Identity Matrix]</li>
+<li>For simplicity, i have just printed a single matrix</li>
+</ul>
+<div id="2fa50df1" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_RoPE(pos, d_model):</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    theta <span class="op">=</span> torch.tensor([<span class="dv">10000</span><span class="op">**</span>(<span class="op">-</span><span class="dv">2</span><span class="op">*</span>(i<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span>d_model) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, d_model<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>)])</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    bsz, seq_len<span class="op">=</span> pos.shape</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    cos <span class="op">=</span> torch.cos(pos[:, :, <span class="va">None</span>]<span class="op">*</span> theta[<span class="va">None</span>, :]).view(bsz, seq_len, d_model<span class="op">//</span><span class="dv">2</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    sin <span class="op">=</span> torch.sin(pos[:, :, <span class="va">None</span>]<span class="op">*</span> theta[<span class="va">None</span>, :]).view(bsz, seq_len, d_model<span class="op">//</span><span class="dv">2</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    row1 <span class="op">=</span> torch.stack([cos, <span class="op">-</span>sin], dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    row2 <span class="op">=</span> torch.stack([sin, cos], dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    RTheta <span class="op">=</span> torch.stack([row1, row2], dim<span class="op">=-</span><span class="dv">2</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> RTheta</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>bsz <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>tokens <span class="op">=</span> torch.tensor([[<span class="dv">2</span>, <span class="dv">3</span>] <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(bsz)])</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">256</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>RTheta <span class="op">=</span> get_RoPE(tokens, d_model)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>matrix <span class="op">=</span> torch.matmul(RTheta, RTheta.transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>))</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>matrix[<span class="dv">0</span>][<span class="dv">0</span>][<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>Below Code shows how to integrate RoPE while calculating attention</li>
+</ul>
+<div id="33e3a380" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimpleAttention(nn.Module):</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, d_model, hidden_dim):</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.hidden_dim <span class="op">=</span> hidden_dim</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.q <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> d_model, out_features <span class="op">=</span> hidden_dim)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.k <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> d_model, out_features <span class="op">=</span> hidden_dim)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.v <span class="op">=</span> nn.Linear(in_features <span class="op">=</span> d_model, out_features <span class="op">=</span> hidden_dim)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x, rotary_emb):</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        bsz, seq_len, d_model <span class="op">=</span> x.shape</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> <span class="va">self</span>.q(x)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> <span class="va">self</span>.k(x)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        value <span class="op">=</span> <span class="va">self</span>.v(x)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> rotary_emb <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>            bsz, seq_len, d_model <span class="op">=</span> x.shape</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>            query <span class="op">=</span> query.view(bsz, seq_len, <span class="va">self</span>.hidden_dim<span class="op">//</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>            key <span class="op">=</span> key.view(bsz, seq_len, <span class="va">self</span>.hidden_dim<span class="op">//</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>            query <span class="op">=</span>  torch.matmul(rotary_emb, query).view(bsz, seq_len, <span class="va">self</span>.hidden_dim)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>            key <span class="op">=</span>  torch.matmul(rotary_emb, key).view(bsz, seq_len, <span class="va">self</span>.hidden_dim)</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">=</span> torch.softmax(torch.matmul(query, key.transpose(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>))<span class="op">/</span>(<span class="va">self</span>.hidden_dim<span class="op">**</span><span class="dv">2</span>), dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        final <span class="op">=</span> torch.matmul(scores, value)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> final</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>bsz <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>tokens <span class="op">=</span> torch.tensor([[<span class="dv">2</span>, <span class="dv">3</span>] <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(bsz)])</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">256</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>embedding <span class="op">=</span> torch.randn(<span class="op">*</span>tokens.shape, d_model)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>RTheta <span class="op">=</span> get_RoPE(tokens, d_model)</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SimpleAttention(d_model, d_model)</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> model(embedding, RTheta)</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(out.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
-<section id="chapter-8semantic-search-and-retrieval-augmented-generation" class="level1">
-<h1>Chapter-8[Semantic Search and Retrieval-Augmented Generation]</h1>
+<section id="the-10000" class="level3">
+<h3 class="anchored" data-anchor-id="the-10000">The 10000</h3>
+<ul>
+<li><p>As relative distance increases, the contribution of later dimension of embedding also increases in attention calculation.</p>
+<ul>
+<li>For example, for smaller relative distance, the earlier dimensions only change but not the later ones as we can see in below figure, thus only earlier dimensions contribute to attention
+<figure style="text-align: center;" class="figure">
+<img src="smaller_rd.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+<li>for larger relative distance, later dimensions also get under significant modification as we can see in below figure, thus earlier as well as later dimensions contribute to attention
+<figure style="text-align: center;" class="figure">
+<img src="larger_rd.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+</ul></li>
+<li><p>Why 10000?</p>
+<ul>
+<li>If we chose some smaller value, then even later dimensions gets modified aggressively for smaller relative distances and thus changing the attention score aggressively</li>
+<li>If we chose some larger value then even earlier dimensions didn’t get modified for larger relative distances and thus attention does not change much at all, the relative distance must need to be much larger for significant contribution to attention.</li>
+<li>Basically this calculates how quickly attention gets sensitive to relative positional difference</li>
+<li>As relative distance increases, the cosine similarity decreases [Attention Decay], and this is what we want, closer tokens attend to each other more than tokens far apart from each other as we can see from below figure.
+<figure style="text-align: center;" class="figure">
+<img src="attention_decay.png" style="width:80%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+</ul></li>
+<li><p>Llama 3 used 500,000 as base frequency stating that it will lower the attention decay and thus model will be able to attend far apart tokens more meaningfully</p></li>
+<li><p>As we can see in below figure, cosine similarity decreases very smoothly, thus will help in case of longer contexts</p>
+<figure style="text-align: center;" class="figure">
+<p><img src="attention_decay500k.png" style="width:80%" class="figure-img"></p>
+<figcaption>
+</figcaption>
+</figure></li>
+<li><p>It was believed that due to this attention decay, RoPE works very well</p></li>
+<li><p>But <a href="https://arxiv.org/abs/2410.06205">Round and Round We Go! What makes Rotary Positional Encodings useful?</a> finds out something else is working under the hood which makes rope good at positional encoding.</p>
+<ul>
+<li>They found out that this decay happens only in specific scenarios</li>
+<li>If two embeddings had negative cosine similarity then instead of decreasing they might increase.</li>
+<li>So what makes rope good
+<ul>
+<li>Lower Dimension Embeddings : High Frequency</li>
+<li>Later Dimension Embeddings : Low Frequency</li>
+<li>Low frequency dimensions dominate the attention dot product, whereas high frequency dimensions rotates heavily thus heavily dominated by positional information.</li>
+<li>Semantic heads rely heavily on low frequency dimensions as a result even if distance increases, it has minimal impact on semantic dot product in case of long context if we chose 500k</li>
+<li>If we have long context and base frequency is 10k then it is possible that for large position difference even the low frequency dimensions might have gone under aggressive transformation, thus heavily impacting the semantic attention</li>
+<li>And if we chose 500k then the low frequency dimensions will not go under heavy rotation thus preserving the semantic meaning and helping to cover long range context</li>
+</ul></li>
+<li>So we can say that:
+<ul>
+<li>High Frequency means positional information encoding.</li>
+<li>Low Frequency means semantic information encoding.</li>
+</ul></li>
+</ul></li>
+</ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -961,7 +1183,7 @@ ul.task-list li input[type="checkbox"] {
 </a>
   </li>  
 </ul>
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Hands on LLMs/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/rotary-position-embedding/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>

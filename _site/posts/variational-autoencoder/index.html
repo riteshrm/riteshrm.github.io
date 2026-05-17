@@ -159,13 +159,13 @@ window.Quarto = {
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="Variational Autoencoder – Ritesh Kumar Maurya">
 <meta property="og:description" content="Notes on Variational Autoencoders, ELBO, and reparameterization">
-<meta property="og:image" content="https://riteshrm.github.io/posts/Variational Autoencoder/vae_thumbnail_resized.png">
+<meta property="og:image" content="https://riteshrm.github.io/posts/variational-autoencoder/vae_thumbnail_resized.png">
 <meta property="og:site_name" content="Ritesh Kumar Maurya">
 <meta property="og:image:height" content="1024">
 <meta property="og:image:width" content="1792">
 <meta name="twitter:title" content="Variational Autoencoder – Ritesh Kumar Maurya">
 <meta name="twitter:description" content="Notes on Variational Autoencoders, ELBO, and reparameterization">
-<meta name="twitter:image" content="https://riteshrm.github.io/posts/Variational Autoencoder/vae_thumbnail_resized.png">
+<meta name="twitter:image" content="https://riteshrm.github.io/posts/variational-autoencoder/vae_thumbnail_resized.png">
 <meta name="twitter:creator" content="@_riteshrm_">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image-height" content="1024">
@@ -441,7 +441,7 @@ window.Quarto = {
   <li><a href="#why-vaes-produce-blurry-samples" id="toc-why-vaes-produce-blurry-samples" class="nav-link" data-scroll-target="#why-vaes-produce-blurry-samples">Why VAEs Produce Blurry Samples</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Variational Autoencoder/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/variational-autoencoder/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -801,7 +801,7 @@ Note
 </ul>
 <section id="vae-model" class="level2">
 <h2 class="anchored" data-anchor-id="vae-model">VAE Model</h2>
-<div id="fbb8bcf4" class="cell" data-execution_count="1">
+<div id="26c8afa5" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
@@ -871,7 +871,7 @@ Note
 <ul>
 <li>Below is the code on how to get KL loss and reconstruction loss</li>
 </ul>
-<div id="16b31b4d" class="cell" data-execution_count="2">
+<div id="b64e9c6f" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kl_loss(mu, log_var):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> torch.mean(<span class="fl">0.5</span> <span class="op">*</span> torch.<span class="bu">sum</span>(torch.exp(log_var) <span class="op">+</span> mu<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> <span class="dv">1</span> <span class="op">-</span> log_var, dim<span class="op">=-</span><span class="dv">1</span>))</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1349,7 +1349,7 @@ Note
 </a>
   </li>  
 </ul>
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Variational Autoencoder/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/variational-autoencoder/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>

@@ -116,13 +116,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="Quantization Fundamentals – Ritesh Kumar Maurya">
 <meta property="og:description" content="Introductory notes on model quantization, lower-precision data types, scaling, zero points, and model compression basics.">
-<meta property="og:image" content="https://riteshrm.github.io/posts/Quantization Fundamentals/qat-training-precision.png">
+<meta property="og:image" content="https://riteshrm.github.io/posts/quantization-fundamentals/qat-training-precision.png">
 <meta property="og:site_name" content="Ritesh Kumar Maurya">
 <meta property="og:image:height" content="290">
 <meta property="og:image:width" content="516">
 <meta name="twitter:title" content="Quantization Fundamentals – Ritesh Kumar Maurya">
 <meta name="twitter:description" content="Introductory notes on model quantization, lower-precision data types, scaling, zero points, and model compression basics.">
-<meta name="twitter:image" content="https://riteshrm.github.io/posts/Quantization Fundamentals/qat-training-precision.png">
+<meta name="twitter:image" content="https://riteshrm.github.io/posts/quantization-fundamentals/qat-training-precision.png">
 <meta name="twitter:creator" content="@_riteshrm_">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image-height" content="290">
@@ -362,7 +362,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#quantization-theory" id="toc-quantization-theory" class="nav-link" data-scroll-target="#quantization-theory">Quantization Theory</a></li>
   <li><a href="#quantization-of-llms" id="toc-quantization-of-llms" class="nav-link" data-scroll-target="#quantization-of-llms">Quantization of LLMs</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Quantization Fundamentals/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/quantization-fundamentals/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -410,14 +410,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><p>This is completely based on <a href="https://learn.deeplearning.ai/courses/quantization-fundamentals/lesson/1/introduction">Quantization Fundamentals</a></p></li>
 <li><p>For the code part, you can checkout this <a href="https://github.com/riteshrm/Quantization-Fundamentals-deeplearning.ai-">link</a></p></li>
-<li><p><strong>Quantizatio</strong> helps to reduce the size of the model with little or no degradation.</p></li>
+<li><p><strong>Quantization</strong> helps to reduce the size of the model with little or no degradation.</p></li>
 </ul>
 <section id="handling-big-models" class="level3">
 <h3 class="anchored" data-anchor-id="handling-big-models">Handling Big Models</h3>
 <p>Current model compression technique:-</p>
 <ol type="1">
 <li><p>Pruning:-remove connections that do not improve the model.</p></li>
-<li><p>Knowledge Distillation:- Train a smaller model(Student) using the original model(Teacher). Cons:-You need to have enough hardware to fit both teacher as weel student both.</p></li>
+<li><p>Knowledge Distillation:- Train a smaller model(Student) using the original model(Teacher). Cons:-You need to have enough hardware to fit both teacher as well student both.</p></li>
 </ol>
 </section>
 <section id="options-to-quantize-" class="level3">
@@ -432,7 +432,7 @@ Fig.1 - A layer of Neural Network.
 <li><p>You can quantize weights.</p></li>
 <li><p>You can quantize activations that propagate through the layers of neural network</p></li>
 </ol>
-<p>Idea:Store the parameters of the model in ower precision</p>
+<p>Idea:Store the parameters of the model in lower precision</p>
 </section>
 <section id="data-types-and-sizes" class="level3">
 <h3 class="anchored" data-anchor-id="data-types-and-sizes">Data Types and Sizes</h3>
@@ -480,12 +480,9 @@ Fig.1 - A layer of Neural Network.
 <ul>
 <li>You can use below mentioned code to find out the more info</li>
 </ul>
-<div id="04ba2c0a" class="cell" data-execution_count="1">
+<div id="7ef33458" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(torch.iinfo(torch.int8))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>iinfo(min=-128, max=127, dtype=int8)</code></pre>
-</div>
 </div>
 <p><strong>Floating Point</strong></p>
 <p>3 components in floating point: Sign:- positive/negative (always 1 bit) Exponent(range): impact the representable range of the number Fraction(precision): impact on the precision of the number</p>
@@ -578,34 +575,26 @@ Fig.1 - A layer of Neural Network.
 </tr>
 </tbody>
 </table>
-<div id="f11d4abb" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"By default, python stores float data in fp64"</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>value <span class="op">=</span> <span class="dv">1</span><span class="op">/</span><span class="dv">3</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>tensor_fp64 <span class="op">=</span> torch.tensor(value, dtype <span class="op">=</span> torch.float64)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>tensor_fp32 <span class="op">=</span> torch.tensor(value, dtype <span class="op">=</span> torch.float32)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>tensor_fp16 <span class="op">=</span> torch.tensor(value, dtype <span class="op">=</span> torch.float16)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>tensor_bf16 <span class="op">=</span> torch.tensor(value, dtype <span class="op">=</span> torch.bfloat16)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"fp64 tensor: </span><span class="sc">{</span><span class="bu">format</span>(tensor_fp64.item(), <span class="st">'.60f'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"fp32 tensor: </span><span class="sc">{</span><span class="bu">format</span>(tensor_fp32.item(), <span class="st">'.60f'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"fp16 tensor: </span><span class="sc">{</span><span class="bu">format</span>(tensor_fp16.item(), <span class="st">'.60f'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"bf16 tensor: </span><span class="sc">{</span><span class="bu">format</span>(tensor_bf16.item(), <span class="st">'.60f'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(torch.finfo(torch.bfloat16))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>By default, python stores float data in fp64
-fp64 tensor: 0.333333333333333314829616256247390992939472198486328125000000
-fp32 tensor: 0.333333343267440795898437500000000000000000000000000000000000
-fp16 tensor: 0.333251953125000000000000000000000000000000000000000000000000
-bf16 tensor: 0.333984375000000000000000000000000000000000000000000000000000
-finfo(resolution=0.01, min=-3.38953e+38, max=3.38953e+38, eps=0.0078125, smallest_normal=1.17549e-38, tiny=1.17549e-38, dtype=bfloat16)</code></pre>
-</div>
+<div id="4cbab0c2" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"By default, python stores float data in fp64"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>value <span class="op">=</span> <span class="dv">1</span><span class="op">/</span><span class="dv">3</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>tensor_fp64 <span class="op">=</span> torch.tensor(value, dtype <span class="op">=</span> torch.float64)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>tensor_fp32 <span class="op">=</span> torch.tensor(value, dtype <span class="op">=</span> torch.float32)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>tensor_fp16 <span class="op">=</span> torch.tensor(value, dtype <span class="op">=</span> torch.float16)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>tensor_bf16 <span class="op">=</span> torch.tensor(value, dtype <span class="op">=</span> torch.bfloat16)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"fp64 tensor: </span><span class="sc">{</span><span class="bu">format</span>(tensor_fp64.item(), <span class="st">'.60f'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"fp32 tensor: </span><span class="sc">{</span><span class="bu">format</span>(tensor_fp32.item(), <span class="st">'.60f'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"fp16 tensor: </span><span class="sc">{</span><span class="bu">format</span>(tensor_fp16.item(), <span class="st">'.60f'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"bf16 tensor: </span><span class="sc">{</span><span class="bu">format</span>(tensor_bf16.item(), <span class="st">'.60f'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(torch.finfo(torch.bfloat16))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>PyTorch Downcasting</strong></p>
 <ul>
 <li><p>when a higher data type converted to a lower data type, it results in loss of data</p></li>
-<li><p>Adavantages:</p>
+<li><p>Advantages:</p>
 <ul>
 <li>Reduced memory footprint</li>
 <li>Increased compute and speed (Depends on the hardware)</li>
@@ -619,7 +608,7 @@ finfo(resolution=0.01, min=-3.38953e+38, max=3.38953e+38, eps=0.0078125, smalles
 <li>Mixed precision training
 <ul>
 <li>Do computation in smaller precision (FP16/BF16/FP8)</li>
-<li>Store and update the wights in higher precision (FP32)</li>
+<li>Store and update the weights in higher precision (FP32)</li>
 </ul></li>
 </ul></li>
 </ul>
@@ -635,7 +624,7 @@ finfo(resolution=0.01, min=-3.38953e+38, max=3.38953e+38, eps=0.0078125, smalles
 <li><p>FP32 is default in pytorch</p></li>
 <li><p>model.get_memory_footprint()/1e+6</p></li>
 <li><p>torch.set_default_dtype(desired_dtype) # By doing so we can directly load the model in desired dtype without loading in full precision and then quantizing it</p></li>
-<li><p>set it back to float32 to avoid unnecesary behaviors</p></li>
+<li><p>set it back to float32 to avoid unnecessary behaviors</p></li>
 </ul>
 </section>
 <section id="quantization-theory" class="level3">
@@ -679,7 +668,7 @@ Fig.2 - Comparison of tensors.
 <ul>
 <li>Gather sample input data.</li>
 <li>Run inference.</li>
-<li>Calculate min/mac of activations</li>
+<li>Calculate min/max of activations</li>
 </ul></li>
 </ul></li>
 <li>Result: better quantized activations</li>
@@ -689,7 +678,7 @@ Fig.2 - Comparison of tensors.
 <li>Training in a way that controls how the model performs once it is quantized.</li>
 <li>Intermediate state holds both(quantized as well as unquantized weights).</li>
 <li>Use quantized version of model in forward pass (e.g.&nbsp;BF16)</li>
-<li>Update original, unquantized version of model weights during back propogation (e.g.&nbsp;FP32)</li>
+<li>Update original, unquantized version of model weights during back propagation (e.g.&nbsp;FP32)</li>
 </ul></li>
 <li>In L4 there is a function in helper.py to calculate the model size</li>
 </ul>
@@ -716,7 +705,7 @@ Fig.3 - Range
 <li>q:- quantized value(e.g.&nbsp;in INT8)</li>
 <li>z:- zero point(e.g.&nbsp;INT8)</li>
 </ul></li>
-<li>How do we get scale and zero pint??
+<li>How do we get scale and zero point??
 <ul>
 <li>s = (r_max-r_min)/(q_max-q_min)</li>
 <li>z = int(round(q_min-r_min/s))</li>
@@ -1220,7 +1209,7 @@ Fig.3 - Range
 </a>
   </li>  
 </ul>
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/Quantization Fundamentals/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/quantization-fundamentals/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
