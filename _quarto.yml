@@ -64,6 +64,4 @@ website:
         href: "https://www.linkedin.com/in/riteshrm/"
 
 execute:
-  enabled: false
   freeze: true
-  eval: false

@@ -480,9 +480,12 @@ Fig.1 - A layer of Neural Network.
 <ul>
 <li>You can use below mentioned code to find out the more info</li>
 </ul>
-<div id="715a8210" class="cell">
+<div id="657f080f" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(torch.iinfo(torch.int8))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iinfo(min=-128, max=127, dtype=int8)</code></pre>
+</div>
 </div>
 <p><strong>Floating Point</strong></p>
 <p>3 components in floating point: Sign:- positive/negative (always 1 bit) Exponent(range): impact the representable range of the number Fraction(precision): impact on the precision of the number</p>
@@ -575,21 +578,29 @@ Fig.1 - A layer of Neural Network.
 </tr>
 </tbody>
 </table>
-<div id="3660945c" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"By default, python stores float data in fp64"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>value <span class="op">=</span> <span class="dv">1</span><span class="op">/</span><span class="dv">3</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>tensor_fp64 <span class="op">=</span> torch.tensor(value, dtype <span class="op">=</span> torch.float64)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>tensor_fp32 <span class="op">=</span> torch.tensor(value, dtype <span class="op">=</span> torch.float32)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>tensor_fp16 <span class="op">=</span> torch.tensor(value, dtype <span class="op">=</span> torch.float16)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>tensor_bf16 <span class="op">=</span> torch.tensor(value, dtype <span class="op">=</span> torch.bfloat16)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"fp64 tensor: </span><span class="sc">{</span><span class="bu">format</span>(tensor_fp64.item(), <span class="st">'.60f'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"fp32 tensor: </span><span class="sc">{</span><span class="bu">format</span>(tensor_fp32.item(), <span class="st">'.60f'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"fp16 tensor: </span><span class="sc">{</span><span class="bu">format</span>(tensor_fp16.item(), <span class="st">'.60f'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"bf16 tensor: </span><span class="sc">{</span><span class="bu">format</span>(tensor_bf16.item(), <span class="st">'.60f'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(torch.finfo(torch.bfloat16))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="da27ca13" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"By default, python stores float data in fp64"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>value <span class="op">=</span> <span class="dv">1</span><span class="op">/</span><span class="dv">3</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>tensor_fp64 <span class="op">=</span> torch.tensor(value, dtype <span class="op">=</span> torch.float64)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>tensor_fp32 <span class="op">=</span> torch.tensor(value, dtype <span class="op">=</span> torch.float32)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>tensor_fp16 <span class="op">=</span> torch.tensor(value, dtype <span class="op">=</span> torch.float16)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>tensor_bf16 <span class="op">=</span> torch.tensor(value, dtype <span class="op">=</span> torch.bfloat16)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"fp64 tensor: </span><span class="sc">{</span><span class="bu">format</span>(tensor_fp64.item(), <span class="st">'.60f'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"fp32 tensor: </span><span class="sc">{</span><span class="bu">format</span>(tensor_fp32.item(), <span class="st">'.60f'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"fp16 tensor: </span><span class="sc">{</span><span class="bu">format</span>(tensor_fp16.item(), <span class="st">'.60f'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"bf16 tensor: </span><span class="sc">{</span><span class="bu">format</span>(tensor_bf16.item(), <span class="st">'.60f'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(torch.finfo(torch.bfloat16))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>By default, python stores float data in fp64
+fp64 tensor: 0.333333333333333314829616256247390992939472198486328125000000
+fp32 tensor: 0.333333343267440795898437500000000000000000000000000000000000
+fp16 tensor: 0.333251953125000000000000000000000000000000000000000000000000
+bf16 tensor: 0.333984375000000000000000000000000000000000000000000000000000
+finfo(resolution=0.01, min=-3.38953e+38, max=3.38953e+38, eps=0.0078125, smallest_normal=1.17549e-38, tiny=1.17549e-38, dtype=bfloat16)</code></pre>
+</div>
 </div>
 <p><strong>PyTorch Downcasting</strong></p>
 <ul>
