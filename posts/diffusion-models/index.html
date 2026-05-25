@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ritesh Kumar Maurya">
+<meta name="dcterms.date" content="2026-05-18">
+<meta name="description" content="Notes on Diffusion Models">
+
+<title>Diffusion Models – Ritesh Kumar Maurya</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../posts/favicon.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b758ccaa5987ceb1b75504551e579abf.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-e22af750838b8708ff2c979203820c49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Diffusion Models – Ritesh Kumar Maurya">
+<meta property="og:description" content="Notes on Diffusion Models">
+<meta property="og:image" content="https://riteshrm.github.io/posts/diffusion-models/diffusion_model.png">
+<meta property="og:site_name" content="Ritesh Kumar Maurya">
+<meta property="og:image:height" content="1024">
+<meta property="og:image:width" content="1536">
+<meta name="twitter:title" content="Diffusion Models – Ritesh Kumar Maurya">
+<meta name="twitter:description" content="Notes on Diffusion Models">
+<meta name="twitter:image" content="https://riteshrm.github.io/posts/diffusion-models/diffusion_model.png">
+<meta name="twitter:creator" content="@_riteshrm_">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image-height" content="1024">
+<meta name="twitter:image-width" content="1536">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">About Me</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Notes</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto:riteshkumarmaurya7379@gmail.com"> <i class="bi bi-envelope" role="img" aria-label="Email">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://x.com/%5Friteshrm%5F/"> <i class="bi bi-twitter" role="img" aria-label="X">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/riteshrm/"> <i class="bi bi-linkedin" role="img" aria-label="LinkedIn">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/riteshrm"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://leetcode.com/riteshrm"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="cib:leetcode" aria-label="Icon leetcode from cib Iconify.design set." title="Icon leetcode from cib Iconify.design set."></iconify-icon></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#denoising-diffusion-probabilistic-models" id="toc-denoising-diffusion-probabilistic-models" class="nav-link active" data-scroll-target="#denoising-diffusion-probabilistic-models">Denoising Diffusion Probabilistic Models</a>
+  <ul class="collapse">
+  <li><a href="#forward-process" id="toc-forward-process" class="nav-link" data-scroll-target="#forward-process">Forward Process</a></li>
+  <li><a href="#reverse-process" id="toc-reverse-process" class="nav-link" data-scroll-target="#reverse-process">Reverse Process</a>
+  <ul class="collapse">
+  <li><a href="#reverse-transition-parameterization" id="toc-reverse-transition-parameterization" class="nav-link" data-scroll-target="#reverse-transition-parameterization">Reverse Transition (Parameterization)</a></li>
+  <li><a href="#objective-log-likelihood-and-elbo" id="toc-objective-log-likelihood-and-elbo" class="nav-link" data-scroll-target="#objective-log-likelihood-and-elbo">Objective: Log-Likelihood and ELBO</a></li>
+  <li><a href="#from-kl-term-to-vlb-step-by-step-expansion" id="toc-from-kl-term-to-vlb-step-by-step-expansion" class="nav-link" data-scroll-target="#from-kl-term-to-vlb-step-by-step-expansion">From KL Term to VLB (Step-by-step Expansion)</a></li>
+  <li><a href="#vlb-expansion-product-to-summation" id="toc-vlb-expansion-product-to-summation" class="nav-link" data-scroll-target="#vlb-expansion-product-to-summation">VLB Expansion (Product to Summation)</a></li>
+  <li><a href="#conditioning-trick-reduce-variance-with-x_0" id="toc-conditioning-trick-reduce-variance-with-x_0" class="nav-link" data-scroll-target="#conditioning-trick-reduce-variance-with-x_0">Conditioning Trick: Reduce Variance with <span class="math inline">x_0</span></a></li>
+  <li><a href="#final-loss-decomposition-l_t-l_t-l_0" id="toc-final-loss-decomposition-l_t-l_t-l_0" class="nav-link" data-scroll-target="#final-loss-decomposition-l_t-l_t-l_0">Final Loss Decomposition (<span class="math inline">L_T</span>, <span class="math inline">L_t</span>, <span class="math inline">L_0</span>)</a></li>
+  <li><a href="#noise-prediction-reparameterization-predict-epsilon" id="toc-noise-prediction-reparameterization-predict-epsilon" class="nav-link" data-scroll-target="#noise-prediction-reparameterization-predict-epsilon">Noise Prediction Reparameterization (Predict epsilon)</a></li>
+  <li><a href="#sampling-step-x_t-1-from-x_t" id="toc-sampling-step-x_t-1-from-x_t" class="nav-link" data-scroll-target="#sampling-step-x_t-1-from-x_t">Sampling Step (<span class="math inline">x_{t-1}</span> from <span class="math inline">x_t</span>)</a></li>
+  </ul></li>
+  <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation">Implementation</a></li>
+  </ul></li>
+  <li><a href="#faster-sampling-denoising-diffusion-implicit-models" id="toc-faster-sampling-denoising-diffusion-implicit-models" class="nav-link" data-scroll-target="#faster-sampling-denoising-diffusion-implicit-models">Faster Sampling (Denoising Diffusion Implicit Models)</a>
+  <ul class="collapse">
+  <li><a href="#motivation-fewer-steps-than-ddpm" id="toc-motivation-fewer-steps-than-ddpm" class="nav-link" data-scroll-target="#motivation-fewer-steps-than-ddpm">Motivation: Fewer Steps than DDPM</a></li>
+  <li><a href="#ddim-setup-non-markovian-same-marginals" id="toc-ddim-setup-non-markovian-same-marginals" class="nav-link" data-scroll-target="#ddim-setup-non-markovian-same-marginals">DDIM Setup: Non-Markovian, Same Marginals</a></li>
+  <li><a href="#deterministic-sampling-sigma-0" id="toc-deterministic-sampling-sigma-0" class="nav-link" data-scroll-target="#deterministic-sampling-sigma-0">Deterministic Sampling (sigma = 0)</a></li>
+  <li><a href="#update-rule-x_tau_i-1-from-x_tau_i" id="toc-update-rule-x_tau_i-1-from-x_tau_i" class="nav-link" data-scroll-target="#update-rule-x_tau_i-1-from-x_tau_i">Update Rule (<span class="math inline">x_{\tau_{i-1}}</span> from <span class="math inline">x_{\tau_i}</span>)</a></li>
+  <li><a href="#implementation-1" id="toc-implementation-1" class="nav-link" data-scroll-target="#implementation-1">Implementation</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/diffusion-models/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Diffusion Models</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Deep Learning</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Notes on Diffusion Models
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ritesh Kumar Maurya </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 18, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<ul>
+<li><p>This is mostly based on <a href="https://www.youtube.com/watch?v=HoKDTa5jHvg&amp;t=1409s">Diffusion Models | Paper Explanation | Math Explained</a> and <a href="https://www.youtube.com/watch?v=tr-CUpw--ck">Stanford CME296 Diffusion &amp; Large Vision Models | Spring 2026 | Lecture 1 - Diffusion</a></p></li>
+<li><p><a href="https://arxiv.org/abs/2006.11239">Denoising Diffusion Probabilistic Models</a></p></li>
+<li><p><a href="https://arxiv.org/abs/2010.02502">Denoising Diffusion Implicit Models</a></p></li>
+<li><p>Minimal PyTorch implementation accompanying these notes:</p>
+<ul>
+<li><a href="https://github.com/riteshrm/nanoDiffusion">nanoDiffusion GitHub Repo</a></li>
+</ul></li>
+</ul>
+<hr>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><a href="#forward-process">Forward Process</a></li>
+<li><a href="#reverse-process">Reverse Process</a></li>
+<li><a href="#implementation">Implementation</a></li>
+<li><a href="#faster-sampling-denoising-diffusion-implicit-models">Faster Sampling (DDIM)</a></li>
+</ul>
+</div>
+</div>
+<section id="denoising-diffusion-probabilistic-models" class="level1">
+<h1>Denoising Diffusion Probabilistic Models</h1>
+<ul>
+<li><p>Denoising Diffusion Probabilistic Models operate within a variational framework, much like VAEs</p></li>
+<li><p>DDPMs introduce a clever twist that tackles some of the challenges faced by their predecessors</p></li>
+<li><p>DDPMs involve two most distinct stochastic processes:-</p></li>
+<li><p>The forward Pass (Fixed Encoder):</p>
+<ul>
+<li>Gradually corrupts data by injecting gaussian noise over multiple steps via a transition kernel <span class="math inline">q(x_t \mid x_{t-1})</span></li>
+<li>The data evolves into an isotropic gaussian distribution, effectively becoming pure noise</li>
+<li>Encoder is fixed not learned.</li>
+</ul></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>iso means same and tropic means direction. This is often represented as identity matrix which signifies that noise is uncorrelated across all dimensions.</li>
+<li>pure noise means no identity of original data, only gaussian noise.</li>
+</ul>
+</div>
+</div>
+<ul>
+<li>The reverse denoising process(Learnable Decoder):
+<ul>
+<li>A neural net learns to reverse the noise corruption through a parameterized distribution <span class="math inline">p_{\theta}(x_{t-1}|x_{t})</span></li>
+<li>Starting from pure noise, this process iteratively denoises to generate realistic samples</li>
+<li>Each individual denoising step is a more manageable task than generating a complete sample from scratch as VAEs often attempt to do</li>
+</ul></li>
+</ul>
+<section id="forward-process" class="level2">
+<h2 class="anchored" data-anchor-id="forward-process">Forward Process</h2>
+<ul>
+<li>Forward process involves taking the noisy image from previous timestep and inject more noise</li>
+<li><strong>Forward transition kernel:</strong> <span class="math inline">q(x_{t} \mid x_{t-1}) = N(x_{t}, \sqrt{1-\beta_{t}}x_{t-1}, \beta_{t}I)</span> where <span class="math inline">x_{t}</span> is output, <span class="math inline">\sqrt{1-\beta_{t}}x_{t-1}</span> is mean and <span class="math inline">\beta_{t}I</span> is variance</li>
+<li>Given <span class="math inline">\beta_{t} \sim (0, 1)</span>, In paper <span class="math inline">\beta_{start} = 0.0001</span> and <span class="math inline">\beta_{end} = 0.02</span></li>
+<li><span class="math inline">q(x_{1}...x_{T} \mid x_{0}):= \prod_{t=1}^{T} q(x_t \mid x_{t-1})</span></li>
+<li><strong>Noise injection form:</strong> <span class="math inline">x_{t} = \sqrt{1-\beta_{t}}x_{t-1} + \sqrt\beta_{t} \epsilon</span></li>
+<li>lets say <span class="math inline">\alpha_{t} = 1-\beta_{t}</span></li>
+<li>Then <span class="math inline">x_{t} = \sqrt\alpha_{t}x_{t-1} + \sqrt{1-\alpha_{t}} \epsilon</span></li>
+<li>Lets say <span class="math inline">\bar{\alpha}_{t}:= \prod_{t=0}^{T} \alpha_t</span></li>
+</ul>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\beta_t</span></td>
+<td>noise schedule</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\alpha_t</span></td>
+<td><span class="math inline">1-\beta_t</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\bar{\alpha}_t</span></td>
+<td><span class="math inline">\prod_{t=0}^{T} \alpha_t</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\epsilon</span></td>
+<td>gaussian noise</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><span class="math inline">x_{1} = \sqrt{\alpha_{1}}x_{0} + \sqrt{1-\alpha_{1}} \epsilon</span></li>
+<li><span class="math inline">x_{2} = \sqrt{\alpha_{2}}x_{1} + \sqrt{1-\alpha_{2}} \epsilon</span></li>
+<li>if we substitute value of <span class="math inline">x_{1}</span> in above equation then</li>
+<li><span class="math inline">x_{2} = \sqrt{\alpha_{2}}(\sqrt\alpha_{1}x_{0} + \sqrt{1-\alpha_{1}} \epsilon) + \sqrt{1-\alpha_{2}} \epsilon</span></li>
+<li><span class="math inline">x_{2} = \sqrt{\alpha_{1}\alpha_{2}}x_{0} + \sqrt{\alpha_{2}(1-\alpha_{1})} \epsilon + \sqrt{1-\alpha_{2}} \epsilon</span></li>
+<li><span class="math inline">x_{2} = \sqrt{\alpha_{1}\alpha_{2}}x_{0} + \sqrt{\alpha_{2}-\alpha_{1}\alpha_{2}} \epsilon + \sqrt{1-\alpha_{2}} \epsilon</span></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>When we merge two normal distributions with different variance, the new distribution is as per below formula
+<ul>
+<li><span class="math inline">N(0, \sigma_{1}^2I) + N(0, \sigma_{2}^2I) = N(0, (\sigma_{1}^2 + \sigma_{2}^2)I)</span></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<ul>
+<li>Using above intuition we can change accordingly the forward equation</li>
+<li><span class="math inline">\sqrt{\alpha_{2}-\alpha_{1}\alpha_{2}} \epsilon + \sqrt{1-\alpha_{2}} \epsilon = \sqrt{1-\alpha_{1}\alpha_{2}} \epsilon</span></li>
+<li><span class="math inline">x_{2} = \sqrt{\alpha_{1}\alpha_{2}}x_{0} + \sqrt{1-\alpha_{1}\alpha_{2}} \epsilon</span></li>
+<li><span class="math inline">x_{2} = \sqrt{\bar{\alpha}_{2}}x_{0} + \sqrt{1-\bar{\alpha}_{2}} \epsilon</span></li>
+<li>If we generalize above equation it becomes</li>
+<li><span class="math inline">x_{t} = \sqrt{\bar{\alpha}_{t}}x_{0} + \sqrt{1-\bar{\alpha}_{t}} \epsilon</span></li>
+</ul>
+</section>
+<section id="reverse-process" class="level2">
+<h2 class="anchored" data-anchor-id="reverse-process">Reverse Process</h2>
+<section id="reverse-transition-parameterization" class="level3">
+<h3 class="anchored" data-anchor-id="reverse-transition-parameterization">Reverse Transition (Parameterization)</h3>
+<ul>
+<li><span class="math inline">p(x_{t-1}|x_{t}) = N(x_{t-1}; \mu_{\theta}(x_{t}, t), \epsilon_{\theta}(x_{t}, t))</span></li>
+<li>Two neural networks to parameterize normal distribution <span class="math inline">\mu_{\theta}</span> and <span class="math inline">\epsilon_{\theta}</span></li>
+<li>In paper variance is fixed so we only need to predict mean</li>
+<li>We want to maximize the log likelihood of our data as we do in case of VAEs</li>
+<li><span class="math inline">log(p_\theta(x_{0}))</span></li>
+<li>but it is not easily computable as it depends on all the other <span class="math inline">x_{ts}</span>:- <span class="math inline">x_0, x_1, x_2..x_T</span></li>
+<li>So keeping track of other T-1 random variables is not possible as a solution we can compute ELBO as we did in VAEs</li>
+</ul>
+</section>
+<section id="objective-log-likelihood-and-elbo" class="level3">
+<h3 class="anchored" data-anchor-id="objective-log-likelihood-and-elbo">Objective: Log-Likelihood and ELBO</h3>
+<ul>
+<li><p>lets say when we have <span class="math inline">f(x)</span> and <span class="math inline">g(x)</span> and <span class="math inline">f(x)</span> &gt; <span class="math inline">g(x)</span> for all x then if we can maximize <span class="math inline">g(x)</span> then <span class="math inline">f(x)</span> will also be maximized</p></li>
+<li><p>Using the above analogy, lets say <span class="math inline">f(x) = log(p_\theta(x_{0}))</span> and <span class="math inline">g(x) = log(p_\theta(x_{0})) - D_{KL}(q(x_1:x_T \mid x_0) || p_{\theta}(x_1:x_T \mid x_0))</span></p></li>
+<li><p>From above equations, we can see <span class="math inline">f(x)</span> and <span class="math inline">g(x)</span> are almost same, just there is one difference the KL-Divergence term which is being subtracted so if we are subtracting something then it is lesser than <span class="math inline">f(x)</span> and thus if we can somehow maximize <span class="math inline">g(x)</span> then we can maximize the likelihood of data samples</p></li>
+<li><p><span class="math inline">log(p_\theta(x_{0})) &gt;= log(p_\theta(x_{0}))) - D_{KL}(q(x_1:x_T \mid x_0) || p_{\theta}(x_1:x_T \mid x_0))</span></p></li>
+<li><p>Now we have to maximize <span class="math inline">log(p_\theta(x_{0}))) - D_{KL}(q(x_1:x_T \mid x_0) || p_{\theta}(x_1:x_T \mid x_0))</span></p></li>
+<li><p>Now our loss becomes negative of log likelihood <span id="eq-loss"><span class="math display">-log(p_\theta(x_{0}))) + D_{KL}(q(x_1:x_T \mid x_0) || p_{\theta}(x_1:x_T \mid x_0)) \tag{1}</span></span></p></li>
+<li><p>Even now our loss still contains <span class="math inline">p_\theta(x_{0})</span> and to eliminate that we have to make some changes to KL term</p></li>
+</ul>
+</section>
+<section id="from-kl-term-to-vlb-step-by-step-expansion" class="level3">
+<h3 class="anchored" data-anchor-id="from-kl-term-to-vlb-step-by-step-expansion">From KL Term to VLB (Step-by-step Expansion)</h3>
+<ul>
+<li>Now lets focus on KL-term only
+<ul>
+<li><span class="math inline">D_{KL}(q(x_1:x_T \mid x_0) || p_{\theta}(x_1:x_T \mid x_0))</span> = <span class="math inline">log\frac{q(x_1:x_T \mid x_0)}{p_{\theta}(x_1:x_T \mid x_0)}</span></li>
+<li>the denominator in the above expression can be replaced using bayes’ theorem</li>
+<li><span class="math inline">p_{\theta}(x_1:x_T \mid x_0) = \frac{p_{\theta}(x_0 \mid x_1:x_T)p_{\theta}(x_1:x_T )}{p_{\theta}(x_0)}</span></li>
+<li>Numerator can be replaced by <span class="math inline">p_{\theta}(x_0 , x_1:x_T)</span> using joint probability.</li>
+<li>Now <span class="math inline">p_{\theta}(x_1:x_T \mid x_0) = \frac{p_{\theta}(x_0 , x_1:x_T)}{p_{\theta}(x_0)}</span></li>
+<li>where <span class="math inline">p_{\theta}(x_0 , x_1:x_T)</span> can be written as <span class="math inline">p_{\theta}(x_0:x_T)</span> full joint distribution of entire diffusion trajectory</li>
+<li>Now putting back the denominator value in KL term as <span class="math inline">\frac{p_{\theta}(x_0:x_T)}{p_{\theta}(x_0)}</span> gives us</li>
+<li><span class="math inline">log\frac{q(x_1:x_T \mid x_0)p_{\theta}(x_0)}{p_{\theta}(x_0:x_T)}</span></li>
+<li>If we expand above equation as:-</li>
+<li><span class="math inline">log\frac{q(x_1:x_T \mid x_0)}{p_{\theta}(x_0:x_T)}</span> + <span class="math inline">log(p_{\theta}(x_0))</span></li>
+</ul></li>
+<li>lets add above derived kl term in <a href="#eq-loss" class="quarto-xref">Equation&nbsp;1</a> which gives</li>
+<li><span class="math inline">-log(p_{\theta}(x_{0})) + log\frac{q(x_1:x_T \mid x_0)}{p_{\theta}(x_0:x_T)} + log(p_{\theta}(x_0))</span></li>
+<li>Notice <span class="math inline">-log(p_{\theta}(x_{0}))</span> gets cancelled with <span class="math inline">log(p_{\theta}(x_0))</span></li>
+<li>Now our loss function becomes: <span class="math inline">log\frac{q(x_1:x_T \mid x_0)}{p_{\theta}(x_0:x_T)}</span></li>
+<li>Which gives <span class="math inline">-log(p_\theta(x_{0})) &lt;= log\frac{q(x_1:x_T \mid x_0)}{p_{\theta}(x_0:x_T)}</span> VLB</li>
+</ul>
+</section>
+<section id="vlb-expansion-product-to-summation" class="level3">
+<h3 class="anchored" data-anchor-id="vlb-expansion-product-to-summation">VLB Expansion (Product to Summation)</h3>
+<ul>
+<li>As we can see in VLB numerator is basically forward pass and denominator can be written as:</li>
+<li><span class="math inline">p_{\theta}(x_{0:T}) = p(x_T)\prod_{t=1}^{T} p_{\theta}(x_{t-1} \mid x_t)</span> and <span class="math inline">p(x_T)</span> is simply normal distribution with mean 0 and std 1</li>
+<li>We can also write numerator as product of probabilities as <span class="math inline">\prod_{t=1}^{T}q(x_{t} \mid x_{t-1})</span></li>
+<li>Now our VLB becomes</li>
+<li><span class="math inline">log\frac{\prod_{t=1}^{T}q(x_{t} \mid x_{t-1})}{p(x_T)\prod_{t=1}^{T} p_{\theta}(x_{t-1} \mid x_t)}</span></li>
+<li>Now take out <span class="math inline">p(x_T)</span> which gives</li>
+<li><span class="math inline">-log(p(x_T)) + log\frac{\prod_{t=1}^{T}q(x_{t} \mid x_{t-1})}{\prod_{t=1}^{T} p_{\theta}(x_{t-1} \mid x_t)}</span></li>
+<li>Now we can transform product to summation which gives</li>
+<li><span class="math inline">-log(p(x_T)) + \sum_{t=1}^{T}log\frac{q(x_{t} \mid x_{t-1})}{p_{\theta}(x_{t-1} \mid x_t)}</span></li>
+<li>Now from summation one take out t=1 formulation and keep everything as it is which gives</li>
+<li><span class="math inline">-log(p(x_T)) + \sum_{t=2}^{T}log\frac{q(x_{t} \mid x_{t-1})}{p_{\theta}(x_{t-1} \mid x_t)}+ log\frac{q(x_1 \mid x_0)}{p_{\theta}(x_0 \mid x_1)}</span></li>
+<li>now the numerator in summation of logs can be written as:</li>
+<li><span class="math inline">q(x_t \mid x_{t-1}) = \frac{q(x_{t-1} \mid x_t)q(x_t)}{q(x_{t-1})}</span></li>
+</ul>
+</section>
+<section id="conditioning-trick-reduce-variance-with-x_0" class="level3">
+<h3 class="anchored" data-anchor-id="conditioning-trick-reduce-variance-with-x_0">Conditioning Trick: Reduce Variance with <span class="math inline">x_0</span></h3>
+<ul>
+<li><p>Now all the three terms 2 in numerator and 1 in denominator have really high variance, since we dont know what we started from that’s why author tried to reduce the variance by conditioning on x_0 and thus it reduces the choice of possible candidates. Intuitively given a noisy sample how can you say that what part do i have to remove, whereas if we also have x_0 then we might guess what part of noise to remove.</p></li>
+<li><p>So <span class="math inline">q(x_t \mid x_{t-1}) = \frac{q(x_{t-1} \mid x_t, x_0)q(x_t \mid x_0)}{q(x_{t-1} \mid x_0)}</span></p></li>
+<li><p>Notice If we have not taken out the t=1 term then there have been a loop as</p></li>
+<li><p><span class="math inline">q(x_1 \mid x_0) = \frac{q(x_0 \mid x_1)q(x_1)}{q(x_0)} = \frac{q(x_0 \mid x_1, x_0)q(x_1 \mid x_0)}{q(x_0 \mid x_0)}</span></p></li>
+<li><p>lets put back the value of <span class="math inline">q(x_t \mid x_{t-1})</span> back in original equation which gives</p></li>
+<li><p><span class="math inline">-log(p(x_T)) + \sum_{t=2}^{T}log(\frac{q(x_{t-1} \mid x_{t}, x_0)q(x_t \mid x_0)}{p_{\theta}(x_{t-1} \mid x_t)q(x_{t-1} \mid x_0)}) + log(\frac{q(x_1 \mid x_0)}{p_{\theta}(x_0 \mid x_1)})</span></p></li>
+<li><p>lets expand summation one</p></li>
+<li><p><span class="math inline">-log(p(x_T)) + \sum_{t=2}^{T}log\frac{q(x_{t-1} \mid x_{t}, x_0)}{p_{\theta}(x_{t-1} \mid x_t)} + \sum_{t=2}^{T}log\frac{q(x_t \mid x_0)}{q(x_{t-1} \mid x_0)}+ log(\frac{q(x_1 \mid x_0)}{p_{\theta}(x_0 \mid x_1)})</span></p></li>
+<li><p>the 3rd term in above equation if expanded is just <span class="math inline">log\frac{q(x_T \mid x_0)}{q(x_1 \mid x_0)}</span></p></li>
+<li><p>Now our loss looks like</p></li>
+<li><p><span class="math inline">-log(p(x_T)) + \sum_{t=2}^{T}log\frac{q(x_{t-1} \mid x_{t}, x_0)}{p_{\theta}(x_{t-1} \mid x_t)} + log\frac{q(x_T \mid x_0)}{q(x_1 \mid x_0)}+ log(\frac{q(x_1 \mid x_0)}{p_{\theta}(x_0 \mid x_1)})</span></p></li>
+<li><p>lets open up the 3rd and 4th term over log</p></li>
+<li><p>$-log(p(x_T)) + <em>{t=2}^{T}log + log(q(x_T x_0)) - log(q(x_1 x_0)) + log(q(x_1 x_0)) - log(p</em>{}(x_0 x_1)) $</p></li>
+<li><p>which gives us finally</p></li>
+<li><p><span class="math inline">log(\frac{q(x_T \mid x_0)}{p(x_T)}) + \sum_{t=2}^{T}log\frac{q(x_{t-1} \mid x_{t}, x_0)}{p_{\theta}(x_{t-1} \mid x_t)} - log(p_{\theta}(x_0 \mid x_1))</span></p></li>
+</ul>
+</section>
+<section id="final-loss-decomposition-l_t-l_t-l_0" class="level3">
+<h3 class="anchored" data-anchor-id="final-loss-decomposition-l_t-l_t-l_0">Final Loss Decomposition (<span class="math inline">L_T</span>, <span class="math inline">L_t</span>, <span class="math inline">L_0</span>)</h3>
+<ul>
+<li>Let’s say
+<ul>
+<li><span class="math inline">L_T = D_{KL}(q(x_T \mid x_0) || p(x_T))</span></li>
+<li><span class="math inline">L_t = \sum_{t=2}^{T}D_{KL}(q(x_{t-1} \mid x_t, x_0) || p_{\theta}(x_{t-1} \mid x_t))</span></li>
+<li><span class="math inline">L_0 = log(p_{\theta}(x_0 \mid x_1))</span></li>
+</ul></li>
+<li>We can neglect <span class="math inline">L_T</span> since it does not involve any parameters</li>
+<li>For <span class="math inline">L_t</span></li>
+<li>Recall when we applied bayes’ rule, due to that both forward and reverse process are in same form now</li>
+<li>Now lets focus on <span class="math inline">L_t</span> and <span class="math inline">L_0</span></li>
+<li><span class="math inline">p_{\theta}(x_{t-1} \mid x_t) = N(x_{t-1}; \mu_{\theta}(x_t, t), \epsilon_{\theta}(x_t, t))</span></li>
+<li>since <span class="math inline">\epsilon_{\theta}(x_t, t)</span> is fixed which is <span class="math inline">\beta_t I</span></li>
+<li><span class="math inline">p_{\theta}(x_{t-1} \mid x_t) = N(x_{t-1}; \mu_{\theta}(x_t, t), \beta_t I)</span></li>
+<li><span class="math inline">q(x_{t-1} \mid x_t, x_0)</span> also has a closed form solution which is equal to</li>
+<li><span class="math inline">N(x_{t-1}; \tilde{\mu_t}(x_t, x_0), \tilde{\beta_t}I)</span></li>
+<li>For derivation check out <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/">What are Diffusion Models?</a></li>
+<li>But for now assume
+<ul>
+<li><span class="math inline">\tilde{\mu_t}(x_t, x_0) = \frac{\sqrt{\alpha_t}(1-\bar{\alpha}_{t-1})}{1-\bar{\alpha}_t}X_t + \frac{\sqrt{\bar{\alpha}_{t-1}}\beta_t}{1-\bar{\alpha}_t}X_0</span></li>
+<li><span class="math inline">\tilde{\beta_t} = \frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_t}\beta_t</span></li>
+<li>Since _t is fixed, we can neglect this</li>
+</ul></li>
+</ul>
+</section>
+<section id="noise-prediction-reparameterization-predict-epsilon" class="level3">
+<h3 class="anchored" data-anchor-id="noise-prediction-reparameterization-predict-epsilon">Noise Prediction Reparameterization (Predict epsilon)</h3>
+<ul>
+<li>from forward pass put the value of X_0 in <span class="math inline">\tilde{\mu_t}</span></li>
+<li><span class="math inline">x_{t} = \sqrt{\bar{\alpha}_{t}}x_{0} + \sqrt{1-\bar{\alpha}_{t}} \epsilon</span></li>
+<li>from above equation</li>
+<li><span class="math inline">x_{0} = \frac{x_{t} - \sqrt{1-\bar{\alpha}_{t}} \epsilon}{\sqrt{\bar{\alpha}_{t}}}</span></li>
+<li>which gives</li>
+<li><span class="math inline">\tilde{\mu}(x_t, x_0) = \frac{1}{\sqrt{\alpha_t}}(x_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}}\epsilon)</span></li>
+<li>Our model needs to predict <span class="math inline">\tilde{\mu}(x_t, x_0)</span></li>
+<li>Since <span class="math inline">x_t</span> is available as input at training time, we can reparameterize the gaussian noise term instead to predict <span class="math inline">\epsilon</span> from input <span class="math inline">x_t</span> at time step <span class="math inline">t</span></li>
+<li><span class="math inline">\mu_{\theta}(x_t, t) = \frac{1}{\sqrt{\alpha_t}}(x_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}}\epsilon_{\theta}(x_t, t))</span></li>
+<li><span class="math inline">L_t = \frac{1}{2{\sigma_{t}}^2} MSE(\tilde{\mu_t}(x_t, x_0), \mu_{\theta}(x_t, t))</span></li>
+<li>now comparing <span class="math inline">\mu_{\theta}(x_t, t)</span> and <span class="math inline">\tilde{\mu_t}(x_t, x_0)</span></li>
+<li><span class="math inline">L_t = \frac{{\beta_{t}}^2}{2{\sigma_{t}}^2\alpha_t(1-\bar{\alpha_t})} MSE(\epsilon, \epsilon_{\theta}(x_t, t))</span></li>
+<li>Authors from the DDPM paper neglected the weighting term citing that it improves the sample quality and implementation is quite easy.</li>
+<li>So <span class="math inline">L_t =  MSE(\epsilon, \epsilon_{\theta}(x_t, t))</span></li>
+<li>Now for <span class="math inline">L_0</span></li>
+<li>Authors decided to neglect the last term but basically it was comparing with <span class="math inline">x_0</span>, like how probable is the predicted <span class="math inline">x_0</span> given <span class="math inline">x_1</span></li>
+<li>By neglecting <span class="math inline">L_0</span>, while generating sample, we add noise till <span class="math inline">t&gt;1</span> but at <span class="math inline">t=1</span>, we just return the sample</li>
+</ul>
+</section>
+<section id="sampling-step-x_t-1-from-x_t" class="level3">
+<h3 class="anchored" data-anchor-id="sampling-step-x_t-1-from-x_t">Sampling Step (<span class="math inline">x_{t-1}</span> from <span class="math inline">x_t</span>)</h3>
+<ul>
+<li>Now back to starting sample generation</li>
+<li><span class="math inline">p_{\theta}(x_{t-1} \mid x_t) = N(x_{t-1}; \mu_{\theta}(x_t, t), \beta_{t}I)</span>, which gives</li>
+<li><span class="math inline">x_{t-1} = \mu_{\theta}(x_t, t) + \sqrt{\beta_{t}}\epsilon</span></li>
+<li>now putting the value of <span class="math inline">\mu_{\theta}(x_t, t)</span> gives</li>
+<li><span class="math inline">x_{t-1} = \frac{1}{\sqrt{\alpha_{t}}}(x_t - \frac{\beta_t}{\sqrt(1-\bar{\alpha}_t)}\epsilon_{\theta}(x_t, t)) + \sqrt{\beta_{t}}\epsilon</span></li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="train.png" style="width:80%" class="figure-img">
+<figcaption>
+Training Algorithm
+</figcaption>
+</figure>
+<figure style="text-align: center;" class="figure">
+<img src="sample.png" style="width:80%" class="figure-img">
+<figcaption>
+Sampling Algorithm
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="implementation" class="level2">
+<h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
+<ul>
+<li>Below is simple implementation of forward process, reverse process, sampling and loss, where eps_theta is our denoiser model</li>
+<li>For the complete class-conditioned DDPM implementation, check out:- <a href="https://github.com/riteshrm/nanoDiffusion/ddpm.py">nanoDiffusion/ddpm.py</a></li>
+</ul>
+<div id="ddpm-reference-implementation" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> torch</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">class</span> Diffusion():</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, beta_start, beta_end, timesteps):</span>
+<span id="cb1-4"><a href="#cb1-4"></a>        <span class="va">self</span>.beta_start <span class="op">=</span> beta_start</span>
+<span id="cb1-5"><a href="#cb1-5"></a>        <span class="va">self</span>.beta_end <span class="op">=</span> beta_end</span>
+<span id="cb1-6"><a href="#cb1-6"></a>        <span class="va">self</span>.timesteps <span class="op">=</span> timesteps</span>
+<span id="cb1-7"><a href="#cb1-7"></a>        <span class="va">self</span>.beta_t <span class="op">=</span> torch.linspace(<span class="va">self</span>.beta_start, <span class="va">self</span>.beta_end, <span class="va">self</span>.timesteps)</span>
+<span id="cb1-8"><a href="#cb1-8"></a>        <span class="va">self</span>.alpha_t <span class="op">=</span> <span class="dv">1</span><span class="op">-</span> <span class="va">self</span>.beta_t</span>
+<span id="cb1-9"><a href="#cb1-9"></a>        <span class="va">self</span>.alphabar_t <span class="op">=</span> torch.cumprod(<span class="va">self</span>.alpha_t, dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb1-10"><a href="#cb1-10"></a>        <span class="va">self</span>.eps_theta <span class="op">=</span> torch.nn.Module()</span>
+<span id="cb1-11"><a href="#cb1-11"></a></span>
+<span id="cb1-12"><a href="#cb1-12"></a>    <span class="kw">def</span> forward_process(<span class="va">self</span>, x_0, eps, t):</span>
+<span id="cb1-13"><a href="#cb1-13"></a>        alphabar_t <span class="op">=</span> <span class="va">self</span>.alphabar_t[t].view(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb1-14"><a href="#cb1-14"></a>        x_t <span class="op">=</span> torch.sqrt(alphabar_t)<span class="op">*</span>x_0 <span class="op">+</span> torch.sqrt(<span class="dv">1</span> <span class="op">-</span> alphabar_t)<span class="op">*</span>eps</span>
+<span id="cb1-15"><a href="#cb1-15"></a>        <span class="cf">return</span> x_t</span>
+<span id="cb1-16"><a href="#cb1-16"></a>    </span>
+<span id="cb1-17"><a href="#cb1-17"></a>    <span class="kw">def</span> reverse_process(<span class="va">self</span>, x_t, t, eps<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb1-18"><a href="#cb1-18"></a>        pred_eps <span class="op">=</span> <span class="va">self</span>.eps_theta(x_t, t)</span>
+<span id="cb1-19"><a href="#cb1-19"></a>        alphabar_t <span class="op">=</span> <span class="va">self</span>.alphabar_t[t].view(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb1-20"><a href="#cb1-20"></a>        alpha_t <span class="op">=</span> <span class="va">self</span>.alpha_t[t].view(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb1-21"><a href="#cb1-21"></a>        beta_t <span class="op">=</span> <span class="va">self</span>.beta_t[t].view(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb1-22"><a href="#cb1-22"></a>        <span class="cf">if</span> eps <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb1-23"><a href="#cb1-23"></a>            x_prevt <span class="op">=</span> (<span class="dv">1</span><span class="op">/</span>torch.sqrt(alpha_t))<span class="op">*</span>(x_t <span class="op">-</span> (beta_t<span class="op">/</span>torch.sqrt(<span class="dv">1</span> <span class="op">-</span> alphabar_t))<span class="op">*</span>pred_eps)</span>
+<span id="cb1-24"><a href="#cb1-24"></a>        <span class="cf">else</span>:</span>
+<span id="cb1-25"><a href="#cb1-25"></a>            x_prevt <span class="op">=</span> (<span class="dv">1</span><span class="op">/</span>torch.sqrt(alpha_t))<span class="op">*</span>(x_t <span class="op">-</span> (beta_t<span class="op">/</span>torch.sqrt(<span class="dv">1</span> <span class="op">-</span> alphabar_t))<span class="op">*</span>pred_eps) <span class="op">+</span> torch.sqrt(beta_t)<span class="op">*</span>eps</span>
+<span id="cb1-26"><a href="#cb1-26"></a>        <span class="cf">return</span> x_prevt</span>
+<span id="cb1-27"><a href="#cb1-27"></a>    </span>
+<span id="cb1-28"><a href="#cb1-28"></a>    <span class="kw">def</span> sample(<span class="va">self</span>, shape):</span>
+<span id="cb1-29"><a href="#cb1-29"></a>        x_t <span class="op">=</span> torch.randn(shape)</span>
+<span id="cb1-30"><a href="#cb1-30"></a>        </span>
+<span id="cb1-31"><a href="#cb1-31"></a>        <span class="cf">for</span> t <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.timesteps<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>):</span>
+<span id="cb1-32"><a href="#cb1-32"></a>            <span class="cf">if</span> t<span class="op">==</span><span class="dv">0</span>:</span>
+<span id="cb1-33"><a href="#cb1-33"></a>                x_t <span class="op">=</span> <span class="va">self</span>.reverse_process(x_t, t)</span>
+<span id="cb1-34"><a href="#cb1-34"></a>            <span class="cf">else</span>:</span>
+<span id="cb1-35"><a href="#cb1-35"></a>                eps <span class="op">=</span> torch.randn(shape)</span>
+<span id="cb1-36"><a href="#cb1-36"></a>                x_t <span class="op">=</span> <span class="va">self</span>.reverse_process(x_t, t, eps)</span>
+<span id="cb1-37"><a href="#cb1-37"></a>        <span class="cf">return</span> x_t</span>
+<span id="cb1-38"><a href="#cb1-38"></a>    </span>
+<span id="cb1-39"><a href="#cb1-39"></a>    <span class="kw">def</span> loss(<span class="va">self</span>, x_0):</span>
+<span id="cb1-40"><a href="#cb1-40"></a>        t <span class="op">=</span> torch.randint(<span class="dv">0</span>, <span class="va">self</span>.timesteps, (x_0.shape[<span class="dv">0</span>],))</span>
+<span id="cb1-41"><a href="#cb1-41"></a>        eps <span class="op">=</span> torch.randn_like(x_0)</span>
+<span id="cb1-42"><a href="#cb1-42"></a>        x_t <span class="op">=</span> <span class="va">self</span>.forward_process(x_0, eps, t)</span>
+<span id="cb1-43"><a href="#cb1-43"></a>        pred_eps <span class="op">=</span> <span class="va">self</span>.eps_theta(x_t, t)</span>
+<span id="cb1-44"><a href="#cb1-44"></a>        <span class="cf">return</span> torch.nn.functional.mse_loss(eps, pred_eps)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="faster-sampling-denoising-diffusion-implicit-models" class="level1">
+<h1>Faster Sampling (Denoising Diffusion Implicit Models)</h1>
+<section id="motivation-fewer-steps-than-ddpm" class="level2">
+<h2 class="anchored" data-anchor-id="motivation-fewer-steps-than-ddpm">Motivation: Fewer Steps than DDPM</h2>
+<ul>
+<li>So DDPM is taking the same number of steps as in forward process to generate a sample.</li>
+<li>May be we can make larger jumps in reverse process, but the resultants are not good due to stochastic nature in DDPM reverse</li>
+<li>DDIM aims to follow a non-markovian process, which also keeps the marginal same as DDPM at the same avoiding stochasticity in reverse process</li>
+<li>Basically DDIM proposes q [<span class="math inline">q_{\sigma}(x_{t-1} \mid x_t, x_0)</span>] such that
+<ul>
+<li>Marginal is same as DDPM :- <span class="math inline">q_{\sigma}(x_{t} \mid x_0) = q(x_{t} \mid x_0)</span></li>
+<li>Generation process can be made deterministic:- <span class="math inline">p_{\theta}(x_{t-1} \mid x_1)</span> can be made deterministic</li>
+</ul></li>
+</ul>
+</section>
+<section id="ddim-setup-non-markovian-same-marginals" class="level2">
+<h2 class="anchored" data-anchor-id="ddim-setup-non-markovian-same-marginals">DDIM Setup: Non-Markovian, Same Marginals</h2>
+<ul>
+<li>Which gives</li>
+<li><span class="math inline">q_{\sigma}(x_{t-1} \mid x_t, x_0) = N(\sqrt{\bar{\alpha}_{t-1}}x_0 + \sqrt{1-\bar{\alpha}_{t-1}-\sigma_t^2}\frac{x_t - \sqrt{\bar{\alpha}_t}x_0}{\sqrt{1-\bar{\alpha}_1}}, \sigma_t^2I)</span></li>
+</ul>
+</section>
+<section id="deterministic-sampling-sigma-0" class="level2">
+<h2 class="anchored" data-anchor-id="deterministic-sampling-sigma-0">Deterministic Sampling (sigma = 0)</h2>
+<ul>
+<li>After setting <span class="math inline">\sigma = 0</span>, there will not be any stochasticity</li>
+<li><span class="math inline">p_{\theta}(x_{t-1} \mid x_1)  \triangleq q_{\sigma=0}(x_{t-1} \mid x_t, \hat{x_0}(t))</span></li>
+<li>where <span class="math inline">\hat{x_0}(t)</span> is approximated <span class="math inline">\hat{x_0}</span> at every step</li>
+<li><span class="math inline">\hat{x_0}(t) = \frac{x_t - \sqrt{1-\bar{\alpha}_t}\epsilon_{\theta}(x_t, t)}{\sqrt{\bar{\alpha}_t}}</span></li>
+<li><span class="math inline">x_{t-1} = \sqrt{\bar{\alpha}_{t-1}}\hat{x_0}(t) + \sqrt{1-\bar{\alpha}_{t-1}}\epsilon_{\theta}(x_t, t) + 0</span></li>
+<li>Our prediction of the clean image from time t that we noise to time t-1 with no stochasticity</li>
+</ul>
+</section>
+<section id="update-rule-x_tau_i-1-from-x_tau_i" class="level2">
+<h2 class="anchored" data-anchor-id="update-rule-x_tau_i-1-from-x_tau_i">Update Rule (<span class="math inline">x_{\tau_{i-1}}</span> from <span class="math inline">x_{\tau_i}</span>)</h2>
+<ul>
+<li>Lets generalize it</li>
+<li><span class="math inline">x_{\tau_{i-1}} = \sqrt{\bar{\alpha}_{\tau_{i-1}}}\hat{x_0}({\tau_{i}}) + \sqrt{1-\bar{\alpha}_{\tau_{i-1}}}\epsilon_{\theta}(x_{\tau_{i}}, \tau_{i})</span></li>
+</ul>
+</section>
+<section id="implementation-1" class="level2">
+<h2 class="anchored" data-anchor-id="implementation-1">Implementation</h2>
+<ul>
+<li>For the complete class-conditioned DDIM implementation, check out:- <a href="https://github.com/riteshrm/nanoDiffusion/ddim.py">nanoDiffusion/ddim.py</a></li>
+</ul>
+<div id="ddim-reference-implementation" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> torch</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">class</span> Diffusion():</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, beta_start, beta_end, timesteps):</span>
+<span id="cb2-4"><a href="#cb2-4"></a>        <span class="va">self</span>.beta_start <span class="op">=</span> beta_start</span>
+<span id="cb2-5"><a href="#cb2-5"></a>        <span class="va">self</span>.beta_end <span class="op">=</span> beta_end</span>
+<span id="cb2-6"><a href="#cb2-6"></a>        <span class="va">self</span>.timesteps <span class="op">=</span> timesteps</span>
+<span id="cb2-7"><a href="#cb2-7"></a>        <span class="va">self</span>.beta_t <span class="op">=</span> torch.linspace(<span class="va">self</span>.beta_start, <span class="va">self</span>.beta_end, <span class="va">self</span>.timesteps)</span>
+<span id="cb2-8"><a href="#cb2-8"></a>        <span class="va">self</span>.alpha_t <span class="op">=</span> <span class="dv">1</span><span class="op">-</span> <span class="va">self</span>.beta_t</span>
+<span id="cb2-9"><a href="#cb2-9"></a>        <span class="va">self</span>.alphabar_t <span class="op">=</span> torch.cumprod(<span class="va">self</span>.alpha_t, dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb2-10"><a href="#cb2-10"></a>        <span class="va">self</span>.eps_theta <span class="op">=</span> torch.nn.Module()</span>
+<span id="cb2-11"><a href="#cb2-11"></a></span>
+<span id="cb2-12"><a href="#cb2-12"></a>    <span class="kw">def</span> forward_process(<span class="va">self</span>, x_0, eps, t):</span>
+<span id="cb2-13"><a href="#cb2-13"></a>        alphabar_t <span class="op">=</span> <span class="va">self</span>.alphabar_t[t].view(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb2-14"><a href="#cb2-14"></a>        x_t <span class="op">=</span> torch.sqrt(alphabar_t)<span class="op">*</span>x_0 <span class="op">+</span> torch.sqrt(<span class="dv">1</span> <span class="op">-</span> alphabar_t)<span class="op">*</span>eps</span>
+<span id="cb2-15"><a href="#cb2-15"></a>        <span class="cf">return</span> x_t</span>
+<span id="cb2-16"><a href="#cb2-16"></a>    </span>
+<span id="cb2-17"><a href="#cb2-17"></a>    <span class="kw">def</span> reverse_process(<span class="va">self</span>, x_t, t, eps<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb2-18"><a href="#cb2-18"></a>        pred_eps <span class="op">=</span> <span class="va">self</span>.eps_theta(x_t, t)</span>
+<span id="cb2-19"><a href="#cb2-19"></a>        alphabar_t <span class="op">=</span> <span class="va">self</span>.alphabar_t[t].view(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb2-20"><a href="#cb2-20"></a>        alpha_t <span class="op">=</span> <span class="va">self</span>.alpha_t[t].view(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb2-21"><a href="#cb2-21"></a>        beta_t <span class="op">=</span> <span class="va">self</span>.beta_t[t].view(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb2-22"><a href="#cb2-22"></a>        <span class="cf">if</span> eps <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb2-23"><a href="#cb2-23"></a>            x_prevt <span class="op">=</span> (<span class="dv">1</span><span class="op">/</span>torch.sqrt(alpha_t))<span class="op">*</span>(x_t <span class="op">-</span> (beta_t<span class="op">/</span>torch.sqrt(<span class="dv">1</span> <span class="op">-</span> alphabar_t))<span class="op">*</span>pred_eps)</span>
+<span id="cb2-24"><a href="#cb2-24"></a>        <span class="cf">else</span>:</span>
+<span id="cb2-25"><a href="#cb2-25"></a>            x_prevt <span class="op">=</span> (<span class="dv">1</span><span class="op">/</span>torch.sqrt(alpha_t))<span class="op">*</span>(x_t <span class="op">-</span> (beta_t<span class="op">/</span>torch.sqrt(<span class="dv">1</span> <span class="op">-</span> alphabar_t))<span class="op">*</span>pred_eps) <span class="op">+</span> torch.sqrt(beta_t)<span class="op">*</span>eps</span>
+<span id="cb2-26"><a href="#cb2-26"></a>        <span class="cf">return</span> x_prevt</span>
+<span id="cb2-27"><a href="#cb2-27"></a>    </span>
+<span id="cb2-28"><a href="#cb2-28"></a>    <span class="kw">def</span> sample_ddim(<span class="va">self</span>, shape, num_steps):</span>
+<span id="cb2-29"><a href="#cb2-29"></a>        x_t <span class="op">=</span> torch.randn(shape)</span>
+<span id="cb2-30"><a href="#cb2-30"></a></span>
+<span id="cb2-31"><a href="#cb2-31"></a>        steps <span class="op">=</span> torch.linspace(<span class="va">self</span>.timesteps<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, num_steps, dtype<span class="op">=</span>torch.<span class="bu">int</span>)</span>
+<span id="cb2-32"><a href="#cb2-32"></a></span>
+<span id="cb2-33"><a href="#cb2-33"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_steps):</span>
+<span id="cb2-34"><a href="#cb2-34"></a>            t <span class="op">=</span> steps[i]</span>
+<span id="cb2-35"><a href="#cb2-35"></a>            alphabar_t <span class="op">=</span> <span class="va">self</span>.alphabar_t[t].view(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb2-36"><a href="#cb2-36"></a>            pred_eps <span class="op">=</span> <span class="va">self</span>.eps_theta(x_t, t)</span>
+<span id="cb2-37"><a href="#cb2-37"></a>            x_hat <span class="op">=</span> (x_t <span class="op">-</span> (<span class="dv">1</span><span class="op">-</span>alphabar_t).sqrt()<span class="op">*</span>pred_eps)<span class="op">/</span>alphabar_t.sqrt()</span>
+<span id="cb2-38"><a href="#cb2-38"></a>            <span class="cf">if</span> i <span class="op">==</span> <span class="bu">len</span>(steps)<span class="op">-</span><span class="dv">1</span>:</span>
+<span id="cb2-39"><a href="#cb2-39"></a>                <span class="cf">return</span> x_hat</span>
+<span id="cb2-40"><a href="#cb2-40"></a>            prev_t <span class="op">=</span> steps[i<span class="op">+</span><span class="dv">1</span>]</span>
+<span id="cb2-41"><a href="#cb2-41"></a>            alphabar_prevt <span class="op">=</span> <span class="va">self</span>.alphabar_t[prev_t].view(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb2-42"><a href="#cb2-42"></a>            x_prevt <span class="op">=</span> alphabar_prevt.sqrt()<span class="op">*</span>x_hat <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>alphabar_prevt).sqrt()<span class="op">*</span>pred_eps</span>
+<span id="cb2-43"><a href="#cb2-43"></a>            x_t <span class="op">=</span> x_prevt</span>
+<span id="cb2-44"><a href="#cb2-44"></a>    </span>
+<span id="cb2-45"><a href="#cb2-45"></a>    <span class="kw">def</span> loss(<span class="va">self</span>, x_0):</span>
+<span id="cb2-46"><a href="#cb2-46"></a>        t <span class="op">=</span> torch.randint(<span class="dv">0</span>, <span class="va">self</span>.timesteps, (x_0.shape[<span class="dv">0</span>],))</span>
+<span id="cb2-47"><a href="#cb2-47"></a>        eps <span class="op">=</span> torch.randn_like(x_0)</span>
+<span id="cb2-48"><a href="#cb2-48"></a>        x_t <span class="op">=</span> <span class="va">self</span>.forward_process(x_0, eps, t)</span>
+<span id="cb2-49"><a href="#cb2-49"></a>        pred_eps <span class="op">=</span> <span class="va">self</span>.eps_theta(x_t, t)</span>
+<span id="cb2-50"><a href="#cb2-50"></a>        <span class="cf">return</span> torch.nn.functional.mse_loss(eps, pred_eps)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/riteshrm\.github\.io\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Built with Quarto</p>
+</div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="../../blog.xml">
+<p>RSS</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/riteshrm">
+<p>GitHub</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://www.linkedin.com/in/riteshrm/">
+<p>LinkedIn</p>
+</a>
+  </li>  
+</ul>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/diffusion-models/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

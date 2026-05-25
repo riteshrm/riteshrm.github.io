@@ -10,7 +10,1092 @@
 <atom:link href="https://riteshrm.github.io/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Notes on deep learning, applied machine learning, optimization, diffusion models and language models.</description>
 <generator>quarto-1.8.26</generator>
-<lastBuildDate>Wed, 06 May 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 18 May 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Diffusion Models</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/diffusion-models/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<ul>
+<li><p>This is mostly based on <a href="https://www.youtube.com/watch?v=HoKDTa5jHvg&amp;t=1409s">Diffusion Models | Paper Explanation | Math Explained</a> and <a href="https://www.youtube.com/watch?v=tr-CUpw--ck">Stanford CME296 Diffusion &amp; Large Vision Models | Spring 2026 | Lecture 1 - Diffusion</a></p></li>
+<li><p><a href="https://arxiv.org/abs/2006.11239">Denoising Diffusion Probabilistic Models</a></p></li>
+<li><p><a href="https://arxiv.org/abs/2010.02502">Denoising Diffusion Implicit Models</a></p></li>
+<li><p>Minimal PyTorch implementation accompanying these notes:</p>
+<ul>
+<li><a href="https://github.com/riteshrm/nanoDiffusion">nanoDiffusion GitHub Repo</a></li>
+</ul></li>
+</ul>
+<hr>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Forward Process</li>
+<li>Reverse Process</li>
+<li>Implementation</li>
+<li>Faster Sampling (DDIM)</li>
+</ul>
+</div>
+</div>
+<section id="denoising-diffusion-probabilistic-models" class="level1">
+<h1>Denoising Diffusion Probabilistic Models</h1>
+<ul>
+<li><p>Denoising Diffusion Probabilistic Models operate within a variational framework, much like VAEs</p></li>
+<li><p>DDPMs introduce a clever twist that tackles some of the challenges faced by their predecessors</p></li>
+<li><p>DDPMs involve two most distinct stochastic processes:-</p></li>
+<li><p>The forward Pass (Fixed Encoder):</p>
+<ul>
+<li>Gradually corrupts data by injecting gaussian noise over multiple steps via a transition kernel <img src="https://latex.codecogs.com/png.latex?q(x_t%20%5Cmid%20x_%7Bt-1%7D)"></li>
+<li>The data evolves into an isotropic gaussian distribution, effectively becoming pure noise</li>
+<li>Encoder is fixed not learned.</li>
+</ul></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>iso means same and tropic means direction. This is often represented as identity matrix which signifies that noise is uncorrelated across all dimensions.</li>
+<li>pure noise means no identity of original data, only gaussian noise.</li>
+</ul>
+</div>
+</div>
+<ul>
+<li>The reverse denoising process(Learnable Decoder):
+<ul>
+<li>A neural net learns to reverse the noise corruption through a parameterized distribution <img src="https://latex.codecogs.com/png.latex?p_%7B%5Ctheta%7D(x_%7Bt-1%7D%7Cx_%7Bt%7D)"></li>
+<li>Starting from pure noise, this process iteratively denoises to generate realistic samples</li>
+<li>Each individual denoising step is a more manageable task than generating a complete sample from scratch as VAEs often attempt to do</li>
+</ul></li>
+</ul>
+<section id="forward-process" class="level2">
+<h2 class="anchored" data-anchor-id="forward-process">Forward Process</h2>
+<ul>
+<li>Forward process involves taking the noisy image from previous timestep and inject more noise</li>
+<li><strong>Forward transition kernel:</strong> <img src="https://latex.codecogs.com/png.latex?q(x_%7Bt%7D%20%5Cmid%20x_%7Bt-1%7D)%20=%20N(x_%7Bt%7D,%20%5Csqrt%7B1-%5Cbeta_%7Bt%7D%7Dx_%7Bt-1%7D,%20%5Cbeta_%7Bt%7DI)"> where <img src="https://latex.codecogs.com/png.latex?x_%7Bt%7D"> is output, <img src="https://latex.codecogs.com/png.latex?%5Csqrt%7B1-%5Cbeta_%7Bt%7D%7Dx_%7Bt-1%7D"> is mean and <img src="https://latex.codecogs.com/png.latex?%5Cbeta_%7Bt%7DI"> is variance</li>
+<li>Given <img src="https://latex.codecogs.com/png.latex?%5Cbeta_%7Bt%7D%20%5Csim%20(0,%201)">, In paper <img src="https://latex.codecogs.com/png.latex?%5Cbeta_%7Bstart%7D%20=%200.0001"> and <img src="https://latex.codecogs.com/png.latex?%5Cbeta_%7Bend%7D%20=%200.02"></li>
+<li><img src="https://latex.codecogs.com/png.latex?q(x_%7B1%7D...x_%7BT%7D%20%5Cmid%20x_%7B0%7D):=%20%5Cprod_%7Bt=1%7D%5E%7BT%7D%20q(x_t%20%5Cmid%20x_%7Bt-1%7D)"></li>
+<li><strong>Noise injection form:</strong> <img src="https://latex.codecogs.com/png.latex?x_%7Bt%7D%20=%20%5Csqrt%7B1-%5Cbeta_%7Bt%7D%7Dx_%7Bt-1%7D%20+%20%5Csqrt%5Cbeta_%7Bt%7D%20%5Cepsilon"></li>
+<li>lets say <img src="https://latex.codecogs.com/png.latex?%5Calpha_%7Bt%7D%20=%201-%5Cbeta_%7Bt%7D"></li>
+<li>Then <img src="https://latex.codecogs.com/png.latex?x_%7Bt%7D%20=%20%5Csqrt%5Calpha_%7Bt%7Dx_%7Bt-1%7D%20+%20%5Csqrt%7B1-%5Calpha_%7Bt%7D%7D%20%5Cepsilon"></li>
+<li>Lets say <img src="https://latex.codecogs.com/png.latex?%5Cbar%7B%5Calpha%7D_%7Bt%7D:=%20%5Cprod_%7Bt=0%7D%5E%7BT%7D%20%5Calpha_t"></li>
+</ul>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="https://latex.codecogs.com/png.latex?%5Cbeta_t"></td>
+<td>noise schedule</td>
+</tr>
+<tr class="even">
+<td><img src="https://latex.codecogs.com/png.latex?%5Calpha_t"></td>
+<td><img src="https://latex.codecogs.com/png.latex?1-%5Cbeta_t"></td>
+</tr>
+<tr class="odd">
+<td><img src="https://latex.codecogs.com/png.latex?%5Cbar%7B%5Calpha%7D_t"></td>
+<td><img src="https://latex.codecogs.com/png.latex?%5Cprod_%7Bt=0%7D%5E%7BT%7D%20%5Calpha_t"></td>
+</tr>
+<tr class="even">
+<td><img src="https://latex.codecogs.com/png.latex?%5Cepsilon"></td>
+<td>gaussian noise</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?x_%7B1%7D%20=%20%5Csqrt%7B%5Calpha_%7B1%7D%7Dx_%7B0%7D%20+%20%5Csqrt%7B1-%5Calpha_%7B1%7D%7D%20%5Cepsilon"></li>
+<li><img src="https://latex.codecogs.com/png.latex?x_%7B2%7D%20=%20%5Csqrt%7B%5Calpha_%7B2%7D%7Dx_%7B1%7D%20+%20%5Csqrt%7B1-%5Calpha_%7B2%7D%7D%20%5Cepsilon"></li>
+<li>if we substitute value of <img src="https://latex.codecogs.com/png.latex?x_%7B1%7D"> in above equation then</li>
+<li><img src="https://latex.codecogs.com/png.latex?x_%7B2%7D%20=%20%5Csqrt%7B%5Calpha_%7B2%7D%7D(%5Csqrt%5Calpha_%7B1%7Dx_%7B0%7D%20+%20%5Csqrt%7B1-%5Calpha_%7B1%7D%7D%20%5Cepsilon)%20+%20%5Csqrt%7B1-%5Calpha_%7B2%7D%7D%20%5Cepsilon"></li>
+<li><img src="https://latex.codecogs.com/png.latex?x_%7B2%7D%20=%20%5Csqrt%7B%5Calpha_%7B1%7D%5Calpha_%7B2%7D%7Dx_%7B0%7D%20+%20%5Csqrt%7B%5Calpha_%7B2%7D(1-%5Calpha_%7B1%7D)%7D%20%5Cepsilon%20+%20%5Csqrt%7B1-%5Calpha_%7B2%7D%7D%20%5Cepsilon"></li>
+<li><img src="https://latex.codecogs.com/png.latex?x_%7B2%7D%20=%20%5Csqrt%7B%5Calpha_%7B1%7D%5Calpha_%7B2%7D%7Dx_%7B0%7D%20+%20%5Csqrt%7B%5Calpha_%7B2%7D-%5Calpha_%7B1%7D%5Calpha_%7B2%7D%7D%20%5Cepsilon%20+%20%5Csqrt%7B1-%5Calpha_%7B2%7D%7D%20%5Cepsilon"></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>When we merge two normal distributions with different variance, the new distribution is as per below formula
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?N(0,%20%5Csigma_%7B1%7D%5E2I)%20+%20N(0,%20%5Csigma_%7B2%7D%5E2I)%20=%20N(0,%20(%5Csigma_%7B1%7D%5E2%20+%20%5Csigma_%7B2%7D%5E2)I)"></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<ul>
+<li>Using above intuition we can change accordingly the forward equation</li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Csqrt%7B%5Calpha_%7B2%7D-%5Calpha_%7B1%7D%5Calpha_%7B2%7D%7D%20%5Cepsilon%20+%20%5Csqrt%7B1-%5Calpha_%7B2%7D%7D%20%5Cepsilon%20=%20%5Csqrt%7B1-%5Calpha_%7B1%7D%5Calpha_%7B2%7D%7D%20%5Cepsilon"></li>
+<li><img src="https://latex.codecogs.com/png.latex?x_%7B2%7D%20=%20%5Csqrt%7B%5Calpha_%7B1%7D%5Calpha_%7B2%7D%7Dx_%7B0%7D%20+%20%5Csqrt%7B1-%5Calpha_%7B1%7D%5Calpha_%7B2%7D%7D%20%5Cepsilon"></li>
+<li><img src="https://latex.codecogs.com/png.latex?x_%7B2%7D%20=%20%5Csqrt%7B%5Cbar%7B%5Calpha%7D_%7B2%7D%7Dx_%7B0%7D%20+%20%5Csqrt%7B1-%5Cbar%7B%5Calpha%7D_%7B2%7D%7D%20%5Cepsilon"></li>
+<li>If we generalize above equation it becomes</li>
+<li><img src="https://latex.codecogs.com/png.latex?x_%7Bt%7D%20=%20%5Csqrt%7B%5Cbar%7B%5Calpha%7D_%7Bt%7D%7Dx_%7B0%7D%20+%20%5Csqrt%7B1-%5Cbar%7B%5Calpha%7D_%7Bt%7D%7D%20%5Cepsilon"></li>
+</ul>
+</section>
+<section id="reverse-process" class="level2">
+<h2 class="anchored" data-anchor-id="reverse-process">Reverse Process</h2>
+<section id="reverse-transition-parameterization" class="level3">
+<h3 class="anchored" data-anchor-id="reverse-transition-parameterization">Reverse Transition (Parameterization)</h3>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?p(x_%7Bt-1%7D%7Cx_%7Bt%7D)%20=%20N(x_%7Bt-1%7D;%20%5Cmu_%7B%5Ctheta%7D(x_%7Bt%7D,%20t),%20%5Cepsilon_%7B%5Ctheta%7D(x_%7Bt%7D,%20t))"></li>
+<li>Two neural networks to parameterize normal distribution <img src="https://latex.codecogs.com/png.latex?%5Cmu_%7B%5Ctheta%7D"> and <img src="https://latex.codecogs.com/png.latex?%5Cepsilon_%7B%5Ctheta%7D"></li>
+<li>In paper variance is fixed so we only need to predict mean</li>
+<li>We want to maximize the log likelihood of our data as we do in case of VAEs</li>
+<li><img src="https://latex.codecogs.com/png.latex?log(p_%5Ctheta(x_%7B0%7D))"></li>
+<li>but it is not easily computable as it depends on all the other <img src="https://latex.codecogs.com/png.latex?x_%7Bts%7D">:- <img src="https://latex.codecogs.com/png.latex?x_0,%20x_1,%20x_2..x_T"></li>
+<li>So keeping track of other T-1 random variables is not possible as a solution we can compute ELBO as we did in VAEs</li>
+</ul>
+</section>
+<section id="objective-log-likelihood-and-elbo" class="level3">
+<h3 class="anchored" data-anchor-id="objective-log-likelihood-and-elbo">Objective: Log-Likelihood and ELBO</h3>
+<ul>
+<li><p>lets say when we have <img src="https://latex.codecogs.com/png.latex?f(x)"> and <img src="https://latex.codecogs.com/png.latex?g(x)"> and <img src="https://latex.codecogs.com/png.latex?f(x)"> &gt; <img src="https://latex.codecogs.com/png.latex?g(x)"> for all x then if we can maximize <img src="https://latex.codecogs.com/png.latex?g(x)"> then <img src="https://latex.codecogs.com/png.latex?f(x)"> will also be maximized</p></li>
+<li><p>Using the above analogy, lets say <img src="https://latex.codecogs.com/png.latex?f(x)%20=%20log(p_%5Ctheta(x_%7B0%7D))"> and <img src="https://latex.codecogs.com/png.latex?g(x)%20=%20log(p_%5Ctheta(x_%7B0%7D))%20-%20D_%7BKL%7D(q(x_1:x_T%20%5Cmid%20x_0)%20%7C%7C%20p_%7B%5Ctheta%7D(x_1:x_T%20%5Cmid%20x_0))"></p></li>
+<li><p>From above equations, we can see <img src="https://latex.codecogs.com/png.latex?f(x)"> and <img src="https://latex.codecogs.com/png.latex?g(x)"> are almost same, just there is one difference the KL-Divergence term which is being subtracted so if we are subtracting something then it is lesser than <img src="https://latex.codecogs.com/png.latex?f(x)"> and thus if we can somehow maximize <img src="https://latex.codecogs.com/png.latex?g(x)"> then we can maximize the likelihood of data samples</p></li>
+<li><p><img src="https://latex.codecogs.com/png.latex?log(p_%5Ctheta(x_%7B0%7D))%20%3E=%20log(p_%5Ctheta(x_%7B0%7D)))%20-%20D_%7BKL%7D(q(x_1:x_T%20%5Cmid%20x_0)%20%7C%7C%20p_%7B%5Ctheta%7D(x_1:x_T%20%5Cmid%20x_0))"></p></li>
+<li><p>Now we have to maximize <img src="https://latex.codecogs.com/png.latex?log(p_%5Ctheta(x_%7B0%7D)))%20-%20D_%7BKL%7D(q(x_1:x_T%20%5Cmid%20x_0)%20%7C%7C%20p_%7B%5Ctheta%7D(x_1:x_T%20%5Cmid%20x_0))"></p></li>
+<li><p>Now our loss becomes negative of log likelihood <span id="eq-loss"><img src="https://latex.codecogs.com/png.latex?-log(p_%5Ctheta(x_%7B0%7D)))%20+%20D_%7BKL%7D(q(x_1:x_T%20%5Cmid%20x_0)%20%7C%7C%20p_%7B%5Ctheta%7D(x_1:x_T%20%5Cmid%20x_0))%20%5Ctag%7B1%7D"></span></p></li>
+<li><p>Even now our loss still contains <img src="https://latex.codecogs.com/png.latex?p_%5Ctheta(x_%7B0%7D)"> and to eliminate that we have to make some changes to KL term</p></li>
+</ul>
+</section>
+<section id="from-kl-term-to-vlb-step-by-step-expansion" class="level3">
+<h3 class="anchored" data-anchor-id="from-kl-term-to-vlb-step-by-step-expansion">From KL Term to VLB (Step-by-step Expansion)</h3>
+<ul>
+<li>Now lets focus on KL-term only
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?D_%7BKL%7D(q(x_1:x_T%20%5Cmid%20x_0)%20%7C%7C%20p_%7B%5Ctheta%7D(x_1:x_T%20%5Cmid%20x_0))"> = <img src="https://latex.codecogs.com/png.latex?log%5Cfrac%7Bq(x_1:x_T%20%5Cmid%20x_0)%7D%7Bp_%7B%5Ctheta%7D(x_1:x_T%20%5Cmid%20x_0)%7D"></li>
+<li>the denominator in the above expression can be replaced using bayes’ theorem</li>
+<li><img src="https://latex.codecogs.com/png.latex?p_%7B%5Ctheta%7D(x_1:x_T%20%5Cmid%20x_0)%20=%20%5Cfrac%7Bp_%7B%5Ctheta%7D(x_0%20%5Cmid%20x_1:x_T)p_%7B%5Ctheta%7D(x_1:x_T%20)%7D%7Bp_%7B%5Ctheta%7D(x_0)%7D"></li>
+<li>Numerator can be replaced by <img src="https://latex.codecogs.com/png.latex?p_%7B%5Ctheta%7D(x_0%20,%20x_1:x_T)"> using joint probability.</li>
+<li>Now <img src="https://latex.codecogs.com/png.latex?p_%7B%5Ctheta%7D(x_1:x_T%20%5Cmid%20x_0)%20=%20%5Cfrac%7Bp_%7B%5Ctheta%7D(x_0%20,%20x_1:x_T)%7D%7Bp_%7B%5Ctheta%7D(x_0)%7D"></li>
+<li>where <img src="https://latex.codecogs.com/png.latex?p_%7B%5Ctheta%7D(x_0%20,%20x_1:x_T)"> can be written as <img src="https://latex.codecogs.com/png.latex?p_%7B%5Ctheta%7D(x_0:x_T)"> full joint distribution of entire diffusion trajectory</li>
+<li>Now putting back the denominator value in KL term as <img src="https://latex.codecogs.com/png.latex?%5Cfrac%7Bp_%7B%5Ctheta%7D(x_0:x_T)%7D%7Bp_%7B%5Ctheta%7D(x_0)%7D"> gives us</li>
+<li><img src="https://latex.codecogs.com/png.latex?log%5Cfrac%7Bq(x_1:x_T%20%5Cmid%20x_0)p_%7B%5Ctheta%7D(x_0)%7D%7Bp_%7B%5Ctheta%7D(x_0:x_T)%7D"></li>
+<li>If we expand above equation as:-</li>
+<li><img src="https://latex.codecogs.com/png.latex?log%5Cfrac%7Bq(x_1:x_T%20%5Cmid%20x_0)%7D%7Bp_%7B%5Ctheta%7D(x_0:x_T)%7D"> + <img src="https://latex.codecogs.com/png.latex?log(p_%7B%5Ctheta%7D(x_0))"></li>
+</ul></li>
+<li>lets add above derived kl term in Equation&nbsp;1 which gives</li>
+<li><img src="https://latex.codecogs.com/png.latex?-log(p_%7B%5Ctheta%7D(x_%7B0%7D))%20+%20log%5Cfrac%7Bq(x_1:x_T%20%5Cmid%20x_0)%7D%7Bp_%7B%5Ctheta%7D(x_0:x_T)%7D%20+%20log(p_%7B%5Ctheta%7D(x_0))"></li>
+<li>Notice <img src="https://latex.codecogs.com/png.latex?-log(p_%7B%5Ctheta%7D(x_%7B0%7D))"> gets cancelled with <img src="https://latex.codecogs.com/png.latex?log(p_%7B%5Ctheta%7D(x_0))"></li>
+<li>Now our loss function becomes: <img src="https://latex.codecogs.com/png.latex?log%5Cfrac%7Bq(x_1:x_T%20%5Cmid%20x_0)%7D%7Bp_%7B%5Ctheta%7D(x_0:x_T)%7D"></li>
+<li>Which gives <img src="https://latex.codecogs.com/png.latex?-log(p_%5Ctheta(x_%7B0%7D))%20%3C=%20log%5Cfrac%7Bq(x_1:x_T%20%5Cmid%20x_0)%7D%7Bp_%7B%5Ctheta%7D(x_0:x_T)%7D"> VLB</li>
+</ul>
+</section>
+<section id="vlb-expansion-product-to-summation" class="level3">
+<h3 class="anchored" data-anchor-id="vlb-expansion-product-to-summation">VLB Expansion (Product to Summation)</h3>
+<ul>
+<li>As we can see in VLB numerator is basically forward pass and denominator can be written as:</li>
+<li><img src="https://latex.codecogs.com/png.latex?p_%7B%5Ctheta%7D(x_%7B0:T%7D)%20=%20p(x_T)%5Cprod_%7Bt=1%7D%5E%7BT%7D%20p_%7B%5Ctheta%7D(x_%7Bt-1%7D%20%5Cmid%20x_t)"> and <img src="https://latex.codecogs.com/png.latex?p(x_T)"> is simply normal distribution with mean 0 and std 1</li>
+<li>We can also write numerator as product of probabilities as <img src="https://latex.codecogs.com/png.latex?%5Cprod_%7Bt=1%7D%5E%7BT%7Dq(x_%7Bt%7D%20%5Cmid%20x_%7Bt-1%7D)"></li>
+<li>Now our VLB becomes</li>
+<li><img src="https://latex.codecogs.com/png.latex?log%5Cfrac%7B%5Cprod_%7Bt=1%7D%5E%7BT%7Dq(x_%7Bt%7D%20%5Cmid%20x_%7Bt-1%7D)%7D%7Bp(x_T)%5Cprod_%7Bt=1%7D%5E%7BT%7D%20p_%7B%5Ctheta%7D(x_%7Bt-1%7D%20%5Cmid%20x_t)%7D"></li>
+<li>Now take out <img src="https://latex.codecogs.com/png.latex?p(x_T)"> which gives</li>
+<li><img src="https://latex.codecogs.com/png.latex?-log(p(x_T))%20+%20log%5Cfrac%7B%5Cprod_%7Bt=1%7D%5E%7BT%7Dq(x_%7Bt%7D%20%5Cmid%20x_%7Bt-1%7D)%7D%7B%5Cprod_%7Bt=1%7D%5E%7BT%7D%20p_%7B%5Ctheta%7D(x_%7Bt-1%7D%20%5Cmid%20x_t)%7D"></li>
+<li>Now we can transform product to summation which gives</li>
+<li><img src="https://latex.codecogs.com/png.latex?-log(p(x_T))%20+%20%5Csum_%7Bt=1%7D%5E%7BT%7Dlog%5Cfrac%7Bq(x_%7Bt%7D%20%5Cmid%20x_%7Bt-1%7D)%7D%7Bp_%7B%5Ctheta%7D(x_%7Bt-1%7D%20%5Cmid%20x_t)%7D"></li>
+<li>Now from summation one take out t=1 formulation and keep everything as it is which gives</li>
+<li><img src="https://latex.codecogs.com/png.latex?-log(p(x_T))%20+%20%5Csum_%7Bt=2%7D%5E%7BT%7Dlog%5Cfrac%7Bq(x_%7Bt%7D%20%5Cmid%20x_%7Bt-1%7D)%7D%7Bp_%7B%5Ctheta%7D(x_%7Bt-1%7D%20%5Cmid%20x_t)%7D+%20log%5Cfrac%7Bq(x_1%20%5Cmid%20x_0)%7D%7Bp_%7B%5Ctheta%7D(x_0%20%5Cmid%20x_1)%7D"></li>
+<li>now the numerator in summation of logs can be written as:</li>
+<li><img src="https://latex.codecogs.com/png.latex?q(x_t%20%5Cmid%20x_%7Bt-1%7D)%20=%20%5Cfrac%7Bq(x_%7Bt-1%7D%20%5Cmid%20x_t)q(x_t)%7D%7Bq(x_%7Bt-1%7D)%7D"></li>
+</ul>
+</section>
+<section id="conditioning-trick-reduce-variance-with-x_0" class="level3">
+<h3 class="anchored" data-anchor-id="conditioning-trick-reduce-variance-with-x_0">Conditioning Trick: Reduce Variance with <img src="https://latex.codecogs.com/png.latex?x_0"></h3>
+<ul>
+<li><p>Now all the three terms 2 in numerator and 1 in denominator have really high variance, since we dont know what we started from that’s why author tried to reduce the variance by conditioning on x_0 and thus it reduces the choice of possible candidates. Intuitively given a noisy sample how can you say that what part do i have to remove, whereas if we also have x_0 then we might guess what part of noise to remove.</p></li>
+<li><p>So <img src="https://latex.codecogs.com/png.latex?q(x_t%20%5Cmid%20x_%7Bt-1%7D)%20=%20%5Cfrac%7Bq(x_%7Bt-1%7D%20%5Cmid%20x_t,%20x_0)q(x_t%20%5Cmid%20x_0)%7D%7Bq(x_%7Bt-1%7D%20%5Cmid%20x_0)%7D"></p></li>
+<li><p>Notice If we have not taken out the t=1 term then there have been a loop as</p></li>
+<li><p><img src="https://latex.codecogs.com/png.latex?q(x_1%20%5Cmid%20x_0)%20=%20%5Cfrac%7Bq(x_0%20%5Cmid%20x_1)q(x_1)%7D%7Bq(x_0)%7D%20=%20%5Cfrac%7Bq(x_0%20%5Cmid%20x_1,%20x_0)q(x_1%20%5Cmid%20x_0)%7D%7Bq(x_0%20%5Cmid%20x_0)%7D"></p></li>
+<li><p>lets put back the value of <img src="https://latex.codecogs.com/png.latex?q(x_t%20%5Cmid%20x_%7Bt-1%7D)"> back in original equation which gives</p></li>
+<li><p><img src="https://latex.codecogs.com/png.latex?-log(p(x_T))%20+%20%5Csum_%7Bt=2%7D%5E%7BT%7Dlog(%5Cfrac%7Bq(x_%7Bt-1%7D%20%5Cmid%20x_%7Bt%7D,%20x_0)q(x_t%20%5Cmid%20x_0)%7D%7Bp_%7B%5Ctheta%7D(x_%7Bt-1%7D%20%5Cmid%20x_t)q(x_%7Bt-1%7D%20%5Cmid%20x_0)%7D)%20+%20log(%5Cfrac%7Bq(x_1%20%5Cmid%20x_0)%7D%7Bp_%7B%5Ctheta%7D(x_0%20%5Cmid%20x_1)%7D)"></p></li>
+<li><p>lets expand summation one</p></li>
+<li><p><img src="https://latex.codecogs.com/png.latex?-log(p(x_T))%20+%20%5Csum_%7Bt=2%7D%5E%7BT%7Dlog%5Cfrac%7Bq(x_%7Bt-1%7D%20%5Cmid%20x_%7Bt%7D,%20x_0)%7D%7Bp_%7B%5Ctheta%7D(x_%7Bt-1%7D%20%5Cmid%20x_t)%7D%20+%20%5Csum_%7Bt=2%7D%5E%7BT%7Dlog%5Cfrac%7Bq(x_t%20%5Cmid%20x_0)%7D%7Bq(x_%7Bt-1%7D%20%5Cmid%20x_0)%7D+%20log(%5Cfrac%7Bq(x_1%20%5Cmid%20x_0)%7D%7Bp_%7B%5Ctheta%7D(x_0%20%5Cmid%20x_1)%7D)"></p></li>
+<li><p>the 3rd term in above equation if expanded is just <img src="https://latex.codecogs.com/png.latex?log%5Cfrac%7Bq(x_T%20%5Cmid%20x_0)%7D%7Bq(x_1%20%5Cmid%20x_0)%7D"></p></li>
+<li><p>Now our loss looks like</p></li>
+<li><p><img src="https://latex.codecogs.com/png.latex?-log(p(x_T))%20+%20%5Csum_%7Bt=2%7D%5E%7BT%7Dlog%5Cfrac%7Bq(x_%7Bt-1%7D%20%5Cmid%20x_%7Bt%7D,%20x_0)%7D%7Bp_%7B%5Ctheta%7D(x_%7Bt-1%7D%20%5Cmid%20x_t)%7D%20+%20log%5Cfrac%7Bq(x_T%20%5Cmid%20x_0)%7D%7Bq(x_1%20%5Cmid%20x_0)%7D+%20log(%5Cfrac%7Bq(x_1%20%5Cmid%20x_0)%7D%7Bp_%7B%5Ctheta%7D(x_0%20%5Cmid%20x_1)%7D)"></p></li>
+<li><p>lets open up the 3rd and 4th term over log</p></li>
+<li><p>$-log(p(x_T)) + <em>{t=2}^{T}log + log(q(x_T x_0)) - log(q(x_1 x_0)) + log(q(x_1 x_0)) - log(p</em>{}(x_0 x_1)) $</p></li>
+<li><p>which gives us finally</p></li>
+<li><p><img src="https://latex.codecogs.com/png.latex?log(%5Cfrac%7Bq(x_T%20%5Cmid%20x_0)%7D%7Bp(x_T)%7D)%20+%20%5Csum_%7Bt=2%7D%5E%7BT%7Dlog%5Cfrac%7Bq(x_%7Bt-1%7D%20%5Cmid%20x_%7Bt%7D,%20x_0)%7D%7Bp_%7B%5Ctheta%7D(x_%7Bt-1%7D%20%5Cmid%20x_t)%7D%20-%20log(p_%7B%5Ctheta%7D(x_0%20%5Cmid%20x_1))"></p></li>
+</ul>
+</section>
+<section id="final-loss-decomposition-l_t-l_t-l_0" class="level3">
+<h3 class="anchored" data-anchor-id="final-loss-decomposition-l_t-l_t-l_0">Final Loss Decomposition (<img src="https://latex.codecogs.com/png.latex?L_T">, <img src="https://latex.codecogs.com/png.latex?L_t">, <img src="https://latex.codecogs.com/png.latex?L_0">)</h3>
+<ul>
+<li>Let’s say
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?L_T%20=%20D_%7BKL%7D(q(x_T%20%5Cmid%20x_0)%20%7C%7C%20p(x_T))"></li>
+<li><img src="https://latex.codecogs.com/png.latex?L_t%20=%20%5Csum_%7Bt=2%7D%5E%7BT%7DD_%7BKL%7D(q(x_%7Bt-1%7D%20%5Cmid%20x_t,%20x_0)%20%7C%7C%20p_%7B%5Ctheta%7D(x_%7Bt-1%7D%20%5Cmid%20x_t))"></li>
+<li><img src="https://latex.codecogs.com/png.latex?L_0%20=%20log(p_%7B%5Ctheta%7D(x_0%20%5Cmid%20x_1))"></li>
+</ul></li>
+<li>We can neglect <img src="https://latex.codecogs.com/png.latex?L_T"> since it does not involve any parameters</li>
+<li>For <img src="https://latex.codecogs.com/png.latex?L_t"></li>
+<li>Recall when we applied bayes’ rule, due to that both forward and reverse process are in same form now</li>
+<li>Now lets focus on <img src="https://latex.codecogs.com/png.latex?L_t"> and <img src="https://latex.codecogs.com/png.latex?L_0"></li>
+<li><img src="https://latex.codecogs.com/png.latex?p_%7B%5Ctheta%7D(x_%7Bt-1%7D%20%5Cmid%20x_t)%20=%20N(x_%7Bt-1%7D;%20%5Cmu_%7B%5Ctheta%7D(x_t,%20t),%20%5Cepsilon_%7B%5Ctheta%7D(x_t,%20t))"></li>
+<li>since <img src="https://latex.codecogs.com/png.latex?%5Cepsilon_%7B%5Ctheta%7D(x_t,%20t)"> is fixed which is <img src="https://latex.codecogs.com/png.latex?%5Cbeta_t%20I"></li>
+<li><img src="https://latex.codecogs.com/png.latex?p_%7B%5Ctheta%7D(x_%7Bt-1%7D%20%5Cmid%20x_t)%20=%20N(x_%7Bt-1%7D;%20%5Cmu_%7B%5Ctheta%7D(x_t,%20t),%20%5Cbeta_t%20I)"></li>
+<li><img src="https://latex.codecogs.com/png.latex?q(x_%7Bt-1%7D%20%5Cmid%20x_t,%20x_0)"> also has a closed form solution which is equal to</li>
+<li><img src="https://latex.codecogs.com/png.latex?N(x_%7Bt-1%7D;%20%5Ctilde%7B%5Cmu_t%7D(x_t,%20x_0),%20%5Ctilde%7B%5Cbeta_t%7DI)"></li>
+<li>For derivation check out <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/">What are Diffusion Models?</a></li>
+<li>But for now assume
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%5Ctilde%7B%5Cmu_t%7D(x_t,%20x_0)%20=%20%5Cfrac%7B%5Csqrt%7B%5Calpha_t%7D(1-%5Cbar%7B%5Calpha%7D_%7Bt-1%7D)%7D%7B1-%5Cbar%7B%5Calpha%7D_t%7DX_t%20+%20%5Cfrac%7B%5Csqrt%7B%5Cbar%7B%5Calpha%7D_%7Bt-1%7D%7D%5Cbeta_t%7D%7B1-%5Cbar%7B%5Calpha%7D_t%7DX_0"></li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Ctilde%7B%5Cbeta_t%7D%20=%20%5Cfrac%7B1-%5Cbar%7B%5Calpha%7D_%7Bt-1%7D%7D%7B1-%5Cbar%7B%5Calpha%7D_t%7D%5Cbeta_t"></li>
+<li>Since _t is fixed, we can neglect this</li>
+</ul></li>
+</ul>
+</section>
+<section id="noise-prediction-reparameterization-predict-epsilon" class="level3">
+<h3 class="anchored" data-anchor-id="noise-prediction-reparameterization-predict-epsilon">Noise Prediction Reparameterization (Predict epsilon)</h3>
+<ul>
+<li>from forward pass put the value of X_0 in <img src="https://latex.codecogs.com/png.latex?%5Ctilde%7B%5Cmu_t%7D"></li>
+<li><img src="https://latex.codecogs.com/png.latex?x_%7Bt%7D%20=%20%5Csqrt%7B%5Cbar%7B%5Calpha%7D_%7Bt%7D%7Dx_%7B0%7D%20+%20%5Csqrt%7B1-%5Cbar%7B%5Calpha%7D_%7Bt%7D%7D%20%5Cepsilon"></li>
+<li>from above equation</li>
+<li><img src="https://latex.codecogs.com/png.latex?x_%7B0%7D%20=%20%5Cfrac%7Bx_%7Bt%7D%20-%20%5Csqrt%7B1-%5Cbar%7B%5Calpha%7D_%7Bt%7D%7D%20%5Cepsilon%7D%7B%5Csqrt%7B%5Cbar%7B%5Calpha%7D_%7Bt%7D%7D%7D"></li>
+<li>which gives</li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Ctilde%7B%5Cmu%7D(x_t,%20x_0)%20=%20%5Cfrac%7B1%7D%7B%5Csqrt%7B%5Calpha_t%7D%7D(x_t%20-%20%5Cfrac%7B%5Cbeta_t%7D%7B%5Csqrt%7B1-%5Cbar%7B%5Calpha%7D_t%7D%7D%5Cepsilon)"></li>
+<li>Our model needs to predict <img src="https://latex.codecogs.com/png.latex?%5Ctilde%7B%5Cmu%7D(x_t,%20x_0)"></li>
+<li>Since <img src="https://latex.codecogs.com/png.latex?x_t"> is available as input at training time, we can reparameterize the gaussian noise term instead to predict <img src="https://latex.codecogs.com/png.latex?%5Cepsilon"> from input <img src="https://latex.codecogs.com/png.latex?x_t"> at time step <img src="https://latex.codecogs.com/png.latex?t"></li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cmu_%7B%5Ctheta%7D(x_t,%20t)%20=%20%5Cfrac%7B1%7D%7B%5Csqrt%7B%5Calpha_t%7D%7D(x_t%20-%20%5Cfrac%7B%5Cbeta_t%7D%7B%5Csqrt%7B1-%5Cbar%7B%5Calpha%7D_t%7D%7D%5Cepsilon_%7B%5Ctheta%7D(x_t,%20t))"></li>
+<li><img src="https://latex.codecogs.com/png.latex?L_t%20=%20%5Cfrac%7B1%7D%7B2%7B%5Csigma_%7Bt%7D%7D%5E2%7D%20MSE(%5Ctilde%7B%5Cmu_t%7D(x_t,%20x_0),%20%5Cmu_%7B%5Ctheta%7D(x_t,%20t))"></li>
+<li>now comparing <img src="https://latex.codecogs.com/png.latex?%5Cmu_%7B%5Ctheta%7D(x_t,%20t)"> and <img src="https://latex.codecogs.com/png.latex?%5Ctilde%7B%5Cmu_t%7D(x_t,%20x_0)"></li>
+<li><img src="https://latex.codecogs.com/png.latex?L_t%20=%20%5Cfrac%7B%7B%5Cbeta_%7Bt%7D%7D%5E2%7D%7B2%7B%5Csigma_%7Bt%7D%7D%5E2%5Calpha_t(1-%5Cbar%7B%5Calpha_t%7D)%7D%20MSE(%5Cepsilon,%20%5Cepsilon_%7B%5Ctheta%7D(x_t,%20t))"></li>
+<li>Authors from the DDPM paper neglected the weighting term citing that it improves the sample quality and implementation is quite easy.</li>
+<li>So <img src="https://latex.codecogs.com/png.latex?L_t%20=%20%20MSE(%5Cepsilon,%20%5Cepsilon_%7B%5Ctheta%7D(x_t,%20t))"></li>
+<li>Now for <img src="https://latex.codecogs.com/png.latex?L_0"></li>
+<li>Authors decided to neglect the last term but basically it was comparing with <img src="https://latex.codecogs.com/png.latex?x_0">, like how probable is the predicted <img src="https://latex.codecogs.com/png.latex?x_0"> given <img src="https://latex.codecogs.com/png.latex?x_1"></li>
+<li>By neglecting <img src="https://latex.codecogs.com/png.latex?L_0">, while generating sample, we add noise till <img src="https://latex.codecogs.com/png.latex?t%3E1"> but at <img src="https://latex.codecogs.com/png.latex?t=1">, we just return the sample</li>
+</ul>
+</section>
+<section id="sampling-step-x_t-1-from-x_t" class="level3">
+<h3 class="anchored" data-anchor-id="sampling-step-x_t-1-from-x_t">Sampling Step (<img src="https://latex.codecogs.com/png.latex?x_%7Bt-1%7D"> from <img src="https://latex.codecogs.com/png.latex?x_t">)</h3>
+<ul>
+<li>Now back to starting sample generation</li>
+<li><img src="https://latex.codecogs.com/png.latex?p_%7B%5Ctheta%7D(x_%7Bt-1%7D%20%5Cmid%20x_t)%20=%20N(x_%7Bt-1%7D;%20%5Cmu_%7B%5Ctheta%7D(x_t,%20t),%20%5Cbeta_%7Bt%7DI)">, which gives</li>
+<li><img src="https://latex.codecogs.com/png.latex?x_%7Bt-1%7D%20=%20%5Cmu_%7B%5Ctheta%7D(x_t,%20t)%20+%20%5Csqrt%7B%5Cbeta_%7Bt%7D%7D%5Cepsilon"></li>
+<li>now putting the value of <img src="https://latex.codecogs.com/png.latex?%5Cmu_%7B%5Ctheta%7D(x_t,%20t)"> gives</li>
+<li><img src="https://latex.codecogs.com/png.latex?x_%7Bt-1%7D%20=%20%5Cfrac%7B1%7D%7B%5Csqrt%7B%5Calpha_%7Bt%7D%7D%7D(x_t%20-%20%5Cfrac%7B%5Cbeta_t%7D%7B%5Csqrt(1-%5Cbar%7B%5Calpha%7D_t)%7D%5Cepsilon_%7B%5Ctheta%7D(x_t,%20t))%20+%20%5Csqrt%7B%5Cbeta_%7Bt%7D%7D%5Cepsilon"></li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/diffusion-models/train.png" style="width:80%" class="figure-img">
+<figcaption>
+Training Algorithm
+</figcaption>
+</figure>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/diffusion-models/sample.png" style="width:80%" class="figure-img">
+<figcaption>
+Sampling Algorithm
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="implementation" class="level2">
+<h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
+<ul>
+<li>Below is simple implementation of forward process, reverse process, sampling and loss, where eps_theta is our denoiser model</li>
+<li>For the complete class-conditioned DDPM implementation, check out:- <a href="https://github.com/riteshrm/nanoDiffusion/ddpm.py">nanoDiffusion/ddpm.py</a></li>
+</ul>
+<div id="ddpm-reference-implementation" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb1-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> Diffusion():</span>
+<span id="cb1-3">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, beta_start, beta_end, timesteps):</span>
+<span id="cb1-4">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.beta_start <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> beta_start</span>
+<span id="cb1-5">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.beta_end <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> beta_end</span>
+<span id="cb1-6">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.timesteps <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> timesteps</span>
+<span id="cb1-7">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.beta_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.linspace(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.beta_start, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.beta_end, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.timesteps)</span>
+<span id="cb1-8">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.alpha_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.beta_t</span>
+<span id="cb1-9">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.alphabar_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.cumprod(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.alpha_t, dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>)</span>
+<span id="cb1-10">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.eps_theta <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.nn.Module()</span>
+<span id="cb1-11"></span>
+<span id="cb1-12">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> forward_process(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, x_0, eps, t):</span>
+<span id="cb1-13">        alphabar_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.alphabar_t[t].view(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb1-14">        x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.sqrt(alphabar_t)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>x_0 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> torch.sqrt(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> alphabar_t)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>eps</span>
+<span id="cb1-15">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> x_t</span>
+<span id="cb1-16">    </span>
+<span id="cb1-17">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> reverse_process(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, x_t, t, eps<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>):</span>
+<span id="cb1-18">        pred_eps <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.eps_theta(x_t, t)</span>
+<span id="cb1-19">        alphabar_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.alphabar_t[t].view(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb1-20">        alpha_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.alpha_t[t].view(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb1-21">        beta_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.beta_t[t].view(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb1-22">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> eps <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">is</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>:</span>
+<span id="cb1-23">            x_prevt <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>torch.sqrt(alpha_t))<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>(x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> (beta_t<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>torch.sqrt(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> alphabar_t))<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>pred_eps)</span>
+<span id="cb1-24">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span>:</span>
+<span id="cb1-25">            x_prevt <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>torch.sqrt(alpha_t))<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>(x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> (beta_t<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>torch.sqrt(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> alphabar_t))<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>pred_eps) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> torch.sqrt(beta_t)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>eps</span>
+<span id="cb1-26">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> x_prevt</span>
+<span id="cb1-27">    </span>
+<span id="cb1-28">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> sample(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, shape):</span>
+<span id="cb1-29">        x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.randn(shape)</span>
+<span id="cb1-30">        </span>
+<span id="cb1-31">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> t <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.timesteps<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>):</span>
+<span id="cb1-32">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> t<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>:</span>
+<span id="cb1-33">                x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.reverse_process(x_t, t)</span>
+<span id="cb1-34">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span>:</span>
+<span id="cb1-35">                eps <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.randn(shape)</span>
+<span id="cb1-36">                x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.reverse_process(x_t, t, eps)</span>
+<span id="cb1-37">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> x_t</span>
+<span id="cb1-38">    </span>
+<span id="cb1-39">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> loss(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, x_0):</span>
+<span id="cb1-40">        t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.randint(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.timesteps, (x_0.shape[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>],))</span>
+<span id="cb1-41">        eps <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.randn_like(x_0)</span>
+<span id="cb1-42">        x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.forward_process(x_0, eps, t)</span>
+<span id="cb1-43">        pred_eps <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.eps_theta(x_t, t)</span>
+<span id="cb1-44">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> torch.nn.functional.mse_loss(eps, pred_eps)</span></code></pre></div></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="faster-sampling-denoising-diffusion-implicit-models" class="level1">
+<h1>Faster Sampling (Denoising Diffusion Implicit Models)</h1>
+<section id="motivation-fewer-steps-than-ddpm" class="level2">
+<h2 class="anchored" data-anchor-id="motivation-fewer-steps-than-ddpm">Motivation: Fewer Steps than DDPM</h2>
+<ul>
+<li>So DDPM is taking the same number of steps as in forward process to generate a sample.</li>
+<li>May be we can make larger jumps in reverse process, but the resultants are not good due to stochastic nature in DDPM reverse</li>
+<li>DDIM aims to follow a non-markovian process, which also keeps the marginal same as DDPM at the same avoiding stochasticity in reverse process</li>
+<li>Basically DDIM proposes q [<img src="https://latex.codecogs.com/png.latex?q_%7B%5Csigma%7D(x_%7Bt-1%7D%20%5Cmid%20x_t,%20x_0)">] such that
+<ul>
+<li>Marginal is same as DDPM :- <img src="https://latex.codecogs.com/png.latex?q_%7B%5Csigma%7D(x_%7Bt%7D%20%5Cmid%20x_0)%20=%20q(x_%7Bt%7D%20%5Cmid%20x_0)"></li>
+<li>Generation process can be made deterministic:- <img src="https://latex.codecogs.com/png.latex?p_%7B%5Ctheta%7D(x_%7Bt-1%7D%20%5Cmid%20x_1)"> can be made deterministic</li>
+</ul></li>
+</ul>
+</section>
+<section id="ddim-setup-non-markovian-same-marginals" class="level2">
+<h2 class="anchored" data-anchor-id="ddim-setup-non-markovian-same-marginals">DDIM Setup: Non-Markovian, Same Marginals</h2>
+<ul>
+<li>Which gives</li>
+<li><img src="https://latex.codecogs.com/png.latex?q_%7B%5Csigma%7D(x_%7Bt-1%7D%20%5Cmid%20x_t,%20x_0)%20=%20N(%5Csqrt%7B%5Cbar%7B%5Calpha%7D_%7Bt-1%7D%7Dx_0%20+%20%5Csqrt%7B1-%5Cbar%7B%5Calpha%7D_%7Bt-1%7D-%5Csigma_t%5E2%7D%5Cfrac%7Bx_t%20-%20%5Csqrt%7B%5Cbar%7B%5Calpha%7D_t%7Dx_0%7D%7B%5Csqrt%7B1-%5Cbar%7B%5Calpha%7D_1%7D%7D,%20%5Csigma_t%5E2I)"></li>
+</ul>
+</section>
+<section id="deterministic-sampling-sigma-0" class="level2">
+<h2 class="anchored" data-anchor-id="deterministic-sampling-sigma-0">Deterministic Sampling (sigma = 0)</h2>
+<ul>
+<li>After setting <img src="https://latex.codecogs.com/png.latex?%5Csigma%20=%200">, there will not be any stochasticity</li>
+<li><img src="https://latex.codecogs.com/png.latex?p_%7B%5Ctheta%7D(x_%7Bt-1%7D%20%5Cmid%20x_1)%20%20%5Ctriangleq%20q_%7B%5Csigma=0%7D(x_%7Bt-1%7D%20%5Cmid%20x_t,%20%5Chat%7Bx_0%7D(t))"></li>
+<li>where <img src="https://latex.codecogs.com/png.latex?%5Chat%7Bx_0%7D(t)"> is approximated <img src="https://latex.codecogs.com/png.latex?%5Chat%7Bx_0%7D"> at every step</li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Chat%7Bx_0%7D(t)%20=%20%5Cfrac%7Bx_t%20-%20%5Csqrt%7B1-%5Cbar%7B%5Calpha%7D_t%7D%5Cepsilon_%7B%5Ctheta%7D(x_t,%20t)%7D%7B%5Csqrt%7B%5Cbar%7B%5Calpha%7D_t%7D%7D"></li>
+<li><img src="https://latex.codecogs.com/png.latex?x_%7Bt-1%7D%20=%20%5Csqrt%7B%5Cbar%7B%5Calpha%7D_%7Bt-1%7D%7D%5Chat%7Bx_0%7D(t)%20+%20%5Csqrt%7B1-%5Cbar%7B%5Calpha%7D_%7Bt-1%7D%7D%5Cepsilon_%7B%5Ctheta%7D(x_t,%20t)%20+%200"></li>
+<li>Our prediction of the clean image from time t that we noise to time t-1 with no stochasticity</li>
+</ul>
+</section>
+<section id="update-rule-x_tau_i-1-from-x_tau_i" class="level2">
+<h2 class="anchored" data-anchor-id="update-rule-x_tau_i-1-from-x_tau_i">Update Rule (<img src="https://latex.codecogs.com/png.latex?x_%7B%5Ctau_%7Bi-1%7D%7D"> from <img src="https://latex.codecogs.com/png.latex?x_%7B%5Ctau_i%7D">)</h2>
+<ul>
+<li>Lets generalize it</li>
+<li><img src="https://latex.codecogs.com/png.latex?x_%7B%5Ctau_%7Bi-1%7D%7D%20=%20%5Csqrt%7B%5Cbar%7B%5Calpha%7D_%7B%5Ctau_%7Bi-1%7D%7D%7D%5Chat%7Bx_0%7D(%7B%5Ctau_%7Bi%7D%7D)%20+%20%5Csqrt%7B1-%5Cbar%7B%5Calpha%7D_%7B%5Ctau_%7Bi-1%7D%7D%7D%5Cepsilon_%7B%5Ctheta%7D(x_%7B%5Ctau_%7Bi%7D%7D,%20%5Ctau_%7Bi%7D)"></li>
+</ul>
+</section>
+<section id="implementation-1" class="level2">
+<h2 class="anchored" data-anchor-id="implementation-1">Implementation</h2>
+<ul>
+<li>For the complete class-conditioned DDIM implementation, check out:- <a href="https://github.com/riteshrm/nanoDiffusion/ddim.py">nanoDiffusion/ddim.py</a></li>
+</ul>
+<div id="ddim-reference-implementation" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb2-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> Diffusion():</span>
+<span id="cb2-3">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, beta_start, beta_end, timesteps):</span>
+<span id="cb2-4">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.beta_start <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> beta_start</span>
+<span id="cb2-5">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.beta_end <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> beta_end</span>
+<span id="cb2-6">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.timesteps <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> timesteps</span>
+<span id="cb2-7">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.beta_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.linspace(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.beta_start, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.beta_end, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.timesteps)</span>
+<span id="cb2-8">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.alpha_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.beta_t</span>
+<span id="cb2-9">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.alphabar_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.cumprod(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.alpha_t, dim<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>)</span>
+<span id="cb2-10">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.eps_theta <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.nn.Module()</span>
+<span id="cb2-11"></span>
+<span id="cb2-12">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> forward_process(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, x_0, eps, t):</span>
+<span id="cb2-13">        alphabar_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.alphabar_t[t].view(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb2-14">        x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.sqrt(alphabar_t)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>x_0 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> torch.sqrt(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> alphabar_t)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>eps</span>
+<span id="cb2-15">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> x_t</span>
+<span id="cb2-16">    </span>
+<span id="cb2-17">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> reverse_process(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, x_t, t, eps<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>):</span>
+<span id="cb2-18">        pred_eps <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.eps_theta(x_t, t)</span>
+<span id="cb2-19">        alphabar_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.alphabar_t[t].view(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb2-20">        alpha_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.alpha_t[t].view(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb2-21">        beta_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.beta_t[t].view(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb2-22">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> eps <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">is</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>:</span>
+<span id="cb2-23">            x_prevt <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>torch.sqrt(alpha_t))<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>(x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> (beta_t<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>torch.sqrt(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> alphabar_t))<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>pred_eps)</span>
+<span id="cb2-24">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span>:</span>
+<span id="cb2-25">            x_prevt <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>torch.sqrt(alpha_t))<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>(x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> (beta_t<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>torch.sqrt(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> alphabar_t))<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>pred_eps) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> torch.sqrt(beta_t)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>eps</span>
+<span id="cb2-26">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> x_prevt</span>
+<span id="cb2-27">    </span>
+<span id="cb2-28">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> sample_ddim(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, shape, num_steps):</span>
+<span id="cb2-29">        x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.randn(shape)</span>
+<span id="cb2-30"></span>
+<span id="cb2-31">        steps <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.linspace(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.timesteps<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, num_steps, dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>torch.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>)</span>
+<span id="cb2-32"></span>
+<span id="cb2-33">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(num_steps):</span>
+<span id="cb2-34">            t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> steps[i]</span>
+<span id="cb2-35">            alphabar_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.alphabar_t[t].view(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb2-36">            pred_eps <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.eps_theta(x_t, t)</span>
+<span id="cb2-37">            x_hat <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> (<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>alphabar_t).sqrt()<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>pred_eps)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>alphabar_t.sqrt()</span>
+<span id="cb2-38">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(steps)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>:</span>
+<span id="cb2-39">                <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> x_hat</span>
+<span id="cb2-40">            prev_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> steps[i<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span>
+<span id="cb2-41">            alphabar_prevt <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.alphabar_t[prev_t].view(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb2-42">            x_prevt <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> alphabar_prevt.sqrt()<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>x_hat <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> (<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>alphabar_prevt).sqrt()<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>pred_eps</span>
+<span id="cb2-43">            x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> x_prevt</span>
+<span id="cb2-44">    </span>
+<span id="cb2-45">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> loss(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, x_0):</span>
+<span id="cb2-46">        t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.randint(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.timesteps, (x_0.shape[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>],))</span>
+<span id="cb2-47">        eps <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.randn_like(x_0)</span>
+<span id="cb2-48">        x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.forward_process(x_0, eps, t)</span>
+<span id="cb2-49">        pred_eps <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.eps_theta(x_t, t)</span>
+<span id="cb2-50">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> torch.nn.functional.mse_loss(eps, pred_eps)</span></code></pre></div></div>
+</div>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>Deep Learning</category>
+  <guid>https://riteshrm.github.io/posts/diffusion-models/</guid>
+  <pubDate>Mon, 18 May 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/diffusion-models/diffusion_model.png" medium="image" type="image/png" height="96" width="144"/>
+</item>
 <item>
   <title>Variational Autoencoder</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
