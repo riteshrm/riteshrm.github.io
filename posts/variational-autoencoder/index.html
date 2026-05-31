@@ -486,8 +486,31 @@ window.Quarto = {
 </header>
 
 
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>References
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
-<li>This is mostly based on <a href="https://www.youtube.com/watch?v=1RPdu_5FCfk">Understanding Variational Autoencoder</a> and <a href="https://www.youtube.com/watch?v=iwEzwTTalbg">Variational Autoencoder - Model, ELBO, loss function and maths explained easily</a></li>
+<li>This is mostly based on:
+<ol type="1">
+<li><a href="https://www.youtube.com/watch?v=1RPdu_5FCfk">Understanding Variational Autoencoder</a></li>
+<li><a href="https://www.youtube.com/watch?v=iwEzwTTalbg">Variational Autoencoder - Model, ELBO, loss function and maths explained easily</a></li>
+</ol></li>
+</ul>
+</div>
+</div>
+<hr>
+<ul>
+<li>Minimal PyTorch implementation accompanying these notes:
+<ul>
+<li><a href="https://github.com/riteshrm/vae">vae GitHub Repo</a></li>
+</ul></li>
 </ul>
 <hr>
 <section id="autoencoders" class="level1">
@@ -801,7 +824,7 @@ Note
 </ul>
 <section id="vae-model" class="level2">
 <h2 class="anchored" data-anchor-id="vae-model">VAE Model</h2>
-<div id="5206e508" class="cell" data-execution_count="1">
+<div id="d530b79d" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
@@ -871,7 +894,7 @@ Note
 <ul>
 <li>Below is the code on how to get KL loss and reconstruction loss</li>
 </ul>
-<div id="04393226" class="cell" data-execution_count="2">
+<div id="b24b89ae" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kl_loss(mu, log_var):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> torch.mean(<span class="fl">0.5</span> <span class="op">*</span> torch.<span class="bu">sum</span>(torch.exp(log_var) <span class="op">+</span> mu<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> <span class="dv">1</span> <span class="op">-</span> log_var, dim<span class="op">=-</span><span class="dv">1</span>))</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
