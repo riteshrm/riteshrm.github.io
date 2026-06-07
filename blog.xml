@@ -10,7 +10,724 @@
 <atom:link href="https://riteshrm.github.io/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Machine learning engineering notes by Ritesh Kumar Maurya.</description>
 <generator>quarto-1.8.26</generator>
-<lastBuildDate>Fri, 22 May 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 02 Jun 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Flow Matching</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/flow-matching/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>References
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>This is mostly based on:
+<ol type="1">
+<li><a href="https://www.youtube.com/watch?v=agN3AlfGFrk">Stanford CME296 Diffusion &amp; Large Vision Models | Spring 2026 | Lecture 3 - Flow matching</a></li>
+<li><a href="https://www.youtube.com/watch?v=7cMzfkWFWhI">Flow Matching | Explanation + PyTorch Implementation</a></li>
+<li><a href="https://arxiv.org/abs/2210.02747">Flow Matching for Generative Modeling</a></li>
+</ol></li>
+</ul>
+</div>
+</div>
+<hr>
+<ul>
+<li>Minimal PyTorch implementation accompanying these notes:
+<ul>
+<li><a href="https://github.com/riteshrm/nanoFM">nanoFM GitHub Repo</a></li>
+</ul></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Reading map
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Motivation</li>
+<li>Flow Models</li>
+<li>Earlier attempts to learn the velocity</li>
+<li>Flow Matching</li>
+<li>Implementation</li>
+</ul>
+</div>
+</div>
+<hr>
+<section id="motivation" class="level2">
+<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
+<section id="objective-and-solution" class="level3">
+<h3 class="anchored" data-anchor-id="objective-and-solution">Objective and solution</h3>
+<ul>
+<li><strong>Objective:</strong> Given a complex data distribution how can we go from simple distribution to complex data distribution.</li>
+<li><strong>Solution:</strong> Use vector field, which will guide to go towards target distribution <img src="https://latex.codecogs.com/png.latex?P_1%20=%20P_%7Bdata%7D"> from initial distribution <img src="https://latex.codecogs.com/png.latex?P_0%20=%20N(0,%20I)"></li>
+</ul>
+</section>
+<section id="some-terminology" class="level3">
+<h3 class="anchored" data-anchor-id="some-terminology">Some terminology</h3>
+<ul>
+<li>Trajectory <img src="https://latex.codecogs.com/png.latex?x_t">: path taken by the observation for time t <img src="https://latex.codecogs.com/png.latex?%5Cepsilon"> [0, 1]
+<ul>
+<li>For example:
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?x_0">: from <img src="https://latex.codecogs.com/png.latex?P_0"> to <img src="https://latex.codecogs.com/png.latex?P_1"></li>
+<li><img src="https://latex.codecogs.com/png.latex?x_t">: from <img src="https://latex.codecogs.com/png.latex?P_0"> to <img src="https://latex.codecogs.com/png.latex?P_t"></li>
+</ul></li>
+</ul></li>
+<li>Flow <img src="https://latex.codecogs.com/png.latex?%5Cpsi(x_0)">: Collections of trajectories <img src="https://latex.codecogs.com/png.latex?x_t"> which start from different <img src="https://latex.codecogs.com/png.latex?x_0"></li>
+<li>Probability path <img src="https://latex.codecogs.com/png.latex?p_t(x)">: Probability distribution of <img src="https://latex.codecogs.com/png.latex?x_t"> at time t.</li>
+<li>Vector field <img src="https://latex.codecogs.com/png.latex?u_t(x)">: where to move(direction, speed) at time t and location x</li>
+</ul>
+</section>
+<section id="velocity-vs-score" class="level3">
+<h3 class="anchored" data-anchor-id="velocity-vs-score">Velocity vs Score</h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Velocity is like giving instructions to self-driving car at point x and time t whereas score is like compass in the car, which tells where the high probability regions are.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="perspective-of-a-single-sample-with-ode" class="level3">
+<h3 class="anchored" data-anchor-id="perspective-of-a-single-sample-with-ode">Perspective of a single sample with ODE</h3>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?dx%20=%20u_t(x)dt"></li>
+<li>where:
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?dx"> is change in sample position</li>
+<li><img src="https://latex.codecogs.com/png.latex?u_t(x)"> is velocity field at location x and time t</li>
+<li><img src="https://latex.codecogs.com/png.latex?dt"> is change in time</li>
+</ul></li>
+<li>Trajectory starting from <img src="https://latex.codecogs.com/png.latex?x_0"> (<img src="https://latex.codecogs.com/png.latex?u_t(x_0)">) is unique if velocity <img src="https://latex.codecogs.com/png.latex?u_t(x)"> is lipschitz continuous</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lipschitz Continuity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>A function f is lipschitz continuous, when we have some constant M, (x, y) from space of interest such that:
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%7C%7Cf(x)%20-%20f(y)%7C%7C%20%5Cleq%20M.%7C%7Cx%20-%20y%7C%7C"></li>
+<li>which means f needs to be continuous but not in a very dramatic way</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="perspective-of-a-distribution-via-mass-conservation" class="level3">
+<h3 class="anchored" data-anchor-id="perspective-of-a-distribution-via-mass-conservation">Perspective of a distribution via “Mass Conservation”</h3>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/flow-matching/volume.png" style="width:25%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cfrac%7B%5Cdelta%20p_t%7D%7B%5Cdelta%20t%7D(x)%20=%20Inflow%20of%20density%20-%20Outflow%20of%20density"></li>
+<li>Where:
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cfrac%7B%5Cdelta%20p_t%7D%7B%5Cdelta%20t%7D(x)"> is temporal evolution of density at time t at a particular location</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="intuition-behind-divergence-in-1d" class="level3">
+<h3 class="anchored" data-anchor-id="intuition-behind-divergence-in-1d">Intuition behind divergence in 1D</h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>divergence <img src="https://latex.codecogs.com/png.latex?%5Cgeq"> 0 (things are coming out more than coming in)
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cfrac%7B%5Cdelta%20f%7D%7B%5Cdelta%20x%7D%20%5Cgeq%200"></li>
+</ul></li>
+<li>divergence <img src="https://latex.codecogs.com/png.latex?%5Cleq"> 0 (things are coming in more than going out)
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cfrac%7B%5Cdelta%20f%7D%7B%5Cdelta%20x%7D%20%5Cleq%200"></li>
+</ul></li>
+<li>Generalization for n dimensions:
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?div(f)%20=%20%5Ctriangledown%20.%20f%20=%20%5Csum_%7Bi=1%7D%5E%7Bn%7D%5Cfrac%7B%5Cdelta%20f%7D%7B%5Cdelta%20x_i%7D"></li>
+</ul></li>
+<li>Which function should we select as f?
+<ul>
+<li>Suppose we have:
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?u_t(x_1)%20=%20u_t(x_2)"></li>
+<li><img src="https://latex.codecogs.com/png.latex?p_t(x_1)%20%3C%20p_t(x_2)"></li>
+</ul></li>
+<li>and we want:
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%7C%7Cf(x_1)%7C%7C%20%3C%20%7C%7Cf(x_2)%7C%7C"></li>
+</ul></li>
+<li>One option would be Vector field <img src="https://latex.codecogs.com/png.latex?u_t(x)">?
+<ul>
+<li>But we want to transfer from high density region more as compared to lower density region which is not possible using vector fields since they have only direction and magnitude not probability distribution</li>
+</ul></li>
+<li>So probability flux
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?(p_t%20u_t)(x)"></li>
+<li><img src="https://latex.codecogs.com/png.latex?p_t"> is probability density</li>
+<li><img src="https://latex.codecogs.com/png.latex?u_t"> is velocity</li>
+</ul></li>
+<li>which finally gives
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cfrac%7B%5Cdelta%20p_t%7D%7B%5Cdelta%20t%7D(x)%20=%20-%5Ctriangledown(p_t%20u_t)(x)"></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="two-perspectives-involving-the-velocity" class="level3">
+<h3 class="anchored" data-anchor-id="two-perspectives-involving-the-velocity">Two perspectives involving the velocity</h3>
+<ul>
+<li>Single Sample(Micro level)
+<ul>
+<li><figure style="text-align: left;" class="figure">
+<img src="https://riteshrm.github.io/posts/flow-matching/single_sample.png" style="width:20%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+<li><img src="https://latex.codecogs.com/png.latex?x_0%20%5Csim%20p_0"></li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cfrac%7Bdx_t%7D%7Bdt%7D%20=%20u_t(x)"></li>
+</ul></li>
+<li>Distribution (Macro level)
+<ul>
+<li><figure style="text-align: left;" class="figure">
+<img src="https://riteshrm.github.io/posts/flow-matching/distribution.png" style="width:20%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+<li><img src="https://latex.codecogs.com/png.latex?x_t%20%5Csim%20p_t"></li>
+</ul></li>
+<li>Vector field <img src="https://latex.codecogs.com/png.latex?u_t"> generates the probability path <img src="https://latex.codecogs.com/png.latex?p_t(x)"></li>
+<li>We want to go from <img src="https://latex.codecogs.com/png.latex?p_0"> to <img src="https://latex.codecogs.com/png.latex?p_1"> and for that we will need vector fields which will actually allows to do the mapping</li>
+</ul>
+</section>
+</section>
+<section id="flow-models" class="level2">
+<h2 class="anchored" data-anchor-id="flow-models">Flow Models</h2>
+<section id="goal-and-strategy" class="level3">
+<h3 class="anchored" data-anchor-id="goal-and-strategy">Goal and strategy</h3>
+<ul>
+<li>Goal: Map <img src="https://latex.codecogs.com/png.latex?x_0%20%5Csim%20p_0%20%5Crightarrow%20x_1%20%5Csim%20p_1"></li>
+<li>Strategy:
+<ul>
+<li>Training: Estimate <img src="https://latex.codecogs.com/png.latex?u_t(x)"> for all time t and all locations x via <img src="https://latex.codecogs.com/png.latex?u%5E%7B%5Ctheta%7D_t(x)"></li>
+<li>Inference: Sample from initial distribution and solve numerically the ODE using the learned vector field <img src="https://latex.codecogs.com/png.latex?u%5E%7B%5Ctheta%7D_t(x)">
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%5Chat%7Bx_1%7D%20=%20x_0%20+%20%5Cint_%7B0%7D%5E%7B1%7Du%5E%7B%5Ctheta%7D_t(x)dt"></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="earlier-attempts-to-learn-the-velocity" class="level2">
+<h2 class="anchored" data-anchor-id="earlier-attempts-to-learn-the-velocity">Earlier attempts to learn the velocity</h2>
+<section id="why-this-was-harder" class="level3">
+<h3 class="anchored" data-anchor-id="why-this-was-harder">Why this was harder</h3>
+<ul>
+<li>Goal: Learn the vector field <img src="https://latex.codecogs.com/png.latex?u_t(x)"> via maximum likelihood</li>
+<li>Idea: Transform continuity equation to:
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cfrac%7Bd%7D%7Bdt%7D%20log%20p_t(x)%20=%20-%20%5Ctriangledown%20.%20u_t(x)"></li>
+</ul></li>
+<li>Then simulate ODE at training time to maximize likelihood:
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?logp%5E%5Ctheta_1(x_1)%20=%20logp%5E%5Ctheta_0(x_0)%20+%20%5Cint_%7B0%7D%5E%7B1%7D%20-%20%5Ctriangledown%20.u%5E%7B%5Ctheta%7D_t(x)dt"></li>
+</ul></li>
+<li>Limitation: Training is slow and expensive because of the integral, that’s why flow matching was introduced</li>
+</ul>
+</section>
+</section>
+<section id="flow-matching" class="level2">
+<h2 class="anchored" data-anchor-id="flow-matching">Flow Matching</h2>
+<section id="core-idea" class="level3">
+<h3 class="anchored" data-anchor-id="core-idea">Core idea</h3>
+<ul>
+<li>Goal: Estimate the vector field with <img src="https://latex.codecogs.com/png.latex?u%5E%5Ctheta_t(x)"> instead of maximizing the likelihood
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?L_%7BFM%7D%20=%20%5Cmathbb%7BE%7D_%7Bt,%20x%7D%5B%7C%7Cu%5E%5Ctheta_t(x)%20-%20u_t(x)%7C%7C%5E2%5D"></li>
+</ul></li>
+<li>But we don’t have access to <img src="https://latex.codecogs.com/png.latex?u_t(x)"></li>
+</ul>
+</section>
+<section id="why-conditional-paths-help" class="level3">
+<h3 class="anchored" data-anchor-id="why-conditional-paths-help">Why conditional paths help</h3>
+<ul>
+<li><p>How do we get this vector field, which will allow us to go from <img src="https://latex.codecogs.com/png.latex?p_0"> to <img src="https://latex.codecogs.com/png.latex?p_1"></p></li>
+<li><p>Let’s assume <img src="https://latex.codecogs.com/png.latex?p_%7Bdata%7D"> is composed of points from training data, so instead of finding out vector field for initial distribution to final distribution, we make it easier and look for vector field from initial distribution to some point in data distribution i.e.&nbsp;Initial Distribution <img src="https://latex.codecogs.com/png.latex?%5Crightarrow"> Dirac Distribution</p></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Dirac Distribution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Something which is deterministic unlike general distributions</li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cdelta_%7Bx_1%7D(x)%20=%200%20%5C:%20if%20%5C:%20x%20%5Cneq%20x_1"></li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cdelta_%7Bx_1%7D(x)%20=%20+%20%5Cinfty%20%5C:%20if%20x%20=%20x_1"></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="conditional-probability-path" class="level3">
+<h3 class="anchored" data-anchor-id="conditional-probability-path">Conditional probability path</h3>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?p_t(x%20%5Cmid%20x_1)%20=%20N(tx_1,%20(1-t)%5E2I)">
+<figure style="text-align: left;" class="figure">
+<img src="https://riteshrm.github.io/posts/flow-matching/cpp.png" style="width:40%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+</ul>
+</section>
+<section id="conditional-vector-path" class="level3">
+<h3 class="anchored" data-anchor-id="conditional-vector-path">Conditional vector path</h3>
+<ul>
+<li>One of the vector fields generating probability path</li>
+<li><img src="https://latex.codecogs.com/png.latex?u_t(x%20%5Cmid%20x_1)%20=%20%5Cfrac%7Bx_1%20-%20x%7D%7B1-t%7D">
+<figure style="text-align: left;" class="figure">
+<img src="https://riteshrm.github.io/posts/flow-matching/cvp.png" style="width:40%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+</ul>
+</section>
+<section id="conditional-vector-fields-and-probability-path" class="level3">
+<h3 class="anchored" data-anchor-id="conditional-vector-fields-and-probability-path">Conditional vector fields and probability path</h3>
+<ul>
+<li>Conditional Vector Fields [<img src="https://latex.codecogs.com/png.latex?u_t(.%20%5Cmid%20x_1)">] generates Conditional Probability Path [<img src="https://latex.codecogs.com/png.latex?p_t(.%20%5Cmid%20x_1)">]</li>
+<li>Using continuity equation, we can derive:
+<ul>
+<li>if <img src="https://latex.codecogs.com/png.latex?x_0%20%5Csim%20p_0(.%20%5Cmid%20x_1)"></li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cfrac%7Bdx_t%7D%7Bdt%7D%20=%20u_t(x_t%20%5Cmid%20x_1)"> then</li>
+<li><img src="https://latex.codecogs.com/png.latex?x_t%20%5Csim%20p_t(.%20%5Cmid%20x_1)"></li>
+<li>Since <img src="https://latex.codecogs.com/png.latex?p_t(.%20%5Cmid%20x_1)%20=%20N(tx_1,%20(1-t)%5E2I)"></li>
+<li><img src="https://latex.codecogs.com/png.latex?x_t%20=%20tx_1%20+%20(1-t)x_0"> where <img src="https://latex.codecogs.com/png.latex?x_0%20%5Csim%20N(0,%20I)"></li>
+<li><img src="https://latex.codecogs.com/png.latex?u_t(x_t%20%5Cmid%20x_1)%20=%20%5Cfrac%7Bx_1-%5Btx_1%20+%20(1-t)x_0%5D%7D%7B1-t%7D%20=%20x_1%20-%20x_0"></li>
+</ul></li>
+</ul>
+</section>
+<section id="marginal-probability-path" class="level3">
+<h3 class="anchored" data-anchor-id="marginal-probability-path">Marginal probability path</h3>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?p_t"> is an aggregation of <img src="https://latex.codecogs.com/png.latex?p_t(.%20%5Cmid%20x%5E%7B(i)%7D_1)">
+<figure style="text-align: left;" class="figure">
+<img src="https://riteshrm.github.io/posts/flow-matching/mvp.png" style="width:40%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure></li>
+<li><img src="https://latex.codecogs.com/png.latex?p_t(x)%20=%20%5Cint%20p_t(x%20%5Cmid%20x_1)p_%7Bdata%7D(x_1)dx_1"></li>
+<li>From above definition, we can say that:
+<ul>
+<li>At t=0, <img src="https://latex.codecogs.com/png.latex?p_%7Bt=0%7D%20=%20p_0"> where <img src="https://latex.codecogs.com/png.latex?p_%7Bt=0%7D"> is marginal probability path for t=0 and <img src="https://latex.codecogs.com/png.latex?p_0"> is initial probability distribution</li>
+<li>At t=1, <img src="https://latex.codecogs.com/png.latex?p_%7Bt=1%7D%20=%20p_1"> where <img src="https://latex.codecogs.com/png.latex?p_%7Bt=1%7D"> is marginal probability path for t=1 and <img src="https://latex.codecogs.com/png.latex?p_1"> is target probability distribution</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="marginal-vector-field" class="level3">
+<h3 class="anchored" data-anchor-id="marginal-vector-field">Marginal vector field</h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>It is an aggregation of the <img src="https://latex.codecogs.com/png.latex?u_t(.%20%5Cmid%20x%5E%7B(i)%7D_1)"> i.e.&nbsp;conditional vector field
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?u_t(x)%20=%20%5Cint%20u_t(x%20%5Cmid%20x_1)%20%5Cfrac%7Bp_t(x%20%5Cmid%20x_1)%20p_%7Bdata%7D(x_1)%7D%7Bp_t(x)%7Ddx_1"></li>
+<li>where <img src="https://latex.codecogs.com/png.latex?%5Cfrac%7Bp_t(x%20%5Cmid%20x_1)%20p_%7Bdata%7D(x_1)%7D%7Bp_t(x)%7D%20=%20p(x_1%20%5Cmid%20x)"> i.e.&nbsp;Posterior mean which specifies where should we go given where we are right now.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="marginal-vector-fields-and-probability-path" class="level3">
+<h3 class="anchored" data-anchor-id="marginal-vector-fields-and-probability-path">Marginal vector fields and probability path</h3>
+<ul>
+<li>Marginal Vector Fields [<img src="https://latex.codecogs.com/png.latex?u_t">] generates Marginal Probability Path [<img src="https://latex.codecogs.com/png.latex?p_t">]</li>
+<li>Using continuity equation, we can derive:
+<ul>
+<li>if <img src="https://latex.codecogs.com/png.latex?x_0%20%5Csim%20p_0"></li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cfrac%7Bdx_t%7D%7Bdt%7D%20=%20u_t(x_t)"> then</li>
+<li><img src="https://latex.codecogs.com/png.latex?x_t%20%5Csim%20p_t"></li>
+</ul></li>
+</ul>
+</section>
+<section id="deriving-conditional-flow-matching" class="level3">
+<h3 class="anchored" data-anchor-id="deriving-conditional-flow-matching">Deriving Conditional Flow Matching</h3>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?L_%7BFM%7D%20=%20%5Cmathbb%7BE%7D_%7Bt,%20x%7D%5B%7C%7Cu%5E%5Ctheta_t(x)%20-%20u_t(x)%7C%7C%5E2%5D"> is equivalent to <img src="https://latex.codecogs.com/png.latex?L_%7BCFM%7D%20=%20%5Cmathbb%7BE%7D_%7Bt,%20x_1,%20x%7D%5B%7C%7Cu%5E%5Ctheta_t(x)%20-%20u_t(x%20%5Cmid%20x_1)%7C%7C%5E2%5D"></li>
+<li>Check out <a href="https://www.youtube.com/watch?v=7cMzfkWFWhI&amp;t=540s">this</a> to see why these two are equivalent</li>
+<li>Now we have a tractable loss</li>
+</ul>
+</section>
+<section id="training-procedure" class="level3">
+<h3 class="anchored" data-anchor-id="training-procedure">Training Procedure</h3>
+<ul>
+<li>Sample noise <img src="https://latex.codecogs.com/png.latex?x_0%20%5Csim%20N(0,%20I)">, clean image <img src="https://latex.codecogs.com/png.latex?x_1%20%5Csim%20p_%7Bdata%7D"> and timestep <img src="https://latex.codecogs.com/png.latex?t%20%5Csim%20U%5B0,%201%5D"></li>
+<li>Get noised image as: <img src="https://latex.codecogs.com/png.latex?x_t%20=%20(1-t)x_0%20+%20tx_1"></li>
+<li>Use <img src="https://latex.codecogs.com/png.latex?x_t"> and <img src="https://latex.codecogs.com/png.latex?t"> to predict <img src="https://latex.codecogs.com/png.latex?x_1-x_0"> via <img src="https://latex.codecogs.com/png.latex?u%5E%5Ctheta_t(x_t)"></li>
+<li>Compute loss <img src="https://latex.codecogs.com/png.latex?L%20=%20%7C%7Cu%5E%5Ctheta_t(x_t)%20-%20(x_1-x_0)%7C%7C%5E2"> and backpropagate through <img src="https://latex.codecogs.com/png.latex?u%5E%5Ctheta"></li>
+</ul>
+</section>
+<section id="inference" class="level3">
+<h3 class="anchored" data-anchor-id="inference">Inference</h3>
+<ul>
+<li>Sample noise <img src="https://latex.codecogs.com/png.latex?x_0%20%5Csim%20N(0,%20I)"></li>
+<li>Use Euler to numerically solve the ODE
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?x_%7Bt_i%7D%20=%20x_%7Bt_%7Bi-1%7D%7D%20+%20u%5E%5Ctheta_%7Bt_%7Bi-1%7D%7D(x_%7Bt_%7Bi-1%7D%7D)(t_i%20-%20t_%7Bi-1%7D)"></li>
+</ul></li>
+<li>Obtain final image <img src="https://latex.codecogs.com/png.latex?x_1"></li>
+</ul>
+</section>
+<section id="issues-with-directly-using-flow-matching" class="level3">
+<h3 class="anchored" data-anchor-id="issues-with-directly-using-flow-matching">Issues with directly using Flow Matching</h3>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<figure style="text-align: left;" class="figure">
+<img src="https://riteshrm.github.io/posts/flow-matching/fm_issue.png" style="width:40%" class="figure-img">
+<figcaption>
+</figcaption>
+</figure>
+<ul>
+<li>As we can see in above figure, two vector fields are intersecting each other, which means our vector field approximator will learn somewhat average of these two</li>
+<li>And at inference time we will not be able to go to <img src="https://latex.codecogs.com/png.latex?x_1"> or <img src="https://latex.codecogs.com/png.latex?x%5E%7B'%7D_1">, we will go somewhere in between.</li>
+<li>And also there is no linearity as it was in case of score based models, where we can deterministically compute the linear part</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="issues-with-flow-matching" class="level3">
+<h3 class="anchored" data-anchor-id="issues-with-flow-matching">Issues with Flow Matching</h3>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Learning Complexity
+<ul>
+<li>Crossing paths leads to different learned rewiring</li>
+<li>Problem even when paths are not strictly crossing</li>
+</ul></li>
+<li>Inefficiency at inference
+<ul>
+<li>Paths are not straight: needs more steps for approximation</li>
+<li>No magic solver to save the day</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="reflow" class="level3">
+<h3 class="anchored" data-anchor-id="reflow">ReFlow</h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>So we got ReFlow, which tries to make paths more straighter</li>
+<li>Reflow procedure</li>
+<li>Train initial model which is called as 1-rectified flow</li>
+<li>Use to create data pairs
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?D_%7Btrain%7D%20=%20U%5C%7Bz_0,%20z_1%5C%7D">, where <img src="https://latex.codecogs.com/png.latex?z_0%20%5Csim%20N(0,%20I)"> and <img src="https://latex.codecogs.com/png.latex?z_1%20=%20%5Cpsi%5E%5Ctheta_1(z_0)"></li>
+</ul></li>
+<li>Train on paired data, which is called as 2-rectified flow</li>
+<li>Repeat 2-3 times as desired</li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="implementation" class="level2">
+<h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
+<div id="327bcfab" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> nn</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> torch.nn.functional <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> F</span>
+<span id="cb1-4"></span>
+<span id="cb1-5"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> FlowMatching(nn.Module):</span>
+<span id="cb1-6">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, velocity_predictor):</span>
+<span id="cb1-7">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">super</span>().<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>()</span>
+<span id="cb1-8"></span>
+<span id="cb1-9">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.velocity_predictor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> velocity_predictor</span>
+<span id="cb1-10"></span>
+<span id="cb1-11">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> flow_lerp(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, x_1):</span>
+<span id="cb1-12">        bsz <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> x_1.shape[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]</span>
+<span id="cb1-13">        t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.rand((bsz,)).to(x_1.device)</span>
+<span id="cb1-14">        t_broadcast <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> t.view(bsz, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb1-15">        x_0 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.randn_like(x_1)</span>
+<span id="cb1-16">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># the flow-matching lerp</span></span>
+<span id="cb1-17">        x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> t_broadcast) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> x_0 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> t_broadcast <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> x_1</span>
+<span id="cb1-18">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> x_0, x_t, t</span>
+<span id="cb1-19">    </span>
+<span id="cb1-20">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@torch.no_grad</span>()</span>
+<span id="cb1-21">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> sample(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, shape, num_steps):</span>
+<span id="cb1-22">        bsz <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> shape[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]</span>
+<span id="cb1-23">        x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.randn(shape, device<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.velocity_predictor.device)</span>
+<span id="cb1-24">        delta_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>num_steps] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> bsz).to(x_t.device).view([bsz, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(x_t.shape[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>:]))])</span>
+<span id="cb1-25">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(num_steps):</span>
+<span id="cb1-26">            t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> torch.tensor([i<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>num_steps] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> bsz).to(x_t.device)</span>
+<span id="cb1-27">            predicted_velocity <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.velocity_predictor(x_t, t)</span>
+<span id="cb1-28">            x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> x_t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> predicted_velocity <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> delta_t</span>
+<span id="cb1-29">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> x_t</span>
+<span id="cb1-30">    </span>
+<span id="cb1-31">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> loss(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, x_1):</span>
+<span id="cb1-32">        x_0, x_t, t <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.flow_lerp(x_1)</span>
+<span id="cb1-33">        target_velocity <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> x_1<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>x_0</span>
+<span id="cb1-34">        predicted_velocity <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.velocity_predictor(x_t, t)</span>
+<span id="cb1-35">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> torch.nn.functional.mse_loss(target_velocity, predicted_velocity)</span></code></pre></div></div>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>Deep Learning</category>
+  <guid>https://riteshrm.github.io/posts/flow-matching/</guid>
+  <pubDate>Tue, 02 Jun 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/flow-matching/flow_matching_resized_thumbnail.png" medium="image" type="image/png" height="82" width="144"/>
+</item>
 <item>
   <title>Score Matching</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
