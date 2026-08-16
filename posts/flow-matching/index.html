@@ -993,7 +993,7 @@ Note
 </section>
 <section id="implementation" class="level2">
 <h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
-<div id="327bcfab" class="cell" data-execution_count="1">
+<div id="6c5a74c0" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
@@ -1030,6 +1030,12 @@ Note
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        predicted_velocity <span class="op">=</span> <span class="va">self</span>.velocity_predictor(x_t, t)</span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> torch.nn.functional.mse_loss(target_velocity, predicted_velocity)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<figure style="text-align: center;" class="figure">
+<img src="fm.gif" style="width:60%" class="figure-img">
+<figcaption>
+Flow matching samples from epoch 0 through training
+</figcaption>
+</figure>
 
 
 </section>

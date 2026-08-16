@@ -533,7 +533,7 @@ Note
 </section>
 <section id="implementation" class="level2">
 <h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
-<div id="327bcfab" class="cell" data-execution_count="1">
+<div id="6c5a74c0" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -718,6 +718,12 @@ background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> torch.nn.functional.mse_loss(target_velocity, predicted_velocity)</span></code></pre></div></div>
 </div>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/flow-matching/fm.gif" style="width:60%" class="figure-img">
+<figcaption>
+Flow matching samples from epoch 0 through training
+</figcaption>
+</figure>
 
 
 </section>
@@ -3221,6 +3227,12 @@ background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> torch.nn.functional.mse_loss(eps, pred_eps)</span></code></pre></div></div>
 </div>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/diffusion-models/ddpm.gif" style="width:60%" class="figure-img">
+<figcaption>
+DDPM samples from epoch 0 through training
+</figcaption>
+</figure>
 <hr>
 </section>
 </section>
@@ -3657,6 +3669,12 @@ background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> torch.nn.functional.mse_loss(eps, pred_eps)</span></code></pre></div></div>
 </div>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/diffusion-models/ddim.gif" style="width:60%" class="figure-img">
+<figcaption>
+DDIM samples from epoch 0 through training
+</figcaption>
+</figure>
 
 
 </section>

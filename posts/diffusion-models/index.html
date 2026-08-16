@@ -818,6 +818,12 @@ Sampling Algorithm
 <span id="cb1-43"><a href="#cb1-43"></a>        pred_eps <span class="op">=</span> <span class="va">self</span>.eps_theta(x_t, t)</span>
 <span id="cb1-44"><a href="#cb1-44"></a>        <span class="cf">return</span> torch.nn.functional.mse_loss(eps, pred_eps)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<figure style="text-align: center;" class="figure">
+<img src="ddpm.gif" style="width:60%" class="figure-img">
+<figcaption>
+DDPM samples from epoch 0 through training
+</figcaption>
+</figure>
 <hr>
 </section>
 </section>
@@ -918,6 +924,12 @@ Sampling Algorithm
 <span id="cb2-49"><a href="#cb2-49"></a>        pred_eps <span class="op">=</span> <span class="va">self</span>.eps_theta(x_t, t)</span>
 <span id="cb2-50"><a href="#cb2-50"></a>        <span class="cf">return</span> torch.nn.functional.mse_loss(eps, pred_eps)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<figure style="text-align: center;" class="figure">
+<img src="ddim.gif" style="width:60%" class="figure-img">
+<figcaption>
+DDIM samples from epoch 0 through training
+</figcaption>
+</figure>
 
 
 </section>
