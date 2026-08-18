@@ -6,11 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Ritesh Kumar Maurya">
-<meta name="dcterms.date" content="2026-04-06">
-<meta name="description" content="Notes on sinusoidal positional encoding, why transformers need position information, and how different frequencies encode token positions.">
 
-<title>Position Encoding – Ritesh Kumar Maurya</title>
+<title>Notes – Ritesh Kumar Maurya</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,68 +20,35 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../">
-<link href="../../posts/favicon.ico" rel="icon">
-<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b758ccaa5987ceb1b75504551e579abf.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-e22af750838b8708ff2c979203820c49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<script src="../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./posts/favicon.ico" rel="icon">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b758ccaa5987ceb1b75504551e579abf.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-e22af750838b8708ff2c979203820c49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-b60bf0822001798444b03adae1f980f9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -111,6 +75,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script>
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-image','listing-title','listing-description','listing-date','listing-reading-time','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
@@ -156,20 +149,18 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="Position Encoding – Ritesh Kumar Maurya">
-<meta property="og:description" content="Notes on sinusoidal positional encoding, why transformers need position information, and how different frequencies encode token positions.">
-<meta property="og:image" content="https://riteshrm.github.io/posts/position-encoding/thumbnail.png">
+<link rel="stylesheet" href="styles.css">
+<link rel="alternate" type="application/rss+xml" title="Ritesh Kumar Maurya" href="notes.xml" data-external="1"><meta property="og:title" content="Notes – Ritesh Kumar Maurya">
+<meta property="og:image" content="https://riteshrm.github.io/posts/xlam-sft/thumbnail.png">
 <meta property="og:site_name" content="Ritesh Kumar Maurya">
-<meta property="og:image:height" content="1024">
-<meta property="og:image:width" content="1536">
-<meta name="twitter:title" content="Position Encoding – Ritesh Kumar Maurya">
-<meta name="twitter:description" content="Notes on sinusoidal positional encoding, why transformers need position information, and how different frequencies encode token positions.">
-<meta name="twitter:image" content="https://riteshrm.github.io/posts/position-encoding/thumbnail.png">
+<meta property="og:image:height" content="562">
+<meta property="og:image:width" content="659">
+<meta name="twitter:title" content="Notes – Ritesh Kumar Maurya">
+<meta name="twitter:image" content="https://riteshrm.github.io/posts/xlam-sft/thumbnail.png">
 <meta name="twitter:creator" content="@_riteshrm_">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image-height" content="1024">
-<meta name="twitter:image-width" content="1536">
+<meta name="twitter:image-height" content="562">
+<meta name="twitter:image-width" content="659">
 </head>
 
 <body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -341,7 +332,7 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../../index.html">
+    <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">About Me</span>
     </a>
   </div>
@@ -352,7 +343,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../notes.html"> 
+    <a class="nav-link active" href="./notes.html" aria-current="page"> 
 <span class="menu-text">Notes</span></a>
   </li>  
 </ul>
@@ -394,67 +385,22 @@ window.Quarto = {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#positional-encoding-pe" id="toc-positional-encoding-pe" class="nav-link active" data-scroll-target="#positional-encoding-pe">Positional Encoding (PE)</a></li>
-  <li><a href="#attempted-solution" id="toc-attempted-solution" class="nav-link" data-scroll-target="#attempted-solution">Attempted Solution</a></li>
-  <li><a href="#sinusoidal-positional-encoding" id="toc-sinusoidal-positional-encoding" class="nav-link" data-scroll-target="#sinusoidal-positional-encoding">Sinusoidal Positional Encoding</a>
-  <ul class="collapse">
-  <li><a href="#below-is-python-code-for-getting-1d-sinusoidal-position-embedding" id="toc-below-is-python-code-for-getting-1d-sinusoidal-position-embedding" class="nav-link" data-scroll-target="#below-is-python-code-for-getting-1d-sinusoidal-position-embedding">Below is python code for getting 1D Sinusoidal Position Embedding</a></li>
-  <li><a href="#lets-see-only-sine-for-intuition" id="toc-lets-see-only-sine-for-intuition" class="nav-link" data-scroll-target="#lets-see-only-sine-for-intuition">Lets see only sine for intuition</a></li>
-  <li><a href="#key-observations" id="toc-key-observations" class="nav-link" data-scroll-target="#key-observations">Key Observations</a></li>
-  <li><a href="#connection-to-binary-encoding" id="toc-connection-to-binary-encoding" class="nav-link" data-scroll-target="#connection-to-binary-encoding">Connection to Binary Encoding</a>
-  <ul class="collapse">
-  <li><a href="#locality-insight" id="toc-locality-insight" class="nav-link" data-scroll-target="#locality-insight">Locality Insight</a></li>
-  <li><a href="#global-insight" id="toc-global-insight" class="nav-link" data-scroll-target="#global-insight">Global Insight</a></li>
-  </ul></li>
-  </ul></li>
-  <li><a href="#why-10000" id="toc-why-10000" class="nav-link" data-scroll-target="#why-10000">Why 10000?</a>
-  <ul class="collapse">
-  <li><a href="#what-happens-if-we-chose-100" id="toc-what-happens-if-we-chose-100" class="nav-link" data-scroll-target="#what-happens-if-we-chose-100">What happens if we chose 100</a></li>
-  <li><a href="#what-happens-if-we-chose-100000" id="toc-what-happens-if-we-chose-100000" class="nav-link" data-scroll-target="#what-happens-if-we-chose-100000">What happens if we chose 100000</a></li>
-  <li><a href="#how-does-10k-solves-above-problems" id="toc-how-does-10k-solves-above-problems" class="nav-link" data-scroll-target="#how-does-10k-solves-above-problems">How does 10k solves above problems</a></li>
-  </ul></li>
-  <li><a href="#why-include-cosine-also" id="toc-why-include-cosine-also" class="nav-link" data-scroll-target="#why-include-cosine-also">Why include cosine also</a></li>
-  </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/position-encoding/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
-    </div>
+        
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(13)</span></div><div class="category" data-category="Qm9va3M=">Books <span class="quarto-category-count">(3)</span></div><div class="category" data-category="RGVlcCUyMExlYXJuaW5n">Deep Learning <span class="quarto-category-count">(3)</span></div><div class="category" data-category="R2VuZXJhdGl2ZSUyMEFJ">Generative AI <span class="quarto-category-count">(5)</span></div><div class="category" data-category="T3B0aW1pemF0aW9u">Optimization <span class="quarto-category-count">(2)</span></div></div></div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Position Encoding</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">Deep Learning</div>
-  </div>
-  </div>
-
-<div>
-  <div class="description">
-    Notes on sinusoidal positional encoding, why transformers need position information, and how different frequencies encode token positions.
-  </div>
+<h1 class="title">Notes</h1>
 </div>
+
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Ritesh Kumar Maurya </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">April 6, 2026</p>
-    </div>
-  </div>
   
     
   </div>
@@ -464,339 +410,379 @@ window.Quarto = {
 </header>
 
 
-<ul>
-<li>This is mostly based on <a href="https://www.youtube.com/watch?v=dWkm4nFikgM">Positional Encoding in Transformer</a></li>
-</ul>
-<section id="positional-encoding-pe" class="level1">
-<h1>Positional Encoding (PE)</h1>
-<ul>
-<li>RNNs process tokens sequentially so they have information about the position of tokens of a given sequence.</li>
-<li>Transformers process all the tokens simultaneously where each token attends to every other token.</li>
-<li><em>For Example:</em>:-
-<ul>
-<li>my daughter called her brother [where each word is a token]</li>
-<li>in above sentence <strong>my</strong> will attend to all other tokens and similarly others will also attend other tokens.</li>
-<li>now consider other permutation of above sequence her daughter called my brother</li>
-<li>even in above example, permutation is different but transformers will find out the same context for each word as above one</li>
-<li>a simple explanation would be consider <strong>my</strong> and <strong>her</strong>
-<ul>
-<li>the attention between these will be same for both of the sequences, but both of them corresponds to different meaning.</li>
-<li>so to have different attentions for different sequences we need to inject some information about the positions of words also.</li>
-</ul></li>
-</ul></li>
-</ul>
-<hr>
-</section>
-<section id="attempted-solution" class="level1">
-<h1>Attempted Solution</h1>
-<ul>
-<li><p>Use the index of tokens directly as position information for a given sequence. However, when we add token embedding with this position indices, positional information will overpower the content signal and also, the rightmost tokens will dominate.</p></li>
-<li><p>Now, to solve this, we can normalize the positional information i.e.&nbsp;normalize with the length of sequence. But now we have another problem, all of the sequences will never be of same length, so each position information will keep varying. For example lets consider two sequences</p>
-<ol type="1">
-<li>I am going PE:=[0/3 1/3 2/3]</li>
-<li>All of us are going PE:=[0/5 1/5 2/5]</li>
-</ol></li>
-<li><p>As we can see in above example, in sequence we are normalizing by 3 and in 2nd one by 5, which is not good for a model to learn like one time we are saying that 2nd positions value is 0.33 and in the next sequence we are saying no no, its 0.2</p></li>
-</ul>
-<hr>
-</section>
-<section id="sinusoidal-positional-encoding" class="level1">
-<h1>Sinusoidal Positional Encoding</h1>
-<ul>
-<li><p>The authors of the Transformer paper introduced sinusoidal functions to address this issue.</p></li>
-<li><p>The positional encoding is defined as:</p>
-<ul>
-<li>For even indices:</li>
-</ul>
-<p><span class="math display">
-PE(pos, 2i) = \sin\left(\frac{pos}{10000^{\frac{2i}{d_{model}}}}\right)
-</span></p>
-<ul>
-<li>For odd indices:</li>
-</ul></li>
-</ul>
-<p><span class="math display">
-PE(pos, 2i + 1) = \cos\left(\frac{pos}{10000^{\frac{2i}{d_{model}}}}\right)
-</span></p>
-<ul>
-<li><em>where</em>
-<ul>
-<li>pos is the position of token</li>
-<li><span class="math inline">d_{model}</span> is dimensionality of position embedding</li>
-<li>i is index of embedding dimension where i runs from 0 to <span class="math inline">d_{model}</span>/2 -1 [each value of i corresponds to one frequency of sinusoid]</li>
-</ul></li>
-</ul>
-<section id="below-is-python-code-for-getting-1d-sinusoidal-position-embedding" class="level2">
-<h2 class="anchored" data-anchor-id="below-is-python-code-for-getting-1d-sinusoidal-position-embedding">Below is python code for getting 1D Sinusoidal Position Embedding</h2>
-<div id="98558041" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Union</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_1d_sin_cos_pe(d_model:<span class="bu">int</span>, pos:Union[<span class="bu">int</span>, <span class="bu">list</span>]):</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">type</span>(pos)<span class="op">==</span><span class="bu">int</span>:</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        pos <span class="op">=</span> [pos]</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    n_tokens <span class="op">=</span> <span class="bu">len</span>(pos)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    pos <span class="op">=</span> torch.tensor(pos).reshape(n_tokens, <span class="op">-</span><span class="dv">1</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    div_term <span class="op">=</span> torch.tensor([<span class="dv">10000</span><span class="op">**</span>(<span class="dv">2</span><span class="op">*</span>i<span class="op">/</span>d_model) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(d_model<span class="op">//</span><span class="dv">2</span>)])</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    sinPE <span class="op">=</span> torch.sin(pos<span class="op">/</span>div_term)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    cosPE <span class="op">=</span> torch.cos(pos<span class="op">/</span>div_term)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    combinedPE <span class="op">=</span> torch.zeros(n_tokens, d_model)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    combinedPE[:, <span class="dv">0</span>::<span class="dv">2</span>] <span class="op">=</span> sinPE</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    combinedPE[:, <span class="dv">1</span>::<span class="dv">2</span>] <span class="op">=</span> cosPE</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> combinedPE</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># For single position</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">512</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>pos <span class="op">=</span> <span class="dv">2</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>pe2 <span class="op">=</span> get_1d_sin_cos_pe(d_model, pos)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">512</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>pos <span class="op">=</span> <span class="dv">3</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>pe3 <span class="op">=</span> get_1d_sin_cos_pe(d_model, pos)</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>combinedPE <span class="op">=</span> torch.cat([pe2, pe3], dim<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co"># For multiple positions </span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>d_model <span class="op">=</span> <span class="dv">512</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>pos <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">3</span>]</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>pe <span class="op">=</span> get_1d_sin_cos_pe(d_model, pos)</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(torch.equal(combinedPE, pe))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>True</code></pre>
+
+
+
+
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="R2VuZXJhdGl2ZSUyMEFJ" data-listing-date-sort="1787011200000" data-listing-file-modified-sort="1787067070120" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2978">
+<div class="thumbnail"><a href="./posts/xlam-sft/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/xlam-sft/thumbnail.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/xlam-sft/index.html" class="no-external">xLAM SFT</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('R2VuZXJhdGl2ZSUyMEFJ'); return false;">Generative AI</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/xlam-sft/index.html" class="no-external">
+<p>Supervised fine-tuning of Qwen2.5-0.5B for tool calling using the Salesforce xLAM dataset.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/xlam-sft/index.html" class="no-external">
+<div class="listing-date">
+Aug 18, 2026
+</div>
+<div class="listing-reading-time">15 min</div>
+</a>
 </div>
 </div>
-</section>
-<section id="lets-see-only-sine-for-intuition" class="level2">
-<h2 class="anchored" data-anchor-id="lets-see-only-sine-for-intuition">Lets see only sine for intuition</h2>
-<figure style="text-align: center;" class="figure">
-<img src="scale_factor.png" style="width:80%" class="figure-img">
-<figcaption>
-As dimension index increases, scaling factor also increases
-</figcaption>
-</figure>
-<ul>
-<li><p>As the scaling factor increases, the period of sin wave increases frequency decreases i.e.&nbsp;the repetition of values decreases.</p></li>
-<li><p>We can also say that as scale factor increases, the oscillation becomes slower.</p></li>
-<li><p>Dimension 0 i.e.&nbsp;lower dimension can incorporate fine grained local positional information.</p></li>
-<li><p>Value at k is far different than value at k + 5 as we can see from below figure.</p></li>
-</ul>
-<figure style="text-align: center;" class="figure">
-<img src="dim_0_sin.png" style="width:80%" class="figure-img">
-<figcaption>
-</figcaption>
-</figure>
-<hr>
-<ul>
-<li>Dimension 255 i.e.&nbsp;higher dimensions incorporates global positional information</li>
-<li>Value at k and k+5 is nearly similar but at k and k+200 is quite different as we can see from the below figure.</li>
-</ul>
-<figure style="text-align: center;" class="figure">
-<img src="dim_255_sin.png" style="width:80%" class="figure-img">
-<figcaption>
-</figcaption>
-</figure>
-<hr>
-<ul>
-<li>Basically given a particular position pos, it gets mapped to various sine waves which incorporates local as well as global information as we can see from below figure.</li>
-</ul>
-<figure style="text-align: center;" class="figure">
-<img src="sine_wave.png" style="width:80%" class="figure-img">
-<figcaption>
-</figcaption>
-</figure>
-</section>
-<section id="key-observations" class="level2">
-<h2 class="anchored" data-anchor-id="key-observations">Key Observations</h2>
-<ul>
-<li>Earlier indices (smaller ( i )):
-<ul>
-<li>Capture <strong>short-range information</strong></li>
-<li>High-frequency variations</li>
-</ul></li>
-<li>Later indices (larger ( i )):
-<ul>
-<li>Capture <strong>long-range information</strong></li>
-<li>Low-frequency variations</li>
-</ul></li>
-<li>This creates a mix of:
-<ul>
-<li>Short-range patterns (rapid oscillations)</li>
-<li>Long-range patterns (slow oscillations)</li>
-</ul></li>
-</ul>
-</section>
-<section id="connection-to-binary-encoding" class="level2">
-<h2 class="anchored" data-anchor-id="connection-to-binary-encoding">Connection to Binary Encoding</h2>
-<ul>
-<li>As frequency decreases, <strong>bit significance increases</strong></li>
-<li>Similar to binary representation:
-<ul>
-<li>Rightmost bits → change frequently (low significance)</li>
-<li>Leftmost bits → change slowly (high significance)</li>
-</ul></li>
-<li>Moving from right → left:
-<ul>
-<li>Repetition decreases</li>
-<li>Importance increases</li>
-</ul></li>
-<li>And this is what we want from a positional encoding, where it can help in differentiate local as well as global tokens.</li>
-<li>But since Binary Encodings are discrete and does not change smoothly for example BE of 3 is 11 and BE of 4 is 100, which is not continuous whereas sinusoidal waves are continuous and change smoothly from pos to pos + 1.</li>
-</ul>
-<hr>
-<section id="locality-insight" class="level3">
-<h3 class="anchored" data-anchor-id="locality-insight">Locality Insight</h3>
-<p>For small values of i:</p>
-<ul>
-<li>PE(pos) and PE(pos + 1) are <strong>very different</strong></li>
-<li>PE(pos) and PE(pos + k) are <strong>more similar for larger k</strong></li>
-</ul>
-<p>Implication:</p>
-<ul>
-<li>Helps distinguish <strong>nearby tokens</strong></li>
-</ul>
-<hr>
-</section>
-<section id="global-insight" class="level3">
-<h3 class="anchored" data-anchor-id="global-insight">Global Insight</h3>
-<p>For large values of i:</p>
-<ul>
-<li>PE(pos) and PE(pos + 1) are <strong>more similar</strong></li>
-<li>PE(pos) and PE(pos + k) are <strong>very different for larger k</strong></li>
-</ul>
-<p>Implication:</p>
-<ul>
-<li>Helps distinguish <strong>Far-apart tokens</strong></li>
-</ul>
-<hr>
-</section>
-</section>
-</section>
-<section id="why-10000" class="level1">
-<h1>Why 10000?</h1>
-<section id="what-happens-if-we-chose-100" class="level2">
-<h2 class="anchored" data-anchor-id="what-happens-if-we-chose-100">What happens if we chose 100</h2>
-<ul>
-<li>From below graph we can see that even higher dimension starts repeating themselves i.e.&nbsp;their frequency increases and thus we cant distinguish between far-apart tokens</li>
-</ul>
-<figure style="text-align: center;" class="figure">
-<img src="100_SF.png" style="width:80%" class="figure-img">
-<figcaption>
-</figcaption>
-</figure>
-<ul>
-<li>For example lets calculate cosine similarity between PE[128:256] of 500th position to everyone other position.</li>
-<li>The cosine similarity will change drastically as we can see in the below figure, whereas we want higher dimensions to change smoothly.</li>
-</ul>
-<figure style="text-align: center;" class="figure">
-<img src="cs2_100.png" style="width:80%" class="figure-img">
-<figcaption>
-</figcaption>
-</figure>
-<ul>
-<li>The cosine similarity between PE[0:128] of 500th position to everyone other position.</li>
-<li>The cosine similarity decreases drastically to zero even with position difference of 10 only, whereas we want it to decrease smoothly but not in an aggressive way.</li>
-</ul>
-<figure style="text-align: center;" class="figure">
-<img src="cs1_100.png" style="width:80%" class="figure-img">
-<figcaption>
-</figcaption>
-</figure>
-</section>
-<section id="what-happens-if-we-chose-100000" class="level2">
-<h2 class="anchored" data-anchor-id="what-happens-if-we-chose-100000">What happens if we chose 100000</h2>
-<ul>
-<li>And if we chose 100K as scaling factor then from below figure we can see that even the earlier dimensions have reduced frequency and thus we can’t differentiate between two local positions</li>
-</ul>
-<figure style="text-align: center;" class="figure">
-<img src="100k_SF.png" style="width:80%" class="figure-img">
-<figcaption>
-</figcaption>
-</figure>
-<ul>
-<li>For example lets calculate cosine similarity between PE[128:256] of 500th position to everyone other position, in this case similarity barely changes as we can see from below figure.</li>
-</ul>
-<figure style="text-align: center;" class="figure">
-<img src="cs2_100k.png" style="width:80%" class="figure-img">
-<figcaption>
-</figcaption>
-</figure>
-<ul>
-<li>The cosine similarity between PE[0:128] of 500th position to everyone other position.</li>
-<li>The cosine similarity remains mostly same even with position difference of 50, whereas we want it to decrease smoothly.</li>
-</ul>
-<figure style="text-align: center;" class="figure">
-<img src="cs1_100k.png" style="width:80%" class="figure-img">
-<figcaption>
-</figcaption>
-</figure>
-</section>
-<section id="how-does-10k-solves-above-problems" class="level2">
-<h2 class="anchored" data-anchor-id="how-does-10k-solves-above-problems">How does 10k solves above problems</h2>
-<ul>
-<li>And as suggested in paper, if we chose 10k. It is something like sweet spot where earlier dimensions have higher frequency thus helping in distinguishing between local positions and later dimensions have lower frequency thus helping in capturing long range positional differences.</li>
-</ul>
-<figure style="text-align: center;" class="figure">
-<img src="10k_SF.png" style="width:80%" class="figure-img">
-<figcaption>
-</figcaption>
-</figure>
-<ul>
-<li>As we can see from below graphs it solves the problem of cosine similarity between PE of 500th position and every other position</li>
-</ul>
-<figure style="text-align: center;" class="figure">
-<img src="cs2_10k.png" style="width:80%" class="figure-img">
-<figcaption>
-Higher dimension similarity changes smoothly to capture global information
-</figcaption>
-</figure>
-<figure style="text-align: center;" class="figure">
-<img src="cs1_10k.png" style="width:80%" class="figure-img">
-<figcaption>
-Lower dimension similarity changes somewhat aggressively to capture local information
-</figcaption>
-</figure>
-</section>
-</section>
-<section id="why-include-cosine-also" class="level1">
-<h1>Why include cosine also</h1>
-<ul>
-<li>It allows, the PE across all positions to have simple linear relationship.</li>
-<li>Generally:
-<ul>
-<li>x = <span class="math inline">\cos(\theta)</span></li>
-<li>y = <span class="math inline">\sin(\theta)</span></li>
-</ul></li>
-<li>But in paper:
-<ul>
-<li>x = <span class="math inline">\sin(\theta)</span></li>
-<li>y = <span class="math inline">\cos(\theta)</span></li>
-</ul></li>
-</ul>
-<figure style="text-align: center;" class="figure">
-<img src="first_cos.png" style="width:80%" class="figure-img">
-<figcaption>
-</figcaption>
-</figure>
-<figure style="text-align: center;" class="figure">
-<img src="first_cos2.png" style="width:80%" class="figure-img">
-<figcaption>
-</figcaption>
-</figure>
-<figure style="text-align: center;" class="figure">
-<img src="first_cos3.png" style="width:80%" class="figure-img">
-<figcaption>
-</figcaption>
-</figure>
-<ul>
-<li>As we can see from above equations, PE[pos+k] = <span class="math inline">T_{k}</span> PE[pos]</li>
-</ul>
+<div class="quarto-post image-right" data-index="1" data-categories="R2VuZXJhdGl2ZSUyMEFJ" data-listing-date-sort="1780358400000" data-listing-file-modified-sort="1787032382865" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1840">
+<div class="thumbnail"><a href="./posts/flow-matching/index.html" class="no-external">
 
+<img loading="lazy" src="./posts/flow-matching/flow_matching_resized_thumbnail.png" class="thumbnail-image">
 
-</section>
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/flow-matching/index.html" class="no-external">Flow Matching</a>
+</h3>
+<div class="listing-categories">
 
-</main> <!-- /main -->
+<div class="listing-category" onclick="window.quartoListingCategory('R2VuZXJhdGl2ZSUyMEFJ'); return false;">Generative AI</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/flow-matching/index.html" class="no-external">
+<p>Notes on Flow Matching</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/flow-matching/index.html" class="no-external">
+<div class="listing-date">
+Jun 2, 2026
+</div>
+<div class="listing-reading-time">10 min</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-categories="R2VuZXJhdGl2ZSUyMEFJ" data-listing-date-sort="1779408000000" data-listing-file-modified-sort="1787032403229" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="21" data-listing-word-count-sort="4048">
+<div class="thumbnail"><a href="./posts/score-matching/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/score-matching/score_resized_thumbnail.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/score-matching/index.html" class="no-external">Score Matching</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('R2VuZXJhdGl2ZSUyMEFJ'); return false;">Generative AI</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/score-matching/index.html" class="no-external">
+<p>Notes on Score Matching</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/score-matching/index.html" class="no-external">
+<div class="listing-date">
+May 22, 2026
+</div>
+<div class="listing-reading-time">21 min</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-categories="R2VuZXJhdGl2ZSUyMEFJ" data-listing-date-sort="1779062400000" data-listing-file-modified-sort="1787032369828" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2929">
+<div class="thumbnail"><a href="./posts/diffusion-models/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/diffusion-models/diffusion_model.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/diffusion-models/index.html" class="no-external">Diffusion Models</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('R2VuZXJhdGl2ZSUyMEFJ'); return false;">Generative AI</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/diffusion-models/index.html" class="no-external">
+<p>Notes on Diffusion Models</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/diffusion-models/index.html" class="no-external">
+<div class="listing-date">
+May 18, 2026
+</div>
+<div class="listing-reading-time">15 min</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-categories="R2VuZXJhdGl2ZSUyMEFJ" data-listing-date-sort="1778025600000" data-listing-file-modified-sort="1787032412809" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2704">
+<div class="thumbnail"><a href="./posts/variational-autoencoder/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/variational-autoencoder/vae_thumbnail_resized.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/variational-autoencoder/index.html" class="no-external">Variational Autoencoder</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('R2VuZXJhdGl2ZSUyMEFJ'); return false;">Generative AI</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/variational-autoencoder/index.html" class="no-external">
+<p>Notes on Variational Autoencoders, ELBO, and reparameterization</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/variational-autoencoder/index.html" class="no-external">
+<div class="listing-date">
+May 6, 2026
+</div>
+<div class="listing-reading-time">14 min</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="5" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1775520000000" data-listing-file-modified-sort="1778503548836" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1943">
+<div class="thumbnail"><a href="./posts/rotary-position-embedding/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/rotary-position-embedding/rotary_thumbnail_resized.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/rotary-position-embedding/index.html" class="no-external">Rotary Position Embedding</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('RGVlcCUyMExlYXJuaW5n'); return false;">Deep Learning</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/rotary-position-embedding/index.html" class="no-external">
+<p>A visual and mathematical walkthrough of RoPE, relative position intuition, rotation matrices, and attention score behavior.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/rotary-position-embedding/index.html" class="no-external">
+<div class="listing-date">
+Apr 7, 2026
+</div>
+<div class="listing-reading-time">10 min</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="6" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1775433600000" data-listing-file-modified-sort="1778503586966" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1378">
+<div class="thumbnail"><a href="./posts/position-encoding/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/position-encoding/thumbnail.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/position-encoding/index.html" class="no-external">Position Encoding</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('RGVlcCUyMExlYXJuaW5n'); return false;">Deep Learning</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/position-encoding/index.html" class="no-external">
+<p>Notes on sinusoidal positional encoding, why transformers need position information, and how different frequencies encode token positions.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/position-encoding/index.html" class="no-external">
+<div class="listing-date">
+Apr 6, 2026
+</div>
+<div class="listing-reading-time">7 min</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="7" data-categories="Qm9va3M=" data-listing-date-sort="1768262400000" data-listing-file-modified-sort="1787032477204" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="19" data-listing-word-count-sort="3687">
+<div class="thumbnail"><a href="./posts/ai-engineering/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/ai-engineering/resized_thumbnail.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/ai-engineering/index.html" class="no-external">AI Engineering: Chapter-Wise Summary</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Qm9va3M='); return false;">Books</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/ai-engineering/index.html" class="no-external">
+<p>Work-in-progress chapter notes from AI Engineering.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/ai-engineering/index.html" class="no-external">
+<div class="listing-date">
+Jan 13, 2026
+</div>
+<div class="listing-reading-time">19 min</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="8" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1768176000000" data-listing-file-modified-sort="1780227385474" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2484">
+<div class="thumbnail"><a href="./posts/attention-mechanism/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/attention-mechanism/attn_resized_thumbnail.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/attention-mechanism/index.html" class="no-external">Attention Mechanism</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('RGVlcCUyMExlYXJuaW5n'); return false;">Deep Learning</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/attention-mechanism/index.html" class="no-external">
+<p>A step-by-step note on attention, scaled dot-product attention, softmax gradients, and transformer intuition.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/attention-mechanism/index.html" class="no-external">
+<div class="listing-date">
+Jan 12, 2026
+</div>
+<div class="listing-reading-time">13 min</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="9" data-categories="Qm9va3M=" data-listing-date-sort="1737936000000" data-listing-file-modified-sort="1787032487193" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1091">
+<div class="thumbnail"><a href="./posts/hands-on-llms/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/hands-on-llms/traing_work_flow_of_llm.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/hands-on-llms/index.html" class="no-external">Hands on LLMs: Chapter-Wise Summary</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Qm9va3M='); return false;">Books</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/hands-on-llms/index.html" class="no-external">
+<p>Work-in-progress chapter notes from Hands-On Large Language Models.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/hands-on-llms/index.html" class="no-external">
+<div class="listing-date">
+Jan 27, 2025
+</div>
+<div class="listing-reading-time">6 min</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="10" data-categories="Qm9va3M=" data-listing-date-sort="1720224000000" data-listing-file-modified-sort="1787032500513" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1775">
+<div class="thumbnail"><a href="./posts/meta-learning/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/meta-learning/metalearning_resized_thumbnail.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/meta-learning/index.html" class="no-external">Meta Learning: Chapter-Wise Summary</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Qm9va3M='); return false;">Books</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/meta-learning/index.html" class="no-external">
+<p>Chapter-wise summary notes from Meta Learning, focused on learning practice, programming habits, and deep learning growth.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/meta-learning/index.html" class="no-external">
+<div class="listing-date">
+Jul 6, 2024
+</div>
+<div class="listing-reading-time">9 min</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="11" data-categories="T3B0aW1pemF0aW9u" data-listing-date-sort="1716508800000" data-listing-file-modified-sort="1778857689316" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="30" data-listing-word-count-sort="5990">
+<div class="thumbnail"><a href="./posts/quantization-in-depth/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/quantization-in-depth/qat-training-precision.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/quantization-in-depth/index.html" class="no-external">Quantization in Depth</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('T3B0aW1pemF0aW9u'); return false;">Optimization</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/quantization-in-depth/index.html" class="no-external">
+<p>Detailed notes on quantize/dequantize workflows, quantization error, calibration, packing, and practical model optimization.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/quantization-in-depth/index.html" class="no-external">
+<div class="listing-date">
+May 24, 2024
+</div>
+<div class="listing-reading-time">30 min</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="12" data-categories="T3B0aW1pemF0aW9u" data-listing-date-sort="1715558400000" data-listing-file-modified-sort="1778857441586" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1234">
+<div class="thumbnail"><a href="./posts/quantization-fundamentals/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/quantization-fundamentals/qat-training-precision.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/quantization-fundamentals/index.html" class="no-external">Quantization Fundamentals</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('T3B0aW1pemF0aW9u'); return false;">Optimization</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/quantization-fundamentals/index.html" class="no-external">
+<p>Introductory notes on model quantization, lower-precision data types, scaling, zero points, and model compression basics.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/quantization-fundamentals/index.html" class="no-external">
+<div class="listing-date">
+May 13, 2024
+</div>
+<div class="listing-reading-time">7 min</div>
+</a>
+</div>
+</div>
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -1219,7 +1205,7 @@ Lower dimension similarity changes somewhat aggressively to capture local inform
     <div class="nav-footer-center">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="../../blog.xml">
+    <a class="nav-link" href="./blog.xml">
 <p>RSS</p>
 </a>
   </li>  
@@ -1234,7 +1220,7 @@ Lower dimension similarity changes somewhat aggressively to capture local inform
 </a>
   </li>  
 </ul>
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/posts/position-encoding/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions"><ul><li><a href="https://github.com/riteshrm/riteshrm.github.io/edit/master/notes.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/riteshrm/riteshrm.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>

@@ -6,11 +6,642 @@
       version="2.0">
 <channel>
 <title>Ritesh Kumar Maurya</title>
-<link>https://riteshrm.github.io/blog.html</link>
-<atom:link href="https://riteshrm.github.io/blog.xml" rel="self" type="application/rss+xml"/>
+<link>https://riteshrm.github.io/notes.html</link>
+<atom:link href="https://riteshrm.github.io/notes.xml" rel="self" type="application/rss+xml"/>
 <description>Machine learning engineering notes by Ritesh Kumar Maurya.</description>
 <generator>quarto-1.8.26</generator>
-<lastBuildDate>Tue, 02 Jun 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 18 Aug 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>xLAM SFT</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/xlam-sft/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<ul>
+<li>This is a write-up of fine-tuning Qwen2.5-0.5B (base) for tool calling on the xLAM dataset from Salesforce. Along the way I ran into a few subtle bugs — a frozen <code>lm_head</code> that couldn’t learn rare special tokens, tied embeddings breaking silently, and some evaluation bugs that were quietly hiding correct predictions — all documented below. After fixing these, the fine-tuned base model ends up performing on par with, and slightly better than, the zero-shot Instruct model on this task.</li>
+</ul>
+<section id="motivation" class="level1">
+<h1>Motivation</h1>
+<p>In case of compute bound, instead of using a large model, can we just fine-tune a small model for domain-specific examples and still get good results? The goal is to fine-tune an SLM for tool calling and check the results. Although current SLMs are already better at tool calling, I still wanted to learn more about SFT and tool calling hands-on.</p>
+<section id="why-tool-calling" class="level2">
+<h2 class="anchored" data-anchor-id="why-tool-calling">Why tool calling?</h2>
+<p>One obvious question might be, why not something else? The reason is that considering the current era of agentic AI, where an LLM needs to call tools to perform some action, the tool accuracy — and alongside that, the arguments passed — becomes more important. It might be possible that due to hallucination, an argument changes from Capital to small caps, where the tool required the text to be capital.</p>
+</section>
+<section id="why-fine-tune-a-small-model" class="level2">
+<h2 class="anchored" data-anchor-id="why-fine-tune-a-small-model">Why fine-tune a small model?</h2>
+<p>Since I already mentioned the compute resources, and also, if I can replicate this tool calling with small models, then for larger models it should not be that much more difficult.</p>
+</section>
+</section>
+<section id="model-dataset" class="level1">
+<h1>Model &amp; Dataset</h1>
+<ul>
+<li>The latest SLMs from Qwen are already performing very well on tool calling, so I chose the earlier base model for my experiment, which is Qwen2.5-0.5B.</li>
+<li>I have used the xLAM dataset from Salesforce, where a sample looks like:</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1">{</span>
+<span id="cb1-2">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"query"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Find the sum of all the multiples of 3 and 5 between 1 and 1000. Also find the product of the first five prime numbers."</span>,</span>
+<span id="cb1-3">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"tools"</span>: [</span>
+<span id="cb1-4">    {</span>
+<span id="cb1-5">      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"math_toolkit.sum_of_multiples"</span>,</span>
+<span id="cb1-6">      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"description"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Find the sum of all multiples of specified numbers within a specified range."</span>,</span>
+<span id="cb1-7">      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"parameters"</span>: {</span>
+<span id="cb1-8">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"lower_limit"</span>: {</span>
+<span id="cb1-9">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"int"</span>,</span>
+<span id="cb1-10">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"description"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"The start of the range (inclusive)."</span>,</span>
+<span id="cb1-11">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"required"</span>: <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span></span>
+<span id="cb1-12">        },</span>
+<span id="cb1-13">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"upper_limit"</span>: {</span>
+<span id="cb1-14">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"int"</span>,</span>
+<span id="cb1-15">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"description"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"The end of the range (inclusive)."</span>,</span>
+<span id="cb1-16">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"required"</span>: <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span></span>
+<span id="cb1-17">        },</span>
+<span id="cb1-18">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"multiples"</span>: {</span>
+<span id="cb1-19">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"list"</span>,</span>
+<span id="cb1-20">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"description"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"The numbers to find multiples of."</span>,</span>
+<span id="cb1-21">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"required"</span>: <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span></span>
+<span id="cb1-22">        }</span>
+<span id="cb1-23">      }</span>
+<span id="cb1-24">    },</span>
+<span id="cb1-25">    {</span>
+<span id="cb1-26">      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"math_toolkit.product_of_primes"</span>,</span>
+<span id="cb1-27">      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"description"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Find the product of the first n prime numbers."</span>,</span>
+<span id="cb1-28">      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"parameters"</span>: {</span>
+<span id="cb1-29">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"count"</span>: {</span>
+<span id="cb1-30">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"int"</span>,</span>
+<span id="cb1-31">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"description"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"The number of prime numbers to multiply together."</span>,</span>
+<span id="cb1-32">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"required"</span>: <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span></span>
+<span id="cb1-33">        }</span>
+<span id="cb1-34">      }</span>
+<span id="cb1-35">    }</span>
+<span id="cb1-36">  ],</span>
+<span id="cb1-37">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"answers"</span>: [</span>
+<span id="cb1-38">    {</span>
+<span id="cb1-39">      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"math_toolkit.sum_of_multiples"</span>,</span>
+<span id="cb1-40">      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"arguments"</span>: {</span>
+<span id="cb1-41">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"lower_limit"</span>: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,</span>
+<span id="cb1-42">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"upper_limit"</span>: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1000</span>,</span>
+<span id="cb1-43">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"multiples"</span>: [<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>]</span>
+<span id="cb1-44">      }</span>
+<span id="cb1-45">    },</span>
+<span id="cb1-46">    {</span>
+<span id="cb1-47">      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"math_toolkit.product_of_primes"</span>,</span>
+<span id="cb1-48">      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"arguments"</span>: {</span>
+<span id="cb1-49">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"count"</span>: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span></span>
+<span id="cb1-50">      }</span>
+<span id="cb1-51">    }</span>
+<span id="cb1-52">  ]</span>
+<span id="cb1-53">}</span></code></pre></div></div>
+<ul>
+<li>I have used <code>True</code> instead of <code>true</code>, since the sample is shown as a Python dict here rather than raw JSON.</li>
+<li>Each JSON object specifies:
+<ul>
+<li><strong>query</strong> — the query with the params possibly needed for the tools</li>
+<li><strong>tools</strong> — the available tools which can be called, where each tool has a description and specifies its arguments; each argument has a description, the type of arg it takes, and whether it’s required</li>
+<li><strong>answers</strong> — a list of tools and their corresponding args (key-value pairs) which need to be passed to the tool</li>
+</ul></li>
+</ul>
+</section>
+<section id="preparing-the-dataset" class="level1">
+<h1>Preparing the Dataset</h1>
+<ul>
+<li>Instead of using all 60k samples, I took only 2,500 samples, where I used 2000 as train, 100 as validation, and 400 as test samples.</li>
+<li>Given the query, tools, and answers, I needed to apply a chat template to convert them into the required format.</li>
+<li>For that purpose, I used the chat template of Qwen2.5-0.5B and defined two functions — one for train/validation, and another for test.</li>
+</ul>
+<div id="943f6586" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> generate_train_val_sample(sample):</span>
+<span id="cb2-2">  messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb2-3">      {</span>
+<span id="cb2-4">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"user"</span>,</span>
+<span id="cb2-5">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>: sample[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"query"</span>]</span>
+<span id="cb2-6">      },</span>
+<span id="cb2-7">      {</span>
+<span id="cb2-8">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"assistant"</span>,</span>
+<span id="cb2-9">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"tool_calls"</span>: [</span>
+<span id="cb2-10">              {</span>
+<span id="cb2-11">                  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"function"</span>: {</span>
+<span id="cb2-12">                      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>: answer[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>],</span>
+<span id="cb2-13">                      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"arguments"</span>: answer[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"arguments"</span>]</span>
+<span id="cb2-14">                  }</span>
+<span id="cb2-15">              }</span>
+<span id="cb2-16">              <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> answer <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> json.loads(sample[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"answers"</span>])</span>
+<span id="cb2-17">          ]</span>
+<span id="cb2-18">      }</span>
+<span id="cb2-19">  ]</span>
+<span id="cb2-20"></span>
+<span id="cb2-21">  tools <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> json.loads(sample[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"tools"</span>])</span>
+<span id="cb2-22">  text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tokenizer.apply_chat_template(</span>
+<span id="cb2-23">        messages,</span>
+<span id="cb2-24">        tools<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>tools,</span>
+<span id="cb2-25">        tokenize<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>,</span>
+<span id="cb2-26">        add_generation_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>,</span>
+<span id="cb2-27">    )</span>
+<span id="cb2-28"></span>
+<span id="cb2-29">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span>  {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"text"</span>: text}</span></code></pre></div></div>
+</div>
+<div id="15e16fa3" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> generate_test_sample(sample):</span>
+<span id="cb3-2">  messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb3-3">      {</span>
+<span id="cb3-4">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"user"</span>,</span>
+<span id="cb3-5">          <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>: sample[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"query"</span>]</span>
+<span id="cb3-6">      }</span>
+<span id="cb3-7">  ]</span>
+<span id="cb3-8"></span>
+<span id="cb3-9">  tools <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> json.loads(sample[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"tools"</span>])</span>
+<span id="cb3-10">  text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tokenizer.apply_chat_template(</span>
+<span id="cb3-11">        messages,</span>
+<span id="cb3-12">        tools<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>tools,</span>
+<span id="cb3-13">        tokenize<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>,</span>
+<span id="cb3-14">        add_generation_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>,</span>
+<span id="cb3-15">    )</span>
+<span id="cb3-16"></span>
+<span id="cb3-17">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span>  {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"text"</span>: text}</span></code></pre></div></div>
+</div>
+<ul>
+<li><p>As can be seen from the functions above, we pass <code>answers</code> in the case of train and validation and set <code>add_generation_prompt</code> to <code>False</code>, since we are not generating — we are comparing against the already-known text.</p></li>
+<li><p>For test, we don’t pass <code>answers</code>, and we set <code>add_generation_prompt</code> to <code>True</code>.</p></li>
+<li><p>Using these two functions, we can convert any sample into the required format.</p></li>
+</ul>
+<p><strong>Converted train/validation sample</strong></p>
+<pre class="text"><code>&lt;|im_start|&gt;system
+You are a helpful assistant.
+
+# Tools
+
+You may call one or more functions to assist with the user query.
+
+You are provided with function signatures within &lt;tools&gt;&lt;/tools&gt; XML tags:
+&lt;tools&gt;
+{"name": "get_order", "description": "Fetches the order information for a given order ID using the Toolbench RapidAPI.", "parameters": {"is_id": {"description": "The ID of the order to be fetched.", "type": "str", "default": ""}}}
+&lt;/tools&gt;
+
+For each function call, return a json object with function name and arguments within &lt;tool_call&gt;&lt;/tool_call&gt; XML tags:
+&lt;tool_call&gt;
+{"name": &lt;function-name&gt;, "arguments": &lt;args-json-object&gt;}
+&lt;/tool_call&gt;&lt;|im_end|&gt;
+&lt;|im_start|&gt;user
+Retrieve the order status for \'ORD11223\' and \'ORD44556\'.&lt;|im_end|&gt;
+&lt;|im_start|&gt;assistant
+&lt;tool_call&gt;
+{"name": "get_order", "arguments": {"is_id": "ORD11223"}}
+&lt;/tool_call&gt;
+&lt;tool_call&gt;
+{"name": "get_order", "arguments": {"is_id": "ORD44556"}}
+&lt;/tool_call&gt;&lt;|im_end|&gt;'</code></pre>
+<p><strong>Converted test sample</strong></p>
+<pre class="text"><code>&lt;|im_start|&gt;system
+You are a helpful assistant.
+
+# Tools
+
+You may call one or more functions to assist with the user query.
+
+You are provided with function signatures within &lt;tools&gt;&lt;/tools&gt; XML tags:
+&lt;tools&gt;
+{"name": "get_order", "description": "Fetches the order information for a given order ID using the Toolbench RapidAPI.", "parameters": {"is_id": {"description": "The ID of the order to be fetched.", "type": "str", "default": ""}}}
+&lt;/tools&gt;
+
+For each function call, return a json object with function name and arguments within &lt;tool_call&gt;&lt;/tool_call&gt; XML tags:
+&lt;tool_call&gt;
+{"name": &lt;function-name&gt;, "arguments": &lt;args-json-object&gt;}
+&lt;/tool_call&gt;&lt;|im_end|&gt;
+&lt;|im_start|&gt;user
+Retrieve the order status for \'ORD11223\' and \'ORD44556\'.&lt;|im_end|&gt;
+&lt;|im_start|&gt;assistant</code></pre>
+<ul>
+<li>I’ve used the same example above to show how it looks in both train/validation and test form.</li>
+<li>As we can see, the text contains all the required pieces — system prompt, user query, and available tools — and depending on the type of sample, it either includes the assistant’s response and ends with the <code>&lt;|im_end|&gt;</code> token, or it ends right at <code>&lt;|im_start|&gt;assistant</code>, triggering the model to generate the response.</li>
+</ul>
+</section>
+<section id="sft-setup" class="level1">
+<h1>SFT Setup</h1>
+<ul>
+<li>I used PEFT and TRL for doing supervised fine-tuning, and didn’t use Unsloth because Unsloth requires some of the latest GPUs, and my current laptop (RTX 1050, 3GB) doesn’t have that.</li>
+<li>I had the option of using Colab, but at the same time, I wanted to check the internal working of the functions I was importing, so instead I switched to my local setup.</li>
+</ul>
+<section id="phase-1" class="level2">
+<h2 class="anchored" data-anchor-id="phase-1">Phase 1</h2>
+<ul>
+<li>In case of the PEFT configuration:
+<ul>
+<li>I used rank 16 and <code>lora_alpha</code> 32 [following the HuggingFace SFT article]</li>
+<li>Target modules were <code>q_proj</code>, <code>k_proj</code>, <code>v_proj</code>, <code>o_proj</code>, <code>gate_proj</code>, <code>up_proj</code>, <code>down_proj</code></li>
+</ul></li>
+<li>I fine-tuned and checked the results.</li>
+<li>Some weird tokens were coming in place of <code>&lt;tool_call&gt;</code> and <code>&lt;/tool_call&gt;</code>.</li>
+<li>Eventually I found out that, since I was fine-tuning a base model, the embedding/<code>lm_head</code> doesn’t know much about the <code>tool_call</code> token. Also, <code>embed_tokens</code> and <code>lm_head</code> are tied in the base model, so I needed to account for that too — otherwise the two matrices would end up with different values instead of staying tied.</li>
+</ul>
+</section>
+<section id="phase-2" class="level2">
+<h2 class="anchored" data-anchor-id="phase-2">Phase 2</h2>
+<ul>
+<li>I trained <code>embed_tokens</code> instead of keeping it frozen, while making sure there wouldn’t end up being two separate matrices instead of one, by passing <code>ensure_weight_tying=True</code>.
+<ul>
+<li><code>modules_to_save=["lm_head", "embed_tokens"]</code></li>
+<li><code>ensure_weight_tying=True</code></li>
+</ul></li>
+<li>Below is the PEFT config I used finally:</li>
+</ul>
+<pre class="text"><code>peft_config = LoraConfig(
+    r=16,
+    lora_alpha=32,
+    task_type=TaskType.CAUSAL_LM,
+    target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
+    modules_to_save=["lm_head", "embed_tokens"],
+    ensure_weight_tying=True,
+)</code></pre>
+<ul>
+<li>Below is the <code>SFTConfig</code> I used:</li>
+</ul>
+<pre class="text"><code>training_args = SFTConfig(
+    # Training schedule / optimization
+    per_device_train_batch_size = BATCH_SIZE,      # Batch size per GPU
+    gradient_accumulation_steps = 4,      # Effective batch size = 1 * 4 = 4
+    warmup_steps = WARMUP_STEPS,
+    max_steps=MAX_STEPS,
+    learning_rate = 2e-4,                 # Learning rate for the optimizer
+    optim = "paged_adamw_8bit",           # Optimizer
+
+    # Logging / reporting
+    eval_strategy="steps",
+    eval_steps=EVAL_STEPS,
+    save_strategy="steps",
+    save_steps=SAVE_STEPS,
+    save_total_limit=2,
+    load_best_model_at_end=True,
+    metric_for_best_model="eval_loss",
+    greater_is_better=False,
+    logging_steps=1,                      # Log training metrics every N steps
+    report_to="trackio",                  # Experiment tracking tool
+    run_name="testing",
+    output_dir=OUTPUT_DIR,                # Where to save model checkpoints and logs
+
+    max_length=1024,                      # Maximum input sequence length
+    activation_offloading=True,           # Offload activations to CPU to reduce GPU memory usage
+)</code></pre>
+<ul>
+<li>Specifically, batch size is 1 with gradient accumulation of 4, and learning rate is 2e-4.</li>
+<li>Sequence length was 1024, since I didn’t need to generate a whole paragraph, and max train steps were only 500 — I think if I train it for longer, the results would likely get better.</li>
+<li>Training setup: I used CUDA-enabled PyTorch with some restrictions, like not being able to use <code>torch.compile</code> due to the older GPU. I used Trackio to track training and validation logs.</li>
+</ul>
+</section>
+<section id="training-logs" class="level2">
+<h2 class="anchored" data-anchor-id="training-logs">Training Logs</h2>
+<div style="display: flex; justify-content: center; gap: 20px;">
+<figure style="text-align: center; width: 48%;" class="figure">
+<img src="https://riteshrm.github.io/posts/xlam-sft/train_loss.png" style="width: 100%;" class="figure-img">
+<figcaption>
+Train Loss
+</figcaption>
+</figure>
+<figure style="text-align: center; width: 48%;" class="figure">
+<img src="https://riteshrm.github.io/posts/xlam-sft/train_entropy.png" style="width: 100%;" class="figure-img">
+<figcaption>
+Train Entropy
+</figcaption>
+</figure>
+</div>
+<div style="display: flex; justify-content: center; gap: 20px;">
+<figure style="text-align: center; width: 48%;" class="figure">
+<img src="https://riteshrm.github.io/posts/xlam-sft/eval_loss.png" style="width: 100%;" class="figure-img">
+<figcaption>
+Evaluation Loss
+</figcaption>
+</figure>
+<figure style="text-align: center; width: 48%;" class="figure">
+<img src="https://riteshrm.github.io/posts/xlam-sft/eval_entropy.png" style="width: 100%;" class="figure-img">
+<figcaption>
+Evaluation Entropy
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="evaluation" class="level1">
+<h1>Evaluation</h1>
+<ul>
+<li>first i checked whether the predicted answers have all the available tools as present in ground truth and then checked for the arguments present and the values passed against those arguments</li>
+<li>compared the result of finetuned base model with instruct version of qwen-2.5-0.5B</li>
+</ul>
+</section>
+<section id="results" class="level1">
+<h1>Results</h1>
+<p><strong>Before fine-tuning (base model)</strong></p>
+<pre class="text"><code>User Query: I need an advanced chart for 'BINANCE:ETHUSDT' with MACD and RSI indicators, in light theme, and a 4h interval. Also, provide a list of stocks that are overbought according to RSI on page 3.
+Actual Output: [{"name": "advanced_chart", "arguments": {"symbol": "BINANCE:ETHUSDT", "studies": "MACD,RSI", "theme": "light", "interval": "4h"}}, {"name": "rsi_overbought", "arguments": {"page": 3}}]
+Predicted Output: To fetch the advanced chart for 'BINANCE:ETHUSDT' with MACD and RSI indicators, in light theme, and a 4h interval, you can use the following code:
+
+{
+    "name": "advanced_chart",
+    "arguments": {
+        "symbol": "BINANCE:ETHUSDT",
+        "studies": ["MACD", "RSI"],
+        "format": "png",
+        "theme": "light",
+        "interval": "4h",
+        "width": 800,
+        "height": 600,
+        "timezone": "Etc/UTC"
+    }
+}
+
+This code will fetch the advanced chart for 'BINANCE:ETHUSDT' with MACD and RSI indicators, in light theme, and a 4h interval. The arguments include the symbol, studies, format, theme, interval, width, height, and timezone.
+
+To fetch a list of stocks that are overbought according to RSI on page 3, you can use the following code:
+
+{
+    "name": "rsi_overbought",
+    "arguments": {
+        "page": 3,
+        "studies": ["RSI"],
+        "format": "png",
+        "theme": "light",
+        "interval": "4h",
+        "width": 800,
+        "height": 600,
+        "timezone": "Etc/UTC"
+    }
+}
+
+This code will fetch a list of stocks that are overbought according to RSI on page 3, with MACD and RSI indicators, in light theme, and a 4h interval. The arguments include the page number, studies, format, theme, interval, width, height, and timezone.</code></pre>
+<p>The base model, before fine-tuning, doesn’t call tools at all — it responds conversationally and hallucinates extra arguments (<code>format</code>, <code>width</code>, <code>height</code>, <code>timezone</code>) that were never part of the tool’s actual schema.</p>
+<p><strong>After fine-tuning</strong></p>
+<pre class="text"><code>User Query: I need an advanced chart for 'BINANCE:ETHUSDT' with MACD and RSI indicators, in light theme, and a 4h interval. Also, provide a list of stocks that are overbought according to RSI on page 3.
+Actual Output: [{"name": "advanced_chart", "arguments": {"symbol": "BINANCE:ETHUSDT", "studies": "MACD,RSI", "theme": "light", "interval": "4h"}}, {"name": "rsi_overbought", "arguments": {"page": 3}}]
+Predicted Output: &lt;tool_call&gt;
+{"name": "advanced_chart", "arguments": {"symbol": "BINANCE:ETHUSDT", "studies": "MACD,RSI", "theme": "light", "interval": "4h"}}
+&lt;/tool_call&gt;
+&lt;tool_call&gt;
+{"name": "rsi_overbought", "arguments": {"page": 3}}
+&lt;/tool_call&gt;</code></pre>
+<p>After fine-tuning, the model correctly emits both tool calls in the expected <code>&lt;tool_call&gt;</code> format, with arguments matching the ground truth exactly.</p>
+<section id="evaluated-on-400-held-out-test-samples" class="level2">
+<h2 class="anchored" data-anchor-id="evaluated-on-400-held-out-test-samples">Evaluated on 400 held-out test samples</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th style="text-align: center;">Base (LoRA)</th>
+<th style="text-align: center;">Instruct (zero-shot)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Valid JSON</td>
+<td style="text-align: center;">98.75%</td>
+<td style="text-align: center;">96.75%</td>
+</tr>
+<tr class="even">
+<td>Exact Match</td>
+<td style="text-align: center;">58.75%</td>
+<td style="text-align: center;">59.25%</td>
+</tr>
+<tr class="odd">
+<td>Tool Accuracy</td>
+<td style="text-align: center;">93.89%</td>
+<td style="text-align: center;">92.45%</td>
+</tr>
+<tr class="even">
+<td>Argument Accuracy</td>
+<td style="text-align: center;">81.58%</td>
+<td style="text-align: center;">80.64%</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="what-i-learned" class="level1">
+<h1>What I Learned</h1>
+<ul>
+<li>For SLMs, the embedding and <code>lm_head</code> are generally kept tied, to reduce the parameter count.</li>
+<li>In this case, the tokenizer’s vocab size was lesser than the number of tokens the embedding module could actually represent — this extra headroom becomes useful if new tokens need to be added during fine-tuning.</li>
+<li>When adding extra tokens, the embedding and <code>lm_head</code> also need to be trained — otherwise the model produces weird/garbage tokens as output.</li>
+</ul>
+</section>
+<section id="code" class="level1">
+<h1>Code</h1>
+<p>Full training and evaluation code: https://github.com/riteshrm/qwen2.5-tool-calling-lora</p>
+
+
+</section>
+
+ ]]></description>
+  <category>Generative AI</category>
+  <guid>https://riteshrm.github.io/posts/xlam-sft/</guid>
+  <pubDate>Tue, 18 Aug 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/xlam-sft/thumbnail.png" medium="image" type="image/png" height="123" width="144"/>
+</item>
 <item>
   <title>Flow Matching</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
@@ -729,10 +1360,10 @@ Flow matching samples from epoch 0 through training
 </section>
 
  ]]></description>
-  <category>Deep Learning</category>
+  <category>Generative AI</category>
   <guid>https://riteshrm.github.io/posts/flow-matching/</guid>
   <pubDate>Tue, 02 Jun 2026 00:00:00 GMT</pubDate>
-  <media:content url="https://riteshrm.github.io/posts/flow-matching/fm.gif" medium="image" type="image/gif"/>
+  <media:content url="https://riteshrm.github.io/posts/flow-matching/flow_matching_resized_thumbnail.png" medium="image" type="image/png" height="82" width="144"/>
 </item>
 <item>
   <title>Score Matching</title>
@@ -2583,7 +3214,7 @@ font-style: inherit;">return</span> loss</span></code></pre></div></div>
 </section>
 
  ]]></description>
-  <category>Deep Learning</category>
+  <category>Generative AI</category>
   <guid>https://riteshrm.github.io/posts/score-matching/</guid>
   <pubDate>Fri, 22 May 2026 00:00:00 GMT</pubDate>
   <media:content url="https://riteshrm.github.io/posts/score-matching/score_resized_thumbnail.png" medium="image" type="image/png" height="82" width="144"/>
@@ -3681,10 +4312,10 @@ DDIM samples from epoch 0 through training
 </section>
 
  ]]></description>
-  <category>Deep Learning</category>
+  <category>Generative AI</category>
   <guid>https://riteshrm.github.io/posts/diffusion-models/</guid>
   <pubDate>Mon, 18 May 2026 00:00:00 GMT</pubDate>
-  <media:content url="https://riteshrm.github.io/posts/diffusion-models/ddpm.gif" medium="image" type="image/gif"/>
+  <media:content url="https://riteshrm.github.io/posts/diffusion-models/diffusion_model.png" medium="image" type="image/png" height="96" width="144"/>
 </item>
 <item>
   <title>Variational Autoencoder</title>
@@ -4359,7 +4990,7 @@ font-style: inherit;">return</span> F.mse_loss(pred, target)</span></code></pre>
 </section>
 
  ]]></description>
-  <category>Deep Learning</category>
+  <category>Generative AI</category>
   <guid>https://riteshrm.github.io/posts/variational-autoencoder/</guid>
   <pubDate>Wed, 06 May 2026 00:00:00 GMT</pubDate>
   <media:content url="https://riteshrm.github.io/posts/variational-autoencoder/vae_thumbnail_resized.png" medium="image" type="image/png" height="82" width="144"/>
@@ -6328,7 +6959,7 @@ Figure 2.2: Training workflow of a large language model.
 </section>
 
  ]]></description>
-  <category>Applied ML</category>
+  <category>Books</category>
   <guid>https://riteshrm.github.io/posts/ai-engineering/</guid>
   <pubDate>Tue, 13 Jan 2026 00:00:00 GMT</pubDate>
   <media:content url="https://riteshrm.github.io/posts/ai-engineering/resized_thumbnail.png" medium="image" type="image/png" height="82" width="144"/>
@@ -8007,7 +8638,7 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
 </section>
 
  ]]></description>
-  <category>Applied ML</category>
+  <category>Books</category>
   <guid>https://riteshrm.github.io/posts/hands-on-llms/</guid>
   <pubDate>Mon, 27 Jan 2025 00:00:00 GMT</pubDate>
   <media:content url="https://riteshrm.github.io/posts/hands-on-llms/traing_work_flow_of_llm.png" medium="image" type="image/png" height="75" width="144"/>
@@ -8305,7 +8936,7 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
 </section>
 
  ]]></description>
-  <category>Deep Learning</category>
+  <category>Books</category>
   <guid>https://riteshrm.github.io/posts/meta-learning/</guid>
   <pubDate>Sat, 06 Jul 2024 00:00:00 GMT</pubDate>
   <media:content url="https://riteshrm.github.io/posts/meta-learning/metalearning_resized_thumbnail.png" medium="image" type="image/png" height="82" width="144"/>
