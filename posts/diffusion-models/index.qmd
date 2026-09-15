@@ -2,25 +2,26 @@
 title: "Diffusion Models"
 author: "Ritesh Kumar Maurya"
 date: "2026-05-18"
-categories: [Deep Learning]
+categories: [Generative AI]
 image: "diffusion_model.png"
 description: "Notes on Diffusion Models"
 ---
-- This is mostly based on [Diffusion Models | Paper Explanation | Math Explained](https://www.youtube.com/watch?v=HoKDTa5jHvg&t=1409s) and [Stanford CME296 Diffusion & Large Vision Models | Spring 2026 | Lecture 1 - Diffusion](https://www.youtube.com/watch?v=tr-CUpw--ck)
-- [Denoising Diffusion Probabilistic Models](https://arxiv.org/abs/2006.11239)
-- [Denoising Diffusion Implicit Models](https://arxiv.org/abs/2010.02502)
+
+::: {.callout-tip}
+### References
+- This is mostly based on:
+    1. [Stanford CME296 Diffusion & Large Vision Models | Spring 2026 | Lecture 1 - Diffusion](https://www.youtube.com/watch?v=tr-CUpw--ck)
+    2. [Diffusion Models | Paper Explanation | Math Explained](https://www.youtube.com/watch?v=HoKDTa5jHvg&t=1409s)
+    3. [Denoising Diffusion Probabilistic Models](https://arxiv.org/abs/2006.11239)
+    4. [Denoising Diffusion Implicit Models](https://arxiv.org/abs/2010.02502)
+:::
+
+---
 
 - Minimal PyTorch implementation accompanying these notes:
   - [nanoDiffusion GitHub Repo](https://github.com/riteshrm/nanoDiffusion)
   
 ---
-
-::: {.callout-note}
-- [Forward Process](#forward-process)
-- [Reverse Process](#reverse-process)
-- [Implementation](#implementation)
-- [Faster Sampling (DDIM)](#faster-sampling-denoising-diffusion-implicit-models)
-:::
 
 # Denoising Diffusion Probabilistic Models
 - Denoising Diffusion Probabilistic Models operate within a variational framework, much like VAEs
@@ -263,6 +264,11 @@ class Diffusion():
         return torch.nn.functional.mse_loss(eps, pred_eps)
 ```
 
+<figure style="text-align: center;">
+  <img src="ddpm.gif" style="width:60%">
+  <figcaption>DDPM samples from epoch 0 through training</figcaption>
+</figure>
+
 ---
 
 # Faster Sampling (Denoising Diffusion Implicit Models)
@@ -346,3 +352,8 @@ class Diffusion():
         pred_eps = self.eps_theta(x_t, t)
         return torch.nn.functional.mse_loss(eps, pred_eps)
 ```
+
+<figure style="text-align: center;">
+  <img src="ddim.gif" style="width:60%">
+  <figcaption>DDIM samples from epoch 0 through training</figcaption>
+</figure>

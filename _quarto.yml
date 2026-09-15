@@ -36,8 +36,11 @@ website:
     # background: primary
     left:
       - text: "Notes"
-        href: blog.qmd
+        href: notes.qmd
     right:
+      - icon: file-earmark-person
+        href: "assets/Ritesh_Kumar_Maurya_Resume.pdf"
+        aria-label: "Resume"
       - icon: envelope
         href: "mailto:riteshkumarmaurya7379@gmail.com"
         aria-label: "Email"
@@ -57,11 +60,13 @@ website:
     left: "Built with Quarto"
     center:
       - text: "RSS"
-        href: blog.xml
+        href: notes.xml
       - text: "GitHub"
         href: "https://github.com/riteshrm"
       - text: "LinkedIn"
         href: "https://www.linkedin.com/in/riteshrm/"
+      - text: "Resume"
+        href: "assets/Ritesh_Kumar_Maurya_Resume.pdf"
 
 execute:
   freeze: true

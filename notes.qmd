@@ -1,0 +1,22 @@
+---
+title: "Notes"
+description: "Practical notes on generative AI, deep learning, optimization, and LLM systems."
+listing:
+  sort: "date desc"
+  contents: "posts"
+  type: default
+  categories: true
+  sort-ui: false
+  fields: [image, title, description, date, reading-time, categories]
+  feed: true
+  #page-layout: full
+---
+
+I write these as working notes: part study guide, part implementation reference, part record of experiments. The strongest threads are generative modeling, transformer mechanics, model optimization, and hands-on LLM engineering.
+
+::: {.topic-strip}
+[Generative AI](#category=Generative%20AI){.topic-pill}
+[Deep Learning](#category=Deep%20Learning){.topic-pill}
+[Optimization](#category=Optimization){.topic-pill}
+[Books](#category=Books){.topic-pill}
+:::

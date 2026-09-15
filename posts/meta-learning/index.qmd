@@ -2,7 +2,7 @@
 title: "Meta Learning: Chapter-Wise Summary"
 author: "Ritesh Kumar Maurya"
 date: "2024-07-06"
-categories: [Deep Learning]
+categories: [Books]
 image: "metalearning_resized_thumbnail.png"
 description: "Chapter-wise summary notes from Meta Learning, focused on learning practice, programming habits, and deep learning growth."
 ---

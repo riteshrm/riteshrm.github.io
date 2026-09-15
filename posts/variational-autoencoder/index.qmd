@@ -2,14 +2,25 @@
 title: "Variational Autoencoder"
 author: "Ritesh Kumar Maurya"
 date: "2026-05-06"
-categories: [Deep Learning]
+categories: [Generative AI]
 image: "vae_thumbnail_resized.png"
 description: "Notes on Variational Autoencoders, ELBO, and reparameterization"
 ---
-- This is mostly based on [Understanding Variational Autoencoder](https://www.youtube.com/watch?v=1RPdu_5FCfk) and [Variational Autoencoder - Model, ELBO, loss function and maths explained easily](https://www.youtube.com/watch?v=iwEzwTTalbg)
 
+::: {.callout-tip}
+### References
+- This is mostly based on:
+    1. [Understanding Variational Autoencoder](https://www.youtube.com/watch?v=1RPdu_5FCfk)
+    2. [Variational Autoencoder - Model, ELBO, loss function and maths explained easily](https://www.youtube.com/watch?v=iwEzwTTalbg)
+:::
 
 ---
+
+- Minimal PyTorch implementation accompanying these notes:
+  - [vae GitHub Repo](https://github.com/riteshrm/vae)
+
+---
+
 
 # Autoencoders
 - They are used for:-

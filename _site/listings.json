@@ -1,7 +1,10 @@
 [
   {
-    "listing": "/blog.html",
+    "listing": "/notes.html",
     "items": [
+      "/posts/xlam-sft/index.html",
+      "/posts/flow-matching/index.html",
+      "/posts/score-matching/index.html",
       "/posts/diffusion-models/index.html",
       "/posts/variational-autoencoder/index.html",
       "/posts/rotary-position-embedding/index.html",

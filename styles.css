@@ -4,6 +4,8 @@
   --site-border: rgba(33, 37, 41, 0.14);
   --site-muted: rgba(33, 37, 41, 0.68);
   --site-surface: rgba(47, 111, 109, 0.06);
+  --site-warm: #d48654;
+  --site-cool: #496f9e;
 }
 
 body {
@@ -83,7 +85,8 @@ main.content li {
 
 .profile-actions .btn,
 .profile-links a,
-.quarto-listing .listing-category {
+.quarto-listing .listing-category,
+.topic-pill {
   border-radius: 0.45rem;
 }
 
@@ -111,6 +114,56 @@ main.content li {
 .profile-links a:hover {
   border-color: var(--site-accent);
   color: var(--site-accent-strong);
+}
+
+.featured-notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.featured-note {
+  display: flex;
+  align-items: center;
+  min-height: 3.25rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--site-border);
+  border-left: 3px solid var(--site-warm);
+  color: inherit;
+  font-weight: 650;
+  line-height: 1.3;
+  text-decoration: none;
+  background: rgba(212, 134, 84, 0.06);
+}
+
+.featured-note:hover {
+  border-color: var(--site-warm);
+  color: inherit;
+}
+
+.topic-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1rem 0 1.4rem;
+}
+
+.topic-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.38rem 0.7rem;
+  border: 1px solid rgba(73, 111, 158, 0.28);
+  color: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  background: rgba(73, 111, 158, 0.08);
+}
+
+.topic-pill:hover {
+  border-color: var(--site-cool);
+  color: inherit;
 }
 
 h2,
@@ -246,10 +299,20 @@ body.quarto-dark {
   --site-surface: rgba(126, 203, 199, 0.09);
   --site-accent: #7ecbc7;
   --site-accent-strong: #a8e0dd;
+  --site-warm: #e6a174;
+  --site-cool: #8fb5e8;
 }
 
 body.quarto-dark .profile-links a:hover {
   color: var(--site-accent-strong);
+}
+
+body.quarto-dark .featured-note {
+  background: rgba(230, 161, 116, 0.1);
+}
+
+body.quarto-dark .topic-pill {
+  background: rgba(143, 181, 232, 0.11);
 }
 
 @media (max-width: 767.98px) {
@@ -270,6 +333,10 @@ body.quarto-dark .profile-links a:hover {
   .profile-actions p,
   .profile-actions .btn {
     width: 100%;
+  }
+
+  .featured-notes {
+    grid-template-columns: 1fr;
   }
 
   .quarto-post.image-right {

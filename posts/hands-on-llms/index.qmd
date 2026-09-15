@@ -2,7 +2,7 @@
 title: "Hands on LLMs: Chapter-Wise Summary"
 author: "Ritesh Kumar Maurya"
 date: "2025-01-27"
-categories: [Applied ML]
+categories: [Books]
 image: "traing_work_flow_of_llm.png"
 description: "Work-in-progress chapter notes from Hands-On Large Language Models."
 ---

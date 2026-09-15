@@ -2,19 +2,18 @@
 ---
 title: ""
 pagetitle: "About Me"
-description: "Ritesh Kumar Maurya is a machine learning engineer writing notes on deep learning, optimization, and LLMs."
+description: "Ritesh Kumar Maurya is a machine learning engineer focused on practical deep learning systems."
 page-layout: article
 title-block-style: none
 ---
 
 ::: {.profile-hero}
 ::: {.profile-copy}
-Hi there 👋 I am Ritesh. I work at [Samsung R&D Institute India, Noida](https://research.samsung.com/sri-n). For more details on my work experience, check out my [LinkedIn profile](https://www.linkedin.com/in/riteshrm/).
-
-I use this site to collect practical notes on deep learning, optimization, diffusion models and language models.
+Hi there 👋 I am Ritesh, a machine learning engineer focused on practical deep learning systems. I previously worked at [Zomato](https://www.eternal.com/our-businesses/zomato/) and [Samsung R&D Institute India](https://research.samsung.com/sri-n).
 
 ::: {.profile-actions}
-[Read Notes](blog.qmd){.btn .btn-primary}
+[Read Notes](notes.qmd){.btn .btn-primary}
+[Resume](assets/Ritesh_Kumar_Maurya_Resume.pdf){.btn .btn-outline-secondary}
 [GitHub](https://github.com/riteshrm){.btn .btn-outline-secondary}
 [LinkedIn](https://www.linkedin.com/in/riteshrm/){.btn .btn-outline-secondary}
 :::
@@ -24,13 +23,23 @@ I use this site to collect practical notes on deep learning, optimization, diffu
 [{{< iconify mdi github >}} GitHub](https://github.com/riteshrm)
 [{{< iconify mdi linkedin >}} LinkedIn](https://www.linkedin.com/in/riteshrm/)
 [{{< iconify mdi email-outline >}} Email](mailto:riteshkumarmaurya7379@gmail.com)
+[{{< iconify mdi file-document-outline >}} Resume](assets/Ritesh_Kumar_Maurya_Resume.pdf)
 [{{< iconify cib leetcode >}} LeetCode](https://leetcode.com/riteshrm)
 :::
+:::
+
+### Featured Notes
+
+::: {.featured-notes}
+[Flow Matching](posts/flow-matching/){.featured-note}
+[Diffusion Models](posts/diffusion-models/){.featured-note}
+[xLAM SFT](posts/xlam-sft/){.featured-note}
 :::
 
 ### Timeline
 
 | Position                               | Company                                | Duration                |
 |:--------------------------------------:|:--------------------------------------:|:-----------------------:|
-| Machine Learning Engineer              | Samsung R&D Institute India, Noida     | Jan 2024 - Present      |
+| Machine Learning Engineer II            | Zomato, Gurugram     | June 2026 - Aug 2026    |
+| Machine Learning Engineer              | Samsung R&D Institute India, Noida     | Jan 2024 - June 2026      |
 | Machine Learning Engineer Intern       | Samsung R&D Institute India, Noida     | Jan 2023 - Dec 2023     |

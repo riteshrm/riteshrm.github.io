@@ -5,5 +5,5 @@ description: "The requested page could not be found."
 
 The page you are looking for is not available.
 
-[Go to notes](blog.qmd){.btn .btn-primary}
+[Go to notes](notes.qmd){.btn .btn-primary}
 [Go home](index.qmd){.btn .btn-outline-secondary}

@@ -2,7 +2,7 @@
 title: "AI Engineering: Chapter-Wise Summary"
 author: "Ritesh Kumar Maurya"
 date: "2026-01-13"
-categories: [Applied ML]
+categories: [Books]
 image: "resized_thumbnail.png"
 description: "Work-in-progress chapter notes from AI Engineering."
 ---
