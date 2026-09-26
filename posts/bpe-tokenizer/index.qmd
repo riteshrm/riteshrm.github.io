@@ -1,0 +1,365 @@
+---
+title: "BPE Tokenizer"
+author: "Ritesh Kumar Maurya"
+date: "2026-09-25"
+categories: [Natural Language Processing]
+image: "bpe-tokenizer-thumbnail.png"
+description: "A practical guide to understanding and implementing a byte-pair encoding tokenizer from first principles."
+---
+
+::: {.callout-tip}
+### References
+
+- This is mostly based on:
+    1. Andrej Karpathy's [minbpe](https://github.com/karpathy/minbpe)
+    2. Andrej Karpathy's [Let's build the GPT Tokenizer](https://www.youtube.com/watch?v=zduSFxRajkE)
+:::
+
+- Implementation accompanying these notes:
+  - [BPE tokenizer implementation in nanoLM](https://github.com/riteshrm/nanoLM/tree/main/tokenizer)
+
+# BPE in the GPT-2 Paper
+
+- Unlike tokenizers that divide words into subwords or characters, BPE divides text into bytes, placing it somewhere between word-level and character-level representations.
+- The main idea of BPE is to represent text as bytes.
+- There are two processes
+  - Encode and decode.
+- We can use `encode('utf-8')` on text to get bytes and `decode('utf-8')` on bytes to get text.
+- But using UTF-8 gives us no more than 256 options, and if we want to use it directly, the number of tokens will be very large and thus computationally infeasible.
+- So we wanted to find a sweet spot where we could represent text efficiently using bytes.
+- This led to the idea of merging tokens into one new token.
+- Basically, we find the pair that occurs most often, replace it with a new token, and repeat this process until the vocabulary size reaches our defined size.
+- You can also check out [this Wikipedia link](https://en.wikipedia.org/wiki/Byte-pair_encoding#Example) to learn more about how this works without getting into the numbers.
+- The code snippet below shows exactly how this works.
+
+The complete implementation used in this post is available in the [`nanoLM/tokenizer`](https://github.com/riteshrm/nanoLM/tree/main/tokenizer) directory.
+```{python}
+text = open("taylorswift.txt", "r", encoding="utf-8").read()
+
+tokens = text.encode('utf-8')
+tokens = list(map(int, tokens))
+
+def get_stats(ids):
+    counts = {}
+    for pair in zip(ids,ids[1:]):
+        counts[pair]=counts.get(pair, 0)+1
+    return counts
+
+def merge(ids, pair, token_number):
+    new_ids = []
+    i=0
+    while i< len(ids):
+        if i+1<len(ids) and ids[i]==pair[0] and ids[i+1]==pair[1]:
+            new_ids.append(token_number)
+            i += 2
+        else:
+            new_ids.append(ids[i])
+            i += 1
+    return new_ids
+
+vocab_size = 257
+num_merges = vocab_size - 256
+merges = {}
+ids = list(tokens)
+for i in range(num_merges):
+    stats = get_stats(ids)
+    top_pair = max(stats, key=stats.get)
+    idx = 256 + i
+    ids = merge(ids, top_pair, idx)
+    merges[top_pair] = idx
+print("Merges: ", merges)
+```
+
+
+## Merges and Vocabulary Creation
+
+- Now that we have the merges, which specify which pair was merged into which new token, we need a mapping that tells us how each token is represented as bytes.
+- For that, we initialize our vocabulary and update it using the merges, as shown in the code snippet below.
+
+```{python}
+vocab={idx:bytes([idx]) for idx in range(256)}
+
+for pair, idx in merges.items():
+    vocab[idx] = vocab[pair[0]] + vocab[pair[1]]
+```
+
+## Encoder
+
+- Now we are ready to encode a given string, as shown in the code below.
+- First, we encode the text into bytes and then repeatedly replace the pairs present in our merges dictionary with the corresponding token.
+- While doing so, we need to find the token pair with the minimum index. Let us say there are two pairs: one is represented by 300 and the other by 489. If the second pair contains 300 as one of its elements, then we must process 300 before 489; otherwise, the merging would be different each time, which would be meaningless.
+
+```{python}
+def encode(text):
+    tokens = text.encode('utf-8')
+    ids = list(map(int,tokens))
+    while len(ids)>=2:
+        stats = get_stats(ids)
+        pair = min(stats, key=lambda p: merges.get(p, float('inf')))
+        if pair not in merges:
+            break
+        idx = merges.get(pair)
+        ids = merge(ids, pair, idx)
+    return ids
+```
+
+$$
+\begin{aligned}
+300 &= \operatorname{merge}(A, B) \\
+489 &= \operatorname{merge}(300, C)
+\end{aligned}
+$$
+
+- Let us say we have three raw tokens: A, B, and C.
+- Then, if we randomly merge tokens, there would be different representations for the same text.
+
+$$
+A, B, C \rightarrow [AB, C] \quad \text{or} \quad [A, BC]
+$$
+
+which is kind of confusing.
+
+## Decoder
+
+- Given the token IDs, we get all the bytes using the vocabulary and then decode them, as shown in the code below.
+
+```{python}
+def decode(ids):
+    tokens = b''.join([vocab[id] for id in ids])
+    text = tokens.decode('utf-8', errors='replace')
+    return text
+```
+
+
+
+# Issues with Basic BPE
+
+- Sequences such as dog., dog!, and dog? get merged into independent tokens. However, since dog is common to all of them, we can represent it using a single token and represent the additions as separate tokens, making our vocabulary more optimal.
+- Basically, what we want is to avoid merging across words, numbers, punctuation, and so on.
+
+## How Regex BPE Solves It
+
+- To achieve the above requirements, the GPT-2 paper used regex to first split the text using a pattern, then trained BPE on top of it and used it for encoding and decoding.
+  The pattern was:
+
+<div class="regex-pattern">
+<code> ?\p{N}+|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+</code>
+</div>
+
+- Given a string, you try to match it to the pattern from left to right.
+
+- For example, let us say we want to match `Hello world`.
+- This will match with ` ?\p{L}+`. Basically, this pattern says that it will match any string that either starts with a space or contains a letter, and that it should contain at least one letter.
+- But it will stop after matching `Hello` because the string has a space after it. Matching will then start from the left again to match the remaining part of the given string; it will now match `world` using the same pattern.
+
+- As can be seen from the code snippet below:
+
+```{python}
+import regex as re
+gpt2pat = re.compile(r"""'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+""")
+print(f"Tokens corresponding to 'Hello world':", re.findall(gpt2pat, "Hello world"))
+```
+- ` ?\p{N}+` matches numbers.
+  For example, if we have the string `Hello world9119`, it will match `Hello`, `world`, and `9119`.
+  Similarly, if we have `I'm a mess`, it will break it down into `I`, `'m`, and `mess`.
+- ` ?[^\s\p{L}\p{N}]+` matches punctuation. Basically, it specifies an optional space followed by no space, no letter, and no number.
+- `\s+(?!\S)` matches spaces while leaving the last one. For example, given `how      are you`, it will match all the spaces after `how` but leave the last one, which will be matched as the ` are` token.
+- `\s+` matches whitespace characters.
+- These can be seen in the code snippet below.
+
+```{python}
+text = "Hello world9119"
+print(f"Tokens corresponding to '{text}':", re.findall(gpt2pat, text))
+text = "I'm a mess"
+print(f"Tokens corresponding to '{text}':", re.findall(gpt2pat, text))
+
+text = "Hellow worl!!!!"
+print(f"Tokens corresponding to '{text}':", re.findall(gpt2pat, text))
+
+text = "how      are?"
+print(f"Tokens corresponding to '{text}':", re.findall(gpt2pat, text))
+
+```
+
+
+- LLaMA-2 SentencePiece uses pair encoding directly on Unicode code points rather than on UTF-8-encoded bytes, as we do in BPE.
+
+# How to Set Vocabulary Size
+
+- Why not use a million-token vocabulary?
+1. We need a large number of parameters for the embedding and `lm_head`. On top of that, to get the logits, we need to perform a dot product with `lm_head`, which will also increase the computational cost.
+2. We might encounter undertraining because, with a large vocabulary size, tokens will occur less frequently and might not appear often enough for the model to learn them; that is, they will not participate enough in the backward pass.
+3. A long sequence will be compressed into a shorter one after tokenization. This is beneficial because we will have fewer tokens to process, but we may also face a problem where the model will not receive enough information to process it correctly. Basically, we are compressing the information too much, and aggressive compression may result in some loss of information.
+
+# Complete Implementation of the Basic BPE Tokenizer
+
+```{python}
+class Tokenizer:
+    def __init__(self):
+        self.vocab_size = None
+        self.merges = None
+        self.vocab = None
+
+    def get_stats(self, ids):
+        counts = {}
+        for pair in zip(ids,ids[1:]):
+            counts[pair]=counts.get(pair, 0)+1
+        return counts
+
+    def get_max_count_pair(self, counts):
+        max_count = 0
+        max_pair = None
+
+        for key, value in counts.items():
+            if value>max_count:
+                max_count = value
+                max_pair = key
+        return max_pair, max_count
+
+    def merge(self, ids, pair, token_number):
+        new_ids = []
+        i=0
+        while i< len(ids):
+            if i+1<len(ids) and ids[i]==pair[0] and ids[i+1]==pair[1]:
+                new_ids.append(token_number)
+                i += 2
+            else:
+                new_ids.append(ids[i])
+                i += 1
+        return new_ids
+
+    def encode(self, text):
+        tokens = text.encode('utf-8')
+        ids = list(map(int,tokens))
+        while len(ids)>=2:
+            stats = self.get_stats(ids)
+            pair = min(stats, key=lambda p: self.merges.get(p, float('inf')))
+            if pair not in self.merges:
+                break
+            idx = self.merges.get(pair)
+            ids = self.merge(ids, pair, idx)
+        return ids
+
+    def decode(self, ids):
+        tokens = b''.join([self.vocab[id] for id in ids])
+        text = tokens.decode('utf-8', errors='replace')
+        return text
+
+    def train(self, vocab_size, text):
+        self.vocab_size = vocab_size
+        num_merges = self.vocab_size - 256
+        self.merges = {}
+        self.vocab = {}
+        tokens = text.encode('utf-8')
+        ids = list(map(int, tokens))
+        for i in range(num_merges):
+            stats = self.get_stats(ids)
+            top_pair = max(stats, key=stats.get)
+            idx = 256 + i
+            ids = self.merge(ids, top_pair, idx)
+            self.merges[top_pair] = idx
+
+        self.vocab={idx:bytes([idx]) for idx in range(256)}
+
+        for pair, idx in self.merges.items():
+            self.vocab[idx] = self.vocab[pair[0]] + self.vocab[pair[1]]
+```
+
+# Complete Implementation of the Regex BPE Tokenizer
+
+```{python}
+import regex as re
+GPT4_SPLIT_PATTERN = r"""'(?i:[sdmt]|ll|ve|re)|[^\r\n\p{L}\p{N}]?+\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]++[\r\n]*|\s*[\r\n]|\s+(?!\S)|\s+"""
+
+class RegexTokenizer:
+    def __init__(self):
+        self.vocab_size = None
+        self.merges = None
+        self.vocab = None
+        self.pattern = GPT4_SPLIT_PATTERN
+        self.compiled_pattern = re.compile(self.pattern)
+
+    def get_stats(self, ids, counts=None):
+        counts = {} if counts is None else counts
+        for pair in zip(ids,ids[1:]):
+            counts[pair]=counts.get(pair, 0)+1
+        return counts
+
+    def get_max_count_pair(self, counts):
+        max_count = 0
+        max_pair = None
+
+        for key, value in counts.items():
+            if value>max_count:
+                max_count = value
+                max_pair = key
+        return max_pair, max_count
+
+    def merge(self, ids, pair, token_number):
+        new_ids = []
+        i=0
+        while i< len(ids):
+            if i+1<len(ids) and ids[i]==pair[0] and ids[i+1]==pair[1]:
+                new_ids.append(token_number)
+                i += 2
+            else:
+                new_ids.append(ids[i])
+                i += 1
+        return new_ids
+
+    def encode(self, text):
+        text_chunks = re.findall(self.compiled_pattern, text)
+        ids = []
+        for text_chunk in text_chunks:
+            ids.extend(self.encode_chunk(text_chunk))
+        return ids
+
+
+    def encode_chunk(self, text):
+        tokens = text.encode('utf-8')
+        ids = list(map(int,tokens))
+        while len(ids)>=2:
+            stats = self.get_stats(ids)
+            pair = min(stats, key=lambda p: self.merges.get(p, float('inf')))
+            if pair not in self.merges:
+                break
+            idx = self.merges.get(pair)
+            ids = self.merge(ids, pair, idx)
+        return ids
+
+    def decode(self, ids):
+        tokens = b''.join([self.vocab[id] for id in ids])
+        text = tokens.decode('utf-8', errors='replace')
+        return text
+
+    def train(self, vocab_size, text):
+        self.vocab_size = vocab_size
+        num_merges = self.vocab_size - 256
+        merges = {}
+        text_chunks = re.findall(self.compiled_pattern, text)
+        tokens = [list(chunk.encode('utf-8')) for chunk in text_chunks]
+        ids = list(tokens)
+        for i in range(num_merges):
+            stats = {}
+            for chunk_ids in ids:
+                if len(chunk_ids) >= 2:
+                    stats = get_stats(chunk_ids, stats)
+            if len(stats)==0:
+                print("No more pairs to merge. Stopping training.")
+                break
+            top_pair = max(stats, key=stats.get)
+            idx = 256 + i
+            ids = [merge(chunk_ids, top_pair, idx) for chunk_ids in ids]
+            merges[top_pair] = idx
+
+        self.merges = merges
+        self.vocab={idx:bytes([idx]) for idx in range(256)}
+
+        for pair, idx in self.merges.items():
+            self.vocab[idx] = self.vocab[pair[0]] + self.vocab[pair[1]]
+```
+
+# Conclusion
+
+BPE starts by representing text as UTF-8 bytes, then repeatedly merges the most frequent token pairs until the desired vocabulary size is reached. The learned merges and vocabulary are used to encode text into token IDs and decode those IDs back into text. Regex pre-tokenization helps avoid undesirable merges across words, numbers, punctuation, and whitespace.
+
