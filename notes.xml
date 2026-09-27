@@ -64,7 +64,7 @@
 <li>The code snippet below shows exactly how this works.</li>
 </ul>
 <p>The complete implementation used in this post is available in the <a href="https://github.com/riteshrm/nanoLM/tree/main/tokenizer"><code>nanoLM/tokenizer</code></a> directory.</p>
-<div id="111765db" class="cell" data-execution_count="1">
+<div id="12695785" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1">text <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="bu" style="color: null;
@@ -264,7 +264,7 @@ font-style: inherit;">"Merges: "</span>, merges)</span></code></pre></div></div>
 <li>Now that we have the merges, which specify which pair was merged into which new token, we need a mapping that tells us how each token is represented as bytes.</li>
 <li>For that, we initialize our vocabulary and update it using the merges, as shown in the code snippet below.</li>
 </ul>
-<div id="4188fd0a" class="cell" data-execution_count="2">
+<div id="955a646e" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">vocab<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>{idx:<span class="bu" style="color: null;
@@ -306,7 +306,7 @@ font-style: inherit;">1</span>]]</span></code></pre></div></div>
 <li>First, we encode the text into bytes and then repeatedly replace the pairs present in our merges dictionary with the corresponding token.</li>
 <li>While doing so, we need to find the token pair with the minimum index. Let us say there are two pairs: one is represented by 300 and the other by 489. If the second pair contains 300 as one of its elements, then we must process 300 before 489; otherwise, the merging would be different each time, which would be meaningless.</li>
 </ul>
-<div id="1578c88c" class="cell" data-execution_count="3">
+<div id="ca2b616b" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -390,7 +390,7 @@ font-style: inherit;">return</span> ids</span></code></pre></div></div>
 <ul>
 <li>Given the token IDs, we get all the bytes using the vocabulary and then decode them, as shown in the code below.</li>
 </ul>
-<div id="c9bd7001" class="cell" data-execution_count="4">
+<div id="c99bd0f6" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -447,7 +447,7 @@ font-style: inherit;">return</span> text</span></code></pre></div></div>
 <li><p>But it will stop after matching <code>Hello</code> because the string has a space after it. Matching will then start from the left again to match the remaining part of the given string; it will now match <code>world</code> using the same pattern.</p></li>
 <li><p>As can be seen from the code snippet below:</p></li>
 </ul>
-<div id="98c715e8" class="cell" data-execution_count="5">
+<div id="30dca1b3" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> regex <span class="im" style="color: #00769E;
@@ -571,7 +571,7 @@ font-style: inherit;">"Hello world"</span>))</span></code></pre></div></div>
 <li><code>\s+</code> matches whitespace characters.</li>
 <li>These can be seen in the code snippet below.</li>
 </ul>
-<div id="73242aac" class="cell" data-execution_count="6">
+<div id="b363a2d4" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">text <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
@@ -663,7 +663,7 @@ Tokens corresponding to 'how      are?': ['how', '     ', ' are', '?']</code></p
 </section>
 <section id="complete-implementation-of-the-basic-bpe-tokenizer" class="level1">
 <h1>Complete Implementation of the Basic BPE Tokenizer</h1>
-<div id="c501a35e" class="cell" data-execution_count="7">
+<div id="acd175a8" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -1094,7 +1094,7 @@ font-style: inherit;">1</span>]]</span></code></pre></div></div>
 </section>
 <section id="complete-implementation-of-the-regex-bpe-tokenizer" class="level1">
 <h1>Complete Implementation of the Regex BPE Tokenizer</h1>
-<div id="e8c572af" class="cell" data-execution_count="8">
+<div id="52ec2ea6" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> regex <span class="im" style="color: #00769E;
@@ -1754,7 +1754,7 @@ font-style: inherit;">1</span>]]</span></code></pre></div></div>
 </section>
 
  ]]></description>
-  <category>Natural Language Processing</category>
+  <category>NLP</category>
   <guid>https://riteshrm.github.io/posts/bpe-tokenizer/</guid>
   <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
   <media:content url="https://riteshrm.github.io/posts/bpe-tokenizer/bpe-tokenizer-thumbnail.png" medium="image" type="image/png" height="81" width="144"/>
