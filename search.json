@@ -270,7 +270,7 @@
     "href": "index.html#from-my-notes",
     "title": "Hi, Ritesh here.",
     "section": "From my notes",
-    "text": "From my notes\n\nFine-tuning a small model for tool calling\nTraining Qwen2.5-0.5B on xLAM, the bugs I ran into, and how I evaluated the results.\nCode on GitHub\n\n\nDiffusion Models\nWorking through DDPM and DDIM, from the equations to a PyTorch implementation.\nCode on GitHub\n\n\nPosition Encoding\nLooking at sinusoidal positional encoding through code and plots, including what changes with the frequency base."
+    "text": "From my notes\n\nFine-tuning a small model for tool calling\nFine-tuning Qwen2.5-0.5B on xLAM, the bugs I ran into, and how I evaluated the results.\nCode on GitHub\n\n\nDiffusion Models\nWorking through DDPM and DDIM, from the equations to a PyTorch implementation.\nCode on GitHub\n\n\nPosition Encoding\nLooking at sinusoidal positional encoding through code and plots, including what changes with the frequency base."
   },
   {
     "objectID": "index.html#experience",
