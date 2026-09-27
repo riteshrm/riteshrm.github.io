@@ -506,7 +506,7 @@ window.Quarto = {
 <li>The code snippet below shows exactly how this works.</li>
 </ul>
 <p>The complete implementation used in this post is available in the <a href="https://github.com/riteshrm/nanoLM/tree/main/tokenizer"><code>nanoLM/tokenizer</code></a> directory.</p>
-<div id="12695785" class="cell" data-execution_count="1">
+<div id="d11b12c3" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="bu">open</span>(<span class="st">"taylorswift.txt"</span>, <span class="st">"r"</span>, encoding<span class="op">=</span><span class="st">"utf-8"</span>).read()</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>tokens <span class="op">=</span> text.encode(<span class="st">'utf-8'</span>)</span>
@@ -551,7 +551,7 @@ window.Quarto = {
 <li>Now that we have the merges, which specify which pair was merged into which new token, we need a mapping that tells us how each token is represented as bytes.</li>
 <li>For that, we initialize our vocabulary and update it using the merges, as shown in the code snippet below.</li>
 </ul>
-<div id="955a646e" class="cell" data-execution_count="2">
+<div id="ee9d9251" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>vocab<span class="op">=</span>{idx:<span class="bu">bytes</span>([idx]) <span class="cf">for</span> idx <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">256</span>)}</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> pair, idx <span class="kw">in</span> merges.items():</span>
@@ -565,7 +565,7 @@ window.Quarto = {
 <li>First, we encode the text into bytes and then repeatedly replace the pairs present in our merges dictionary with the corresponding token.</li>
 <li>While doing so, we need to find the token pair with the minimum index. Let us say there are two pairs: one is represented by 300 and the other by 489. If the second pair contains 300 as one of its elements, then we must process 300 before 489; otherwise, the merging would be different each time, which would be meaningless.</li>
 </ul>
-<div id="ca2b616b" class="cell" data-execution_count="3">
+<div id="4d7291b2" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode(text):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> text.encode(<span class="st">'utf-8'</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    ids <span class="op">=</span> <span class="bu">list</span>(<span class="bu">map</span>(<span class="bu">int</span>,tokens))</span>
@@ -598,7 +598,7 @@ A, B, C \rightarrow [AB, C] \quad \text{or} \quad [A, BC]
 <ul>
 <li>Given the token IDs, we get all the bytes using the vocabulary and then decode them, as shown in the code below.</li>
 </ul>
-<div id="c99bd0f6" class="cell" data-execution_count="4">
+<div id="6e23eab1" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decode(ids):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> <span class="st">b''</span>.join([vocab[<span class="bu">id</span>] <span class="cf">for</span> <span class="bu">id</span> <span class="kw">in</span> ids])</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> tokens.decode(<span class="st">'utf-8'</span>, errors<span class="op">=</span><span class="st">'replace'</span>)</span>
@@ -618,7 +618,7 @@ A, B, C \rightarrow [AB, C] \quad \text{or} \quad [A, BC]
 <li>To achieve the above requirements, the GPT-2 paper used regex to first split the text using a pattern, then trained BPE on top of it and used it for encoding and decoding. The pattern was:</li>
 </ul>
 <div class="regex-pattern">
-<p><code> ?+|’t|’re|’ve|’m|’ll|’d| ?+| ?+| ?[^\s\p{L}\p{N}]+|+(?!)|+</code></p>
+<p><code> ’s|’t|’re|’ve|’m|’ll|’d| ?+| ?+| ?[^\s\p{L}\p{N}]+|+(?!)|+</code></p>
 </div>
 <ul>
 <li><p>Given a string, you try to match it to the pattern from left to right.</p></li>
@@ -627,7 +627,7 @@ A, B, C \rightarrow [AB, C] \quad \text{or} \quad [A, BC]
 <li><p>But it will stop after matching <code>Hello</code> because the string has a space after it. Matching will then start from the left again to match the remaining part of the given string; it will now match <code>world</code> using the same pattern.</p></li>
 <li><p>As can be seen from the code snippet below:</p></li>
 </ul>
-<div id="30dca1b3" class="cell" data-execution_count="5">
+<div id="9a8aa88d" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> regex <span class="im">as</span> re</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>gpt2pat <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r"""'s</span><span class="cf">|</span><span class="vs">'t</span><span class="cf">|</span><span class="vs">'re</span><span class="cf">|</span><span class="vs">'ve</span><span class="cf">|</span><span class="vs">'m</span><span class="cf">|</span><span class="vs">'ll</span><span class="cf">|</span><span class="vs">'d</span><span class="cf">|</span><span class="vs"> </span><span class="op">?</span><span class="ch">\p{L}</span><span class="op">+</span><span class="cf">|</span><span class="vs"> </span><span class="op">?</span><span class="ch">\p{N}</span><span class="op">+</span><span class="cf">|</span><span class="vs"> </span><span class="op">?</span><span class="pp">[^</span><span class="dv">\s</span><span class="ch">\p{L}\p{N}</span><span class="pp">]</span><span class="op">+</span><span class="cf">|</span><span class="dv">\s</span><span class="op">+</span><span class="ex">(</span><span class="fu">?!</span><span class="dv">\S</span><span class="ex">)</span><span class="cf">|</span><span class="dv">\s</span><span class="op">+</span><span class="vs">"""</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tokens corresponding to 'Hello world':"</span>, re.findall(gpt2pat, <span class="st">"Hello world"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -642,7 +642,7 @@ A, B, C \rightarrow [AB, C] \quad \text{or} \quad [A, BC]
 <li><code>\s+</code> matches whitespace characters.</li>
 <li>These can be seen in the code snippet below.</li>
 </ul>
-<div id="b363a2d4" class="cell" data-execution_count="6">
+<div id="1042f9fb" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">"Hello world9119"</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tokens corresponding to '</span><span class="sc">{</span>text<span class="sc">}</span><span class="ss">':"</span>, re.findall(gpt2pat, text))</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">"I'm a mess"</span></span>
@@ -673,12 +673,12 @@ Tokens corresponding to 'how      are?': ['how', '     ', ' are', '?']</code></p
 <ol type="1">
 <li>We need a large number of parameters for the embedding and <code>lm_head</code>. On top of that, to get the logits, we need to perform a dot product with <code>lm_head</code>, which will also increase the computational cost.</li>
 <li>We might encounter undertraining because, with a large vocabulary size, tokens will occur less frequently and might not appear often enough for the model to learn them; that is, they will not participate enough in the backward pass.</li>
-<li>A long sequence will be compressed into a shorter one after tokenization. This is beneficial because we will have fewer tokens to process, but we may also face a problem where the model will not receive enough information to process it correctly. Basically, we are compressing the information too much, and aggressive compression may result in some loss of information.</li>
+<li>A long sequence will be compressed into a shorter one after tokenization. This is beneficial because we will have fewer tokens to process, but we may also face a problem where the model will not receive enough information to process it correctly. Basically, we are compressing the information too much, and that would mean the model will spend less time thinking about individual tokens.</li>
 </ol>
 </section>
 <section id="complete-implementation-of-the-basic-bpe-tokenizer" class="level1">
 <h1>Complete Implementation of the Basic BPE Tokenizer</h1>
-<div id="acd175a8" class="cell" data-execution_count="7">
+<div id="a47ffc55" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Tokenizer:</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vocab_size <span class="op">=</span> <span class="va">None</span></span>
@@ -747,101 +747,117 @@ Tokens corresponding to 'how      are?': ['how', '     ', ' are', '?']</code></p
 <span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vocab<span class="op">=</span>{idx:<span class="bu">bytes</span>([idx]) <span class="cf">for</span> idx <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">256</span>)}</span>
 <span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> pair, idx <span class="kw">in</span> <span class="va">self</span>.merges.items():</span>
-<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.vocab[idx] <span class="op">=</span> <span class="va">self</span>.vocab[pair[<span class="dv">0</span>]] <span class="op">+</span> <span class="va">self</span>.vocab[pair[<span class="dv">1</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.vocab[idx] <span class="op">=</span> <span class="va">self</span>.vocab[pair[<span class="dv">0</span>]] <span class="op">+</span> <span class="va">self</span>.vocab[pair[<span class="dv">1</span>]]</span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="bu">open</span>(<span class="st">"taylorswift.txt"</span>, <span class="st">"r"</span>, encoding<span class="op">=</span><span class="st">"utf-8"</span>).read()</span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>tokenizer <span class="op">=</span> Tokenizer()</span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a>tokenizer.train(vocab_size<span class="op">=</span><span class="dv">300</span>, text<span class="op">=</span>text)</span>
+<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(tokenizer.decode(tokenizer.encode(<span class="st">"Hello World"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello World</code></pre>
+</div>
 </div>
 </section>
 <section id="complete-implementation-of-the-regex-bpe-tokenizer" class="level1">
 <h1>Complete Implementation of the Regex BPE Tokenizer</h1>
-<div id="52ec2ea6" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> regex <span class="im">as</span> re</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>GPT4_SPLIT_PATTERN <span class="op">=</span> <span class="vs">r"""'</span><span class="ex">(</span><span class="fu">?i:</span><span class="pp">[sdmt]</span><span class="cf">|</span><span class="vs">ll</span><span class="cf">|</span><span class="vs">ve</span><span class="cf">|</span><span class="vs">re</span><span class="ex">)</span><span class="cf">|</span><span class="pp">[^</span><span class="ch">\r\n\p{L}\p{N}</span><span class="pp">]</span><span class="op">?+</span><span class="ch">\p{L}</span><span class="op">+</span><span class="cf">|</span><span class="ch">\p{N}</span><span class="op">{1,3}</span><span class="cf">|</span><span class="vs"> </span><span class="op">?</span><span class="pp">[^</span><span class="dv">\s</span><span class="ch">\p{L}\p{N}</span><span class="pp">]</span><span class="op">++</span><span class="pp">[</span><span class="ch">\r\n</span><span class="pp">]</span><span class="op">*</span><span class="cf">|</span><span class="dv">\s</span><span class="op">*</span><span class="pp">[</span><span class="ch">\r\n</span><span class="pp">]</span><span class="cf">|</span><span class="dv">\s</span><span class="op">+</span><span class="ex">(</span><span class="fu">?!</span><span class="dv">\S</span><span class="ex">)</span><span class="cf">|</span><span class="dv">\s</span><span class="op">+</span><span class="vs">"""</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> RegexTokenizer:</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vocab_size <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.merges <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vocab <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.pattern <span class="op">=</span> GPT4_SPLIT_PATTERN</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.compiled_pattern <span class="op">=</span> re.<span class="bu">compile</span>(<span class="va">self</span>.pattern)</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_stats(<span class="va">self</span>, ids, counts<span class="op">=</span><span class="va">None</span>):</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>        counts <span class="op">=</span> {} <span class="cf">if</span> counts <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> counts</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> pair <span class="kw">in</span> <span class="bu">zip</span>(ids,ids[<span class="dv">1</span>:]):</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>            counts[pair]<span class="op">=</span>counts.get(pair, <span class="dv">0</span>)<span class="op">+</span><span class="dv">1</span></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> counts</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_max_count_pair(<span class="va">self</span>, counts):</span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        max_count <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>        max_pair <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> key, value <span class="kw">in</span> counts.items():</span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> value<span class="op">&gt;</span>max_count:</span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>                max_count <span class="op">=</span> value</span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>                max_pair <span class="op">=</span> key</span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> max_pair, max_count</span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> merge(<span class="va">self</span>, ids, pair, token_number):</span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>        new_ids <span class="op">=</span> []</span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>        i<span class="op">=</span><span class="dv">0</span></span>
-<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> i<span class="op">&lt;</span> <span class="bu">len</span>(ids):</span>
-<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> i<span class="op">+</span><span class="dv">1</span><span class="op">&lt;</span><span class="bu">len</span>(ids) <span class="kw">and</span> ids[i]<span class="op">==</span>pair[<span class="dv">0</span>] <span class="kw">and</span> ids[i<span class="op">+</span><span class="dv">1</span>]<span class="op">==</span>pair[<span class="dv">1</span>]:</span>
-<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>                new_ids.append(token_number)</span>
-<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>                i <span class="op">+=</span> <span class="dv">2</span></span>
-<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
-<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>                new_ids.append(ids[i])</span>
-<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>                i <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> new_ids</span>
-<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> encode(<span class="va">self</span>, text):</span>
-<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>        text_chunks <span class="op">=</span> re.findall(<span class="va">self</span>.compiled_pattern, text)</span>
-<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>        ids <span class="op">=</span> []</span>
-<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> text_chunk <span class="kw">in</span> text_chunks:</span>
-<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>            ids.extend(<span class="va">self</span>.encode_chunk(text_chunk))</span>
-<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> ids</span>
-<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> encode_chunk(<span class="va">self</span>, text):</span>
-<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>        tokens <span class="op">=</span> text.encode(<span class="st">'utf-8'</span>)</span>
-<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>        ids <span class="op">=</span> <span class="bu">list</span>(<span class="bu">map</span>(<span class="bu">int</span>,tokens))</span>
-<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="bu">len</span>(ids)<span class="op">&gt;=</span><span class="dv">2</span>:</span>
-<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>            stats <span class="op">=</span> <span class="va">self</span>.get_stats(ids)</span>
-<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>            pair <span class="op">=</span> <span class="bu">min</span>(stats, key<span class="op">=</span><span class="kw">lambda</span> p: <span class="va">self</span>.merges.get(p, <span class="bu">float</span>(<span class="st">'inf'</span>)))</span>
-<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> pair <span class="kw">not</span> <span class="kw">in</span> <span class="va">self</span>.merges:</span>
-<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span></span>
-<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a>            idx <span class="op">=</span> <span class="va">self</span>.merges.get(pair)</span>
-<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>            ids <span class="op">=</span> <span class="va">self</span>.merge(ids, pair, idx)</span>
-<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> ids</span>
-<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> decode(<span class="va">self</span>, ids):</span>
-<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a>        tokens <span class="op">=</span> <span class="st">b''</span>.join([<span class="va">self</span>.vocab[<span class="bu">id</span>] <span class="cf">for</span> <span class="bu">id</span> <span class="kw">in</span> ids])</span>
-<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>        text <span class="op">=</span> tokens.decode(<span class="st">'utf-8'</span>, errors<span class="op">=</span><span class="st">'replace'</span>)</span>
-<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> text</span>
-<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> train(<span class="va">self</span>, vocab_size, text):</span>
-<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vocab_size <span class="op">=</span> vocab_size</span>
-<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a>        num_merges <span class="op">=</span> <span class="va">self</span>.vocab_size <span class="op">-</span> <span class="dv">256</span></span>
-<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a>        merges <span class="op">=</span> {}</span>
-<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a>        text_chunks <span class="op">=</span> re.findall(<span class="va">self</span>.compiled_pattern, text)</span>
-<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a>        tokens <span class="op">=</span> [<span class="bu">list</span>(chunk.encode(<span class="st">'utf-8'</span>)) <span class="cf">for</span> chunk <span class="kw">in</span> text_chunks]</span>
-<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a>        ids <span class="op">=</span> <span class="bu">list</span>(tokens)</span>
-<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_merges):</span>
-<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a>            stats <span class="op">=</span> {}</span>
-<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> chunk_ids <span class="kw">in</span> ids:</span>
-<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="bu">len</span>(chunk_ids) <span class="op">&gt;=</span> <span class="dv">2</span>:</span>
-<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a>                    stats <span class="op">=</span> get_stats(chunk_ids, stats)</span>
-<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">len</span>(stats)<span class="op">==</span><span class="dv">0</span>:</span>
-<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="st">"No more pairs to merge. Stopping training."</span>)</span>
-<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span></span>
-<span id="cb11-80"><a href="#cb11-80" aria-hidden="true" tabindex="-1"></a>            top_pair <span class="op">=</span> <span class="bu">max</span>(stats, key<span class="op">=</span>stats.get)</span>
-<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a>            idx <span class="op">=</span> <span class="dv">256</span> <span class="op">+</span> i</span>
-<span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a>            ids <span class="op">=</span> [merge(chunk_ids, top_pair, idx) <span class="cf">for</span> chunk_ids <span class="kw">in</span> ids]</span>
-<span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a>            merges[top_pair] <span class="op">=</span> idx</span>
-<span id="cb11-84"><a href="#cb11-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-85"><a href="#cb11-85" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.merges <span class="op">=</span> merges</span>
-<span id="cb11-86"><a href="#cb11-86" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vocab<span class="op">=</span>{idx:<span class="bu">bytes</span>([idx]) <span class="cf">for</span> idx <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">256</span>)}</span>
-<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> pair, idx <span class="kw">in</span> <span class="va">self</span>.merges.items():</span>
-<span id="cb11-89"><a href="#cb11-89" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.vocab[idx] <span class="op">=</span> <span class="va">self</span>.vocab[pair[<span class="dv">0</span>]] <span class="op">+</span> <span class="va">self</span>.vocab[pair[<span class="dv">1</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="1c493501" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> regex <span class="im">as</span> re</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>SPLIT_PATTERN <span class="op">=</span> <span class="vs">r"""'s</span><span class="cf">|</span><span class="vs">'t</span><span class="cf">|</span><span class="vs">'re</span><span class="cf">|</span><span class="vs">'ve</span><span class="cf">|</span><span class="vs">'m</span><span class="cf">|</span><span class="vs">'ll</span><span class="cf">|</span><span class="vs">'d</span><span class="cf">|</span><span class="vs"> </span><span class="op">?</span><span class="ch">\p{L}</span><span class="op">+</span><span class="cf">|</span><span class="vs"> </span><span class="op">?</span><span class="ch">\p{N}</span><span class="op">+</span><span class="cf">|</span><span class="vs"> </span><span class="op">?</span><span class="pp">[^</span><span class="dv">\s</span><span class="ch">\p{L}\p{N}</span><span class="pp">]</span><span class="op">+</span><span class="cf">|</span><span class="dv">\s</span><span class="op">+</span><span class="ex">(</span><span class="fu">?!</span><span class="dv">\S</span><span class="ex">)</span><span class="cf">|</span><span class="dv">\s</span><span class="op">+</span><span class="vs">"""</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> RegexTokenizer:</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vocab_size <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.merges <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vocab <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.pattern <span class="op">=</span> SPLIT_PATTERN</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.compiled_pattern <span class="op">=</span> re.<span class="bu">compile</span>(<span class="va">self</span>.pattern)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_stats(<span class="va">self</span>, ids, counts<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        counts <span class="op">=</span> {} <span class="cf">if</span> counts <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> counts</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> pair <span class="kw">in</span> <span class="bu">zip</span>(ids,ids[<span class="dv">1</span>:]):</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>            counts[pair]<span class="op">=</span>counts.get(pair, <span class="dv">0</span>)<span class="op">+</span><span class="dv">1</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> counts</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_max_count_pair(<span class="va">self</span>, counts):</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>        max_count <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>        max_pair <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> key, value <span class="kw">in</span> counts.items():</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> value<span class="op">&gt;</span>max_count:</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>                max_count <span class="op">=</span> value</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>                max_pair <span class="op">=</span> key</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> max_pair, max_count</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> merge(<span class="va">self</span>, ids, pair, token_number):</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>        new_ids <span class="op">=</span> []</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>        i<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> i<span class="op">&lt;</span> <span class="bu">len</span>(ids):</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> i<span class="op">+</span><span class="dv">1</span><span class="op">&lt;</span><span class="bu">len</span>(ids) <span class="kw">and</span> ids[i]<span class="op">==</span>pair[<span class="dv">0</span>] <span class="kw">and</span> ids[i<span class="op">+</span><span class="dv">1</span>]<span class="op">==</span>pair[<span class="dv">1</span>]:</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>                new_ids.append(token_number)</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>                i <span class="op">+=</span> <span class="dv">2</span></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>                new_ids.append(ids[i])</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>                i <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> new_ids</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> encode(<span class="va">self</span>, text):</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>        text_chunks <span class="op">=</span> re.findall(<span class="va">self</span>.compiled_pattern, text)</span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>        ids <span class="op">=</span> []</span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> text_chunk <span class="kw">in</span> text_chunks:</span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>            ids.extend(<span class="va">self</span>.encode_chunk(text_chunk))</span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> ids</span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> encode_chunk(<span class="va">self</span>, text):</span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>        tokens <span class="op">=</span> text.encode(<span class="st">'utf-8'</span>)</span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>        ids <span class="op">=</span> <span class="bu">list</span>(<span class="bu">map</span>(<span class="bu">int</span>,tokens))</span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="bu">len</span>(ids)<span class="op">&gt;=</span><span class="dv">2</span>:</span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>            stats <span class="op">=</span> <span class="va">self</span>.get_stats(ids)</span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a>            pair <span class="op">=</span> <span class="bu">min</span>(stats, key<span class="op">=</span><span class="kw">lambda</span> p: <span class="va">self</span>.merges.get(p, <span class="bu">float</span>(<span class="st">'inf'</span>)))</span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> pair <span class="kw">not</span> <span class="kw">in</span> <span class="va">self</span>.merges:</span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span></span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>            idx <span class="op">=</span> <span class="va">self</span>.merges.get(pair)</span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>            ids <span class="op">=</span> <span class="va">self</span>.merge(ids, pair, idx)</span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> ids</span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> decode(<span class="va">self</span>, ids):</span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>        tokens <span class="op">=</span> <span class="st">b''</span>.join([<span class="va">self</span>.vocab[<span class="bu">id</span>] <span class="cf">for</span> <span class="bu">id</span> <span class="kw">in</span> ids])</span>
+<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>        text <span class="op">=</span> tokens.decode(<span class="st">'utf-8'</span>, errors<span class="op">=</span><span class="st">'replace'</span>)</span>
+<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> text</span>
+<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> train(<span class="va">self</span>, vocab_size, text):</span>
+<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vocab_size <span class="op">=</span> vocab_size</span>
+<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a>        num_merges <span class="op">=</span> <span class="va">self</span>.vocab_size <span class="op">-</span> <span class="dv">256</span></span>
+<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a>        merges <span class="op">=</span> {}</span>
+<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>        text_chunks <span class="op">=</span> re.findall(<span class="va">self</span>.compiled_pattern, text)</span>
+<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a>        tokens <span class="op">=</span> [<span class="bu">list</span>(chunk.encode(<span class="st">'utf-8'</span>)) <span class="cf">for</span> chunk <span class="kw">in</span> text_chunks]</span>
+<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a>        ids <span class="op">=</span> <span class="bu">list</span>(tokens)</span>
+<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_merges):</span>
+<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>            stats <span class="op">=</span> {}</span>
+<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> chunk_ids <span class="kw">in</span> ids:</span>
+<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="bu">len</span>(chunk_ids) <span class="op">&gt;=</span> <span class="dv">2</span>:</span>
+<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a>                    stats <span class="op">=</span> <span class="va">self</span>.get_stats(chunk_ids, stats)</span>
+<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">len</span>(stats)<span class="op">==</span><span class="dv">0</span>:</span>
+<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="st">"No more pairs to merge. Stopping training."</span>)</span>
+<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span></span>
+<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a>            top_pair <span class="op">=</span> <span class="bu">max</span>(stats, key<span class="op">=</span>stats.get)</span>
+<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a>            idx <span class="op">=</span> <span class="dv">256</span> <span class="op">+</span> i</span>
+<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a>            ids <span class="op">=</span> [<span class="va">self</span>.merge(chunk_ids, top_pair, idx) <span class="cf">for</span> chunk_ids <span class="kw">in</span> ids]</span>
+<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a>            merges[top_pair] <span class="op">=</span> idx</span>
+<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.merges <span class="op">=</span> merges</span>
+<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vocab<span class="op">=</span>{idx:<span class="bu">bytes</span>([idx]) <span class="cf">for</span> idx <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">256</span>)}</span>
+<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> pair, idx <span class="kw">in</span> <span class="va">self</span>.merges.items():</span>
+<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.vocab[idx] <span class="op">=</span> <span class="va">self</span>.vocab[pair[<span class="dv">0</span>]] <span class="op">+</span> <span class="va">self</span>.vocab[pair[<span class="dv">1</span>]]</span>
+<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="bu">open</span>(<span class="st">"taylorswift.txt"</span>, <span class="st">"r"</span>, encoding<span class="op">=</span><span class="st">"utf-8"</span>).read()</span>
+<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a>tokenizer <span class="op">=</span> RegexTokenizer()</span>
+<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a>tokenizer.train(vocab_size<span class="op">=</span><span class="dv">300</span>, text<span class="op">=</span>text)</span>
+<span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(tokenizer.decode(tokenizer.encode(<span class="st">"Hello World"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello World</code></pre>
+</div>
 </div>
 </section>
 <section id="conclusion" class="level1">

@@ -351,3 +351,146 @@ body.quarto-dark .topic-pill {
     width: 100%;
   }
 }
+
+.regex-pattern {
+  margin: 1rem 0 1.5rem;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  border: 1px solid rgba(47, 111, 109, 0.25);
+  border-left: 4px solid var(--site-accent);
+  border-radius: 0.45rem;
+  background: var(--site-surface);
+  color: inherit;
+  white-space: nowrap;
+}
+
+.regex-pattern code {
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 0.92em;
+}
+
+/* Homepage: a simple reading list and work history. */
+.home-page {
+  --home-link: #1261a0;
+  --home-link-hover: #084775;
+  padding: 0 0 2rem;
+}
+
+body.quarto-dark .home-page {
+  --home-link: #8bc7ff;
+  --home-link-hover: #b8ddff;
+}
+
+.content:has(.home-page) #title-block-header {
+  margin-bottom: 1.25rem;
+}
+
+.content:has(.home-page) #title-block-header h1 {
+  margin: 0 0 1.25rem;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.home-page .profile-copy > p {
+  max-width: 65ch;
+}
+
+.home-page .profile-copy > p:first-child {
+  font-size: 1.1rem;
+}
+
+.home-page a {
+  color: var(--home-link);
+}
+
+.home-page a:not(.btn) {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.home-page a:not(.btn):hover {
+  color: var(--home-link-hover);
+  text-decoration-thickness: 2px;
+}
+
+.home-page a:focus-visible {
+  outline: 2px solid var(--site-accent);
+  outline-offset: 4px;
+}
+
+.home-page .profile-actions {
+  margin-top: 1.5rem;
+}
+
+.home-page .profile-actions p {
+  width: auto;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+}
+
+.home-page .profile-actions .btn {
+  width: auto;
+  padding: 0.6rem 1rem;
+  background: var(--site-accent-strong);
+  border-color: var(--site-accent-strong);
+  color: var(--bs-body-bg);
+}
+
+.home-page h2 {
+  margin: 3rem 0 0;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--site-border);
+  font-size: 1.25rem;
+  font-weight: 650;
+}
+
+.home-page .home-note {
+  padding: 1.3rem 0;
+  border-bottom: 1px solid var(--site-border);
+}
+
+.home-page .home-note h3,
+.home-page .home-job h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.08rem;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.home-page .home-note h3 a {
+  font-weight: inherit;
+}
+
+.home-page .home-note p {
+  margin: 0.35rem 0 0;
+  color: var(--site-muted);
+}
+
+.home-page .home-code {
+  font-size: 0.9rem;
+}
+
+.home-page .home-job {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.25rem 1.5rem;
+  padding: 1.15rem 0;
+  border-bottom: 1px solid var(--site-border);
+}
+
+.home-page .home-job p {
+  margin: 0;
+  color: var(--site-muted);
+  font-size: 0.94rem;
+}
+
+@media (max-width: 575.98px) {
+  .home-page .home-job {
+    grid-template-columns: 1fr;
+  }
+}
