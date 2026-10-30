@@ -205,7 +205,7 @@ Implication:
 
 <figure style="text-align: center;">
   <img src="cs2_100.png" style="width:80%">
-  <figcaption></figcaption>
+  <figcaption>Base 100: cosine similarity between position 500 and other positions, using dimensions 128–255.</figcaption>
 </figure>
 
 - The cosine similarity between PE[0:128] of 500th position to everyone other position.
@@ -213,7 +213,7 @@ Implication:
 
 <figure style="text-align: center;">
   <img src="cs1_100.png" style="width:80%">
-  <figcaption></figcaption>
+  <figcaption>Base 100: cosine similarity between position 500 and other positions, using dimensions 0–127.</figcaption>
 </figure>
 
 ## What happens if we chose 100000
@@ -228,7 +228,7 @@ Implication:
 
 <figure style="text-align: center;">
   <img src="cs2_100k.png" style="width:80%">
-  <figcaption></figcaption>
+  <figcaption>Base 100,000: cosine similarity between position 500 and other positions, using dimensions 128–255.</figcaption>
 </figure>
 
 - The cosine similarity between PE[0:128] of 500th position to everyone other position.
@@ -236,7 +236,7 @@ Implication:
 
 <figure style="text-align: center;">
   <img src="cs1_100k.png" style="width:80%">
-  <figcaption></figcaption>
+  <figcaption>Base 100,000: cosine similarity between position 500 and other positions, using dimensions 0–127.</figcaption>
 </figure>
 
 ## How does 10k solves above problems

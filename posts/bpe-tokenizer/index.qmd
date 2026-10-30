@@ -2,7 +2,7 @@
 title: "BPE Tokenizer"
 author: "Ritesh Kumar Maurya"
 date: "2026-09-25"
-categories: [Natural Language Processing]
+categories: [NLP]
 image: "bpe-tokenizer-thumbnail.png"
 description: "A practical guide to understanding and implementing a byte-pair encoding tokenizer from first principles."
 ---
@@ -143,7 +143,7 @@ def decode(ids):
   The pattern was:
 
 <div class="regex-pattern">
-<code> ?\p{N}+|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+</code>
+<code> 's|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+</code>
 </div>
 
 - Given a string, you try to match it to the pattern from left to right.
@@ -189,7 +189,7 @@ print(f"Tokens corresponding to '{text}':", re.findall(gpt2pat, text))
 - Why not use a million-token vocabulary?
 1. We need a large number of parameters for the embedding and `lm_head`. On top of that, to get the logits, we need to perform a dot product with `lm_head`, which will also increase the computational cost.
 2. We might encounter undertraining because, with a large vocabulary size, tokens will occur less frequently and might not appear often enough for the model to learn them; that is, they will not participate enough in the backward pass.
-3. A long sequence will be compressed into a shorter one after tokenization. This is beneficial because we will have fewer tokens to process, but we may also face a problem where the model will not receive enough information to process it correctly. Basically, we are compressing the information too much, and aggressive compression may result in some loss of information.
+3. A long sequence will be compressed into a shorter one after tokenization. This is beneficial because we will have fewer tokens to process, but we may also face a problem where the model will not receive enough information to process it correctly. Basically, we are compressing the information too much, and that would mean the model will spend less time thinking about individual tokens.
 
 # Complete Implementation of the Basic BPE Tokenizer
 
@@ -263,20 +263,25 @@ class Tokenizer:
 
         for pair, idx in self.merges.items():
             self.vocab[idx] = self.vocab[pair[0]] + self.vocab[pair[1]]
+
+text = open("taylorswift.txt", "r", encoding="utf-8").read()
+tokenizer = Tokenizer()
+tokenizer.train(vocab_size=300, text=text)
+print(tokenizer.decode(tokenizer.encode("Hello World")))
 ```
 
 # Complete Implementation of the Regex BPE Tokenizer
 
 ```{python}
 import regex as re
-GPT4_SPLIT_PATTERN = r"""'(?i:[sdmt]|ll|ve|re)|[^\r\n\p{L}\p{N}]?+\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]++[\r\n]*|\s*[\r\n]|\s+(?!\S)|\s+"""
+SPLIT_PATTERN = r"""'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
 
 class RegexTokenizer:
     def __init__(self):
         self.vocab_size = None
         self.merges = None
         self.vocab = None
-        self.pattern = GPT4_SPLIT_PATTERN
+        self.pattern = SPLIT_PATTERN
         self.compiled_pattern = re.compile(self.pattern)
 
     def get_stats(self, ids, counts=None):
@@ -343,13 +348,13 @@ class RegexTokenizer:
             stats = {}
             for chunk_ids in ids:
                 if len(chunk_ids) >= 2:
-                    stats = get_stats(chunk_ids, stats)
+                    stats = self.get_stats(chunk_ids, stats)
             if len(stats)==0:
                 print("No more pairs to merge. Stopping training.")
                 break
             top_pair = max(stats, key=stats.get)
             idx = 256 + i
-            ids = [merge(chunk_ids, top_pair, idx) for chunk_ids in ids]
+            ids = [self.merge(chunk_ids, top_pair, idx) for chunk_ids in ids]
             merges[top_pair] = idx
 
         self.merges = merges
@@ -357,6 +362,11 @@ class RegexTokenizer:
 
         for pair, idx in self.merges.items():
             self.vocab[idx] = self.vocab[pair[0]] + self.vocab[pair[1]]
+
+text = open("taylorswift.txt", "r", encoding="utf-8").read()
+tokenizer = RegexTokenizer()
+tokenizer.train(vocab_size=300, text=text)
+print(tokenizer.decode(tokenizer.encode("Hello World")))
 ```
 
 # Conclusion

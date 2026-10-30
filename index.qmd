@@ -1,45 +1,89 @@
 
 ---
-title: ""
+title: "Hi, Ritesh here."
 pagetitle: "About Me"
 description: "Ritesh Kumar Maurya is a machine learning engineer focused on practical deep learning systems."
 page-layout: article
 title-block-style: none
+toc: false
+anchor-sections: false
+repo-actions: false
 ---
 
-::: {.profile-hero}
+::: {.home-page}
 ::: {.profile-copy}
-Hi there 👋 I am Ritesh, a machine learning engineer focused on practical deep learning systems. I previously worked at [Zomato](https://www.eternal.com/our-businesses/zomato/) and [Samsung R&D Institute India](https://research.samsung.com/sri-n).
+I’m a machine learning engineer focused on building and understanding practical deep learning systems. I previously worked at [Zomato](https://www.eternal.com/our-businesses/zomato/) and [Samsung R&D Institute India](https://research.samsung.com/sri-n).
+
+I use this site to document what I learn while building machine learning projects.
 
 ::: {.profile-actions}
 [Read Notes](notes.qmd){.btn .btn-primary}
-[Resume](assets/Ritesh_Kumar_Maurya_Resume.pdf){.btn .btn-outline-secondary}
-[GitHub](https://github.com/riteshrm){.btn .btn-outline-secondary}
-[LinkedIn](https://www.linkedin.com/in/riteshrm/){.btn .btn-outline-secondary}
+[Resume](assets/Ritesh_Kumar_Maurya_Resume.pdf)
+[GitHub](https://github.com/riteshrm)
+[LinkedIn](https://www.linkedin.com/in/riteshrm/)
+[Email](mailto:riteshkumarmaurya7379@gmail.com)
 :::
 :::
 
-::: {.profile-links aria-label="Profile links"}
-[{{< iconify mdi github >}} GitHub](https://github.com/riteshrm)
-[{{< iconify mdi linkedin >}} LinkedIn](https://www.linkedin.com/in/riteshrm/)
-[{{< iconify mdi email-outline >}} Email](mailto:riteshkumarmaurya7379@gmail.com)
-[{{< iconify mdi file-document-outline >}} Resume](assets/Ritesh_Kumar_Maurya_Resume.pdf)
-[{{< iconify cib leetcode >}} LeetCode](https://leetcode.com/riteshrm)
+## From my notes
+
+::: {.home-note}
+### [Fine-tuning a small model for tool calling](posts/xlam-sft/)
+
+Fine-tuning Qwen2.5-0.5B on xLAM, the bugs I ran into, and how I evaluated the results.
+
+[Code on GitHub](https://github.com/riteshrm/qwen2.5-tool-calling-lora){.home-code}
+:::
+
+::: {.home-note}
+### [Diffusion Models](posts/diffusion-models/)
+
+Working through DDPM and DDIM, from the equations to a PyTorch implementation.
+
+[Code on GitHub](https://github.com/riteshrm/nanoDiffusion){.home-code}
+:::
+
+::: {.home-note}
+### [Position Encoding](posts/position-encoding/)
+
+Looking at sinusoidal positional encoding through code and plots, including what changes with the frequency base.
+:::
+
+## Experience
+
+::: {.home-job}
+::: {.home-job-details}
+### Machine Learning Engineer II
+
+Zomato, Gurugram
+:::
+
+::: {.home-job-dates}
+June 2026 – Aug 2026
 :::
 :::
 
-### Featured Notes
+::: {.home-job}
+::: {.home-job-details}
+### Machine Learning Engineer
 
-::: {.featured-notes}
-[Flow Matching](posts/flow-matching/){.featured-note}
-[Diffusion Models](posts/diffusion-models/){.featured-note}
-[xLAM SFT](posts/xlam-sft/){.featured-note}
+Samsung R&D Institute India, Noida
 :::
 
-### Timeline
+::: {.home-job-dates}
+Jan 2024 – June 2026
+:::
+:::
 
-| Position                               | Company                                | Duration                |
-|:--------------------------------------:|:--------------------------------------:|:-----------------------:|
-| Machine Learning Engineer II            | Zomato, Gurugram     | June 2026 - Aug 2026    |
-| Machine Learning Engineer              | Samsung R&D Institute India, Noida     | Jan 2024 - June 2026      |
-| Machine Learning Engineer Intern       | Samsung R&D Institute India, Noida     | Jan 2023 - Dec 2023     |
+::: {.home-job}
+::: {.home-job-details}
+### Machine Learning Engineer Intern
+
+Samsung R&D Institute India, Noida
+:::
+
+::: {.home-job-dates}
+Jan 2023 – Dec 2023
+:::
+:::
+:::

@@ -390,4 +390,4 @@ After fine-tuning, the model correctly emits both tool calls in the expected `<t
 
 # Code
 
-Full training and evaluation code: [https://github.com/riteshrm/qwen2.5-tool-calling-lora](#)
+Full training and evaluation code: [https://github.com/riteshrm/qwen2.5-tool-calling-lora](https://github.com/riteshrm/qwen2.5-tool-calling-lora)

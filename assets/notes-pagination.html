@@ -1,0 +1,41 @@
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const listingId = "listing-listing";
+  const list = window["quarto-listings"]?.[listingId];
+  const numberedNavigation = document.querySelector(`#${listingId} .listing-pagination`);
+  if (!list || !numberedNavigation) return;
+
+  numberedNavigation.hidden = true;
+  const navigation = document.createElement("nav");
+  navigation.className = "listing-pagination d-flex justify-content-between gap-3";
+  navigation.setAttribute("aria-label", "Notes pages");
+
+  function makeButton(label, direction) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "btn btn-outline-primary";
+    button.textContent = label;
+    button.addEventListener("click", () => {
+      const page = Math.floor((list.i - 1) / list.page) + 1 + direction;
+      // Use Quarto's navigation helpers to preserve category and page URLs.
+      setPageHash(listingId, page);
+      showPage(listingId, page);
+    });
+    navigation.append(button);
+    return button;
+  }
+
+  const previous = makeButton("Previous", -1);
+  const next = makeButton("Next", 1);
+  numberedNavigation.after(navigation);
+
+  function updateNavigation() {
+    previous.disabled = list.i <= 1;
+    next.disabled = list.i + list.page > list.matchingItems.length;
+    navigation.classList.toggle("d-none", list.matchingItems.length <= list.page);
+  }
+
+  list.on("updated", updateNavigation);
+  updateNavigation();
+});
+</script>
