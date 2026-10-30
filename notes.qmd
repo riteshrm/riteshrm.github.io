@@ -23,6 +23,6 @@ Notes from what I read and build, with code and examples along the way.
 [NLP](#category=NLP){.topic-pill}
 [Computer Vision](#category=Computer%20Vision){.topic-pill}
 [Deep Learning](#category=Deep%20Learning){.topic-pill}
-[Optimization](#category=Optimization){.topic-pill}
+[Model Optimization](#category=Model%20Optimization){.topic-pill}
 [Books](#category=Books){.topic-pill}
 :::

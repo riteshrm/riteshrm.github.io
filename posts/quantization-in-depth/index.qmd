@@ -2,7 +2,7 @@
 title: "Quantization in Depth"
 author: "Ritesh Kumar Maurya"
 date: "2024-05-24"
-categories: [Optimization]
+categories: [Model Optimization]
 image: "qat-training-precision.png"
 description: "Detailed notes on quantize/dequantize workflows, quantization error, calibration, packing, and practical model optimization."
 ---

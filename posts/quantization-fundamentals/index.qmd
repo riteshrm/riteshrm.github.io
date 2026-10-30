@@ -2,7 +2,7 @@
 title: "Quantization Fundamentals"
 author: "Ritesh Kumar Maurya"
 date: "2024-05-13"
-categories: [Optimization]
+categories: [Model Optimization]
 image: "qat-training-precision.png"
 description: "Introductory notes on model quantization, lower-precision data types, scaling, zero points, and model compression basics."
 ---

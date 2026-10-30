@@ -7,6 +7,11 @@ image: "resized_thumbnail.png"
 description: "Work-in-progress chapter notes from AI Engineering."
 ---
 
+::: {.callout-note}
+## Work in progress
+These chapter notes are still being expanded.
+:::
+
 - This is completely based on [AI Engineering By Chip Huyen](https://www.oreilly.com/library/view/ai-engineering/9781098166298/)
 
 # Chapter 1 Introduction to Building AI Applications with Foundation Models

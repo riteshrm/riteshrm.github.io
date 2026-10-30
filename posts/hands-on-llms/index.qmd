@@ -7,6 +7,11 @@ image: "traing_work_flow_of_llm.png"
 description: "Work-in-progress chapter notes from Hands-On Large Language Models."
 ---
 
+::: {.callout-note}
+## Work in progress
+These chapter notes are still being expanded.
+:::
+
 - This is completely based on [Hands on LLMs](https://www.oreilly.com/library/view/hands-on-large-language/9781098150952/)
 
 

@@ -25,28 +25,42 @@ I use this site to document what I learn while building machine learning project
 :::
 :::
 
-## From my notes
+## Projects
 
 ::: {.home-note}
-### [Fine-tuning a small model for tool calling](posts/xlam-sft/)
+### [nanoFM](https://github.com/riteshrm/nanoFM)
 
-Fine-tuning Qwen2.5-0.5B on xLAM, the bugs I ran into, and how I evaluated the results.
+A minimal PyTorch implementation of flow matching, connecting the mathematical formulation to training and sampling.
 
-[Code on GitHub](https://github.com/riteshrm/qwen2.5-tool-calling-lora){.home-code}
+[Read the notes](posts/flow-matching/){.home-code}
 :::
 
 ::: {.home-note}
-### [Diffusion Models](posts/diffusion-models/)
+### [nanoSBGM](https://github.com/riteshrm/nanoSBGM)
 
-Working through DDPM and DDIM, from the equations to a PyTorch implementation.
+A minimal PyTorch implementation of score-based generative modeling, exploring SDE formulations and stochastic and deterministic sampling.
 
-[Code on GitHub](https://github.com/riteshrm/nanoDiffusion){.home-code}
+[Read the notes](posts/score-matching/){.home-code}
 :::
 
 ::: {.home-note}
-### [Position Encoding](posts/position-encoding/)
+### [Qwen2.5 SFT](https://github.com/riteshrm/qwen2.5-tool-calling-lora)
 
-Looking at sinusoidal positional encoding through code and plots, including what changes with the frequency base.
+Fine-tuning Qwen2.5-0.5B for tool calling with the xLAM dataset, with LoRA training and structured evaluation.
+
+Achieved 93.89% tool accuracy and 98.75% valid JSON on 400 held-out test samples.
+
+[Read the notes](posts/xlam-sft/){.home-code}
+:::
+
+::: {.home-note}
+### [nanoOCR](https://github.com/riteshrm/nanoOCR)
+
+A minimal OCR pipeline with DBNet text detection, CRNN text recognition, and ONNX inference with INT8 quantization.
+
+The recognizer achieved 68.9% exact word-match accuracy on the IIIT5K test set.
+
+[Read the notes](posts/ocr/){.home-code}
 :::
 
 ## Experience
