@@ -10,7 +10,507 @@
 <atom:link href="https://riteshrm.github.io/notes.xml" rel="self" type="application/rss+xml"/>
 <description>Practical notes on generative AI, deep learning, optimization, and LLM systems.</description>
 <generator>quarto-1.8.26</generator>
-<lastBuildDate>Fri, 25 Sep 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 22 Oct 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>nanoOCR</title>
+  <dc:creator>Ritesh Kumar Maurya</dc:creator>
+  <link>https://riteshrm.github.io/posts/ocr/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>References
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>This is mostly based on:
+<ol type="1">
+<li><a href="https://github.com/MhLiao/DB">DB</a></li>
+<li><a href="https://arxiv.org/abs/1911.08947">DBNet Paper</a></li>
+<li><a href="https://forge.coreweave.com/wandb/authors/text-recognition-crnn-ctc/reports/Text-Recognition-With-CRNN-CTC-Network--VmlldzoxNTI5NDI">Rajesh Shreedhar Bhat’s Article</a></li>
+</ol></li>
+<li>Datasets Text Detection
+<ol type="1">
+<li><a href="https://textvqa.org/textocr/dataset/">TextOCR dataset</a></li>
+<li><a href="https://paddleocr.bj.bcebos.com/dataset/TD_TR.tar">TD TR data</a></li>
+</ol></li>
+<li>Datasets Text recognition
+<ol type="1">
+<li><a href="https://www.kaggle.com/datasets/prathmeshzade/iiit5k-words">IIIT5K-Words</a></li>
+<li><a href="https://www.robots.ox.ac.uk/~vgg/data/text/">MJSynth</a></li>
+</ol></li>
+</ul>
+</div>
+</div>
+<ul>
+<li>Implementation accompanying these notes:
+<ul>
+<li><a href="https://github.com/riteshrm/nanoOCR">nanoOCR implementation</a></li>
+</ul></li>
+</ul>
+<section id="motivation" class="level1">
+<h1>Motivation</h1>
+<p>The goal of this project was to understand how OCR works, how we train these models, evaluate them, and deploy them efficiently.</p>
+<p>Generally, OCR modules consist of two components:</p>
+<ol type="1">
+<li><strong>Text Detection</strong>:- It is responsible for detecting the text regions from an image.</li>
+<li><strong>Text Recognition</strong>:- It is responsible for recognizing the text present in the given image.</li>
+</ol>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/ocr/ocr_overview.png" style="width:80%" class="figure-img">
+<figcaption>
+An overview of how OCR works
+</figcaption>
+</figure>
+<p>We will start with text detection and then we will move on to text recognition, where, in each case, we will start by first exploring why we need this module and what it predicts, then explore how we train it and evaluate it, and then the data needed to train the model and how we get the expected data representation from the raw dataset.</p>
+</section>
+<section id="text-detection" class="level1">
+<h1>Text Detection</h1>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<ul>
+<li>This module is responsible for detecting the textual regions.</li>
+<li>Basically, given an image, it gives multiple bounding boxes which contain text.</li>
+<li>This is completely based on DBNet, which gives the probability of each pixel being a textual region.</li>
+</ul>
+</section>
+<section id="model" class="level2">
+<h2 class="anchored" data-anchor-id="model"><a href="https://github.com/riteshrm/nanoOCR/blob/main/src/det_model/model.py#L485">Model</a></h2>
+<ul>
+<li>This module consists of a ResNet-based backbone, which extracts features from a given image at 4 resolutions, which are generally /32, /16, /8 and /4.</li>
+<li>Then these extracted features pass through independent convolution networks, which make all these features have the same number of channels.</li>
+<li>Now we take the /32 resolution, upsample it to make it similar to /16, add it, and then upsample it to get /8, which is added to /8, and then we repeat for /4.</li>
+<li>After this, we have features at /32, /16, /8 and /4 which contain more low-level features as we move from /32 to /4. At the same time, they also incorporate global features through previous upsampling and addition process.</li>
+<li>Now we upsample all these 4 features to have the same resolution, then we concatenate them along the channel dimension.</li>
+<li>These features are passed through a network which gives the probability of textual regions in the image.</li>
+<li>There are two other components, which are used only while training:
+<ul>
+<li>A thresh predictor, which gives some adaptive threshold which is finally being used to produce a binary map</li>
+<li>This thresh predictor takes the concatenated feats and the probability and gives some threshmap</li>
+<li>Using the probability and threshmap, we get thresh binary, where 1 tells us about the textual region and 0 tells us about the background</li>
+</ul></li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/ocr/dbnet_architecture.png" style="width:80%" class="figure-img">
+<figcaption>
+DBNet Architecture
+</figcaption>
+</figure>
+</section>
+<section id="dataset-preprocessing" class="level2">
+<h2 class="anchored" data-anchor-id="dataset-preprocessing">Dataset &amp; Preprocessing</h2>
+<section id="td-tr" class="level3">
+<h3 class="anchored" data-anchor-id="td-tr">TD TR</h3>
+<ul>
+<li>Images and a corresponding bounding box per line with labels 0 and 1, where 0 means suitable for detection and 1 indicates difficult text regions</li>
+<li>I split the training set into training and validation sets</li>
+</ul>
+</section>
+<section id="textocr" class="level3">
+<h3 class="anchored" data-anchor-id="textocr">TextOCR</h3>
+<ul>
+<li>Images and corresponding bounding boxes which I needed to extract from the given json files</li>
+<li>Neglected those lines which were not rectangles and also, to make it consistent with TD TR, appended 0 at the end of each line.</li>
+</ul>
+</section>
+<section id="preprocessing" class="level3">
+<h3 class="anchored" data-anchor-id="preprocessing">Preprocessing</h3>
+<ul>
+<li><p>During training time, I needed training targets corresponding to the predicted probability, thresh and thresh binary.</p></li>
+<li><p>I needed a pipeline to generate the required training labels from an image and its corresponding bounding box.</p></li>
+<li><p>Used DBNet repo’s files to do so and the code inherited from that repo can be found <a href="https://github.com/riteshrm/nanoOCR/blob/main/src/data/det_data_processing.py">here</a></p></li>
+<li><p>Let’s explore the main components from that file</p></li>
+</ul>
+<section id="randomcropdata" class="level4">
+<h4 class="anchored" data-anchor-id="randomcropdata"><a href="https://github.com/riteshrm/nanoOCR/blob/main/src/data/det_data_processing.py#L20">RandomCropData</a></h4>
+<p>Let’s see how it processes a given image and corresponding polygons of textual regions:-</p>
+<ol type="1">
+<li>It calls crop_area, which basically returns crop_x, crop_y [top left] and crop_w, crop_h [width from left, height from top]</li>
+<li>crop_area finds out the consecutive regions where text is not there and then selects points from those regions; basically, it selects cols from different consecutive regions and as soon as it finds a polygon it returns that crop.</li>
+<li>Then calculate scale_w, scale_h and define scale as min(scale_h, scale_w) and use that scale to calculate w, h</li>
+<li>Take out the crop from the original image using the values returned by crop_area</li>
+<li>Resize the cropped_image to w, h</li>
+<li>Create a black image of the required size</li>
+<li>Assign the cropped image to the created black image</li>
+<li>The final image might contain black padding on the bottom or right of the image.</li>
+<li>Using the scale and crop_x, crop_y, we now have to change the coordinates of the polygons also</li>
+<li><code>new_coords = (old_coords - (crop_x, crop_y)) * scale</code></li>
+<li>Check if this new polygon is within the cropped image or not. If not, then truncate to (0, 0, w, h)</li>
+</ol>
+</section>
+<section id="makesegdetectiondata" class="level4">
+<h4 class="anchored" data-anchor-id="makesegdetectiondata"><a href="https://github.com/riteshrm/nanoOCR/blob/main/src/data/det_data_processing.py#L168">MakeSegDetectionData</a></h4>
+<ul>
+<li>Given an image and the polygons, it gives gt[1: text region, 0: background], mask[1: pixel to be considered while training, 0: Ignore]</li>
+</ul>
+</section>
+<section id="makebordermap" class="level4">
+<h4 class="anchored" data-anchor-id="makebordermap"><a href="https://github.com/riteshrm/nanoOCR/blob/main/src/data/det_data_processing.py#L259">MakeBorderMap</a></h4>
+<ul>
+<li>Given an image and the polygons, it gives thresh_map[which contains values between 0.3 and 0.7, the value is larger closer to the boundary of the polygon and it decreases as we move away from the boundary], thresh_mask[1: train at this pixel considering thresh_map, 0: Ignore]</li>
+</ul>
+</section>
+<section id="normalizeimage" class="level4">
+<h4 class="anchored" data-anchor-id="normalizeimage"><a href="https://github.com/riteshrm/nanoOCR/blob/main/src/data/det_data_processing.py#L376">NormalizeImage</a></h4>
+<ul>
+<li>Normalizes the pixel values as per the requirements of ResNet; in DBNet, ResNet is being used as the backbone</li>
+</ul>
+<p>Now, after all this preprocessing, we get our training dataset as:-</p>
+<ol type="1">
+<li>cropped Image</li>
+<li>Transformed Polygons</li>
+<li>gt[1: text region, 0: background]</li>
+<li>mask[contains 1 everywhere except small polygons]</li>
+<li>thresh_map [creates a boundary around the lines of polygons with closer points having a value of 0.7 and further points a value of 0.3]</li>
+<li>thresh_mask [1: to consider thresh_map training, 0: Ignore]</li>
+</ol>
+<p>and Val/Test as:-</p>
+<ol type="1">
+<li>Resized_image considering the aspect ratio</li>
+<li>Polygons in original Image</li>
+<li>original Image Shape</li>
+</ol>
+</section>
+</section>
+</section>
+<section id="loss-functions" class="level2">
+<h2 class="anchored" data-anchor-id="loss-functions">Loss Functions</h2>
+<ul>
+<li>Now we have got the model architecture and data; let’s see the loss functions which are being used in DBNet.</li>
+</ul>
+<section id="balanced-celoss" class="level3">
+<h3 class="anchored" data-anchor-id="balanced-celoss"><a href="https://github.com/riteshrm/nanoOCR/blob/main/src/det_model/loss.py#L6">Balanced CELoss</a></h3>
+<ul>
+<li>It takes pred[probability of a pixel being a text region], gt[contains 1 where text is], mask[contains 1 where the model needs to consider pixels]</li>
+<li>Before moving on to loss calculation, let’s consider positives as text regions and negatives as background</li>
+</ul>
+<ol type="1">
+<li><code>positive = (gt x mask)</code>[gives text area]</li>
+<li><code>negative = ((1-gt) x mask)</code>[gives background]</li>
+</ol>
+<ul>
+<li>Now we don’t want our model to consider all the background pixels since an image might contain a very large area which does not have text, and at the same time we want the model to consider hard pixels, i.e., where it is not so sure between text and background</li>
+<li>To do so, we define a negative ratio which tells how many negative pixels we can consider per positive pixel</li>
+<li>It has been defined in DBNet to be 3, i.e., at most 3 negative pixels per positive pixel</li>
+</ul>
+<ol start="4" type="1">
+<li><code>positive_count = positive.sum()</code></li>
+<li><code>negative_count = min(negative.sum(), positive_count x negative_ratio)</code></li>
+<li><code>loss = ce_loss(pred, gt, reduction='None')</code></li>
+</ol>
+<ul>
+<li>Notice one thing: generally, we pass reduction as mean but here we are passing it as None, because it will otherwise consider all the positive as well as negative regions.</li>
+</ul>
+<ol start="7" type="1">
+<li><code>positve_loss = (loss x positive)</code>[ it will consider only the text region]</li>
+<li><code>negative_loss = (loss x negative)</code>[ it will consider background]</li>
+</ol>
+<ul>
+<li>Now we have got the loss for both the regions, but we need to select the hardest ones from negative_loss</li>
+</ul>
+<ol start="9" type="1">
+<li><code>negative_loss = topk(negative_loss.view(-1), negative_count)</code> [selects harder pixels for background]</li>
+<li><code>loss = (positive_loss.sum() + negative_loss.sum())/(positive_count, negative_count + 1e-6)</code> [1e-6, so that we don’t divide by 0]</li>
+</ol>
+</section>
+<section id="maskl1loss" class="level3">
+<h3 class="anchored" data-anchor-id="maskl1loss"><a href="https://github.com/riteshrm/nanoOCR/blob/main/src/det_model/loss.py#L59">MaskL1Loss</a></h3>
+<ul>
+<li>It takes thresh[predicted by the model], thresh_map[data], thresh_mask[data] and calculates L1Loss considering only those pixels where thresh_mask contains 1</li>
+</ul>
+</section>
+<section id="diceloss" class="level3">
+<h3 class="anchored" data-anchor-id="diceloss"><a href="https://github.com/riteshrm/nanoOCR/blob/main/src/det_model/loss.py#L72">DiceLoss</a></h3>
+<ul>
+<li><p>It takes thresh_binary[predicted by the model], gt[data], mask[data] and tells how the predicted binary map coincides with the actual text regions.</p></li>
+<li><p>We calculate the dice score as:-</p></li>
+<li><p><code>2 x (intersection)/(pred area + actual area)</code></p>
+<ul>
+<li>where <code>intersection = sum(thresh_binary * gt * mask)</code></li>
+<li><code>pred_area = sum(thresh_binary * mask)</code></li>
+<li><code>actual_area = sum(gt x mask)</code></li>
+</ul></li>
+<li><p>Now we need to maximize this score, but in ML we generally minimize loss, so we can define diceloss as 1 - dice score</p></li>
+<li><p>So you can think of these as follows: Balanced BCE is considering pixel by pixel, whereas diceloss is considering the overall map loss.</p></li>
+<li><p>And our final loss is a weighted sum of all these and is defined as</p>
+<ul>
+<li><code>loss = 5 x balanced_ce_loss + 10 x l1_loss + dice_loss</code></li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="postprocessing" class="level2">
+<h2 class="anchored" data-anchor-id="postprocessing"><a href="https://github.com/riteshrm/nanoOCR/blob/main/src/eval/seg_detector_representer.py#L24">Postprocessing</a></h2>
+<ul>
+<li>During inference, given an image, the model predicts the probability of textual regions</li>
+<li>We get a segmentation map using pred (1 is pred&gt;0.3)</li>
+<li>Now, using segmentation, find contours (basically regions containing 1s)</li>
+<li>Decide the final number of contours depending on the len(contours) returned by OpenCV and max candidates to be considered.</li>
+<li>Initialize boxes, scores</li>
+<li>Now, for each candidate:
+<ul>
+<li>get the points and shortest_side
+<ul>
+<li>if shortest_side &lt; 3 then reject this candidate</li>
+</ul></li>
+<li>get the textual probability of the current polygon
+<ul>
+<li>if it is less than the threshold then reject it</li>
+</ul></li>
+<li>If both checks pass, expand the polygon</li>
+</ul></li>
+<li>Finally, scale the coordinates by:-
+<ul>
+<li><code>cords = predicted_coord/ predicted_width X destination width</code></li>
+</ul></li>
+<li>Now we have predicted boxes and corresponding scores</li>
+</ul>
+</section>
+<section id="evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="evaluation"><a href="https://github.com/riteshrm/nanoOCR/blob/main/src/eval/iou.py#L11">Evaluation</a></h2>
+<ul>
+<li>Now we have got the predicted boxes and corresponding scores, and we also have ground truth boxes.</li>
+<li>Now, using the ground truth and predicted polygons, we calculate precision, recall and F1 based on the IoU (Intersection over Union)</li>
+<li>Basically, we try to find out how many ground truth polygons and predicted polygons have IoU &gt; the threshold (which is 0.5) and also, at the same time, avoid mixing one already mapped polygon with any other corresponding ones</li>
+<li>Now we get true positives, which indicate how many of all the predicted boxes overlapped with the ground truth.</li>
+<li>And using that value, we calculate precision as the number of true positives/number of predicted boxes and recall as the number of true positives / number of ground truth boxes and finally get hmean using precision and recall</li>
+</ul>
+<section id="benchmarking-environment" class="level3">
+<h3 class="anchored" data-anchor-id="benchmarking-environment">Benchmarking Environment</h3>
+<p>All evaluation metrics and latency measurements below were measured on CPU, using the same evaluation datasets for each model across PyTorch FP32, ONNX Runtime FP32, and ONNX Runtime INT8.</p>
+<ul>
+<li><strong>Environment:</strong> Ubuntu on WSL2</li>
+<li><strong>CPU:</strong> Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz</li>
+<li><strong>CPU threads:</strong> 4</li>
+<li><strong>Batch size:</strong> 1</li>
+<li><strong>Warmup:</strong> 20 forward passes</li>
+<li><strong>Latency measurement:</strong> Forward pass only, excluding preprocessing and postprocessing.</li>
+</ul>
+</section>
+<section id="results" class="level3">
+<h3 class="anchored" data-anchor-id="results">Results</h3>
+<p>Results on the TDTR test set:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Model format</th>
+<th>Precision</th>
+<th>Recall</th>
+<th>H-mean</th>
+<th>Mean latency (ms)</th>
+<th>Median latency (ms)</th>
+<th>P95 latency (ms)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>INT8 ONNX</td>
+<td>0.293</td>
+<td>0.363</td>
+<td>0.324</td>
+<td>214.704</td>
+<td>214.029</td>
+<td>247.256</td>
+</tr>
+<tr class="even">
+<td>FP32 ONNX</td>
+<td>0.296</td>
+<td>0.373</td>
+<td>0.330</td>
+<td>224.976</td>
+<td>220.783</td>
+<td>261.635</td>
+</tr>
+<tr class="odd">
+<td>FP32 PyTorch</td>
+<td>0.296</td>
+<td>0.373</td>
+<td>0.330</td>
+<td>290.916</td>
+<td>285.088</td>
+<td>326.251</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="text-recognition" class="level1">
+<h1>Text Recognition</h1>
+<section id="overview-1" class="level2">
+<h2 class="anchored" data-anchor-id="overview-1">Overview</h2>
+<ul>
+<li>This module is responsible for recognizing text from a given cropped image.</li>
+<li>This is completely based on a CRNN type of architecture</li>
+</ul>
+</section>
+<section id="model-1" class="level2">
+<h2 class="anchored" data-anchor-id="model-1"><a href="https://github.com/riteshrm/nanoOCR/blob/main/src/rec_model/model.py#L63">Model</a></h2>
+<ul>
+<li>This module consists of two main submodules: one is based on CNNs, which are responsible for extracting visual features from a given image, and the other is BiLSTM-based, which takes in those features and gives the probability of the characters at predefined time steps.</li>
+</ul>
+<figure style="text-align: center;" class="figure">
+<img src="https://riteshrm.github.io/posts/ocr/crnn_architecture.png" style="width:80%" class="figure-img">
+<figcaption>
+CRNN Architecture[Generated by ChatGPT]
+</figcaption>
+</figure>
+</section>
+<section id="dataset-preprocessing-1" class="level2">
+<h2 class="anchored" data-anchor-id="dataset-preprocessing-1">Dataset &amp; Preprocessing</h2>
+<section id="iiit5k" class="level3">
+<h3 class="anchored" data-anchor-id="iiit5k">IIIT5K</h3>
+<ul>
+<li>It contains images and csv files where the csv files have the image filename and the corresponding chars</li>
+<li>It has 2K train and 3k test samples</li>
+</ul>
+</section>
+<section id="mjsynth" class="level3">
+<h3 class="anchored" data-anchor-id="mjsynth">MJSynth</h3>
+<ul>
+<li>It also contains images and the text present in the image is embedded in the image file name</li>
+<li>I used 50K samples from this which I divided into 45k train, 2.5K val and 2.5K test</li>
+</ul>
+</section>
+<section id="preprocessing-1" class="level3">
+<h3 class="anchored" data-anchor-id="preprocessing-1"><a href="https://github.com/riteshrm/nanoOCR/blob/main/src/data/rec_data_processing.py">Preprocessing</a></h3>
+<ul>
+<li>Given images and corresponding data, the file creates separate CSV files for each dataset, along with a combined CSV file.</li>
+<li>It also creates a vocab of size 63 [26 lowercase letters + 26 uppercase letters + 10 digits + blank]</li>
+<li>It also creates two mappings, namely itoc, which is integer to character, and ctoi, which is the reverse of itoc</li>
+</ul>
+</section>
+</section>
+<section id="loss-functions-1" class="level2">
+<h2 class="anchored" data-anchor-id="loss-functions-1">Loss Functions</h2>
+<ul>
+<li>Now we have got the model architecture and data; let’s see the loss functions which are used in this case.</li>
+</ul>
+<section id="ctc-loss" class="level3">
+<h3 class="anchored" data-anchor-id="ctc-loss"><a href="https://docs.pytorch.org/docs/2.14/generated/torch.nn.CTCLoss.html">CTC Loss</a></h3>
+<ul>
+<li><p>I didn’t get much into the maths of this loss; I just followed PyTorch’s doc on how this function expects all the inputs to calculate the loss.</p></li>
+<li><p>T=Input length, N=Batch Size, C=No.&nbsp;of Classes</p></li>
+<li><p>Log_probs:- an input of shape [T, N, C]</p></li>
+<li><p>Targets:- Either (N, S) where S is the max seq_len and use pad tokens if any sequence is less than the max seq_len or concatenate all the labels in a single array</p></li>
+<li><p>Input_lengths:- (N, ) all the inputs have the same length (T)</p></li>
+<li><p>Target_lengths:- (N, ) an array containing the lengths of all labels</p></li>
+</ul>
+</section>
+</section>
+<section id="postprocessing-1" class="level2">
+<h2 class="anchored" data-anchor-id="postprocessing-1"><a href="https://github.com/riteshrm/nanoOCR/blob/main/src/utils/utils.py#L58">Postprocessing</a></h2>
+<ul>
+<li>The idea is very simple: collapse consecutive repeated tokens and then remove blanks</li>
+</ul>
+</section>
+<section id="evaluation-1" class="level2">
+<h2 class="anchored" data-anchor-id="evaluation-1"><a href="https://github.com/riteshrm/nanoOCR/blob/main/src/utils/utils.py#L94">Evaluation</a></h2>
+<ul>
+<li>Now we have got the predicted text and ground truth; we calculate the character error rate.</li>
+<li>Basically, it calculates the minimum number of deletions, insertions and replacements we can apply to the predicted text to make it similar to the ground truth text</li>
+</ul>
+<section id="results-1" class="level3">
+<h3 class="anchored" data-anchor-id="results-1">Results</h3>
+<p>The recognition model uses the same benchmarking environment and measurement settings as the detection model.</p>
+<p>Results on the IIIT5K test set:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Model format</th>
+<th>CER</th>
+<th>Character precision</th>
+<th>Character recall</th>
+<th>Exact word-match accuracy</th>
+<th>Mean latency (ms)</th>
+<th>Median latency (ms)</th>
+<th>P95 latency (ms)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>INT8 ONNX</td>
+<td>0.1429 (14.29%)</td>
+<td>87.72%</td>
+<td>87.54%</td>
+<td>68.90% (2067/3000)</td>
+<td>2.453</td>
+<td>2.412</td>
+<td>3.078</td>
+</tr>
+<tr class="even">
+<td>FP32 ONNX</td>
+<td>0.1441 (14.41%)</td>
+<td>87.47%</td>
+<td>87.45%</td>
+<td>68.90% (2067/3000)</td>
+<td>3.030</td>
+<td>3.022</td>
+<td>3.975</td>
+</tr>
+<tr class="odd">
+<td>FP32 PyTorch</td>
+<td>0.1441 (14.41%)</td>
+<td>87.47%</td>
+<td>87.45%</td>
+<td>68.90% (2067/3000)</td>
+<td>6.146</td>
+<td>5.717</td>
+<td>8.185</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="limitations-and-future-work" class="level1">
+<h1>Limitations and Future Work</h1>
+<p>The current implementation has several areas for improvement:</p>
+<ol type="1">
+<li><strong>Detection accuracy:</strong> The detector currently achieves an H-mean of approximately 0.33, which limits overall text detection performance. Further training could improve performance.</li>
+<li><strong>Recognition accuracy:</strong> The recognizer achieves approximately 68.9% exact word-match accuracy on the IIIT5K test set. Further training could improve performance.</li>
+<li><strong>Model architecture:</strong> The initial goal was to establish a working baseline. Lightweight backbones such as LCNetV4 from PPOCRv6 and EfficientNet-inspired architectures have not yet been explored and could improve the trade-off between accuracy and latency.</li>
+<li><strong>Training data:</strong> Increasing the training sample size improved generalization for both models. Additional training data, augmentation, and hyperparameter tuning could improve it further.</li>
+<li><strong>Quantization:</strong> INT8 quantization reduced mean latency, with a small decrease in detection accuracy and a small improvement in recognition CER. Further profiling could identify bottlenecks and help guide the exploration of other quantization strategies.</li>
+</ol>
+
+
+</section>
+
+ ]]></description>
+  <category>Computer Vision</category>
+  <guid>https://riteshrm.github.io/posts/ocr/</guid>
+  <pubDate>Thu, 22 Oct 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://riteshrm.github.io/posts/ocr/ocr_thumbnail.png" medium="image" type="image/png" height="81" width="144"/>
+</item>
 <item>
   <title>BPE Tokenizer</title>
   <dc:creator>Ritesh Kumar Maurya</dc:creator>
@@ -8871,7 +9371,7 @@ Note
 <h2 class="anchored" data-anchor-id="pytorch-implementations">PyTorch Implementations</h2>
 <section id="single-head-vanilla-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="single-head-vanilla-attention-pytorch-code">Single Head Vanilla Attention PyTorch Code</h3>
-<div id="ddae75af" class="cell" data-execution_count="1">
+<div id="903682ed" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -9120,13 +9620,13 @@ font-style: inherit;">:.3f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 0.508</code></pre>
+<pre><code>Time taken: 0.496</code></pre>
 </div>
 </div>
 </section>
 <section id="multi-head-vanilla-attention-for-loop-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="multi-head-vanilla-attention-for-loop-pytorch-code">Multi Head Vanilla Attention For loop PyTorch Code</h3>
-<div id="f7beaebf" class="cell" data-execution_count="2">
+<div id="f45685ad" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -9533,13 +10033,13 @@ font-style: inherit;">:.3f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 0.926</code></pre>
+<pre><code>Time taken: 0.840</code></pre>
 </div>
 </div>
 </section>
 <section id="multi-head-vanilla-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="multi-head-vanilla-attention-pytorch-code">Multi Head Vanilla Attention PyTorch Code</h3>
-<div id="9e54e867" class="cell" data-execution_count="3">
+<div id="42c2ab74" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -9899,7 +10399,7 @@ font-style: inherit;">:.3f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 2.734</code></pre>
+<pre><code>Time taken: 2.952</code></pre>
 </div>
 </div>
 </section>
@@ -9949,7 +10449,7 @@ Tip
 </div>
 <section id="single-head-linear-attention-pytorch-code" class="level3">
 <h3 class="anchored" data-anchor-id="single-head-linear-attention-pytorch-code">Single Head Linear Attention PyTorch Code</h3>
-<div id="3b9ee8ef" class="cell" data-execution_count="4">
+<div id="1af92f58" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
@@ -10230,7 +10730,7 @@ font-style: inherit;">:.3f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time taken: 0.057</code></pre>
+<pre><code>Time taken: 0.063</code></pre>
 </div>
 </div>
 <table class="caption-top table">

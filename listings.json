@@ -2,6 +2,7 @@
   {
     "listing": "/notes.html",
     "items": [
+      "/posts/ocr/index.html",
       "/posts/bpe-tokenizer/index.html",
       "/posts/xlam-sft/index.html",
       "/posts/flow-matching/index.html",

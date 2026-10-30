@@ -87,7 +87,8 @@ ul.task-list li input[type="checkbox"] {
 
     const options = {
       valueNames: ['listing-image','listing-title','listing-description','listing-date','listing-reading-time','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
+      page: 5,
+    pagination: { item: "<li class='page-item'><a class='page page-link' href='#'></a></li>" },
       searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
     };
 
@@ -153,13 +154,13 @@ window.Quarto = {
 <link rel="stylesheet" href="styles.css">
 <link rel="alternate" type="application/rss+xml" title="Ritesh Kumar Maurya" href="notes.xml" data-external="1"><meta property="og:title" content="Notes – Ritesh Kumar Maurya">
 <meta property="og:description" content="Practical notes on generative AI, deep learning, optimization, and LLM systems.">
-<meta property="og:image" content="https://riteshrm.github.io/posts/bpe-tokenizer/bpe-tokenizer-thumbnail.png">
+<meta property="og:image" content="https://riteshrm.github.io/posts/ocr/ocr_thumbnail.png">
 <meta property="og:site_name" content="Ritesh Kumar Maurya">
 <meta property="og:image:height" content="941">
 <meta property="og:image:width" content="1672">
 <meta name="twitter:title" content="Notes – Ritesh Kumar Maurya">
 <meta name="twitter:description" content="Practical notes on generative AI, deep learning, optimization, and LLM systems.">
-<meta name="twitter:image" content="https://riteshrm.github.io/posts/bpe-tokenizer/bpe-tokenizer-thumbnail.png">
+<meta name="twitter:image" content="https://riteshrm.github.io/posts/ocr/ocr_thumbnail.png">
 <meta name="twitter:creator" content="@_riteshrm_">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image-height" content="941">
@@ -394,7 +395,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(14)</span></div><div class="category" data-category="Qm9va3M=">Books <span class="quarto-category-count">(3)</span></div><div class="category" data-category="RGVlcCUyMExlYXJuaW5n">Deep Learning <span class="quarto-category-count">(3)</span></div><div class="category" data-category="R2VuZXJhdGl2ZSUyMEFJ">Generative AI <span class="quarto-category-count">(5)</span></div><div class="category" data-category="TkxQ">NLP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="T3B0aW1pemF0aW9u">Optimization <span class="quarto-category-count">(2)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(15)</span></div><div class="category" data-category="Qm9va3M=">Books <span class="quarto-category-count">(3)</span></div><div class="category" data-category="Q29tcHV0ZXIlMjBWaXNpb24=">Computer Vision <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RGVlcCUyMExlYXJuaW5n">Deep Learning <span class="quarto-category-count">(3)</span></div><div class="category" data-category="R2VuZXJhdGl2ZSUyMEFJ">Generative AI <span class="quarto-category-count">(5)</span></div><div class="category" data-category="TkxQ">NLP <span class="quarto-category-count">(1)</span></div><div class="category" data-category="T3B0aW1pemF0aW9u">Optimization <span class="quarto-category-count">(2)</span></div></div></div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -425,7 +426,7 @@ window.Quarto = {
 
 <p>Notes from what I read and build, with code and examples along the way.</p>
 <div class="topic-strip">
-<p><a href="#category=Generative%20AI" class="topic-pill">Generative AI</a> <a href="#category=NLP" class="topic-pill">NLP</a> <a href="#category=Deep%20Learning" class="topic-pill">Deep Learning</a> <a href="#category=Optimization" class="topic-pill">Optimization</a> <a href="#category=Books" class="topic-pill">Books</a></p>
+<p><a href="#category=Generative%20AI" class="topic-pill">Generative AI</a> <a href="#category=NLP" class="topic-pill">NLP</a> <a href="#category=Computer%20Vision" class="topic-pill">Computer Vision</a> <a href="#category=Deep%20Learning" class="topic-pill">Deep Learning</a> <a href="#category=Optimization" class="topic-pill">Optimization</a> <a href="#category=Books" class="topic-pill">Books</a></p>
 </div>
 
 
@@ -433,7 +434,35 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="TkxQ" data-listing-date-sort="1790294400000" data-listing-file-modified-sort="1790493898621" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3016">
+<div class="quarto-post image-right" data-index="0" data-categories="Q29tcHV0ZXIlMjBWaXNpb24=" data-listing-date-sort="1792627200000" data-listing-file-modified-sort="1793366936258" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2462">
+<div class="thumbnail"><a href="./posts/ocr/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/ocr/ocr_thumbnail.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/ocr/index.html" class="no-external">nanoOCR</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Q29tcHV0ZXIlMjBWaXNpb24='); return false;">Computer Vision</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/ocr/index.html" class="no-external">
+<p>A minimal implementation of OCR</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/ocr/index.html" class="no-external">
+<div class="listing-date">
+Oct 22, 2026
+</div>
+<div class="listing-reading-time">13 min</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="TkxQ" data-listing-date-sort="1790294400000" data-listing-file-modified-sort="1790493898621" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3016">
 <div class="thumbnail"><a href="./posts/bpe-tokenizer/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/bpe-tokenizer/bpe-tokenizer-thumbnail.png" class="thumbnail-image">
@@ -461,7 +490,7 @@ Sep 25, 2026
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="R2VuZXJhdGl2ZSUyMEFJ" data-listing-date-sort="1787011200000" data-listing-file-modified-sort="1790494278909" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2975">
+<div class="quarto-post image-right" data-index="2" data-categories="R2VuZXJhdGl2ZSUyMEFJ" data-listing-date-sort="1787011200000" data-listing-file-modified-sort="1790494278909" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2975">
 <div class="thumbnail"><a href="./posts/xlam-sft/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/xlam-sft/thumbnail.png" class="thumbnail-image">
@@ -489,7 +518,7 @@ Aug 18, 2026
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="R2VuZXJhdGl2ZSUyMEFJ" data-listing-date-sort="1780358400000" data-listing-file-modified-sort="1790487806609" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1840">
+<div class="quarto-post image-right" data-index="3" data-categories="R2VuZXJhdGl2ZSUyMEFJ" data-listing-date-sort="1780358400000" data-listing-file-modified-sort="1790487806609" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1840">
 <div class="thumbnail"><a href="./posts/flow-matching/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/flow-matching/flow_matching_resized_thumbnail.png" class="thumbnail-image">
@@ -517,7 +546,7 @@ Jun 2, 2026
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="3" data-categories="R2VuZXJhdGl2ZSUyMEFJ" data-listing-date-sort="1779408000000" data-listing-file-modified-sort="1790487806611" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="21" data-listing-word-count-sort="4048">
+<div class="quarto-post image-right" data-index="4" data-categories="R2VuZXJhdGl2ZSUyMEFJ" data-listing-date-sort="1779408000000" data-listing-file-modified-sort="1790487806611" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="21" data-listing-word-count-sort="4048">
 <div class="thumbnail"><a href="./posts/score-matching/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/score-matching/score_resized_thumbnail.png" class="thumbnail-image">
@@ -545,10 +574,10 @@ May 22, 2026
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="4" data-categories="R2VuZXJhdGl2ZSUyMEFJ" data-listing-date-sort="1779062400000" data-listing-file-modified-sort="1790487806608" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2929">
+<div class="quarto-post image-right" data-index="5" data-categories="R2VuZXJhdGl2ZSUyMEFJ" data-listing-date-sort="1779062400000" data-listing-file-modified-sort="1790487806608" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2929">
 <div class="thumbnail"><a href="./posts/diffusion-models/index.html" class="no-external">
 
-<img loading="lazy" src="./posts/diffusion-models/diffusion_model.png" class="thumbnail-image">
+<img loading="lazy" data-src="./posts/diffusion-models/diffusion_model.png" class="thumbnail-image">
 
 </a></div>
 <div class="body">
@@ -573,10 +602,10 @@ May 18, 2026
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="5" data-categories="R2VuZXJhdGl2ZSUyMEFJ" data-listing-date-sort="1778025600000" data-listing-file-modified-sort="1790487806612" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2704">
+<div class="quarto-post image-right" data-index="6" data-categories="R2VuZXJhdGl2ZSUyMEFJ" data-listing-date-sort="1778025600000" data-listing-file-modified-sort="1790487806612" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2704">
 <div class="thumbnail"><a href="./posts/variational-autoencoder/index.html" class="no-external">
 
-<img loading="lazy" src="./posts/variational-autoencoder/vae_thumbnail_resized.png" class="thumbnail-image">
+<img loading="lazy" data-src="./posts/variational-autoencoder/vae_thumbnail_resized.png" class="thumbnail-image">
 
 </a></div>
 <div class="body">
@@ -601,10 +630,10 @@ May 6, 2026
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="6" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1775520000000" data-listing-file-modified-sort="1790487806607" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1943">
+<div class="quarto-post image-right" data-index="7" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1775520000000" data-listing-file-modified-sort="1790487806607" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1943">
 <div class="thumbnail"><a href="./posts/rotary-position-embedding/index.html" class="no-external">
 
-<img loading="lazy" src="./posts/rotary-position-embedding/rotary_thumbnail_resized.png" class="thumbnail-image">
+<img loading="lazy" data-src="./posts/rotary-position-embedding/rotary_thumbnail_resized.png" class="thumbnail-image">
 
 </a></div>
 <div class="body">
@@ -629,10 +658,10 @@ Apr 7, 2026
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="7" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1775433600000" data-listing-file-modified-sort="1790494278913" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1426">
+<div class="quarto-post image-right" data-index="8" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1775433600000" data-listing-file-modified-sort="1790494278913" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1426">
 <div class="thumbnail"><a href="./posts/position-encoding/index.html" class="no-external">
 
-<img loading="lazy" src="./posts/position-encoding/thumbnail.png" class="thumbnail-image">
+<img loading="lazy" data-src="./posts/position-encoding/thumbnail.png" class="thumbnail-image">
 
 </a></div>
 <div class="body">
@@ -657,10 +686,10 @@ Apr 6, 2026
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="8" data-categories="Qm9va3M=" data-listing-date-sort="1768262400000" data-listing-file-modified-sort="1790487806590" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="19" data-listing-word-count-sort="3687">
+<div class="quarto-post image-right" data-index="9" data-categories="Qm9va3M=" data-listing-date-sort="1768262400000" data-listing-file-modified-sort="1790487806590" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="19" data-listing-word-count-sort="3687">
 <div class="thumbnail"><a href="./posts/ai-engineering/index.html" class="no-external">
 
-<img loading="lazy" src="./posts/ai-engineering/resized_thumbnail.png" class="thumbnail-image">
+<img loading="lazy" data-src="./posts/ai-engineering/resized_thumbnail.png" class="thumbnail-image">
 
 </a></div>
 <div class="body">
@@ -685,10 +714,10 @@ Jan 13, 2026
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="9" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1768176000000" data-listing-file-modified-sort="1790487806591" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2484">
+<div class="quarto-post image-right" data-index="10" data-categories="RGVlcCUyMExlYXJuaW5n" data-listing-date-sort="1768176000000" data-listing-file-modified-sort="1793366501422" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2484">
 <div class="thumbnail"><a href="./posts/attention-mechanism/index.html" class="no-external">
 
-<img loading="lazy" src="./posts/attention-mechanism/attn_resized_thumbnail.png" class="thumbnail-image">
+<img loading="lazy" data-src="./posts/attention-mechanism/attn_resized_thumbnail.png" class="thumbnail-image">
 
 </a></div>
 <div class="body">
@@ -713,10 +742,10 @@ Jan 12, 2026
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="10" data-categories="Qm9va3M=" data-listing-date-sort="1737936000000" data-listing-file-modified-sort="1790487806590" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1091">
+<div class="quarto-post image-right" data-index="11" data-categories="Qm9va3M=" data-listing-date-sort="1737936000000" data-listing-file-modified-sort="1790487806590" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1091">
 <div class="thumbnail"><a href="./posts/hands-on-llms/index.html" class="no-external">
 
-<img loading="lazy" src="./posts/hands-on-llms/traing_work_flow_of_llm.png" class="thumbnail-image">
+<img loading="lazy" data-src="./posts/hands-on-llms/traing_work_flow_of_llm.png" class="thumbnail-image">
 
 </a></div>
 <div class="body">
@@ -741,10 +770,10 @@ Jan 27, 2025
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="11" data-categories="Qm9va3M=" data-listing-date-sort="1720224000000" data-listing-file-modified-sort="1790487806591" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1775">
+<div class="quarto-post image-right" data-index="12" data-categories="Qm9va3M=" data-listing-date-sort="1720224000000" data-listing-file-modified-sort="1790487806591" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1775">
 <div class="thumbnail"><a href="./posts/meta-learning/index.html" class="no-external">
 
-<img loading="lazy" src="./posts/meta-learning/metalearning_resized_thumbnail.png" class="thumbnail-image">
+<img loading="lazy" data-src="./posts/meta-learning/metalearning_resized_thumbnail.png" class="thumbnail-image">
 
 </a></div>
 <div class="body">
@@ -769,10 +798,10 @@ Jul 6, 2024
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="12" data-categories="T3B0aW1pemF0aW9u" data-listing-date-sort="1716508800000" data-listing-file-modified-sort="1790487806613" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="30" data-listing-word-count-sort="5990">
+<div class="quarto-post image-right" data-index="13" data-categories="T3B0aW1pemF0aW9u" data-listing-date-sort="1716508800000" data-listing-file-modified-sort="1790487806613" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="30" data-listing-word-count-sort="5990">
 <div class="thumbnail"><a href="./posts/quantization-in-depth/index.html" class="no-external">
 
-<img loading="lazy" src="./posts/quantization-in-depth/qat-training-precision.png" class="thumbnail-image">
+<img loading="lazy" data-src="./posts/quantization-in-depth/qat-training-precision.png" class="thumbnail-image">
 
 </a></div>
 <div class="body">
@@ -797,10 +826,10 @@ May 24, 2024
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="13" data-categories="T3B0aW1pemF0aW9u" data-listing-date-sort="1715558400000" data-listing-file-modified-sort="1790487806613" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1234">
+<div class="quarto-post image-right" data-index="14" data-categories="T3B0aW1pemF0aW9u" data-listing-date-sort="1715558400000" data-listing-file-modified-sort="1790487806613" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1234">
 <div class="thumbnail"><a href="./posts/quantization-fundamentals/index.html" class="no-external">
 
-<img loading="lazy" src="./posts/quantization-fundamentals/qat-training-precision.png" class="thumbnail-image">
+<img loading="lazy" data-src="./posts/quantization-fundamentals/qat-training-precision.png" class="thumbnail-image">
 
 </a></div>
 <div class="body">
@@ -827,7 +856,51 @@ May 13, 2024
 </div>
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
+<nav id="listing-pagination" class="listing-pagination" aria-label="Page Navigation">
+  <ul class="pagination"></ul>
+</nav>
 </div></main> <!-- /main -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const listingId = "listing-listing";
+  const list = window["quarto-listings"]?.[listingId];
+  const numberedNavigation = document.querySelector(`#${listingId} .listing-pagination`);
+  if (!list || !numberedNavigation) return;
+
+  numberedNavigation.hidden = true;
+  const navigation = document.createElement("nav");
+  navigation.className = "listing-pagination d-flex justify-content-between gap-3";
+  navigation.setAttribute("aria-label", "Notes pages");
+
+  function makeButton(label, direction) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "btn btn-outline-primary";
+    button.textContent = label;
+    button.addEventListener("click", () => {
+      const page = Math.floor((list.i - 1) / list.page) + 1 + direction;
+      // Use Quarto's navigation helpers to preserve category and page URLs.
+      setPageHash(listingId, page);
+      showPage(listingId, page);
+    });
+    navigation.append(button);
+    return button;
+  }
+
+  const previous = makeButton("Previous", -1);
+  const next = makeButton("Next", 1);
+  numberedNavigation.after(navigation);
+
+  function updateNavigation() {
+    previous.disabled = list.i <= 1;
+    next.disabled = list.i + list.page > list.matchingItems.length;
+    navigation.classList.toggle("d-none", list.matchingItems.length <= list.page);
+  }
+
+  list.on("updated", updateNavigation);
+  updateNavigation();
+});
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
